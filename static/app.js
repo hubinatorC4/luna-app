@@ -238,7 +238,7 @@ function renderSettings(){
   $('#volVal').textContent = Math.round((S.volume + 36) / 20 * 100) + '%';
   rasp.value = S.rasp ?? 0; breath.value = S.breath ?? 0; $('#raspVal').textContent = Math.round((S.rasp ?? 0) * 10) + '%'; $('#breathVal').textContent = Math.round((S.breath ?? 0) * 10) + '%'; $('#lispChk').checked = !!S.lisp;
 }
-fetch('/api/voices').then(r => r.json()).then(d => {
+fetch('/api/voices?lang=' + encodeURIComponent((new URLSearchParams(location.search).get('lang') || document.documentElement.lang || 'pl').slice(0, 2))).then(r => r.json()).then(d => {
   for (const [k, v] of Object.entries(d.voices)){ const o = document.createElement('option'); o.value = k; o.textContent = v; voiceSel.appendChild(o); }
   renderSettings();
 }).catch(()=>{});

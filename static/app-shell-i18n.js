@@ -171,3 +171,19 @@ uk: {tab_feed: 'Стіна', tab_luna: 'Луна', tab_butik: 'Бутик', tab_
  foot: 'Луна — ШІ-асистентка. Без реклами.',
  sup_h: '💚 Підтримайте Луну', sup_p: 'Оберіть Premium або порекомендуйте нас друзям. Так Луна зможе розвиватися.', sup_plans: 'Переглянути плани', sup_share: 'Порекомендувати', copied: 'Посилання скопійовано 💚', share_t: 'Луна — ШІ-тренерка голосу. Спробуйте безкоштовно:'}
 };
+/* v1.4.5: „Co potrafi Luna” (tylko prawdziwe funkcje) + casting w „Więcej” */
+(function(T){
+var X = {
+ pl: {cap_h: 'Co potrafi Luna', caps: [['🎙️', 'Rozmowa na żywo', 'Mówisz, Luna odpowiada głosem.'], ['💬', 'Pytania o głos', 'Oddech, dykcja, tempo, trema.'], ['🎚️', 'Głos Luny po Twojemu', 'Wybierz głos, ton i tempo.'], ['✨', 'Własna asystentka', 'Imię, charakter i wygląd.'], ['👗', 'Nowy wygląd Luny', 'Stylizacje w Butiku.']],
+  cast: '🎙️ Casting na agentki', cast_s: 'Pilnie szukamy nowych agentek – zgłoś się'},
+ en: {cap_h: 'What Luna can do', caps: [['🎙️', 'Live conversation', 'You speak, Luna answers out loud.'], ['💬', 'Voice questions', 'Breathing, diction, pace, stage fright.'], ['🎚️', 'Luna’s voice, your way', 'Pick the voice, tone and speed.'], ['✨', 'Your own assistant', 'Name, personality and look.'], ['👗', 'A new look for Luna', 'Outfits in the Boutique.']],
+  cast: '🎙️ Agent casting', cast_s: 'We urgently need new agents – apply'},
+ es: {cap_h: 'Lo que sabe hacer Luna', caps: [['🎙️', 'Conversación en vivo', 'Hablas y Luna responde con su voz.'], ['💬', 'Preguntas sobre la voz', 'Respiración, dicción, ritmo, nervios.'], ['🎚️', 'La voz de Luna a tu gusto', 'Elige voz, tono y velocidad.'], ['✨', 'Tu propia asistente', 'Nombre, carácter y aspecto.'], ['👗', 'Un nuevo look para Luna', 'Estilos en la Boutique.']],
+  cast: '🎙️ Casting de agentes', cast_s: 'Buscamos nuevas agentes con urgencia: apúntate'},
+ de: {cap_h: 'Was Luna kann', caps: [['🎙️', 'Live-Gespräch', 'Du sprichst, Luna antwortet mit Stimme.'], ['💬', 'Fragen zur Stimme', 'Atmung, Aussprache, Tempo, Lampenfieber.'], ['🎚️', 'Lunas Stimme nach deinem Geschmack', 'Stimme, Ton und Tempo wählen.'], ['✨', 'Eigene Assistentin', 'Name, Charakter und Aussehen.'], ['👗', 'Neuer Look für Luna', 'Outfits in der Boutique.']],
+  cast: '🎙️ Casting für Agentinnen', cast_s: 'Wir suchen dringend neue Agentinnen – bewirb dich'},
+ uk: {cap_h: 'Що вміє Луна', caps: [['🎙️', 'Розмова наживо', 'Ви говорите, Луна відповідає голосом.'], ['💬', 'Питання про голос', 'Дихання, дикція, темп, хвилювання.'], ['🎚️', 'Голос Луни на ваш смак', 'Оберіть голос, тон і темп.'], ['✨', 'Власна асистентка', 'Ім’я, характер і вигляд.'], ['👗', 'Новий образ Луни', 'Стилізації в Бутику.']],
+  cast: '🎙️ Кастинг агенток', cast_s: 'Терміново шукаємо нових агенток – подайте заявку'}
+};
+for (var k in X) if (T[k]) for (var j in X[k]) T[k][j] = X[k][j];
+})(window.LUNA_APP_T);

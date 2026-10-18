@@ -39,6 +39,16 @@ VOICES = {
     "es-ES-XimenaNeural": "Ximena – mocny hiszpański akcent (słabo zrozumiała po polsku)",
     "es-MX-DaliaNeural": "Dalia – meksykański akcent (słabo zrozumiała po polsku)",
 }
+VOICES_I18N = {  # opisy głosów w interfejsie (same głosy się nie zmieniają)
+    "en": ["Zofia – clearest Polish (default)", "Thalita – multilingual, Latin timbre", "Seraphina – multilingual, warm", "Ava – multilingual, soft",
+           "Ximena – strong Spanish accent (hard to understand in Polish)", "Dalia – Mexican accent (hard to understand in Polish)"],
+    "es": ["Zofia – el polaco más claro (predeterminada)", "Thalita – multilingüe, timbre latino", "Seraphina – multilingüe, cálida", "Ava – multilingüe, suave",
+           "Ximena – fuerte acento español (poco comprensible en polaco)", "Dalia – acento mexicano (poco comprensible en polaco)"],
+    "de": ["Zofia – klarstes Polnisch (Standard)", "Thalita – mehrsprachig, lateinamerikanisches Timbre", "Seraphina – mehrsprachig, warm", "Ava – mehrsprachig, sanft",
+           "Ximena – starker spanischer Akzent (auf Polnisch schwer verständlich)", "Dalia – mexikanischer Akzent (auf Polnisch schwer verständlich)"],
+    "uk": ["Зофія – найчистіша польська (за замовчуванням)", "Таліта – багатомовна, латиноамериканський тембр", "Серафіна – багатомовна, тепла", "Ава – багатомовна, м’яка",
+           "Хімена – сильний іспанський акцент (погано зрозуміла польською)", "Далія – мексиканський акцент (погано зрозуміла польською)"],
+}
 DEFAULT_VOICE = "pl-PL-ZofiaNeural"
 SPANISH_VOICE = "es-ES-XimenaNeural"
 SPANISH_RE = re.compile(r"(?i)\b(hola|cariño|carino|mi amor|vamos|de nada|escucha|ay|bueno|perfecto|claro|querido|guapo|gracias)\b")
@@ -1037,7 +1047,8 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/age/status":
             return self._json(age.status(parse_qs(u.query).get("vid", [""])[0][:40]))
         if u.path == "/api/voices":
-            return self._json({"voices": VOICES, "default": DEFAULT_VOICE})
+            tr = VOICES_I18N.get(parse_qs(u.query).get("lang", ["pl"])[0][:5])
+            return self._json({"voices": dict(zip(VOICES, tr)) if tr else VOICES, "default": DEFAULT_VOICE})
         if u.path == "/api/tts":
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tts(q)
