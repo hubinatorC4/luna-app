@@ -25,7 +25,7 @@ const css = `.hb-fab{position:fixed;right:18px;bottom:18px;z-index:80;width:58px
 const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 const fab = document.createElement('button'); fab.className = 'hb-fab'; fab.type = 'button'; fab.setAttribute('aria-label', T.open); fab.textContent = '💬';
 const w = document.createElement('section'); w.className = 'hb-win'; w.hidden = true; w.setAttribute('role', 'dialog'); w.setAttribute('aria-label', T.title);
-w.innerHTML = `<div class="hb-h"><img src="/brand-emblem-256.png" alt=""><b>${T.title}<small>${T.ai}</small></b><button class="hb-x" type="button" aria-label="${T.close}">✕</button></div>
+w.innerHTML = `<div class="hb-h"><img src="/brand-emblem-96.webp" alt=""><b>${T.title}<small>${T.ai}</small></b><button class="hb-x" type="button" aria-label="${T.close}">✕</button></div>
 <div class="hb-log" aria-live="polite"></div><div class="hb-chips"></div><button class="hb-hum" type="button" hidden>🙋 ${T.human}</button>
 <form class="hb-f"><input maxlength="500" placeholder="${T.ph}" aria-label="${T.ph}"><button type="submit">${T.send}</button></form>`;
 document.body.append(fab, w);

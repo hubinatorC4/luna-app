@@ -26,7 +26,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.5.4"
+VERSION = "1.5.5"
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")

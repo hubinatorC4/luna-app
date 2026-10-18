@@ -92,7 +92,8 @@ def localize(doc, path, lang, base):
         doc = doc.replace("</head>", tw + "\n</head>", 1)
     if p in ("/", "/promo.html", "/o-lunie.html") and "application/ld+json" not in doc: doc = doc.replace("</head>", jsonld(base, lang) + "\n</head>", 1)
     if 'og:url' not in doc: doc = doc.replace("</head>", f'<meta property="og:url" content="{canon}">\n</head>', 1)
-    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js"></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
+    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
+    doc = re.sub(r'(<meta charset="utf-8">)', r'\1<script src="/lg.js"></script>', doc, count=1, flags=re.I)
     return doc
 
 def sitemap(base):
