@@ -674,6 +674,8 @@ def _purge_deleted():
         profiles.delete_owner(uid); agentvideo.delete_owner(uid); social.purge_author("u:" + uid); antibot.forget("u:" + uid)
         try: battles.set_privacy(uid, False)
         except Exception: pass
+        try: inbox.delete_user(uid)   # skrzynka, znajomi i rozmowy – jak w natychmiastowym usunięciu i w Polityce prywatności § 7
+        except Exception as e: print("inbox purge", type(e).__name__, file=sys.stderr)
         userprof.delete(uid); presence.delete(uid); agentgen.delete_owner(uid)
 
 def _bg_loop():
@@ -832,7 +834,7 @@ class H(SimpleHTTPRequestHandler):
                 "payments": "wkrótce", "logged_in": bool(uid)}
     def _gen_plan(self, pl, uid):
         """Plan dla Generatora agentek: „Agentka współpracująca” (nadana ręcznie przez admina) dostaje limity Pro / Ultra
-        (60 s, 2160 px, wszystkie scenerie) niezależnie od planu właściciela – flaga po stronie serwera."""
+        (60 s, 1920 px, wszystkie scenerie) niezależnie od planu właściciela – flaga po stronie serwera."""
         try:
             if uid and partners.is_partner(uid): return "pro"
         except Exception: pass

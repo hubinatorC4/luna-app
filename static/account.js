@@ -85,9 +85,8 @@ function acctUI(){
         es: ['¿Eliminar tu cuenta para siempre?\n\nEliminaremos la cuenta y tus datos personales (correo, nombre, contraseña, sesiones, solicitud de tester). Tus comentarios y publicaciones anteriores se anonimizarán como «Usuario eliminado». No se puede deshacer.', 'Tu cuenta y tus datos personales se han eliminado.'],
         de: ['Konto endgültig löschen?\n\nWir löschen dein Konto und deine personenbezogenen Daten (E-Mail, Name, Passwort, Sitzungen, Testeranmeldung). Frühere Kommentare und Beiträge werden als „Gelöschter Nutzer“ anonymisiert. Das kann nicht rückgängig gemacht werden.', 'Dein Konto und deine personenbezogenen Daten wurden gelöscht.'],
         uk: ['Видалити акаунт назавжди?\n\nМи видалимо акаунт і персональні дані (е-пошту, ім’я, пароль, сесії, заявку тестувальника). Ваші попередні коментарі та дописи буде анонімізовано як «Видалений користувач». Цю дію не можна скасувати.', 'Акаунт і персональні дані видалено.']}[L] || null;
-      const m = M || ['Usunąć konto na zawsze?', 'Konto zostało usunięte.'];
-      if (!confirm(m[0])) return;
-      try { await api('/api/account/delete', {}); ME = null; CSRF = ''; alert(m[1]); acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); } catch(e){ $('#a_err').textContent = '⚠️ ' + e.message; }
+      // Spójnie z Regulaminem i Polityką prywatności: usuwanie konta w 2 krokach (wpisz nick) z 30 dniami na przywrócenie – w Mój panel.
+      void M; location.href = '/ustawienia.html#del';
     };
     return;
   }
@@ -164,7 +163,7 @@ const NEWS = [
   ['💭 Dymki Luny', 'Czasem podpowiem coś obok mojego awatara – krótko, raz na stronę i znikam po 5 s. Wyłączysz mnie w Mój panel (nie obrażę się… bardzo).'],
   ['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.'],
   ['⚙️ Mój panel', 'Profil, plan i jakość, Twoje treści, powiadomienia i prywatność w jednym miejscu – z wyszukiwarką i krótkim przewodnikiem. Tylko nick, bez imienia i nazwiska.'],
-  ['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 2160 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.'],
+  ['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 1920 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.'],
   ['📷 Twoje zdjęcia na wallu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.'],
   ['🌍 Twój język od razu', 'Luna rozpoznaje język urządzenia już przy pierwszym wyświetleniu; wybrana flaga zawsze wygrywa i jest zapamiętana.'],
   ['💌 Skrzynka, Znajomi i czat', 'Ikona 📬 w aplikacji: ważne sprawy, nowości i wyniki Bitew. Znajomi po nicku, linku lub QR i prywatny czat z emoji. Tylko nicki – bez e-maili.'],
@@ -184,7 +183,7 @@ const NEWS = [
   ['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.'],
   ['🧱 Ścianka Agentek Głosu', 'Nowa nazwa Ścianki. Pod wpisami: polubienia, wyświetlenia i komentarze jak w czacie – tylko prawdziwe liczby.'],
   ['🛍 Nowy Butik Luny', 'Nowa kolekcja, kategorie i kolory. Wszystkie kolory w cenie stroju. Tylko eleganckie, zakrywające stroje.'],
-  ['🔒 Prywatność', 'Usuwamy metadane (GPS, urządzenie) ze zdjęć. Konto usuniesz jednym kliknięciem.'],
+  ['🔒 Prywatność', 'Usuwamy metadane (GPS, urządzenie) ze zdjęć. Konto usuniesz w 2 krokach, a przez 30 dni możesz je przywrócić.'],
   ['🤖 Ochrona przed botami', 'Fałszywe konta nie zawyżają liczników.']
 ];
 window.LunaNews = () => {

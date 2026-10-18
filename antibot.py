@@ -53,7 +53,11 @@ def excluded():
     """Klucze autorów, których głosy/komentarze nie liczą się publicznie (ukryci w cieniu + konta bez potwierdzonego e-maila)."""
     if time.time() - _cache["t"] > 10:
         S = _all(); _cache["hidden"] = {k for k, e in S.items() if e.get("status") == "flagged"}
-        _cache["unver"] = _unverified(); _cache["t"] = time.time()
+        try:
+            import notify; ver_on = notify.email_enabled()
+        except Exception: ver_on = False
+        # jak w Bitwach: konta bez potwierdzonego e-maila wyłączamy z liczenia tylko wtedy, gdy potwierdzanie e-maili naprawdę działa
+        _cache["unver"] = _unverified() if ver_on else set(); _cache["t"] = time.time()
     return _cache["hidden"] | _cache["unver"]
 def hidden(ak): excluded(); return ak in _cache["hidden"]
 def burst(kind, ak, n, secs):

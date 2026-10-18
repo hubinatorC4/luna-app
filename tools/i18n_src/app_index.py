@@ -1,5 +1,7 @@
 # Aplikacja /app (index.html) – teksty interfejsu w 5 językach. Panel producenta zostaje po polsku.
 E = [
+["Twórca i właściciel serwisu oraz aplikacji: Hubinator❤️", "Creator and owner of the service and the app: Hubinator❤️", "Creador y propietario del servicio y de la aplicación: Hubinator❤️", "Schöpfer und Inhaber des Dienstes und der App: Hubinator❤️", "Творець і власник сервісу та застосунку: Hubinator❤️"],
+["Twórca i wydawca aplikacji: Hubinator❤️", "Creator and publisher of the app: Hubinator❤️", "Creador y editor de la aplicación: Hubinator❤️", "Schöpfer und Herausgeber der App: Hubinator❤️", "Творець і видавець застосунку: Hubinator❤️"],
 ["Twoja trenerka głosu", "Your voice coach", "Tu entrenadora de voz", "Deine Stimmtrainerin", "Ваша тренерка голосу"],
 ["Nasłuchiwanie", "Listening", "Escucha", "Zuhören", "Слухання"],
 ["– asystentka AI (postać wygenerowana sztucznie)", "– AI assistant (an artificially generated character)", "– asistente de IA (personaje generado artificialmente)", "– KI-Assistentin (künstlich erzeugte Figur)", "– ШІ-асистентка (штучно згенерований персонаж)"],

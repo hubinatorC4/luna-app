@@ -282,7 +282,7 @@ def admin_real_photo(pid, data_url, agreement):
         if not partners.is_partner(r["uid"]): raise PermissionError("Najpierw nadaj status współpracy (partnerka / casting).")
     m = re.fullmatch(r"data:image/(png|jpeg|webp);base64,(.+)", str(data_url or ""), re.S)
     if not m: raise ValueError("Wgraj JPG, PNG lub WEBP.")
-    out, ext = imgsafe.reencode(base64.b64decode(m.group(2)), max_px=2160, max_in=12 * 1024 * 1024, quality=2)
+    out, ext = imgsafe.reencode(base64.b64decode(m.group(2)), max_px=1920, max_in=12 * 1024 * 1024, quality=2)
     h = hashlib.sha1(out).hexdigest()[:10]
     with _lock:
         I = _imgs(); I[pid] = {"b": base64.b64encode(out).decode(), "ext": ext, "h": h, "t": int(time.time()), "ai": False, "real_person": True}; store.put("agent_profile_img", I)

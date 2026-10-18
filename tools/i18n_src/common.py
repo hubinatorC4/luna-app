@@ -1,6 +1,7 @@
 # Wspólne elementy stron (stopka, nagłówek, atrybuty). Kolumny: pl, en, es, de, uk.
 # "~" na początku = zamiana podciągu (raw); w pozostałych przypadkach – cały węzeł tekstowy lub wartość atrybutu.
 E = [
+["Twórca i właściciel serwisu oraz aplikacji: Hubinator❤️", "Creator and owner of the service and the app: Hubinator❤️", "Creador y propietario del servicio y de la aplicación: Hubinator❤️", "Schöpfer und Inhaber des Dienstes und der App: Hubinator❤️", "Творець і власник сервісу та застосунку: Hubinator❤️"],
 ["Aplikacja", "App", "Aplicación", "App", "Застосунок"],
 ["Porady", "Tips", "Consejos", "Tipps", "Поради"],
 ["Butik", "Boutique", "Boutique", "Boutique", "Бутик"],

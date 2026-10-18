@@ -253,12 +253,12 @@
 "Give her a name and wake word, choose the tone (matter-of-fact, warm, subtly playful, motivating), answer length, voice, ring colour and outfit. With Pro / Ultra, pose and figure too."
 ],
 [
-"Stroje: koronkowa sukienka, sweter, suknia wieczorowa, marynarka, sukienka koktajlowa",
-"Outfits: lace dress, jumper, evening gown, blazer, cocktail dress"
+"Stroje: koronkowa sukienka, sweter, suknia wieczorowa, marynarka, letnia sukienka, sukienka koktajlowa",
+"Outfits: lace dress, jumper, evening gown, blazer, summer dress, cocktail dress"
 ],
 [
-"Twój własny obraz awatara (zostaje na Twoim urządzeniu)",
-"Your own avatar image (stays on your device)"
+"Twój własny obraz AI (sprawdzany na serwerze, bez metadanych, z moderacją)",
+"Your own AI image (checked on the server, metadata removed, moderated)"
 ],
 [
 "Ustawienia zapisują się automatycznie",
@@ -329,8 +329,8 @@
 "Extra characters"
 ],
 [
-"Trwają testy aplikacji – w wersji demonstracyjnej możesz wypróbować każdy plan.",
-"The app is in testing – in the demo you can try every plan."
+"Trwają testy aplikacji – testerzy dostają Premium za darmo na 2 miesiące.",
+"The app is in testing – testers get Premium free for 2 months."
 ],
 [
 "Posłuchaj, jak odpowiada",
@@ -775,12 +775,12 @@
 "Ponle nombre y palabra de activación, elige el tono (directo, cálido, sutilmente coqueto, motivador), la longitud de las respuestas, la voz, el color del anillo y el conjunto. Con Pro / Ultra, también pose y silueta."
 ],
 [
-"Stroje: koronkowa sukienka, sweter, suknia wieczorowa, marynarka, sukienka koktajlowa",
-"Conjuntos: vestido de encaje, jersey, vestido de noche, americana, vestido de cóctel"
+"Stroje: koronkowa sukienka, sweter, suknia wieczorowa, marynarka, letnia sukienka, sukienka koktajlowa",
+"Conjuntos: vestido de encaje, jersey, vestido de noche, americana, vestido de verano, vestido de cóctel"
 ],
 [
-"Twój własny obraz awatara (zostaje na Twoim urządzeniu)",
-"Tu propia imagen de avatar (se queda en tu dispositivo)"
+"Twój własny obraz AI (sprawdzany na serwerze, bez metadanych, z moderacją)",
+"Tu propia imagen de IA (revisada en el servidor, sin metadatos, con moderación)"
 ],
 [
 "Ustawienia zapisują się automatycznie",
@@ -851,8 +851,8 @@
 "Personajes adicionales"
 ],
 [
-"Trwają testy aplikacji – w wersji demonstracyjnej możesz wypróbować każdy plan.",
-"La app está en pruebas: en la demo puedes probar todos los planes."
+"Trwają testy aplikacji – testerzy dostają Premium za darmo na 2 miesiące.",
+"La app está en pruebas: los testers reciben Premium gratis durante 2 meses."
 ],
 [
 "Posłuchaj, jak odpowiada",
@@ -1297,12 +1297,12 @@
 "Gib ihr Namen und Weckwort, wähle den Ton (sachlich, warm, dezent verspielt, motivierend), Antwortlänge, Stimme, Ringfarbe und Outfit. Mit Pro / Ultra auch Pose und Figur."
 ],
 [
-"Stroje: koronkowa sukienka, sweter, suknia wieczorowa, marynarka, sukienka koktajlowa",
-"Outfits: Spitzenkleid, Pullover, Abendkleid, Blazer, Cocktailkleid"
+"Stroje: koronkowa sukienka, sweter, suknia wieczorowa, marynarka, letnia sukienka, sukienka koktajlowa",
+"Outfits: Spitzenkleid, Pullover, Abendkleid, Blazer, Sommerkleid, Cocktailkleid"
 ],
 [
-"Twój własny obraz awatara (zostaje na Twoim urządzeniu)",
-"Dein eigenes Avatarbild (bleibt auf deinem Gerät)"
+"Twój własny obraz AI (sprawdzany na serwerze, bez metadanych, z moderacją)",
+"Dein eigenes KI-Bild (auf dem Server geprüft, ohne Metadaten, moderiert)"
 ],
 [
 "Ustawienia zapisują się automatycznie",
@@ -1373,8 +1373,8 @@
 "Zusätzliche Figuren"
 ],
 [
-"Trwają testy aplikacji – w wersji demonstracyjnej możesz wypróbować każdy plan.",
-"Die App wird getestet – in der Demo kannst du jeden Plan ausprobieren."
+"Trwają testy aplikacji – testerzy dostają Premium za darmo na 2 miesiące.",
+"Die App wird getestet – Tester bekommen Premium 2 Monate gratis."
 ],
 [
 "Posłuchaj, jak odpowiada",
@@ -1819,12 +1819,12 @@
 "Дайте їй ім’я та слово активації, оберіть тон (діловий, теплий, легко грайливий, мотиваційний), довжину відповідей, голос, колір кільця й вбрання. У Pro / Ultra — також позу й силует."
 ],
 [
-"Stroje: koronkowa sukienka, sweter, suknia wieczorowa, marynarka, sukienka koktajlowa",
-"Вбрання: мереживна сукня, светр, вечірня сукня, жакет, коктейльна сукня"
+"Stroje: koronkowa sukienka, sweter, suknia wieczorowa, marynarka, letnia sukienka, sukienka koktajlowa",
+"Вбрання: мереживна сукня, светр, вечірня сукня, жакет, літня сукня, коктейльна сукня"
 ],
 [
-"Twój własny obraz awatara (zostaje na Twoim urządzeniu)",
-"Власне зображення аватара (лишається на вашому пристрої)"
+"Twój własny obraz AI (sprawdzany na serwerze, bez metadanych, z moderacją)",
+"Ваше власне зображення ШІ (перевіряється на сервері, без метаданих, з модерацією)"
 ],
 [
 "Ustawienia zapisują się automatycznie",
@@ -1895,8 +1895,8 @@
 "Додаткові персонажі"
 ],
 [
-"Trwają testy aplikacji – w wersji demonstracyjnej możesz wypróbować każdy plan.",
-"Застосунок тестується – у демоверсії можна спробувати кожен план."
+"Trwają testy aplikacji – testerzy dostają Premium za darmo na 2 miesiące.",
+"Застосунок тестується – тестувальники отримують Premium безкоштовно на 2 місяці."
 ],
 [
 "Posłuchaj, jak odpowiada",

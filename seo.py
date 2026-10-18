@@ -110,7 +110,7 @@ def jsonld(base, lang, app=True):
     """Organizacja bez danych osobowych (żadnego imienia i nazwiska), witryna i aplikacja – tylko prawdziwe informacje (bez ocen i liczby pobrań)."""
     import json as _j
     l = lang or "pl"
-    org = {"@context": "https://schema.org", "@type": "Organization", "@id": base + "/#org", "name": "Luna mówi jak jest", "url": base + "/", "logo": base + "/icon-512.png"}
+    org = {"@context": "https://schema.org", "@type": "Organization", "@id": base + "/#org", "name": "Luna mówi jak jest", "url": base + "/", "logo": base + "/icon-512.png", "founder": {"@type": "Person", "name": "Hubinator❤️"}}
     sa = same_as()
     if sa: org["sameAs"] = sa
     site = {"@context": "https://schema.org", "@type": "WebSite", "@id": base + "/#site", "name": "Luna mówi jak jest", "url": base + "/", "inLanguage": list(LANGS), "publisher": {"@id": base + "/#org"}}
@@ -118,7 +118,7 @@ def jsonld(base, lang, app=True):
     if app:
         desc = PAGES.get("/o-lunie.html", {}).get(l, ("", ""))[1]
         common = {"name": APPNAME.get(l, APPNAME["pl"]), "applicationCategory": "EducationalApplication", "url": base + "/", "image": base + "/og-luna-star.jpg",
-                  "description": desc, "inLanguage": list(LANGS), "isAccessibleForFree": True, "publisher": {"@id": base + "/#org"},
+                  "description": desc, "inLanguage": list(LANGS), "isAccessibleForFree": True, "publisher": {"@id": base + "/#org"}, "author": {"@type": "Person", "name": "Hubinator❤️"},
                   "offers": {"@type": "Offer", "price": "0", "priceCurrency": "PLN"}}
         out.append({"@context": "https://schema.org", "@type": "MobileApplication", "operatingSystem": "Android", "downloadUrl": base + "/download", **common})
         out.append({"@context": "https://schema.org", "@type": "WebApplication", "operatingSystem": "Web", "browserRequirements": "Requires JavaScript", **common})

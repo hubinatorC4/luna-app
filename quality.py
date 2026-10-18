@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """Jakość mediów i Generator agentek według planu – egzekwowane na serwerze (402 z nazwą planu).
 Podstawowa/Darmowy: obrazy ≤ 854 px (dłuższy bok), wideo ≤ 480p, bez generatora.
-Premium: ≤ 1280 px, wideo ≤ 720p, generator 20/dzień.  Pro / Ultra: ≤ 1920 px (źródła mają maks. 1920 px – nie powiększamy), wideo ≤ 1080p, generator 60/dzień."""
+Premium: ≤ 1280 px, wideo ≤ 720p, generator 20/dzień.  Pro / Ultra: ≤ 1920 px (bez powiększania), wideo ≤ 1080p, generator 60/dzień."""
 import base64, hashlib, threading, time
 import store, plans, imgsafe
 
 CAPS = {"darmowy": {"img": 854, "video": 480, "gen": 0, "gen_px": 0},
         "podstawowa": {"img": 854, "video": 480, "gen": 0, "gen_px": 0},
         "premium": {"img": 1280, "video": 720, "gen": 20, "gen_px": 1280},
-        "pro": {"img": 2160, "video": 1080, "gen": 60, "gen_px": 2160}}  # źródła ujęć AI mają 1920 px – bez powiększania wychodzi 1920
+        "pro": {"img": 1920, "video": 1080, "gen": 60, "gen_px": 1920}}  # decyzja właściciela: Pro / Ultra do 1920 px (źródła ujęć AI też mają 1920 px)
 USER_PHOTO_PX = 854          # zdjęcia użytkownika na wallu: zawsze maks. 854 px
 VIDEO_LEVELS = (480, 720, 1080)
 NEED_FOR_VIDEO = {480: "darmowy", 720: "premium", 1080: "pro"}
@@ -34,6 +34,7 @@ def check_video(plan, q):
     return None if q <= caps(plan)["video"] else lock(NEED_FOR_VIDEO[q])
 
 def check_img(plan, w):
+    w = min(int(w), CAPS["pro"]["img"])  # żądanie powyżej maksimum (np. 2160) = maksimum planu Pro, bez powiększania
     return None if w <= caps(plan)["img"] else lock(need_for_img(w))
 
 # ---------- skalowanie obrazów przy wydawaniu (pamięć podręczna w RAM) ----------

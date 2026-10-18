@@ -125,6 +125,9 @@ def submit_support(d, uid="", gate=None):
         if not m: raise ValueError("shot_type")
         raw = base64.b64decode(m.group(2))
         if len(raw) > 5 * 1024 * 1024: raise ValueError("shot_size")
+        import nsfw_filter
+        try: nsfw_filter.enforce(raw, "support")  # jak w pozostałych uploadach: jawna nagość odrzucona
+        except nsfw_filter.Blocked: raise ValueError("shot_nsfw")
         try: out, ext = imgsafe.reencode(raw, max_px=1600, max_in=5 * 1024 * 1024, quality=4)
         except Exception: raise ValueError("shot_type")
         shot = f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()

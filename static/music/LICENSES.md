@@ -21,4 +21,4 @@ Wymagane oznaczenie: „Music: [tytuł] by Kevin MacLeod (incompetech.com), Lice
 Katalog i warunki: https://incompetech.com/music/royalty-free/licenses/
 
 ## Oryginalne utwory Luny (v1.6.6, domyślne w odtwarzaczu)
-`luna-quiet_practice.m4a`, `luna-velvet_lounge.m4a`, `luna-luna_swing.m4a`, `luna-hello_luna.m4a`: oryginalne kompozycje projektu Luna (18.10.2026), wygenerowane algorytmicznie i wyrenderowane FluidSynth z soundfontem FluidR3_GM (licencja MIT). Bez sampli i bez cudzych melodii. Prawa: Hubert Szumski / projekt Luna. Nie wymagają przypisania autorstwa.
+`luna-quiet_practice.m4a`, `luna-velvet_lounge.m4a`, `luna-luna_swing.m4a`, `luna-hello_luna.m4a`: oryginalne kompozycje projektu Luna (18.10.2026), wygenerowane algorytmicznie i wyrenderowane FluidSynth z soundfontem FluidR3_GM (licencja MIT). Bez sampli i bez cudzych melodii. Prawa: Hubinator❤️ (twórca) / projekt Luna. Nie wymagają przypisania autorstwa.

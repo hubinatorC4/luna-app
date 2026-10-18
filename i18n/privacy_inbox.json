@@ -1,6 +1,22 @@
 {
 "en": [
 [
+"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na wall (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
+"Profile and content (My panel): nick, optional profile avatar (any image that follows the rules, after moderation), bio, interests, privacy and online-visibility settings (default: close friends only), your photos on the wall (max. 854 px), photos sent in the friends chat (depending on the plan up to 854, 1280 or 1920 px) and agent descriptions and images from the Generator. We remove EXIF and GPS metadata from all photos, and each one goes through an automatic nudity filter."
+],
+[
+"Profil, publikowanie treści, czat ze znajomymi, Generator agentek",
+"Profile, publishing content, chat with friends, Agent generator"
+],
+[
+"Nie (nick – tak, jeśli zakładasz profil)",
+"No (nick – yes, if you create a profile)"
+],
+[
+"Do usunięcia treści lub konta (po prośbie o usunięcie konta – 30 dni na przywrócenie, potem trwałe usunięcie). Zdjęcia w czacie – jak wiadomości czatu. Niewybrane warianty z Generatora usuwamy od razu, a zadania w kolejce – po 30 dniach.",
+"Until you delete the content or the account (after a deletion request – 30 days to restore, then permanent deletion). Chat photos – like chat messages. Unchosen Generator variants are deleted right away, and queued jobs after 30 days."
+],
+[
 "Skrzynka, Znajomi i czat: nick, lista znajomych i zaproszeń, zablokowane konta, ustawienia prywatności, wiadomości systemowe oraz treść Twoich wiadomości na czacie ze znajomymi",
 "Inbox, Friends and chat: nickname, friends and invite lists, blocked accounts, privacy settings, system messages and the content of your chat messages with friends"
 ],
@@ -26,6 +42,22 @@
 ]
 ],
 "es": [
+[
+"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na wall (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
+"Perfil y contenidos (Mi panel): nick, avatar de perfil opcional (cualquier imagen conforme a las normas, tras moderación), descripción, intereses, ajustes de privacidad y de visibilidad en línea (por defecto: solo amigos cercanos), tus fotos en el muro (máx. 854 px), fotos enviadas en el chat de amigos (según el plan, hasta 854, 1280 o 1920 px) y descripciones e imágenes de agentes del Generador. Eliminamos los metadatos EXIF y GPS de todas las fotos, y cada una pasa un filtro automático de desnudos."
+],
+[
+"Profil, publikowanie treści, czat ze znajomymi, Generator agentek",
+"Perfil, publicación de contenidos, chat con amigos, Generador de agentes"
+],
+[
+"Nie (nick – tak, jeśli zakładasz profil)",
+"No (nick: sí, si creas un perfil)"
+],
+[
+"Do usunięcia treści lub konta (po prośbie o usunięcie konta – 30 dni na przywrócenie, potem trwałe usunięcie). Zdjęcia w czacie – jak wiadomości czatu. Niewybrane warianty z Generatora usuwamy od razu, a zadania w kolejce – po 30 dniach.",
+"Hasta que borres el contenido o la cuenta (tras solicitar la eliminación: 30 días para restaurarla y después borrado definitivo). Fotos del chat: como los mensajes del chat. Las variantes no elegidas del Generador se borran al instante y las tareas en cola, a los 30 días."
+],
 [
 "Skrzynka, Znajomi i czat: nick, lista znajomych i zaproszeń, zablokowane konta, ustawienia prywatności, wiadomości systemowe oraz treść Twoich wiadomości na czacie ze znajomymi",
 "Buzón, Amigos y chat: nick, listas de amigos e invitaciones, cuentas bloqueadas, ajustes de privacidad, mensajes del sistema y el contenido de tus mensajes de chat con amigos"
@@ -53,6 +85,22 @@
 ],
 "de": [
 [
+"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na wall (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
+"Profil und Inhalte (Mein Bereich): Nick, optionaler Profil-Avatar (jedes regelkonforme Bild, nach Moderation), Beschreibung, Interessen, Datenschutz- und Online-Sichtbarkeitseinstellungen (Standard: nur enge Freunde), deine Fotos auf der Wand (max. 854 px), im Freundes-Chat gesendete Fotos (je nach Plan bis 854, 1280 oder 1920 px) sowie Beschreibungen und Bilder von Agentinnen aus dem Generator. Aus allen Fotos entfernen wir EXIF- und GPS-Metadaten, und jedes durchläuft einen automatischen Nacktheitsfilter."
+],
+[
+"Profil, publikowanie treści, czat ze znajomymi, Generator agentek",
+"Profil, Veröffentlichung von Inhalten, Chat mit Freunden, Agentinnen-Generator"
+],
+[
+"Nie (nick – tak, jeśli zakładasz profil)",
+"Nein (Nick – ja, wenn du ein Profil anlegst)"
+],
+[
+"Do usunięcia treści lub konta (po prośbie o usunięcie konta – 30 dni na przywrócenie, potem trwałe usunięcie). Zdjęcia w czacie – jak wiadomości czatu. Niewybrane warianty z Generatora usuwamy od razu, a zadania w kolejce – po 30 dniach.",
+"Bis du die Inhalte oder das Konto löschst (nach einem Löschantrag – 30 Tage zum Wiederherstellen, danach endgültige Löschung). Chat-Fotos – wie Chat-Nachrichten. Nicht gewählte Generator-Varianten löschen wir sofort, Aufträge in der Warteschlange nach 30 Tagen."
+],
+[
 "Skrzynka, Znajomi i czat: nick, lista znajomych i zaproszeń, zablokowane konta, ustawienia prywatności, wiadomości systemowe oraz treść Twoich wiadomości na czacie ze znajomymi",
 "Postfach, Freunde und Chat: Nick, Freundes- und Einladungslisten, blockierte Konten, Privatsphäre-Einstellungen, Systemnachrichten und der Inhalt deiner Chatnachrichten mit Freunden"
 ],
@@ -78,6 +126,22 @@
 ]
 ],
 "uk": [
+[
+"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na wall (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
+"Профіль і вміст (Моя панель): нік, необов’язковий аватар профілю (будь-яке зображення за правилами, після модерації), опис, інтереси, налаштування приватності та видимості онлайн (за замовчуванням: лише близькі друзі), ваші фото на стіні (макс. 854 px), фото, надіслані в чаті з друзями (залежно від плану до 854, 1280 або 1920 px), а також описи й зображення агенток із Генератора. З усіх фото ми видаляємо метадані EXIF і GPS, а кожне проходить автоматичний фільтр оголеності."
+],
+[
+"Profil, publikowanie treści, czat ze znajomymi, Generator agentek",
+"Профіль, публікація вмісту, чат із друзями, Генератор агенток"
+],
+[
+"Nie (nick – tak, jeśli zakładasz profil)",
+"Ні (нік – так, якщо створюєте профіль)"
+],
+[
+"Do usunięcia treści lub konta (po prośbie o usunięcie konta – 30 dni na przywrócenie, potem trwałe usunięcie). Zdjęcia w czacie – jak wiadomości czatu. Niewybrane warianty z Generatora usuwamy od razu, a zadania w kolejce – po 30 dniach.",
+"До видалення вмісту або акаунта (після запиту на видалення – 30 днів на відновлення, потім остаточне видалення). Фото в чаті – як повідомлення чату. Невибрані варіанти Генератора видаляємо одразу, а завдання в черзі – через 30 днів."
+],
 [
 "Skrzynka, Znajomi i czat: nick, lista znajomych i zaproszeń, zablokowane konta, ustawienia prywatności, wiadomości systemowe oraz treść Twoich wiadomości na czacie ze znajomymi",
 "Скринька, Друзі й чат: нік, списки друзів і запрошень, заблоковані акаунти, налаштування приватності, системні повідомлення та зміст ваших повідомлень у чаті з друзями"

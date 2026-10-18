@@ -116,7 +116,7 @@ def _email_admin(tid, d):
 
 ERR = {"fast": "Za szybko – odczekaj sekundę i wyślij ponownie.", "cat": "Wybierz kategorię sprawy.", "title": "Tytuł: od 5 do 120 znaków.", "desc": "Opis: od 20 do 4000 znaków.",
        "email": "Podaj poprawny e-mail albo zostaw pole puste.", "shot_type": "Zrzut ekranu musi być obrazem (JPG, PNG lub WEBP).",
-       "shot_size": "Zrzut ekranu jest za duży (maks. 5 MB).", "captcha": "Potwierdź, że nie jesteś botem."}
+       "shot_size": "Zrzut ekranu jest za duży (maks. 5 MB).", "shot_nsfw": "Tego zrzutu nie przyjmiemy – filtr nagości mówi stanowcze „nie”. Wyślij inny obraz.", "captcha": "Potwierdź, że nie jesteś botem."}
 
 # ---------- HTTP ----------
 TOKEN_OK = lambda t: False
