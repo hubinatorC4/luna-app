@@ -165,12 +165,12 @@ fetch('/api/config').then(r => r.json()).then(c => {
   const b = banner('💳 ' + pn.text, 'info'); b.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('luna.payNotice', pn.t); } catch(e){} });
 }).catch(() => {});
 const NEWS = [
+  ['⚔️ Bitwy agentek', 'Dwie agentki AI naprzeciw siebie: głosujesz (1 konto = 1 głos) i piszesz na czacie na żywo. Bitwa trwa od 1 do 7 dni. Swoją agentkę zgłosisz w planie Premium lub Pro.'],
   ['🔒 Trening agentki AI w planach płatnych', 'Premium: imię, słowo wybudzające, ton, długość odpowiedzi i styl. Pro / Ultra: także poza i sylwetka.'],
   ['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.'],
   ['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.'],
   ['🎁 Poleć Lunę', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.'],
   ['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.'],
-  ['⚔️ Bitwy agentek – wkrótce', 'Ruszą, gdy w obsadzie będą co najmniej dwie agentki. Pilnie szukamy nowych agentek!'],
   ['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.'],
   ['🧱 Ścianka Agentek Głosu', 'Nowa nazwa Ścianki. Pod wpisami: polubienia, wyświetlenia i komentarze jak w czacie – tylko prawdziwe liczby.'],
   ['🛍 Nowy Butik Luny', 'Nowa kolekcja, kategorie i kolory. Wszystkie kolory w cenie stroju. Tylko eleganckie, zakrywające stroje.'],
@@ -180,10 +180,10 @@ const NEWS = [
 window.LunaNews = () => {
   let d = $('#newsDlg');
   if (!d){ d = document.createElement('dialog'); d.id = 'newsDlg'; d.className = 'news';
-    d.innerHTML = '<h2>Co nowego w wersji 1.5.7</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
+    d.innerHTML = '<h2>Co nowego w wersji 1.6.0</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
     document.body.appendChild(d); }
-  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.5.7'); } catch(e){}
+  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.0'); } catch(e){}
 };
-try { if (localStorage.getItem('luna.seenVer') !== '1.5.7' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
+try { if (localStorage.getItem('luna.seenVer') !== '1.6.0' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-news]')){ e.preventDefault(); window.LunaNews(); } });
 })();

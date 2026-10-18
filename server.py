@@ -27,7 +27,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.5.8"
+VERSION = "1.6.0"
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
@@ -839,7 +839,7 @@ class H(SimpleHTTPRequestHandler):
                 if p == "/api/battles/vote":
                     if not livechat.rate_ok("btv:" + ip, 10, 300): return self._json({"error": "Za szybko."}, 429)
                     antibot.on_vote("u:" + uid, ip, ua)
-                    return self._json(battles.vote(uid, dev, str(data.get("bid", "")), data.get("side")))
+                    return self._json(self._bt_pub(battles.vote(uid, dev, str(data.get("bid", "")), data.get("side")), uid))
                 if p == "/api/battles/chat":
                     if not (livechat.rate_ok("btc:" + ip, 6, 400) and livechat.rate_ok("btc:" + uid, 4, 300)): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
                     m, L = battles.chat_post(uid, a[0].get("name") or "", str(data.get("bid", "")), data.get("text"))
@@ -991,6 +991,12 @@ class H(SimpleHTTPRequestHandler):
             else: return self._json({"error": "bad action"}, 400)
             return self._json({"ok": True, "items": avatars.admin_list()})
         return None
+    def _bt_pub(self, d, uid):
+        pl, _ = self._plan(); d["my_plan"] = pl; d["logged_in"] = bool(uid); d["can_enter"] = plans.has(pl, battles.ENTER_PLAN)
+        show = CFG["pricing"]["show"]
+        d["price"] = CFG["pricing"]["plans"]["premium"]["pln"] if show else None
+        d["price_pro"] = CFG["pricing"]["plans"]["pro"]["pln"] if show else None
+        return d
     def _get_account(self, u):
         p = u.path
         if p == "/api/butik":
@@ -1008,10 +1014,8 @@ class H(SimpleHTTPRequestHandler):
                 if p.startswith("/api/admin/battles/img/"): return self._dataurl(battles.entry_img(p.rsplit("/", 1)[-1], admin=True))
                 return self._json(battles.admin_list())
             if p == "/api/battles":
-                d = battles.public(uid, dev)
-                pl, _ = self._plan(); d["my_plan"] = pl; d["logged_in"] = bool(uid); d["can_enter"] = plans.has(pl, battles.ENTER_PLAN)
-                d["price"] = CFG["pricing"]["plans"]["premium"]["pln"] if CFG["pricing"]["show"] else None
-                return self._json(d)
+                if dev and not antibot.UA_BOT.search(self.headers.get("User-Agent", "") or "bot"): battles.touch(dev)
+                return self._json(self._bt_pub(battles.public(uid, dev), uid))
             if p.startswith("/api/battles/img/"): return self._dataurl(battles.entry_img(p.rsplit("/", 1)[-1], uid))
             if p == "/api/battles/chat":
                 s = (q.get("since") or ["0"])[0]

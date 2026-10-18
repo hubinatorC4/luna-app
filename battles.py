@@ -21,6 +21,15 @@ ENTER_PLAN = "premium"          # każdy płatny plan (Premium, Pro) może zgło
 LUNA = {"id": "luna", "name": "Luna", "img": "/catalog/luna/outfit_sweter.jpg", "official": True}
 LUNA_TARGETS = ["agent:luna-" + n for n in social.LUNA_GAL]
 
+_view = {}  # skrót urządzenia -> ostatnie odpytanie (prawdziwi oglądający w ostatnich 45 s; bez botów)
+def touch(dev):
+    now = time.time(); h = hashlib.sha256(("btv:" + str(dev)).encode()).hexdigest()[:12]
+    with _lock:
+        _view[h] = now
+        for k in [k for k, t in _view.items() if now - t > 45]: _view.pop(k, None)
+def viewers():
+    now = time.time(); return sum(1 for t in list(_view.values()) if now - t <= 45)
+
 def _entries(): return store.get("bt_entries", []) or []
 def _state(): return store.get("bt_state", {}) or {}
 def _cfg(): return store.get("bt_cfg", {}) or {}
@@ -38,8 +47,7 @@ def set_duration(h):
 def excluded():
     """Głosy, które się nie liczą: konta ukryte przez filtr antybotowy; konta bez potwierdzonego e-maila – gdy weryfikacja e-mail działa."""
     X = antibot.excluded()
-    if notify.email_enabled(): return X
-    antibot.excluded(); return set(antibot._cache["hidden"])
+    return X if notify.email_enabled() else set(antibot._cache["hidden"])
 
 def _reports(target):
     return sum(1 for r in (store.get("social_reports", []) or []) if r["target"] == target)
@@ -78,7 +86,7 @@ def withdraw(uid):
         for e in E:
             if e["uid"] == uid and e["status"] in ("pending", "approved"): e["status"] = "withdrawn"; ch = True
         if ch: store.put("bt_entries", E)
-    if ch: _cancel_if_in_battle(lambda c: c.get("uid") == uid, "withdrawn")
+    if ch: _cancel_if_in_battle(lambda c: c.get("id") != "luna" and _owner(c["id"]) == uid, "withdrawn")
     return ch
 
 def entry_img(eid, uid=None, admin=False):
@@ -94,7 +102,7 @@ def _in_history(eid):
 
 # ---------- ranking (prawdziwe zaangażowanie, filtr antybotowy jak w Polecanych) ----------
 def _eligible():
-    X = antibot.excluded(); V = social._votes(); C = social._cmts()
+    X = antibot.excluded(); XA = excluded(); V = social._votes(); C = social._cmts()
     cmc = {}
     for c in C:
         if c["status"] == "approved" and c["author"] not in X: cmc[c["target"]] = cmc.get(c["target"], 0) + 1
@@ -106,7 +114,7 @@ def _eligible():
     lu = _cfg().get("luna", {"wins": 0, "bt_votes": 0})
     out = [dict(LUNA, score=sc(LUNA_TARGETS, lu.get("bt_votes", 0)), wins=lu.get("wins", 0), t=0)]
     for e in _entries():
-        if e["status"] != "approved" or social.banned(e["ak"]) or e["ak"] in X: continue
+        if e["status"] != "approved" or social.banned(e["ak"]) or e["ak"] in XA: continue
         tg = "agent:bt-" + e["id"]
         if _reports(tg) >= REPORT_HIDE and not e.get("cleared"): continue
         out.append({"id": e["id"], "uid": e["uid"], "name": e["name"], "img": "/api/battles/img/" + e["id"], "official": False,
@@ -128,7 +136,8 @@ def _finalize(st, now, reason="end"):
            "winner": win, "reason": reason, "hours": b["hours"]}
     st["hist"] = ([res] + st.get("hist", []))[:30]; st["cur"] = None
     if win:
-        w = b[win]; st["champ"] = {"c": w, "bid": b["id"], "until": int(res["end"] + CHAMP_H * 3600), "votes": max(va, vb)}
+        w = b[win]; st["champ"] = {"c": w, "bid": b["id"], "until": int(res["end"] + CHAMP_H * 3600), "votes": max(va, vb),
+                                   "pct": round(max(va, vb) * 100 / (va + vb)), "a": b["a"], "b": b["b"], "va": va, "vb": vb, "winner": win, "scene": b["scene"]}
     # zapis prawdziwych głosów i zwycięstw do rankingu
     E = _entries(); cfg = _cfg(); ch = False
     for side, n in (("a", va), ("b", vb)):
@@ -169,7 +178,7 @@ def _cancel_if_in_battle(pred, reason):
 def public(uid=None, dev=""):
     st = tick(); now = int(time.time()); X = excluded()
     voter = "u:" + uid if uid else None
-    out = {"now": now, "need": NEED, "min_h": MIN_H, "max_h": MAX_H, "scenes": SCENES, "enter_plan": ENTER_PLAN}
+    out = {"now": now, "viewers": viewers(), "need": NEED, "min_h": MIN_H, "max_h": MAX_H, "scenes": SCENES, "enter_plan": ENTER_PLAN}
     b = st.get("cur")
     if b:
         va = sum(1 for k, s in b["votes"].items() if s == "a" and k not in X); vb = sum(1 for k, s in b["votes"].items() if s == "b" and k not in X)
@@ -208,7 +217,7 @@ def vote(uid, dev, bid, side):
 def _chat(): return store.get("bt_chat", {}) or {}
 
 def chat_list(bid, uid=None, since=0):
-    X = antibot.excluded(); me = "u:" + uid if uid else None
+    X = excluded(); me = "u:" + uid if uid else None
     L = _chat().get(bid, [])
     items = [{"id": m["id"], "nick": m["nick"], "text": m["text"], "t": m["t"], "mine": m["ak"] == me}
              for m in L if m["id"] > since and ((not m.get("hidden") and m["ak"] not in X) or m["ak"] == me)]

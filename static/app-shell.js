@@ -245,7 +245,7 @@ function renderMore(){
     <ul class="menu"><li><button type="button" data-chat><span>${esc(T.help_h)}<small>${esc(T.help_s)}</small></span></button></li>
       <li><a href="/problemy.html" data-page>${esc(T.problems)}</a></li>
       <li><a href="/twarz.html#castForm" data-page><span>${esc(T.cast)}<small>${esc(T.cast_s)}</small></span></a></li>
-      <li><a href="/bitwy.html" data-page><span>${esc(BT[0])}<small>${esc(BT[1])}</small></span></a></li></ul>
+      <li><a href="/bitwy.html"><span>${esc(BT[0])}<small>${esc(BT[1])}</small></span></a></li></ul>
     <h2 class="t" id="howH" style="font-size:22px">${esc(T.how_h)}</h2>
     ${T.how.map(([h, p]) => `<details class="more"><summary>${esc(h)}</summary><p>${esc(p)}</p></details>`).join('')}
     <ul class="menu"><li><button type="button" id="replay">${esc(T.replay)}</button></li></ul>
