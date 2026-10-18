@@ -695,6 +695,11 @@ def _bg_loop():
         if n % 60 == 5:
             try: agentgen.tick()
             except Exception as e: print("agentgen tick", repr(e)[:200], file=sys.stderr)
+        if n % 3600 == 120:
+            try:   # codzienna kopia logiczna w bazie (7 dni)
+                b = store.backup_tick()
+                if b: print("backup day=%s keys=%d bytes=%d" % (b["day"], b["keys"], b["bytes"]), flush=True)
+            except Exception as e: print("backup error", type(e).__name__, file=sys.stderr)
         if n % 60 == 0:
             try: run_reminders()
             except Exception as e: print("reminder error", repr(e)[:200], file=sys.stderr)
@@ -1379,6 +1384,15 @@ class H(SimpleHTTPRequestHandler):
         return None
     def do_GET(self):
         u = urlparse(self.path)
+        if u.path == "/api/internal/kv-handover":
+            # jednorazowe przekazanie danych nowej instancji z bazą (podpis HMAC z sekretu znanego tylko serwerowi, ważny 120 s);
+            # działa wyłącznie na starej instancji bez bazy – po podłączeniu Postgresa zawsze 404
+            if not livechat.rate_ok("kvh:" + self._ip(), 5, 600): return self._json({"error": "rate limited"}, 429)
+            hd = self.headers
+            if not store.handover_ok(hd.get("X-Luna-Ts"), hd.get("X-Luna-Nonce", ""), hd.get("X-Luna-Sig")): return self._json({"error": "not found"}, 404)
+            try: security.audit("kv_handover", self._ip(), "keys=%d" % len(store.keys()))
+            except Exception: pass
+            return self._json(store.handover_payload())
         if moderator.gate(self, "GET"): return      # tryb serwisowy (Strona / Aplikacja / Cały system) – panel i logowanie działają zawsze
         if re.search(r"(?:^|&)source=(?:twa|pwa)(?:&|$)", u.query or "") and self._cookie("luna_app") != "1":
             self._cookies = getattr(self, "_cookies", []) + ["luna_app=1; Path=/; HttpOnly; Secure; SameSite=Lax"]   # rozpoznanie aplikacji (TWA/PWA) po stronie serwera
@@ -1569,9 +1583,9 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"catalog": CAT, "public": catalog.public(CAT), "plans": catalog.PLAN_IDS, "tones": list(TONES)})
         if u.path.startswith("/uploads/"):
             fn = os.path.basename(u.path)
-            fp = os.path.join(catalog.UPLOADS, fn)
-            if not re.fullmatch(r"[0-9a-f]{16}\.(jpg|png|webp|mp3)", fn) or not os.path.exists(fp): return self._json({"error": "not found"}, 404)
-            b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
+            b = catalog.read_upload(fn) if re.fullmatch(r"[0-9a-f]{16}\.(jpg|png|webp|mp3)", fn) else None
+            if b is None: return self._json({"error": "not found"}, 404)
+            ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
             self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
         if u.path == "/api/tester/perks": return tester_perks.get(self, u)
@@ -1662,7 +1676,9 @@ class H(SimpleHTTPRequestHandler):
             try: return self._json(livechat.conv(vid))
             except KeyError: return self._json({"error": "not found"}, 404)
         if u.path == "/api/health":
-            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled(), "version": VERSION})
+            st = store.status()
+            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled(), "version": VERSION,
+                               "storage": st["backend"], "persistent": st["persistent"], **({"db_ok": store.ping()} if st["persistent"] else {})})
         if u.path in ("/sitemap.xml", "/robots.txt"):
             base = notify.PUBLIC_URL.rstrip("/")
             b = (seo.sitemap(base) if u.path.endswith(".xml") else seo.robots(base)).encode()
@@ -2114,6 +2130,8 @@ class H(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(os.getenv("PORT", sys.argv[1] if len(sys.argv) > 1 else 8765))
     print(f"Luna działa na http://0.0.0.0:{port}")
+    print("storage=%s migration=%s" % (store.BACKEND, json.dumps(store.MIGRATION, default=str)[:400]), flush=True)
+    store.install_sigterm()   # wdrożenie (SIGTERM): najpierw zapis zaległych zmian
     try: moderator.ensure_admin()   # konto właściciela (LUNA_ADMIN_NICK + LUNA_ADMIN_PASSWORD_HASH) z rolą admin
     except Exception as e: print("ensure_admin", repr(e)[:200], file=sys.stderr)
     try: userprof.seed_moderator()

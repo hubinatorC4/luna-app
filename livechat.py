@@ -15,13 +15,23 @@ CONVS = {}
 def _load():
     global CONVS
     try:
-        d = json.load(open(FILE, encoding="utf-8"))
+        import store
+        d = store.get("livechat", None) if store.BACKEND == "postgres" else None
+        if not isinstance(d, dict): d = json.load(open(FILE, encoding="utf-8"))
         CONVS = d.get("convs", {}); _seq[0] = int(d.get("seq", 0))
     except Exception:
         CONVS = {}
 _load()
 
+def _snap():
+    with _lock: return json.loads(json.dumps({"convs": CONVS, "seq": _seq[0]}))
+
 def _save():
+    try:
+        import store
+        if store.BACKEND == "postgres":   # trwale w Postgresie (zapis odroczony o 2 s – seria wiadomości = jeden zapis)
+            store.put_later("livechat", _snap); return
+    except Exception: pass
     try:
         os.makedirs(os.path.dirname(FILE), exist_ok=True)
         tmp = FILE + ".tmp"

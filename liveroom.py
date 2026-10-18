@@ -15,11 +15,22 @@ cmd_last = {}   # vid -> czas ostatniej komendy
 
 def _load():
     try:
-        d = json.load(open(FILE, encoding="utf-8")); S.update({k: d[k] for k in S if k in d})
+        import store
+        d = store.get("liveroom", None) if store.BACKEND == "postgres" else None
+        if not isinstance(d, dict): d = json.load(open(FILE, encoding="utf-8"))
+        S.update({k: d[k] for k in S if k in d})
     except Exception: pass
 _load()
 
+def _snap():
+    with lock: return json.loads(json.dumps(S))
+
 def save():
+    try:
+        import store
+        if store.BACKEND == "postgres":
+            store.put_later("liveroom", _snap); return
+    except Exception: pass
     try:
         os.makedirs(os.path.dirname(FILE), exist_ok=True)
         json.dump(S, open(FILE + ".tmp", "w", encoding="utf-8"), ensure_ascii=False); os.replace(FILE + ".tmp", FILE)

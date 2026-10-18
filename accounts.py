@@ -28,6 +28,34 @@ def check_pw(stored, pw):
     except Exception: return False
 
 def _accts(): return store.get("accounts", {}) or {}
+
+def _day(t=None):
+    try:
+        from zoneinfo import ZoneInfo; import datetime as _dt
+        return _dt.datetime.fromtimestamp(t or time.time(), ZoneInfo("Europe/Warsaw")).strftime("%Y-%m-%d")
+    except Exception: return time.strftime("%Y-%m-%d", time.gmtime(t or time.time()))
+
+def count_signup():
+    """Licznik rejestracji per dzień (same liczby, bez danych osobowych) – zostaje także po usunięciu konta."""
+    d = store.get("signup_days", {}) or {}; k = _day(); d[k] = int(d.get(k, 0)) + 1
+    store.put("signup_days", dict(sorted(d.items())[-400:]))
+
+def signup_stats(days=30):
+    """Prawdziwe liczby do Panelu admina: istniejące konta (bez konta właściciela) i rejestracje dzień po dniu."""
+    import datetime as _dt
+    now = int(time.time()); A = [u for u in _accts().values() if u.get("role") != "admin"]
+    since = lambda s: sum(1 for u in A if int(u.get("created") or 0) >= now - s)
+    logd = store.get("signup_days", {}) or {}
+    exist = {}
+    for u in A:
+        if u.get("created"): k = _day(int(u["created"])); exist[k] = exist.get(k, 0) + 1
+    today = _dt.date.fromisoformat(_day(now))
+    series = []
+    for i in range(days - 1, -1, -1):
+        k = (today - _dt.timedelta(days=i)).isoformat()
+        series.append({"day": k, "signups": int(logd.get(k, 0)), "existing": exist.get(k, 0)})
+    return {"total": len(A), "verified": sum(1 for u in A if u.get("verified")), "last_24h": since(86400), "last_7d": since(7 * 86400),
+            "last_30d": since(30 * 86400), "signups_all_time": sum(int(v) for v in logd.values()), "log_since": min(logd) if logd else "", "series": series}
 def _sess(): return store.get("sessions", {}) or {}
 
 def _by_email(a, email):
@@ -62,6 +90,8 @@ def signup(d, base_url=""):
         a[uid] = {"uid": uid, "email": email, "pw": pwh, "name": name, "created": int(time.time()), "verified": False,
                   "vtok": _h(vt), "tester": "", "fails": 0, "lock": 0, "terms_at": int(time.time()), **decl}
         store.put("accounts", a)
+        try: count_signup()
+        except Exception: pass
     try: userprof.set_nick(uid, nick)
     except ValueError: pass
     sent = False

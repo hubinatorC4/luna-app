@@ -137,6 +137,11 @@ def _migrate(c):
     return c
 
 def load():
+    try:   # Postgres (trwale), gdy jest DATABASE_URL; plik data/catalog.json tylko lokalnie
+        import store
+        sv = store.get("catalog", None) if store.BACKEND == "postgres" else None
+        if isinstance(sv, dict) and sv: return _migrate(sanitize(sv))
+    except Exception: pass
     try:
         with open(FILE, encoding="utf-8") as f: return _migrate(sanitize(json.load(f)))
     except Exception:
@@ -149,6 +154,8 @@ def save(c):
         os.makedirs(DATA, exist_ok=True)
         with open(FILE + ".tmp", "w", encoding="utf-8") as f: json.dump(c, f, ensure_ascii=False, indent=1)
         os.replace(FILE + ".tmp", FILE)
+    import store
+    if store.BACKEND == "postgres": store.put("catalog", c)
     return c
 
 def save_upload(name, raw):
@@ -169,4 +176,19 @@ def save_upload(name, raw):
         ext = "." + out_ext
     fn = secrets.token_hex(8) + (".jpg" if ext == ".jpeg" else ext)
     with open(os.path.join(UPLOADS, fn), "wb") as f: f.write(raw)
+    import store, base64
+    if store.BACKEND == "postgres": store.put("upl:" + fn, {"b": base64.b64encode(raw).decode()})   # przetrwa wdrożenie
     return "/uploads/" + fn
+
+def read_upload(fn):
+    """Plik wgrany przez admina: z dysku, a po wdrożeniu z bazy (i znów na dysk jako pamięć podręczna)."""
+    p = os.path.join(UPLOADS, fn)
+    if os.path.exists(p): return open(p, "rb").read()
+    import store, base64
+    r = store.get("upl:" + fn) if store.BACKEND == "postgres" else None
+    if not r or not r.get("b"): return None
+    raw = base64.b64decode(r["b"])
+    try:
+        os.makedirs(UPLOADS, exist_ok=True); open(p, "wb").write(raw)
+    except Exception: pass
+    return raw

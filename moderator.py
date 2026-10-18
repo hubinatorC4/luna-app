@@ -740,6 +740,19 @@ def handle_get(h, u):
     need = {"/api/mod/overview": "overview", "/api/mod/queue": "chat", "/api/mod/users": "users", "/api/mod/content": "content", "/api/mod/audit": "audit",
             "/api/mod/broadcasts": "broadcast", "/api/mod/shop": "shop", "/api/mod/support": "support"}.get(p)
     if need and not can(c["u"], need): return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)
+    if p in ("/api/mod/accounts", "/api/mod/backup"):
+        if not c["full"]: return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)
+        if p == "/api/mod/accounts":
+            import accounts
+            mig = store.MIGRATION.get("handover") if isinstance(store.MIGRATION, dict) else None
+            return h._json({"stats": accounts.signup_stats(30), "storage": store.status(), "db": store.db_info(), "backups": store.backups(),
+                            "handover": {k: v for k, v in (mig or store.meta_get("handover", {}) or {}).items() if k in ("done", "tries", "last", "t", "counts")} if store.BACKEND == "postgres" else None})
+        day = g("day")
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day): return h._json({"error": "bad day"}, 400)
+        b = store.backup_data(day)
+        if b is None: return h._json({"error": "not found"}, 404)
+        audit(h, "backup download", day, "")
+        return _send(h, 200, "application/json; charset=utf-8", b, {"Content-Disposition": "attachment; filename=luna-kopia-%s.json" % day})
     if p == "/api/mod/shop": return h._json({"items": shop(g("q"))})
     if p == "/api/mod/support": return h._json(support_list())
     if p == "/api/mod/overview":
@@ -819,6 +832,13 @@ def handle_post(h, u, data):
     if p == "/api/mod/lock":
         device_forget(h, bool(data.get("all")), c["uid"]); _sess.pop(c["tok"], None); audit(h, "lock", "wszystkie urządzenia" if data.get("all") else "to urządzenie")
         return h._json({"ok": True})
+    if p == "/api/mod/backup/now":
+        if not c["full"]: return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)
+        if not _rate("bk:" + c["uid"], 5, 3600): return h._json({"error": "Za dużo kopii – odczekaj chwilę."}, 429)
+        try: b = store.backup_now()
+        except Exception as e: return h._json({"error": "Kopia nie powiodła się (" + type(e).__name__ + ")."}, 500)
+        if not b: return h._json({"error": "Brak bazy danych – kopia w bazie niemożliwa."}, 400)
+        audit(h, "backup now", b["day"], "%d kluczy" % b["keys"]); return h._json({"ok": True, "backup": b, "backups": store.backups()})
     act = p.rsplit("/", 1)[-1]
     need = {"switches": "switches", "queue": "chat", "user": "users", "content": "content", "announce": "announce", "broadcast": "broadcast", "shop": "shop", "support": "support"}.get(act)
     if need and not can(c["u"], need): return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)

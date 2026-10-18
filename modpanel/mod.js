@@ -82,19 +82,19 @@ function unlockView(){
 }
 $('#mpLock').onclick = async () => { if (!confirm('Zablokować panel na tym urządzeniu? Następne wejście poprosi o kod 2FA.')) return; try { await req('/api/mod/lock', {}); } catch (e) {} TOK = ''; boot(); };
 /* ---------- panel ---------- */
-const TABS = [['home', '⚡', 'Przełączniki'], ['queue', '🧹', 'Kolejka'], ['users', '👥', 'Użytkownicy'], ['content', '🖼️', 'Treści'], ['shop', '🛍️', 'Butik'], ['msg', '📣', 'Komunikaty'], ['support', '💬', 'Wsparcie'], ['audit', '📜', 'Dziennik']];
+const TABS = [['home', '⚡', 'Przełączniki'], ['konta', '📈', 'Konta i baza'], ['queue', '🧹', 'Kolejka'], ['users', '👥', 'Użytkownicy'], ['content', '🖼️', 'Treści'], ['shop', '🛍️', 'Butik'], ['msg', '📣', 'Komunikaty'], ['support', '💬', 'Wsparcie'], ['audit', '📜', 'Dziennik']];
 const MTABS = [['queue', '💬', 'Czat'], ['users', '👥', 'Użytkownicy'], ['shop', '🛍️', 'Butik'], ['support', '🛟', 'Wsparcie']];   /* moderator: minimalne uprawnienia */
 function app(){
   main.className = 'mp-main'; main.innerHTML = '';   // bez resztek ekranu logowania / kodu 2FA
   if (MODE === 'web') main.prepend(tabs);
-  const list = !FULL ? MTABS : MODE === 'app' ? TABS.filter(t => ['home', 'queue', 'users', 'content', 'msg'].includes(t[0])) : TABS;
+  const list = !FULL ? MTABS : MODE === 'app' ? TABS.filter(t => ['home', 'konta', 'queue', 'users', 'content', 'msg'].includes(t[0])) : TABS;
   tabs.innerHTML = list.map(([k, i, l]) => `<button type="button" data-t="${k}"><span class="i" aria-hidden="true">${i}</span><span>${l}</span>${k === 'queue' ? '<span class="n" id="qN" hidden></span>' : ''}</button>`).join('');
   tabs.hidden = false; tabs.querySelectorAll('button').forEach(b => b.onclick = () => show(b.dataset.t)); show(TAB);
 }
 function sec(html){ main.querySelectorAll('.mp-sec').forEach(s => s.remove()); main.insertAdjacentHTML('beforeend', `<section class="mp-sec">${html}</section>`); return main.querySelector('.mp-sec'); }
 async function show(t){
   TAB = t; tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-current', b.dataset.t === t));
-  try { await ({home, queue, users, content, shop, msg, support, audit})[t](); } catch (e){ sec(`<p class="mp-hint">⚠️ ${esc(e.message)}</p>`); }
+  try { await ({home, konta, queue, users, content, shop, msg, support, audit})[t](); } catch (e){ sec(`<p class="mp-hint">⚠️ ${esc(e.message)}</p>`); }
 }
 /* przełączniki + statystyki */
 async function home(){
@@ -126,6 +126,27 @@ async function home(){
     try { await act('/api/mod/switches', body); toast(on ? 'Włączone ✅' : 'Wyłączone – tryb serwisowy 🛠️'); home(); } catch (e){ toast('⚠️ ' + e.message); }
   });
   $('#swSave').onclick = async () => { const v = $('#swUntil').value; try { await act('/api/mod/switches', {msg: $('#swMsg').value, until: v ? Math.floor(new Date(v).getTime() / 1000) : 0}); toast('Zapisano 💚'); home(); } catch (e){ toast('⚠️ ' + e.message); } };
+}
+/* konta i baza danych – tylko prawdziwe liczby */
+async function konta(){
+  const d = await req('/api/mod/accounts'); const st = d.stats, S = d.storage, db = d.db || {}, mx = Math.max(1, ...st.series.map(x => Math.max(x.signups, x.existing)));
+  const kb = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.ceil(n / 1024) + ' kB';
+  const bars = st.series.map(x => `<div class="kb" title="${esc(x.day)}: ${x.signups} rejestracji (${x.existing} kont nadal istnieje)"><i style="height:${Math.round(x.signups / mx * 100)}%"></i><em style="height:${Math.round(x.existing / mx * 100)}%"></em><small>${x.day.slice(8)}</small></div>`).join('');
+  const s = sec(`<h2>📈 Konta i baza danych</h2>
+  ${S.persistent ? `<p class="mp-hint">✅ Baza danych Postgres podłączona – konta i dane przetrwają aktualizacje strony.${db.db_bytes ? ' Rozmiar bazy: ' + kb(db.db_bytes) + ' z 1 GB (plan darmowy).' : ''}</p>` : `<p class="mp-banner warn">⚠️ Brak trwałej bazy danych${S.error ? ' (nie udało się połączyć)' : ' (brak DATABASE_URL)'} – konta znikają przy każdej aktualizacji strony.</p>`}
+  <h3>👥 Konta (bez konta właściciela)</h3><div class="mp-stat">
+    <div><b>${st.total}</b><small>zarejestrowanych kont</small></div><div><b>${st.verified}</b><small>z potwierdzonym e-mailem</small></div>
+    <div><b>${st.last_24h}</b><small>nowych w 24 h</small></div><div><b>${st.last_7d}</b><small>nowych w 7 dni</small></div><div><b>${st.last_30d}</b><small>nowych w 30 dni</small></div>
+    <div><b>${st.signups_all_time}</b><small>rejestracji łącznie${st.log_since ? ' od ' + esc(st.log_since) : ''} (z usuniętymi)</small></div></div>
+  <h3>📊 Rejestracje dzień po dniu (30 dni)</h3><div class="mp-card"><div class="kbars" role="img" aria-label="Wykres rejestracji z 30 dni">${bars}</div>
+    <p class="mp-hint"><span class="kl i"></span> rejestracje danego dnia · <span class="kl e"></span> konta z tego dnia, które nadal istnieją. Licznik rejestracji działa od podłączenia bazy – wcześniejsze dni pokazują tylko istniejące konta.</p></div>
+  ${S.persistent ? `<h3>💾 Kopie zapasowe</h3><div class="mp-card"><p class="mp-hint">Codziennie automatyczna kopia w tej samej bazie (7 ostatnich dni, bez ciężkich zdjęć AI). Chroni przed błędem aplikacji, ale nie przed utratą całej bazy – pobieraj kopię na swój komputer. Darmowa baza wygasa 17.11.2026.</p>
+    <ul class="mp-list">${(d.backups || []).map(b => `<li>${esc(b.day)} · ${b.keys} kluczy · ${kb(b.bytes)} <button class="mp-btn sm" data-bk="${esc(b.day)}" type="button">⬇ Pobierz</button></li>`).join('') || '<li>Jeszcze brak – pierwsza kopia w ciągu godziny.</li>'}</ul>
+    <div class="mp-row"><button class="mp-btn" id="bkNow" type="button">💾 Zrób kopię teraz</button></div></div>` : ''}`);
+  s.querySelectorAll('[data-bk]').forEach(b => b.onclick = async () => {
+    try { const r = await fetch('/api/mod/backup?day=' + encodeURIComponent(b.dataset.bk), {headers: {'X-Admin-Token': TOK}, credentials: 'same-origin'}); if (!r.ok) throw new Error('HTTP ' + r.status);
+      const a = document.createElement('a'); a.href = URL.createObjectURL(await r.blob()); a.download = 'luna-kopia-' + b.dataset.bk + '.json'; a.click(); } catch (e){ toast('⚠️ ' + e.message); } });
+  const bn = $('#bkNow'); if (bn) bn.onclick = async () => { try { const r = await act('/api/mod/backup/now', {}); toast('Kopia zapisana 💚 (' + r.backup.keys + ' kluczy)'); konta(); } catch (e){ toast('⚠️ ' + e.message); } };
 }
 /* kolejka */
 const ACT = {approve: ['✅ Zatwierdź', 'ok'], dismiss: ['👌 Odrzuć zgłoszenie', 'ok'], remove: ['🗑️ Usuń', 'bad'], warn: ['⚠️ Ostrzeż', ''], strike: ['🟥 Strike', 'bad'], temp_block: ['⏸️ Blokada 7 dni', 'bad'], ban: ['⛔ Ban', 'bad']};
