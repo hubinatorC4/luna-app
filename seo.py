@@ -122,6 +122,10 @@ def jsonld(base, lang, app=True):
         out.append({"@context": "https://schema.org", "@type": "WebApplication", "operatingSystem": "Web", "browserRequirements": "Requires JavaScript", **common})
     return "".join(f'<script type="application/ld+json">{_j.dumps(x, ensure_ascii=False)}</script>' for x in out)
 
+# v1.6.6: wersja na komputer (tylko ≥1024 px) – wszystkie strony serwisu poza aplikacją i panelem
+NO_DESKTOP = ("/index.html", "/app.html", "/panel.html", "/app")
+DESKTOP = '<link rel="stylesheet" href="/desktop.css?v=d1">\n<script src="/desktop.js?v=d1" defer></script>\n'
+
 def localize(doc, path, lang, base):
     p = "/" if path in ("", "/index.html") else path
     meta = PAGES.get(p, {}).get(lang) if lang else None
@@ -148,7 +152,7 @@ def localize(doc, path, lang, base):
     if p in PAGES and "application/ld+json" not in doc: doc = doc.replace("</head>", jsonld(base, lang, p in ("/", "/promo.html", "/o-lunie.html")) + "\n</head>", 1)
     if "og:site_name" not in doc: doc = doc.replace("</head>", '<meta property="og:site_name" content="Luna mówi jak jest">\n</head>', 1)
     if 'og:url' not in doc: doc = doc.replace("</head>", f'<meta property="og:url" content="{canon}">\n</head>', 1)
-    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<script src="/emoji.js" defer></script>\n<script src="/bt-mini.js?v=1.6.3" defer></script>\n<script src="/share-kit.js?v=2" defer></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
+    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<script src="/emoji.js" defer></script>\n<script src="/bt-mini.js?v=1.6.3" defer></script>\n<script src="/share-kit.js?v=2" defer></script>\n<link rel="stylesheet" href="/soft.css">\n{DESKTOP if path not in NO_DESKTOP else ""}</head>', 1)
     doc = re.sub(r'(<meta charset="utf-8">)', r'\1<script src="/lg.js"></script>', doc, count=1, flags=re.I)
     return doc
 

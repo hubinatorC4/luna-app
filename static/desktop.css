@@ -1,0 +1,128 @@
+/* Luna – wersja na komputer (desktop d1). Tylko ≥1024 px i ≥1440 px: telefon i tablet bez zmian.
+   Szerszy kontener, spokojny nagłówek (wyszukiwarka + 2–3 akcje + „Więcej ▾”), zakładki z „Więcej” zamiast ucinania,
+   siatki kart, 2-kolumnowe hero i boczna kolumna na stronie głównej. Styl: czerń–złoto–zieleń, Poppins/Playfair, miękkie zaokrąglenia (soft.css). */
+.dsk-more,.dsk-rail{display:none}
+@media (min-width:1024px){
+  :root{--dsk-w:min(1240px,calc(100vw - 176px));--dsk-pad:20px;--dsk-hdr:112px;--dsk-gap:28px}
+  html{scroll-padding-top:calc(var(--dsk-hdr) + 12px)}
+
+  /* ---------- nagłówek ---------- */
+  header.top{background:rgba(10,10,10,.985);-webkit-backdrop-filter:saturate(1.2) blur(10px);backdrop-filter:saturate(1.2) blur(10px)}
+  header.top .bar{max-width:calc(var(--dsk-w) + 2*var(--dsk-pad));padding:12px var(--dsk-pad);grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"logo search acts";gap:18px;justify-content:stretch}
+  header.top .bar .search{max-width:440px;width:100%;justify-self:start;margin-left:8px}
+  header.top .bar .search input{padding:9px 16px;font-size:15px}
+  header.top .bar .search button{width:46px}
+  header.top .bar .acts{align-items:center;gap:10px;flex-wrap:nowrap}
+  header.top .bar .acts>.pill,header.top .bar .acts>a,header.top .bar .acts>button{white-space:nowrap}
+  /* dzwonek: stan powiadomień w dymku zamiast długiej pigułki */
+  header.top .acts [data-push]{position:relative;font-size:0!important;width:42px;height:42px;min-height:42px;max-width:none;padding:0!important;border-radius:50%!important;display:inline-grid;place-items:center;overflow:visible}
+  header.top .acts [data-push]::before{content:"🔔";font-size:18px;line-height:1}
+  header.top .acts [data-push][data-dsk-state=off]::before{content:"🔕"}
+  header.top .acts [data-push].on::before{content:"🔔";color:var(--acc)}
+  header.top .acts [data-push].on::after{content:"";position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--green,#2ee66b);box-shadow:0 0 0 2px #0a0a0a}
+  .dsk-tip{position:absolute;top:calc(100% + 10px);right:0;z-index:60;width:max-content;max-width:260px;padding:9px 13px;border-radius:var(--luna-r-md,16px);background:var(--luna-surface-2,#1e1a22);border:1px solid rgba(255,200,140,.22);color:#f5ece2;font:600 13px/1.4 var(--luna-font-head,"Poppins",system-ui,sans-serif);box-shadow:var(--luna-shadow-soft,0 14px 30px -12px rgba(0,0,0,.7));opacity:0;transform:translateY(-4px);pointer-events:none;transition:opacity .18s,transform .18s;white-space:normal;text-align:left}
+  .dsk-tip::before{content:"";position:absolute;top:-6px;right:15px;width:10px;height:10px;background:inherit;border-left:1px solid rgba(255,200,140,.22);border-top:1px solid rgba(255,200,140,.22);transform:rotate(45deg)}
+  header.top .acts [data-push]:hover .dsk-tip,header.top .acts [data-push]:focus-visible .dsk-tip{opacity:1;transform:none}
+
+  /* „Więcej ▾” (nagłówek i zakładki) */
+  .dsk-more{display:block;position:relative}
+  .dsk-more[hidden]{display:none}
+  .dsk-more>button{display:inline-flex;align-items:center;gap:6px;background:var(--luna-surface-2,#1b1b1b);color:#eee;border:1px solid #333;border-radius:999px;padding:9px 15px;font:700 14px/1 var(--luna-font-head,"Poppins",system-ui,sans-serif);cursor:pointer;white-space:nowrap;transition:border-color .15s,background .15s}
+  .dsk-more>button:hover,.dsk-more[data-open]>button{border-color:var(--acc);background:#211a12}
+  .dsk-more>button .car{font-size:10px;transition:transform .2s}
+  .dsk-more[data-open]>button .car{transform:rotate(180deg)}
+  .dsk-menu{position:absolute;right:0;top:calc(100% + 10px);z-index:70;min-width:240px;max-width:320px;max-height:calc(100vh - var(--dsk-hdr) - 24px);overflow:auto;padding:8px;border-radius:var(--luna-r-lg,22px);background:#15110e;border:1px solid rgba(255,200,140,.2);box-shadow:0 24px 50px -18px rgba(0,0,0,.85);display:none;flex-direction:column;gap:2px;animation:dskPop .16s var(--luna-ease,ease) both}
+  .dsk-more[data-open]>.dsk-menu{display:flex}
+  @keyframes dskPop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+  .dsk-menu>a,.dsk-menu>.pill,.dsk-menu .dsk-row{display:flex!important;align-items:center;gap:8px;width:100%;margin:0!important;padding:10px 12px!important;border:0!important;border-radius:14px!important;background:none!important;color:#eee!important;font:600 14.5px/1.3 var(--luna-font-head,"Poppins",system-ui,sans-serif)!important;text-decoration:none;white-space:nowrap;box-shadow:none!important;min-height:0!important;opacity:1;text-align:left;justify-content:flex-start}
+  .dsk-menu>a:hover,.dsk-menu>a:focus-visible,.dsk-menu>.pill:hover{background:rgba(255,176,71,.1)!important;color:#fff!important}
+  .dsk-menu>a.on{color:var(--acc)!important;background:rgba(255,144,0,.08)!important}
+  .dsk-menu>a.hot{color:var(--acc)!important}
+  .dsk-menu .dsk-row{justify-content:space-between;cursor:default}
+  .dsk-menu .dsk-row .lswitch{margin:0;max-width:170px}
+  .dsk-menu .dsk-h{padding:8px 12px 4px;font:700 11.5px/1 var(--luna-font-head,"Poppins",system-ui,sans-serif);letter-spacing:.06em;text-transform:uppercase;color:#a89c90}
+  .dsk-menu hr{border:0;border-top:1px solid #2a2420;margin:4px 6px}
+
+  /* ---------- zakładki ---------- */
+  header.top nav.tabs{max-width:calc(var(--dsk-w) + 2*var(--dsk-pad));padding:0 var(--dsk-pad);overflow:visible;flex-wrap:nowrap;align-items:center;gap:2px}
+  header.top nav.tabs>a{padding:11px 13px;font-size:14.5px;border-radius:12px 12px 0 0;transition:color .15s,background .15s}
+  .homebody header.top nav.tabs>a{font-size:15px;padding:12px 13px}
+  header.top nav.tabs>a:hover{background:rgba(255,255,255,.04)}
+  header.top nav.tabs>.dsk-more{margin-left:auto;flex:0 0 auto;padding:4px 0}
+  header.top nav.tabs>.dsk-more>button{padding:8px 14px;font-size:14px}
+
+  /* ---------- kontener ---------- */
+  .site main.page,.site main.wrap,main.sec-wrap{max-width:calc(var(--dsk-w) + 2*var(--dsk-pad));padding:26px var(--dsk-pad) 40px}
+  /* strony tekstowe i formularze (testerzy, casting, dołącz, regulamin, pomoc, wesprzyj): wygodna długość wiersza */
+  .site main.page{max-width:1040px}
+  .site main.page.legal,.site.help-open main.page{max-width:980px}
+  /* strony z siatkami kart: pełna szerokość kontenera */
+  .site main.page.galpage,.site main.page.btpage,.site main.page.profpage,.site main.page.wallapp{max-width:calc(var(--dsk-w) + 2*var(--dsk-pad))}
+  .site main.page:has(.annbox,.tabsx){max-width:calc(var(--dsk-w) + 2*var(--dsk-pad))}
+  .site main.page>h1{font-size:clamp(2.2rem,2.6vw,2.9rem)}
+  .site main.page>.lead{max-width:760px;font-size:1.12rem}
+
+  /* siatki kart */
+  .grid3{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+  .galgrid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+  .plancards{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+  .item,.galgrid>*,.lstile,.hfshop,.plan,.thumb{transition:transform .2s var(--luna-ease,ease),box-shadow .2s,border-color .2s}
+  .item:hover,.galgrid>*:hover,.lstile:hover,.plan:hover{transform:translateY(-3px);box-shadow:0 18px 36px -18px rgba(0,0,0,.8);border-color:rgba(255,190,120,.45)}
+
+  /* testerzy, casting, dołącz: formularz obok opisu */
+  .site main.page>.card,.site main.page>section.card{border-radius:var(--luna-r-lg,22px)}
+
+  /* skrzynka / znajomi / ustawienia / ranking / bitwy */
+  .site main.ibpage,.site main.setapp,.site main.rkpage{max-width:min(1100px,calc(var(--dsk-w) + 2*var(--dsk-pad)))}
+  .bt-topbar{max-width:calc(var(--dsk-w) + 2*var(--dsk-pad));margin-left:auto;margin-right:auto}
+
+  /* ---------- strona główna ---------- */
+  /* body bez własnego przewijania – dzięki temu nagłówek i boczna kolumna mogą „przyklejać się” jak na innych stronach */
+  html body.homebody{overflow-y:visible!important}
+  .homebody main.hf{max-width:calc(var(--dsk-w) + 2*var(--dsk-pad));padding:22px var(--dsk-pad) 48px;display:grid;grid-template-columns:minmax(0,1fr) 320px;column-gap:var(--dsk-gap);row-gap:22px;align-items:start}
+  .homebody main.hf>*{grid-column:1;min-width:0}
+  .homebody main.hf>.star-hero{grid-column:1/-1}
+  .homebody main.hf>.tester-banner{grid-column:1/-1}
+  .homebody main.hf>.dsk-rail{display:flex;flex-direction:column;gap:16px;grid-column:2;grid-row:2/span 20;position:sticky;top:calc(var(--dsk-hdr) + 16px);max-height:calc(100vh - var(--dsk-hdr) - 32px);overflow:auto;scrollbar-width:thin;scrollbar-color:#3a302a transparent;padding:2px}
+  /* hero na całą szerokość, 2 kolumny */
+  .homebody .star-hero{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;padding:28px 36px 28px 28px}
+  .homebody .sh-stage{aspect-ratio:16/11;max-height:520px;width:100%}
+  .homebody .star-hero h1{font-size:clamp(2.8rem,3.8vw,4rem);margin:0 0 10px}
+  .homebody .sh-tag{font-size:19.5px;max-width:520px}
+  .homebody .sh-cta{display:flex;flex-wrap:wrap;gap:12px}
+  .homebody .sh-copy .langtabs{margin-bottom:8px}
+  .homebody .pill{transition:transform .15s,box-shadow .15s,background .15s,border-color .15s}
+  .homebody main .pill:hover{transform:translateY(-1px)}
+  /* boczna kolumna */
+  .dsk-rail .tester-banner{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:start;text-align:left;gap:10px 12px;padding:16px;margin:0;border-radius:var(--luna-r-lg,24px)}
+  .dsk-rail .tester-banner>.pill{grid-column:1/-1}
+  .dsk-rail .tester-banner .tb-copy span{font-size:13.5px}
+  .dsk-rail .tester-banner .pill{align-self:stretch;justify-content:center;text-align:center}
+  .dsk-card{background:linear-gradient(180deg,#1e1a17,#161412);border:1px solid #2c2622;border-radius:var(--luna-r-lg,24px);padding:16px 16px 14px;box-shadow:0 18px 40px -22px rgba(0,0,0,.7)}
+  .dsk-card h3{margin:0 0 4px;font:800 16.5px/1.25 var(--luna-font-head,"Poppins",system-ui,sans-serif);color:#fff}
+  .dsk-card p{margin:0 0 10px;color:#cfc3b6;font-size:14px;line-height:1.45}
+  .dsk-links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .dsk-links a{display:flex;align-items:center;gap:7px;padding:10px 11px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:#eee;text-decoration:none;font:600 13.5px/1.2 var(--luna-font-head,"Poppins",system-ui,sans-serif);transition:background .15s,border-color .15s,transform .15s}
+  .dsk-links a:hover{background:rgba(255,176,71,.1);border-color:rgba(255,190,120,.4);transform:translateY(-1px)}
+  .dsk-card .pill{display:flex;justify-content:center;width:100%;box-sizing:border-box}
+  .dsk-card small{display:block;margin-top:8px;color:#8f857b;font-size:12px}
+
+  /* fokus z klawiatury – zawsze widoczny */
+  header.top a:focus-visible,header.top button:focus-visible,header.top select:focus-visible,header.top input:focus-visible,.dsk-rail a:focus-visible,.dsk-menu a:focus-visible,.dsk-menu select:focus-visible{outline:3px solid var(--acc2,#ffb347);outline-offset:2px}
+}
+@media (min-width:1440px){
+  :root{--dsk-w:min(1320px,calc(100vw - 200px));--dsk-gap:36px}
+  .homebody main.hf{grid-template-columns:minmax(0,1fr) 340px}
+  .homebody .star-hero{padding:34px 48px 34px 34px;gap:56px}
+  .homebody .sh-stage{max-height:560px}
+  .grid3{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .galgrid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .site main.page{max-width:1100px}
+  .site main.page.legal,.site.help-open main.page{max-width:1000px}
+  .site main.page.galpage,.site main.page.btpage,.site main.page.profpage,.site main.page.wallapp{max-width:calc(var(--dsk-w) + 2*var(--dsk-pad))}
+  .site main.page:has(.annbox,.tabsx){max-width:calc(var(--dsk-w) + 2*var(--dsk-pad))}
+}
+@media (min-width:1024px) and (prefers-reduced-motion:reduce){
+  .dsk-menu{animation:none}.dsk-tip,.dsk-more>button .car{transition:none}
+  .item:hover,.galgrid>*:hover,.lstile:hover,.plan:hover,.dsk-links a:hover,.homebody main .pill:hover{transform:none}
+}
