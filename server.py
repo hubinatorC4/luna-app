@@ -338,7 +338,7 @@ class H(SimpleHTTPRequestHandler):
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
         if u.path == "/api/health":
-            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True})
+            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled(), "admin_fp": hashlib.sha256(("luna-fp:" + admin_code()).encode()).hexdigest()[:4] if admin_enabled() else None})
         return super().do_GET()
     def do_POST(self):
         u = urlparse(self.path)
