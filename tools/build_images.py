@@ -55,6 +55,7 @@ save_pair(sharp_resize(im, 1280), os.path.join(ST, "luna_portrait")); save_pair(
 av = Image.open("/workspace/luna_avatar3.png").convert("RGB")
 _w, _h = av.size  # kadr na twarz – czytelny w małych rozmiarach
 av = av.crop((int(_w * .17), int(_h * .02), int(_w * .83), int(_h * .68)))
+av = av.crop((int(av.width * 150 / 1024), 0, int(av.width * 850 / 1024), int(av.width * 700 / 1024)))  # ciaśniej: twarz i włosy, bez dekoltu (zasada „skromnie”)
 for n in (256, 512, 1024):
     save_pair(sharp_resize(av, n), os.path.join(ST, f"avatar-{n}"))
 sharp_resize(av, 512).save(os.path.join(ST, "avatar_round.png"), optimize=True)

@@ -25,7 +25,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.4.6"
+VERSION = "1.4.7"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -1176,6 +1176,9 @@ class H(SimpleHTTPRequestHandler):
                 u = u._replace(path="/index.html")
             else:
                 u = u._replace(path="/promo.html")
+        elif re.fullmatch(r"/download/luna-1\.0\.0(-release)?\.apk", u.path):
+            # stary APK (dawna nazwa pakietu) usunięty – stare linki prowadzą do aktualnej wersji
+            self.send_response(301); self.send_header("Location", "/download/luna-1.1.0.apk"); self.send_header("Content-Length", "0"); self.end_headers(); return
         elif "." not in u.path.rsplit("/", 1)[-1] and re.fullmatch(r"/[a-z0-9-]{2,30}", u.path) and os.path.isfile(os.path.join(STATIC, u.path[1:] + ".html")):
             self.send_response(301); self.send_header("Location", u.path + ".html" + ("?" + u.query if u.query else "")); self.send_header("Content-Length", "0"); self.end_headers(); return
         if u.path.endswith(".html"):

@@ -1,5 +1,5 @@
 // Luna – service worker. Zmień VERSION przy każdym wydaniu, aby użytkownicy zobaczyli „Dostępna nowa wersja – odśwież”.
-const VERSION = '1.4.6';
+const VERSION = '1.4.7';
 const C = 'luna-' + VERSION;
 const CORE = ['/app', '/app.js', '/custom.js', '/music.js', '/profile.js', '/holo.js', '/livechat.js', '/push.js', '/testers.js', '/admin.js', '/admin-catalog.js', '/style.css', '/manifest.json', '/avatar-256.jpg', '/avatar-512.jpg', '/icon-192.png', '/app.html', '/app-shell.js', '/app-shell-i18n.js', '/app-shell.css', '/app-redirect.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(C).then(c => c.addAll(CORE)).catch(() => {})); });
