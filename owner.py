@@ -20,7 +20,7 @@ def butik_report(days):
         rows.append({"id": i["id"], "name": i.get("name"), "category": i.get("category") or "—", "collection": i.get("collection") or "—", "line": i.get("line") or "—",
                      "rarity": i.get("rarity") or "—", "tier": i.get("tier") or "—", "price_pln": (i.get("price") or {}).get("pln"), "band": band((i.get("price") or {}).get("pln")),
                      "status": butik.eff_status(i), "views": _sum(S, k + ":v"), "unique": _sum(S, k + ":u"), "likes": c["up"], "dislikes": c["down"],
-                     "likes_period": _sum(S, k + ":like"), "dislikes_period": _sum(S, k + ":dislike"), "cart": _sum(S, k + ":cart"), "purchases": len(buys), "revenue_pln": rev})
+                     "likes_period": _sum(S, k + ":like"), "dislikes_period": _sum(S, k + ":dislike"), "cart": _sum(S, k + ":cart"), "shares": _sum(S, k + ":share"), "purchases": len(buys), "revenue_pln": rev})
     def agg(field):
         out = {}
         for r in rows:
@@ -40,7 +40,17 @@ def site_report(days):
         for k, n in d.items():
             if k.startswith(("sec:", "page:")) and k.endswith(":v"): keys[k[:-2]] = keys.get(k[:-2], 0) + n
     secs = sorted(({"key": k, "views": n} for k, n in keys.items()), key=lambda x: -x["views"])
-    return {"sections": secs}
+    U = {}
+    for d in S.values():
+        for k, n in d.items():
+            if k.startswith("utm:") and k.endswith((":arr", ":shr")):
+                src = k[4:-4]; u = U.setdefault(src, {"source": src, "arrivals": 0, "shares": 0}); u["arrivals" if k.endswith(":arr") else "shares"] += n
+    shares = {k[:-6]: 0 for k in ()}
+    for d in S.values():
+        for k, n in d.items():
+            if k.endswith(":share") and k.startswith(("post:", "item:")): shares[k[:-6]] = shares.get(k[:-6], 0) + n
+    return {"sections": secs, "utm": sorted(U.values(), key=lambda u: (-u["arrivals"], -u["shares"])),
+            "shares_total": sum(shares.values()), "shares_top": sorted(({"key": k, "shares": n} for k, n in shares.items()), key=lambda x: -x["shares"])[:20]}
 def posts_report(days):
     S = stats.series(days); V = social._votes(); C = social._cmts(); X = social.antibot.excluded(); T = stats.totals()
     lim = time.time() - days * 86400; dl = list(S.keys())

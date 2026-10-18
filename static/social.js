@@ -49,15 +49,17 @@ document.addEventListener('click', async e => {
 async function report(target){ const reason = prompt(T.reason); if (reason === null) return; try { await api('/api/report', {target, reason}); alert(T.reported); } catch(e){ alert(e.message); } }
 document.addEventListener('click', e => { const b = e.target.closest('[data-report]'); if (b) report(b.dataset.report); });
 /* ---------- udostępnij ---------- */
-function shareBox(url, text){
-  const u = encodeURIComponent(url), tx = encodeURIComponent(text || 'Luna mówi jak jest');
-  return `<div class="sharebox"><a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener">Facebook</a><a href="https://twitter.com/intent/tweet?url=${u}&text=${tx}" target="_blank" rel="noopener">X</a><a href="https://wa.me/?text=${tx}%20${u}" target="_blank" rel="noopener">WhatsApp</a><a href="fb-messenger://share/?link=${u}" rel="noopener">Messenger</a><a href="https://t.me/share/url?url=${u}&text=${tx}" target="_blank" rel="noopener">Telegram</a><button type="button" data-copy="${esc(url)}">📋 ${T.copy}</button></div>`;
+function utm(url, src, camp){ try { const x = new URL(url, location.origin); x.searchParams.set('utm_source', src); x.searchParams.set('utm_medium', 'share'); x.searchParams.set('utm_campaign', camp || (/butik/.test(x.pathname) ? 'butik' : 'wall'));
+  const h = x.hash; x.hash = ''; return x.toString() + h; } catch(e){ return url; } }
+function shareBox(url0, text){
+  const U = n => encodeURIComponent(utm(url0, n)), url = utm(url0, 'copy'), tx = encodeURIComponent(text || 'Luna mówi jak jest');
+  return `<div class="sharebox"><a data-net="facebook" href="https://www.facebook.com/sharer/sharer.php?u=${U('facebook')}" target="_blank" rel="noopener">Facebook</a><a data-net="x" href="https://twitter.com/intent/tweet?url=${U('x')}&text=${tx}" target="_blank" rel="noopener">X</a><a data-net="whatsapp" href="https://wa.me/?text=${tx}%20${U('whatsapp')}" target="_blank" rel="noopener">WhatsApp</a><a data-net="messenger" href="fb-messenger://share/?link=${U('messenger')}" rel="noopener">Messenger</a><a data-net="telegram" href="https://t.me/share/url?url=${U('telegram')}&text=${tx}" target="_blank" rel="noopener">Telegram</a><button type="button" data-net="copy" data-copy="${esc(url)}">📋 ${T.copy}</button></div>`;
 }
 document.addEventListener('click', async e => {
   const c = e.target.closest('[data-copy]'); if (c){ try { await navigator.clipboard.writeText(c.dataset.copy); c.textContent = T.copied; } catch(x){ prompt(T.copy, c.dataset.copy); } return; }
   const s = e.target.closest('[data-share]'); if (!s) return;
   const url = s.dataset.share, text = s.dataset.text || '';
-  if (navigator.share && matchMedia('(pointer:coarse)').matches){ try { await navigator.share({url, text}); return; } catch(x){ if (x && x.name === 'AbortError') return; } }
+  if (navigator.share && matchMedia('(pointer:coarse)').matches){ try { await navigator.share({url: utm(url, 'native'), text}); track('sharenet', 'utm:native'); return; } catch(x){ if (x && x.name === 'AbortError') return; } }
   const host = s.closest('article, .cmtbox, .item, section') || s.parentElement; const old = host.querySelector(':scope > .sharebox');
   if (old) old.remove(); else s.closest('.acts').insertAdjacentHTML('afterend', shareBox(url, text));
 });
@@ -135,9 +137,11 @@ document.addEventListener('click', e => {
   const a = e.target.closest('a[href]'); const host = e.target.closest('[data-track]');
   if (a && host && /^post:/.test(host.dataset.track) && !a.closest('.acts')) track('click', host.dataset.track);
   const sh = e.target.closest('[data-share]'); if (sh && host) track('share', host.dataset.track);
+  const nt = e.target.closest('.sharebox [data-net]'); if (nt) track('sharenet', 'utm:' + nt.dataset.net);
 }, true);
 async function votesFor(targets){ if (!targets.length) return {}; try { return await api('/api/votes?t=' + targets.map(encodeURIComponent).join(',')); } catch(e){ return {}; } }
-window.LunaSocial = {T, lang, esc, ago, api, ava, voteButtons, comments, shareBox, report, votesFor, nickGet, nickSet, counterRow, track, observe, nickShow, NUM};
+try { const q = new URLSearchParams(location.search), src = (q.get('utm_source') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30); if (src) setTimeout(() => track('arrive', 'utm:' + src), 800); } catch(e){}
+window.LunaSocial = {utm, T, lang, esc, ago, api, ava, voteButtons, comments, shareBox, report, votesFor, nickGet, nickSet, counterRow, track, observe, nickShow, NUM};
 /* auto: [data-comments="target"] i [data-votes="target"] */
 function auto(){
   document.querySelectorAll('[data-comments]').forEach(el => { if (!el.dataset.ready){ el.dataset.ready = 1; comments(el, el.dataset.comments, {rating: el.dataset.rating === '1'}); } });

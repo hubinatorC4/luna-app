@@ -25,7 +25,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.4.7"
+VERSION = "1.4.8"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -791,6 +791,8 @@ class H(SimpleHTTPRequestHandler):
             for k in keys:
                 if not stats.KEY_RE.fullmatch(k) or k.count(":") != 1: continue
                 if ev == "view": stats.view(sid, k, lg)
+                elif ev in ("arrive", "sharenet") and k.startswith("utm:") and re.fullmatch(r"[A-Za-z0-9_-]{16,64}", sid) and stats.once(sid, k + ":" + ev): stats.add(k + (":arr" if ev == "arrive" else ":shr"))
+                elif k.startswith("utm:"): continue
                 elif ev in ("click", "share", "cart") and re.fullmatch(r"[A-Za-z0-9_-]{16,64}", sid) and stats.once(sid, k + ":" + ev): stats.add(k + ":" + ev)
             return self._json({"ok": True})
         if p == "/api/admin/login":
@@ -965,7 +967,7 @@ class H(SimpleHTTPRequestHandler):
                 lim = max(1, min(20, int((q.get("limit") or ["10"])[0]) if (q.get("limit") or ["10"])[0].isdigit() else 10))
                 b = (q.get("before") or [""])[0]
                 lg = (q.get("lang") or ["pl"])[0]
-                return self._json(social.feed("top" if (q.get("sort") or [""])[0] == "top" else "new", int(b) if b.isdigit() else None, lim, uid, dev, lg if lg in social.LANGS else "pl"))
+                return self._json(social.feed((q.get("sort") or [""])[0] if (q.get("sort") or [""])[0] in ("top", "hot") else "new", int(b) if b.isdigit() else None, lim, uid, dev, lg if lg in social.LANGS else "pl"))
             if p.startswith("/api/wall/img/"):
                 return self._dataurl(social.wall_img(p.rsplit("/", 1)[-1]))
             if p == "/api/comments":

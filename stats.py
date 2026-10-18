@@ -10,7 +10,7 @@ _seen = {}         # day -> set(hash)
 _tot = {}          # przyrosty sum całkowitych (publiczne liczniki wyświetleń)
 _last = time.time()
 KEEP_DAYS = 400
-KEY_RE = re.compile(r"(sec|page|post|item):[\w\-./]{1,60}(:[a-z_]{1,8}(:[a-z]{2})?)?")
+KEY_RE = re.compile(r"(sec|page|post|item|utm):[\w\-./]{1,60}(:[a-z_]{1,8}(:[a-z]{2})?)?")
 BOT_UA = re.compile(r"(?i)bot|crawl|spider|slurp|headless|phantom|selenium|puppeteer|playwright|python|curl|wget|httpclient|okhttp|java/|go-http|axios|node-fetch|scrapy|lighthouse|preview|facebookexternalhit|embedly|monitor|uptime")
 def today(): return (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).date().isoformat()
 def is_bot(ua): return not ua or len(ua) < 20 or bool(BOT_UA.search(ua))

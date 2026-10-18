@@ -18,7 +18,7 @@ window.LunaClamp = clampAll;
 const cmio = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; const box = e.target; cmio.unobserve(box); openCm(box.closest('article')); }), {rootMargin: '300px'}) : null;
 function openCm(art){ if (!art) return; const box = art.querySelector('.comments'); if (!box || box.dataset.ready) return; const b = art.querySelector('[data-cm]'); box.hidden = false; box.dataset.ready = 1; if (b) b.setAttribute('aria-expanded', 'true');
   S.comments(box, 'post:' + art.dataset.id, {onCount: n => { if (b) b.querySelector('em').textContent = n; const c = art.querySelector('[data-cnt-cm] b'); if (c) c.textContent = S.NUM(n); }}); }
-let sort = 'new', next = null, loading = false, done = false, img = null, ME = null; const t0 = Date.now();
+let sort = 'hot', next = null, loading = false, done = false, img = null, ME = null; const t0 = Date.now();
 let feed = $('#feed'); const host = document.getElementById('feedHost');
 function chunk(){ if (!host || !feed.querySelector('article')) return; const c = document.createElement('div'); c.className = 'wallpage chunk'; host.appendChild(c); feed = c; }
 const posts = () => (host || feed).querySelectorAll('article.post');
@@ -49,7 +49,7 @@ async function load(reset, want){
   try {
     const d = await api('/api/wall?lang=' + S.lang + '&sort=' + sort + '&limit=' + (want || 10) + (next != null ? '&before=' + next : ''));
     feed.querySelectorAll('.skels').forEach(x => x.remove());
-    if (sort === 'new' && reset && d.items[0]) newest = Math.max(newest, d.items[0].t);
+    if (reset && d.items.length) newest = Math.max(newest, ...d.items.map(p => p.t || 0));
     const before = feed.children.length;
     feed.insertAdjacentHTML('beforeend', d.items.map(postHTML).join(''));
     next = d.next; done = d.next == null;
@@ -102,7 +102,7 @@ addEventListener('scroll', () => { topB.hidden = scrollY < 900; document.body.cl
 topB.onclick = () => scrollTo({top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
 $('.wall-write').onclick = () => { f.scrollIntoView({block: 'center', behavior: 'smooth'}); setTimeout(() => f.text.focus(), 300); };
 function hidePill(){ pill.hidden = true; }
-pill.onclick = () => { hidePill(); if (sort !== 'new') document.querySelector('[data-sort=new]').click(); else load(true); scrollTo({top: (host || feed).offsetTop - 120, behavior: 'smooth'}); };
+pill.onclick = () => { hidePill(); const nb = document.querySelector('[data-sort=new]'); if (sort !== 'new' && nb) nb.click(); else load(true); scrollTo({top: (host || feed).offsetTop - 120, behavior: 'smooth'}); };
 setInterval(async () => { if (document.hidden || !newest) return;
   try { const d = await api('/api/wall?sort=new&limit=20'); const n = d.items.filter(p => p.t > newest && !p.mine).length;
     if (n){ pill.textContent = `↑ ${X.newp} (${n})`; pill.hidden = false; } } catch(e){} }, 30000);
@@ -111,7 +111,7 @@ addEventListener('pagehide', () => { try { sessionStorage.setItem(KEY, JSON.stri
 let saved = null; try { saved = JSON.parse(sessionStorage.getItem(KEY) || 'null'); sessionStorage.removeItem(KEY); } catch(e){}
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 if (saved && saved.n && !new URLSearchParams(location.search).get('post')){
-  sort = saved.sort === 'top' ? 'top' : 'new'; document.querySelectorAll('.tabs [data-sort]').forEach(x => x.classList.toggle('on', x.dataset.sort === sort));
+  sort = ['top', 'hot', 'new'].includes(saved.sort) ? saved.sort : 'hot'; document.querySelectorAll('.tabs [data-sort]').forEach(x => x.classList.toggle('on', x.dataset.sort === sort));
   load(true, Math.min(20, Math.max(10, saved.n))).then(() => scrollTo(0, saved.y));
 } else load(true);
 })();

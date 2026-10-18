@@ -170,7 +170,20 @@ def feed(sort, before, limit, uid, vid, lang="pl"):
     PIN = [i for i in _pinned()]; pin_posts = [p for pid in PIN for p in P if p["id"] == pid]
     P = [p for p in P if p["id"] not in PIN]
     def score(p): c = counts("post:" + p["id"], None, V, X); return c["up"] - c["down"]
-    if sort == "top":
+    if sort == "hot":
+        # Ranking wg prawdziwego zaangażowania (tylko sygnały po filtrze antybotowym) z zanikiem w czasie.
+        now = time.time(); S30 = stats.series(30)
+        cmc = {}
+        for x in C:
+            if x["status"] == "approved" and x["author"] not in X: cmc[x["target"]] = cmc.get(x["target"], 0) + 1
+        def hot(p):
+            k = "post:" + p["id"]; c = counts(k, None, V, X); sh = sum(d.get(k + ":share", 0) for d in S30.values())
+            raw = 1 + c["up"] - 0.5 * c["down"] + 2 * cmc.get(k, 0) + 3 * sh
+            h = max(raw, 0.1) / ((max(now - p["t"], 0) / 3600 + 2) ** 1.3)
+            return h * (4 if p.get("_off") else 1)   # oficjalne wpisy zachowują priorytet
+        P.sort(key=lambda p: (hot(p), p["t"]), reverse=True)
+        start = int(before or 0); items = P[start:start + limit]; nxt = start + limit if len(P) > start + limit else None
+    elif sort == "top":
         wk = time.time() - 7 * 86400
         P = [p for p in P if p["t"] >= wk or p.get("_off")]
         P.sort(key=lambda p: (score(p), p["t"]), reverse=True)
@@ -185,7 +198,7 @@ def feed(sort, before, limit, uid, vid, lang="pl"):
             cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
             return official.public(p, lang, pr, {"votes": counts("post:" + p["id"], voter, V, X), "ncomments": len(cm), "views": stats.post_views(p["id"], T)})
         return public_post(p, voter, V, C, voter, lang, T)
-    first = (sort == "top" and not int(before or 0)) or (sort != "top" and not before)
+    first = (sort in ("top", "hot") and not int(before or 0)) or (sort != "top" and not before)
     out = ([dict(pub(p), pinned=True) for p in pin_posts] if first else []) + [pub(p) for p in items]
     return {"items": out, "next": nxt}
 

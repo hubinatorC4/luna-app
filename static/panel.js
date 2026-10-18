@@ -62,6 +62,8 @@ function render(){
   } else if (TAB === 'site'){
     const S = DATA.site.sections;
     V.innerHTML = `<div class="card"><h2>Najczęściej oglądane sekcje strony</h2>${table(S, [['key', 'Sekcja'], ['views', 'Wyświetlenia', null, 'n']])}</div>
+      <div class="card"><h2>Udostępnienia i wejścia z linków (UTM)</h2><p class="hint">Udostępnienia łącznie: <b>${num(DATA.site.shares_total || 0)}</b>. Wejście = pierwsza wizyta w sesji z linku z utm_source (bez danych osobowych).</p>${table(DATA.site.utm || [], [['source', 'Źródło'], ['arrivals', 'Wejścia', null, 'n'], ['shares', 'Udostępnienia', null, 'n']])}
+        <h3>Najczęściej udostępniane</h3>${table(DATA.site.shares_top || [], [['key', 'Wpis / strój'], ['shares', 'Udostępnienia', null, 'n']])}</div>
       <div class="card"><h2>Najczęściej oglądane wpisy</h2>${table(DATA.posts.posts.filter(p => p.views).slice(0, 10), [['title', 'Wpis'], ['views', 'Wyświetlenia', null, 'n']])}</div>`;
   } else {
     const L = SUS.suspects;
