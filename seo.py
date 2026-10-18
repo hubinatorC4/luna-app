@@ -49,6 +49,12 @@ PAGES = {
        "de": ("Datenschutzerklärung – Luna sagt, wie es ist", "Welche Daten Luna verarbeitet, wozu und wie lange. Export und Löschung des Kontos."),
        "uk": ("Політика конфіденційності – Луна каже як є", "Які дані обробляє Луна, навіщо і як довго. Експорт і видалення облікового запису.")},
 }
+PAGES["/agentki.html"] = {
+ "pl": ("Ściana agentek AI – posty i filmy | Luna mówi jak jest", "Jeden kanał postów i filmów agentek AI. Ranking prawdziwego zaangażowania, agentki współpracujące oznaczone jako współpraca reklamowa."),
+ "en": ("AI agents’ wall – posts and videos | Luna", "One feed of AI agents’ posts and videos. Ranked by real engagement; partner agents are labelled as advertising."),
+ "es": ("Muro de agentes IA – publicaciones y vídeos | Luna", "Un solo canal de publicaciones y vídeos de agentes IA. Ordenado por interacción real; las agentes colaboradoras se marcan como publicidad."),
+ "de": ("Pinnwand der KI-Agentinnen – Beiträge und Videos | Luna", "Ein Feed mit Beiträgen und Videos von KI-Agentinnen. Sortiert nach echtem Engagement; Partner-Agentinnen sind als Werbung gekennzeichnet."),
+ "uk": ("Стіна ШІ-агенток – дописи й відео | Luna", "Одна стрічка дописів і відео ШІ-агенток. Порядок за справжньою активністю; агентки-партнерки позначені як реклама.")}
 def load_generated():
     import sys
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools"))
@@ -68,14 +74,32 @@ def alternates(base, path):
 
 OGIMG = {"/butik.html": "/og-butik.jpg", "/twarz.html": "/og-casting.jpg", "/dolacz.html": "/og-casting.jpg", "/galeria.html": "/og-luna-star.jpg", "/bitwy.html": "/og-luna-star.jpg", "/ranking.html": "/og-luna-star.jpg",
          "/": "/og-luna-star.jpg", "/promo.html": "/og-luna-star.jpg", "/o-lunie.html": "/og-luna-star.jpg", "/scianka.html": "/og-luna-star.jpg"}
-def jsonld(base, lang):
-    """Organizacja bez danych osobowych + aplikacja (tylko prawdziwe informacje)."""
+def same_as():
+    """Profile społecznościowe tylko z ustawionych adresów (env LUNA_SOCIAL_*), bez wymyślonych kont."""
+    out = []
+    for k in ("facebook", "instagram", "tiktok", "youtube", "x"):
+        v = (os.getenv("LUNA_SOCIAL_" + k.upper()) or "").strip()
+        if re.fullmatch(r"https://[\w.-]+/[\w@./?=&%-]*", v): out.append(v)
+    return out
+
+APPNAME = {"pl": "Luna – trenerka głosu AI", "en": "Luna – AI voice coach", "es": "Luna – entrenadora de voz con IA", "de": "Luna – KI-Stimmtrainerin", "uk": "Луна – ШІ-тренерка голосу"}
+def jsonld(base, lang, app=True):
+    """Organizacja bez danych osobowych (żadnego imienia i nazwiska), witryna i aplikacja – tylko prawdziwe informacje (bez ocen i liczby pobrań)."""
     import json as _j
-    org = {"@context": "https://schema.org", "@type": "Organization", "name": "Luna mówi jak jest", "url": base + "/", "logo": base + "/icon-512.png"}
-    app = {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Luna – trenerka głosu AI" if (lang or "pl") == "pl" else "Luna – AI voice coach",
-           "applicationCategory": "EducationalApplication", "operatingSystem": "Android, Web", "url": base + "/", "image": base + "/og-luna-star.jpg",
-           "inLanguage": list(LANGS), "offers": {"@type": "Offer", "price": "0", "priceCurrency": "PLN"}}
-    return "".join(f'<script type="application/ld+json">{_j.dumps(x, ensure_ascii=False)}</script>' for x in (org, app))
+    l = lang or "pl"
+    org = {"@context": "https://schema.org", "@type": "Organization", "@id": base + "/#org", "name": "Luna mówi jak jest", "url": base + "/", "logo": base + "/icon-512.png"}
+    sa = same_as()
+    if sa: org["sameAs"] = sa
+    site = {"@context": "https://schema.org", "@type": "WebSite", "@id": base + "/#site", "name": "Luna mówi jak jest", "url": base + "/", "inLanguage": list(LANGS), "publisher": {"@id": base + "/#org"}}
+    out = [org, site]
+    if app:
+        desc = PAGES.get("/o-lunie.html", {}).get(l, ("", ""))[1]
+        common = {"name": APPNAME.get(l, APPNAME["pl"]), "applicationCategory": "EducationalApplication", "url": base + "/", "image": base + "/og-luna-star.jpg",
+                  "description": desc, "inLanguage": list(LANGS), "isAccessibleForFree": True, "publisher": {"@id": base + "/#org"},
+                  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "PLN"}}
+        out.append({"@context": "https://schema.org", "@type": "MobileApplication", "operatingSystem": "Android", "downloadUrl": base + "/download", **common})
+        out.append({"@context": "https://schema.org", "@type": "WebApplication", "operatingSystem": "Web", "browserRequirements": "Requires JavaScript", **common})
+    return "".join(f'<script type="application/ld+json">{_j.dumps(x, ensure_ascii=False)}</script>' for x in out)
 
 def localize(doc, path, lang, base):
     p = "/" if path in ("", "/index.html") else path
@@ -100,9 +124,10 @@ def localize(doc, path, lang, base):
         tw = '<meta name="twitter:card" content="summary_large_image">' + (f'<meta name="twitter:title" content="{mt.group(1).strip()}">' if mt else "") + \
              (f'<meta name="twitter:description" content="{md.group(1)}">' if md else "") + (f'<meta name="twitter:image" content="{mi.group(1)}">' if mi else "")
         doc = doc.replace("</head>", tw + "\n</head>", 1)
-    if p in ("/", "/promo.html", "/o-lunie.html") and "application/ld+json" not in doc: doc = doc.replace("</head>", jsonld(base, lang) + "\n</head>", 1)
+    if p in PAGES and "application/ld+json" not in doc: doc = doc.replace("</head>", jsonld(base, lang, p in ("/", "/promo.html", "/o-lunie.html")) + "\n</head>", 1)
+    if "og:site_name" not in doc: doc = doc.replace("</head>", '<meta property="og:site_name" content="Luna mówi jak jest">\n</head>', 1)
     if 'og:url' not in doc: doc = doc.replace("</head>", f'<meta property="og:url" content="{canon}">\n</head>', 1)
-    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<script src="/emoji.js" defer></script>\n<script src="/bt-mini.js?v=1.6.3" defer></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
+    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<script src="/emoji.js" defer></script>\n<script src="/bt-mini.js?v=1.6.3" defer></script>\n<script src="/share-kit.js?v=1" defer></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
     doc = re.sub(r'(<meta charset="utf-8">)', r'\1<script src="/lg.js"></script>', doc, count=1, flags=re.I)
     return doc
 

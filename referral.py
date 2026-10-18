@@ -89,7 +89,15 @@ def mine(uid, base=""):
     c = code(uid)
     return {"enabled": True, "rule": "first_purchase_both", "code": c, "link": f"{base}/?ref={c}", "days_per_referral": DAYS, "cap_month": CAP, "rewarded_month": month,
             "rewarded_total": sum(1 for r in R if r["status"] == "rewarded"), "pending": sum(1 for r in R if r["status"] == "pending"),
-            "days_earned": DAYS * sum(1 for r in R if r["status"] == "rewarded")}
+            "days_earned": DAYS * sum(1 for r in R if r["status"] == "rewarded"), **badge(R)}
+
+BADGES = ((10, "gold"), (3, "amb"), (1, "seed"))
+def badge(R):
+    """Odznaka „Zaproś znajomych” – tylko z prawdziwych liczb: osoby z linku z potwierdzonym e-mailem (bez odrzuconych przez antybota)."""
+    ok = sum(1 for r in R if (r.get("verified") or r["status"] == "rewarded") and r["status"] != "rejected")
+    b = next((k for n, k in BADGES if ok >= n), None)
+    nxt = next((n for n, k in reversed(BADGES) if ok < n), None)
+    return {"joined": len(R), "confirmed": ok, "badge": b, "badge_next": nxt}
 
 def admin_list():
     A = accounts._accts(); nick = lambda uid: (A.get(uid) or {}).get("name") or ("konto " + uid[:4]) if uid in A else "usunięte konto"

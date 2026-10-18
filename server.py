@@ -19,6 +19,7 @@ import knowledge
 import api_i18n
 import textutil
 import catalog, base64, training, profiles, nicktier, partners, agentwall
+import promo_share
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox
 from datetime import datetime, timedelta
 try:
@@ -28,6 +29,7 @@ except Exception:
     WAW = None
 
 VERSION = "1.6.4"
+STATIC_CACHE = re.compile(r"\.(webp|avif|jpe?g|png|ico|svg|woff2)$")
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
@@ -658,10 +660,16 @@ class H(SimpleHTTPRequestHandler):
     def end_headers(self):
         if urlparse(self.path).path.endswith((".html", "/", ".js", ".css", ".json")):
             self.send_header("Cache-Control", "no-cache")
+        elif STATIC_CACHE.search(urlparse(self.path).path) and not self.path.startswith(("/api/", "/og/")):
+            # obrazy i fonty strony: pamięć przeglądarki (szybsze LCP przy kolejnych wizytach); fonty 7 dni, obrazy 1 dzień
+            self.send_header("Cache-Control", "public, max-age=604800" if self.path.endswith(".woff2") else "public, max-age=86400, stale-while-revalidate=604800")
         for k, v in security.HEADERS.items(): self.send_header(k, v)
         for c in getattr(self, "_cookies", []): self.send_header("Set-Cookie", c)
         self._cookies = []
         super().end_headers()
+    def _pid_plan(self, pid):
+        r = profiles._P().get(pid)
+        return self._owner_plan(r["uid"]) if r else None
     def _cookie(self, name):
         for part in (self.headers.get("Cookie") or "").split(";"):
             k, _, v = part.strip().partition("=")
@@ -1203,6 +1211,8 @@ class H(SimpleHTTPRequestHandler):
         if u.path.startswith(("/api/battles", "/api/admin/battles", "/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/referral", "/api/gallery", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
             r = self._get_account(u)
             if r is not None: return r
+        if u.path.startswith("/og/") or u.path.rstrip("/") in promo_share.REDIRECTS:   # karty do udostępniania + krótkie linki (/casting, /glosuj, /zapros)
+            if promo_share.handle_get(self, u, self._pid_plan): return
         if u.path == "/api/age/status":
             return self._json(age.status(parse_qs(u.query).get("vid", [""])[0][:40]))
         if u.path == "/api/agents/feed":
@@ -1390,6 +1400,7 @@ class H(SimpleHTTPRequestHandler):
                         if av["bio"]: doc = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{_h.escape(av["bio"][:200], quote=True)}">', doc, 1)
                         if av["photos"] and not av["photos"][0]["url"].startswith("/api/"):
                             doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{notify.PUBLIC_URL.rstrip("/")}{av["photos"][0]["url"]}">', doc, 1)
+                doc = promo_share.inject(doc, u.path, parse_qs(u.query), lang, notify.PUBLIC_URL.rstrip("/"), self._pid_plan)
                 NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
                 if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
                 b = doc.encode()

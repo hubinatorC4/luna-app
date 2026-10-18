@@ -1,0 +1,3 @@
+Nunito (Nunito-VariableFont_wght.ttf) – used server-side for share images (OG cards)
+Copyright 2014 The Nunito Project Authors (https://github.com/googlefonts/nunito)
+Licencja: SIL Open Font License 1.1 – https://openfontlicense.org
