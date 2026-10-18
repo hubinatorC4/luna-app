@@ -66,3 +66,4 @@ label.mp-l{display:block;margin:8px 0;font-weight:700;font-size:14px}label.mp-l>
 .kl{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:middle}.kl.i{background:#ff9b54}.kl.e{background:#7dffa8}
 .mp-list{list-style:none;padding:0;margin:0 0 10px}.mp-list li{padding:6px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .mp-btn.sm{padding:4px 10px;font-size:13px}
+@media (max-width:600px){.kbars .kb:not(:nth-child(5n)):not(:last-child) small{display:none}}
