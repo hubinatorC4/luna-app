@@ -6,6 +6,7 @@ if (window.__lunaDymki || window.top !== window) return; window.__lunaDymki = 1;
 const ls = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch(e){ return null; } };
 const ss = (k, v) => { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch(e){ return null; } };
 if (ls('luna.dymki') === '0') return;
+if (/^\/(testerzy|zgloszenie)(\.html)?$/.test(location.pathname)) return;   // strony zapisu testerów: nic nie zasłania nagłówka ani formularza
 const views = +(ss('luna.dy.v') || 0) + 1; ss('luna.dy.v', views);
 const shown = +(ss('luna.dy.n') || 0); if (shown >= 3) return;
 const LS = ['pl', 'en', 'es', 'de', 'uk'];
@@ -68,7 +69,7 @@ const busy = () => {
   if (a && (a.matches('input:not([type=checkbox]):not([type=radio]):not([type=button]),textarea,select,[contenteditable=""],[contenteditable=true]'))) return true;
   if (Date.now() - lastKey < 4000) return true;
   if (window.LUNA_BUSY || document.querySelector('.recording,.is-recording,[data-recording="1"],body.rec,.mic.on,[aria-label][aria-pressed="true"].mic')) return true;
-  if (document.querySelector('dialog[open],.st-sheet:not([hidden]),#ibChat:not([hidden])')) return true;
+  if (document.querySelector('dialog[open],.st-sheet:not([hidden]),#ibChat:not([hidden]),.onb:not([hidden]),.lag')) return true;
   const v = [...document.querySelectorAll('.bt-vote:not(.done)')].some(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && r.width > 0; });
   return v; // trwa głosowanie w bitwie – nie przeszkadzamy
 };

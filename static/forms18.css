@@ -56,3 +56,5 @@ button.f18mb:hover{border-color:#3DDC97}
 .f18safe.sm{padding:10px 14px;font-size:13.5px}
 .f18safe a{color:#FF9A3C;font-weight:700}
 .f18del{justify-self:center;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid rgba(255,138,154,.4);background:transparent;color:#ffb3bf;font-weight:700;cursor:pointer}
+.f18app{display:grid;gap:8px;justify-items:center;margin:16px 0 6px;text-align:center}.f18app .f18btn{display:inline-flex;align-items:center;justify-content:center;padding:0 22px;text-decoration:none;font-size:16px;max-width:100%}.f18app small{opacity:.8}
+.f18app .f18btn{line-height:1.25;padding:12px 22px;min-height:52px}

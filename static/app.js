@@ -257,7 +257,7 @@ $('#testVoice').onclick = () => speak('Hola, cariño. Słyszę cię. Mów szczer
 function openAdmin(){ window.LunaAdmin && window.LunaAdmin.open(); }
 
 /* ---------- Start ---------- */
-const CFG = {greeting:'Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Pomagam mężczyznom i kobietom lepiej się rozmawiać – przez samą mowę: głośność, barwę, ton, tempo i intonację. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.', wake_reply:'Słyszę cię, cariño. Jestem Luna, sztucznie stworzona asystentka AI.', ai_tag:'Luna, asystentka AI', chat_notice:'Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.'};
+const CFG = {greeting:'Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Pomagam mężczyznom i kobietom lepiej ze sobą rozmawiać – przez samą mowę: głośność, barwę, ton, tempo i intonację. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.', wake_reply:'Słyszę cię, cariño. Jestem Luna, sztucznie stworzona asystentka AI.', ai_tag:'Luna, asystentka AI', chat_notice:'Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.'};
 window.LunaApplyConfig = c => {
   Object.assign(CFG, c);
   const g = document.querySelector('.msg.greet'); if (g) g.firstChild.textContent = CFG.greeting;
@@ -266,7 +266,7 @@ window.LunaApplyConfig = c => {
   window.LunaCustomApply && window.LunaCustomApply();
   if (CFG.voice_defaults && (!localStorage.getItem('luna.settings') || S.preset === 'chrypka' && !S.custom)){ Object.assign(DEF, CFG.voice_defaults); Object.assign(S, CFG.voice_defaults); }
 };
-fetch('/api/config').then(r => r.json()).then(window.LunaApplyConfig).catch(()=>{});
+fetch('/api/config?lang=' + encodeURIComponent((new URLSearchParams(location.search).get('lang') || document.documentElement.lang || 'pl').slice(0, 2))).then(r => r.json()).then(window.LunaApplyConfig).catch(()=>{});  /* powitanie w języku strony */
 if (history.length){ history.forEach(h => addMsg(h.content, h.role === 'user' ? 'me' : 'luna')); }
 else addMsg(CFG.greeting, 'luna greet');
 /* ---------- Aktualizacje (PWA) ---------- */

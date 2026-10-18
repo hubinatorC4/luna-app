@@ -5,6 +5,15 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;
 const code = () => localStorage.getItem('luna.tester') || '';
 window.LunaTesterCode = code;
 
+/* ---------- wejścia z kampanii (UTM) na stronach bez social.js – np. /testerzy.html?utm_source=facebook; ten sam format co social.js ---------- */
+setTimeout(() => { try {
+  if (window.LunaSocial || navigator.webdriver) return;
+  const src = (new URLSearchParams(location.search).get('utm_source') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 30); if (!src) return;
+  let sid = sessionStorage.getItem('luna.vsid'); if (!sid){ sid = Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join(''); sessionStorage.setItem('luna.vsid', sid); }
+  const body = JSON.stringify({sid, ev: 'arrive', keys: ['utm:' + src], lang: (document.documentElement.lang || 'pl').slice(0, 2)});
+  navigator.sendBeacon ? navigator.sendBeacon('/api/track', new Blob([body], {type: 'application/json'})) : fetch('/api/track', {method: 'POST', headers: {'Content-Type': 'application/json'}, body}).catch(() => {});
+} catch(e){} }, 1200);
+
 /* ---------- status testera: obwódka i Premium ---------- */
 function applyStatus(st){
   window.LunaTesterRing = st && st.granted ? st.ring : null;

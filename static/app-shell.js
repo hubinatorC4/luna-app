@@ -16,7 +16,7 @@ const store = (k, v) => { try { if (v === undefined) return localStorage.getItem
 document.documentElement.lang = lang;
 document.querySelectorAll('[data-t]').forEach(el => { const v = T[el.dataset.t]; if (typeof v === 'string') el.textContent = v; });
 document.querySelectorAll('[data-t-aria]').forEach(el => { el.setAttribute('aria-label', T[el.dataset.tAria]); el.title = T[el.dataset.tAria]; });
-const withLang = p => { const u = new URL(p, location.origin); if (lang !== 'pl') u.searchParams.set('lang', lang); return u.pathname + u.search + u.hash; };
+const withLang = p => { const u = new URL(p, location.origin); u.searchParams.set('lang', lang); return u.pathname + u.search + u.hash; };  /* zawsze ?lang= (także pl) – inaczej strona w ramce bierze język przeglądarki (np. „Agents’ wall” w polskiej aplikacji) */
 const toast = t => { const el = $('#toast'); el.textContent = t; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => el.hidden = true, 2600); };
 
 /* ---------- osadzone strony ---------- */
@@ -254,10 +254,23 @@ const PA = {pl: ['🔥 Najpopularniejsze agentki', 'Prawdziwe polubienia, koment
   de: ['🔥 Beliebteste Agentinnen', 'Echte Likes, Kommentare und Stimmen'], uk: ['🔥 Найпопулярніші агентки', 'Справжні вподобання, коментарі й голоси']}[lang] || ['🔥 Najpopularniejsze agentki', ''];
 const SUP = {pl: ['🛟 Pomoc na żywo', 'Asystent AI od ręki, moderator albo „Napisz do moderatora”'], en: ['🛟 Live help', 'Instant AI assistant, a moderator or “Write to a moderator”'], es: ['🛟 Ayuda en directo', 'Asistente IA al instante, un moderador o «Escribir a un moderador»'],
   de: ['🛟 Live-Hilfe', 'KI-Assistent sofort, Moderation oder „Der Moderation schreiben“'], uk: ['🛟 Допомога наживо', 'ШІ-асистент одразу, модератор або «Написати модератору»']}[lang] || ['🛟 Pomoc na żywo', ''];
+/* rekrutacja testerów: pigułka w nagłówku + pozycja na górze „Więcej” (prawdziwy licznik z /api/testers; ukryte przy komplecie i dla osób z kodem testera) */
+const TST = {pl: ['Testerzy', '🎁 Zostań testerem Luny', '2 miesiące Premium za darmo, odznaka, 7 emotek, 4 awatary, kolor ramki', 'Zostało {n} z {l} miejsc'],
+  en: ['Testers', '🎁 Become a Luna tester', '2 months of Premium free, badge, 7 emotes, 4 avatars, frame colour', '{n} of {l} spots left'],
+  es: ['Testers', '🎁 Hazte tester de Luna', '2 meses de Premium gratis, insignia, 7 emoticonos, 4 avatares, color de marco', 'Quedan {n} de {l} plazas'],
+  de: ['Tester', '🎁 Werde Luna-Tester', '2 Monate Premium gratis, Abzeichen, 7 Emotes, 4 Avatare, Rahmenfarbe', 'Noch {n} von {l} Plätzen frei'],
+  uk: ['Тестери', '🎁 Станьте тестувальником Луни', '2 місяці Premium безкоштовно, значок, 7 емодзі, 4 аватари, колір рамки', 'Залишилося {n} з {l} місць']}[lang] || null;
+let tstLeft = null;
+(() => { const a = $('#ahTst'); if (!a || !TST) return; a.querySelector('span').textContent = TST[0]; a.title = TST[1].replace(/^🎁 /, ''); a.setAttribute('aria-label', a.title);
+  a.onclick = e => { e.preventDefault(); openPage('/testerzy.html'); };
+  fetch('/api/testers').then(r => r.json()).then(d => { if (!(d.limit > 0) || !(d.remaining > 0)) return; tstLeft = d;
+    if (!store('luna.tester')) a.hidden = false;
+    const m = document.querySelector('#moreTst small[data-left]'); if (m) m.textContent = TST[3].replace('{n}', d.remaining).replace('{l}', d.limit); }).catch(() => {}); })();
 function renderMore(){
   const host = $('#p-more'); host.dataset.ready = '1';
   host.innerHTML = `<div class="wrapc">
     <h1 class="t">${esc(T.more_h)}</h1>
+    ${TST && !store('luna.tester') ? `<ul class="menu"><li id="moreTst"><a href="/testerzy.html" data-page><span>${esc(TST[1])}<small>${esc(TST[2])}</small>${tstLeft ? `<small data-left>${esc(TST[3].replace('{n}', tstLeft.remaining).replace('{l}', tstLeft.limit))}</small>` : '<small data-left></small>'}</span></a></li></ul>` : ''}
     <ul class="menu"><li><button type="button" data-go-tab="butik"><span>👗 ${esc(T.tab_butik)}<small>${esc(T.tip.butik || '')}</small></span></button></li>
       <li><button type="button" data-go-tab="plans"><span>💎 ${esc(T.tab_plans)}<small>${esc(T.tip.plans || '')}</small></span></button></li></ul>
     <ul class="menu"><li><button type="button" data-chat><span>${esc(T.help_h)}<small>${esc(T.help_s)}</small></span></button></li>

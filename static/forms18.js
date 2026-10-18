@@ -78,6 +78,11 @@ async function mount(box){
     if (!f.checkValidity()){ const bad = f.querySelector(':invalid'); if (bad){ try { bad.focus({preventScroll: false}); bad.scrollIntoView({block: 'center'}); } catch(x){} } const nm = bad && (bad.closest('fieldset.f18age') ? bad.closest('fieldset').querySelector('legend span[data-k]') : bad.closest('label') && bad.closest('label').querySelector('span[data-k]')); err.textContent = '⚠️ ' + (nm ? nm.textContent.trim() + ': ' : '') + t('req').replace(/^\*\s*/, ''); return; }
     const fd = new FormData(f); const all = n => fd.getAll(n);
     if ((new FormData(f)).get('adult18') === 'no') return underage(box);
+    /* QA (lejek testerów): grupy wyboru i zgody sprawdzamy po stronie klienta – komunikat w języku strony zamiast polskiego błędu z serwera */
+    const need = kind === 'tester' ? [['device', !!fd.get('device'), 'e_device'], ['topics', all('topics').length > 0, 'e_topics']] : [['offer', !!fd.get('offer'), 'e_offer']];
+    need.push(['c_', [...f.querySelectorAll('input[name^="c_"]')].every(x => x.checked), 'e_consents']);
+    const miss = need.find(x => !x[1]);
+    if (miss){ const el = f.querySelector(miss[0] === 'c_' ? 'input[name^="c_"]:not(:checked)' : `[name="${miss[0]}"]`); if (el){ try { el.focus({preventScroll: true}); el.closest('fieldset').scrollIntoView({block: 'center'}); } catch(x){} } err.textContent = '⚠️ ' + t(miss[2]); return; }
     const body = {email: fd.get('email'), adult_confirmed: fd.get('adult18') === 'yes', website: fd.get('website') || '', t0, turnstile: ts, lang: lang(), consents: {}};
     f.querySelectorAll('input[name^="c_"]').forEach(x => { body.consents[x.name.slice(2)] = x.checked; });
     if (kind === 'tester') Object.assign(body, {nickname: fd.get('nickname'), device: fd.get('device'), topics: all('topics'), note: fd.get('note') || ''});
@@ -94,12 +99,15 @@ async function mount(box){
       const r = await fetch('/api/forms/' + kind, {method: 'POST', headers: {'Content-Type': 'application/json'}, credentials: 'same-origin', body: JSON.stringify(body)});
       const d = await r.json().catch(() => ({}));
       if (d.underage) return underage(box);
-      if (!r.ok) throw new Error(d.error || r.status);
+      if (!r.ok) throw new Error(srvErr(d.error) || r.status);
       if (d.id){ try { localStorage.setItem('luna.f18.' + kind, JSON.stringify({id: d.id, k: d.key})); } catch(e){} }
       verifyStep(box, kind, d.id, d.key, d.status, true);
     } catch(x){ err.textContent = '⚠️ ' + x.message; btn.disabled = false; btn.textContent = t('send'); if (window.turnstile) try { window.turnstile.reset(); } catch(e){} }
   };
 }
+/* błędy z serwera są po polsku – znane komunikaty tłumaczymy na język strony */
+const SRV_ERR = [[/e-mail.*już do nas dotarło/i, 'e_dup'], [/Za dużo zgłoszeń/i, 'e_rate'], [/Komplet/i, 'full'], [/adres e-mail/i, 'e_email'], [/nick|pseudonim/i, 'e_nick'], [/zgody/i, 'e_consents'], [/urządzenie/i, 'e_device'], [/testować/i, 'e_topics'], [/botem/i, 'ts_wait']];
+function srvErr(m){ if (!m || lang() === 'pl') return m; const x = SRV_ERR.find(e => e[0].test(m)); return x ? t(x[1]) : m; }
 function loadTS(){ return window.turnstile ? Promise.resolve() : new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.async = true; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
 const stKey = st => st.decision === 'accepted' ? 'st_accepted' : st.decision === 'rejected' ? 'st_rejected' : st.verification.status === 'verified' ? 'st_verified' : st.verification.status === 'failed' ? 'st_failed' : 'st_pending';
 async function verifyStep(box, kind, id, k, st, fresh){
@@ -109,7 +117,7 @@ async function verifyStep(box, kind, id, k, st, fresh){
   const card = st && st.verification.card ? ` · ${esc(st.verification.card.brand || '')} •••• ${esc(st.verification.card.last4 || '')}` : '';
   box.innerHTML = `<div class="f18done">${fresh ? `<div class="f18ico">💚</div><h3>${L('thanks')}</h3>` : `<h3>${L('status')}</h3>`}
     ${kind === 'casting' ? `<div class="f18safe">${L('safe_box', 1)}</div>` : ''}
-    ${kind === 'tester' ? `<div class="f18safe f18perks">${L('perks', 1)}</div>` : ''}
+    ${kind === 'tester' ? `<div class="f18safe f18perks">${L('perks', 1)}</div><p class="f18app"><a class="f18btn" href="/app.html${lang() !== 'pl' ? '?lang=' + lang() : ''}" target="_top">${L('open_app')}</a><small>${L('open_app_d')}</small></p>` : ''}
     ${st ? `<p class="f18st ${esc(stKey(st))}">${L(stKey(st))}${card}</p>` : ''}
     ${done ? '' : `<div class="f18v"><h4>${L('v_h')}</h4>${c.verify === 'on' ? `<p>${L('v_lead')}</p>
       <div class="f18m">${m.document ? `<button type="button" class="f18mb" data-m="document"><b>${L('m_doc')}</b><small>${L('m_doc_d')}</small></button>` : ''}

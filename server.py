@@ -107,7 +107,7 @@ DEFAULTS = {
     "tone": "ciepla",
     "length": "srednio",
     "style_notes": "",
-    "greeting": "Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Pomagam mężczyznom i kobietom lepiej się rozmawiać – przez samą mowę: głośność, barwę, ton, tempo i intonację. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.",
+    "greeting": "Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Pomagam mężczyznom i kobietom lepiej ze sobą rozmawiać – przez samą mowę: głośność, barwę, ton, tempo i intonację. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.",
     "wake_reply": "Słyszę cię, cariño. Jestem Luna, sztucznie stworzona asystentka AI.",
     "ai_first": AI_FIRST.strip(),
     "ai_tag": AI_TAG.strip(" ()"),

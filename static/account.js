@@ -186,6 +186,10 @@ window.LunaNews = () => {
     document.body.appendChild(d); }
   d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.8'); } catch(e){}
 };
-try { if (localStorage.getItem('luna.seenVer') !== '1.6.8' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
+/* „Co nowego” tylko dla powracających (mieli już starszą wersję albo historię rozmowy). Nowa osoba – np. prosto z zapisu testerów – nie dostaje listy zmian:
+   samo „Masz 18 lat?” (luna.age) nie oznacza, że ktoś już korzystał z aplikacji. */
+try { const sv = localStorage.getItem('luna.seenVer'), back = sv || localStorage.getItem('luna.history');
+  if (!back) localStorage.setItem('luna.seenVer', '1.6.8');
+  else if (sv !== '1.6.8') setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-news]')){ e.preventDefault(); window.LunaNews(); } });
 })();

@@ -127,7 +127,7 @@ fetch('/api/catalog').then(r => r.json()).then(c => {
     if (p.prices || free){ const b = document.createElement('div'); b.className = 'pbig'; b.textContent = free ? '0 zł' : String(p.prices.pln).replace('.', ',') + ' zł';
       const s = document.createElement('small'); s.className = 'psub'; s.textContent = p.id === 'darmowy' ? 'bez konta, z limitem' : p.id === 'podstawowa' ? 'za darmo – wystarczy konto' : '30 dni · bez odnawiania · cena zawiera VAT';
       d.insertBefore(s, ul); d.insertBefore(b, s); }
-    t.textContent = free ? '✓ Bez opłat' : p.id === 'premium' ? '🎁 Testerzy: Premium 2 miesiące za darmo' + (p.prices ? ' (wartość ' + (Math.round(parseFloat(String(p.prices.pln).replace(',', '.')) * 200) / 100).toFixed(2).replace('.', ',') + ' zł)' : '') : 'Płatności – wkrótce';
+    t.textContent = free ? '✓ Bez opłat' : p.id === 'premium' ? '🎁 Testerzy: Premium 2 miesiące za darmo' : 'Płatności – wkrótce';
     d.appendChild(t); P.appendChild(d); });
 }).catch(() => {});
 function liveTab(){

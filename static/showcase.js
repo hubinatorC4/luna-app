@@ -4,10 +4,11 @@
 const lang = (document.documentElement.lang || 'pl').slice(0, 2);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 const D = {
-pl: {st_les: 'lekcji głosu', st_out: 'strojów w Butiku', st_scn: 'scenerii Bitew', st_tst: 'wolnych z {l} miejsc dla testerów',
+pl: {tst_left: 'Zostało {n} z {l} miejsc', st_les: 'lekcji głosu', st_out: 'strojów w Butiku', st_scn: 'scenerii Bitew', st_tst: 'wolnych z {l} miejsc dla testerów',
   ag_empty_h: 'Tu zabłyśnie Twoja agentka', ag_empty_p: 'Ranking ruszy, gdy pojawią się pierwsze prawdziwe reakcje. Nie wstawiamy wypełniaczy – Luna by się zaczerwieniła.', ag_off: 'Oficjalne stylizacje Luny', ag_create: '✨ Stwórz agentkę',
   likes: 'polubień', wins: 'wygranych', bt_wait: 'Teraz: czekamy na rywalkę – brakuje {n}. Nie pokazujemy fikcyjnych rywalek ani głosów.', bt_live: '🔴 Bitwa trwa – wejdź i zagłosuj!', bt_view: 'ogląda teraz', bk_free: 'W cenie', bk_colors: 'kolorów'},
-en: {kick: '🎙️ An AI assistant for better conversations · 18+', h1: 'Luna tells it like it is. <em>You speak better every day.</em>',
+en: {tst_h: 'We’re looking for 1000 testers', tst_p: '2 months of Premium free + badge, 7 emotes, 4 avatars and a frame colour', tst_go: 'Apply →', tst_left: '{n} of {l} spots left',
+  kick: '🎙️ An AI assistant for better conversations · 18+', h1: 'Luna tells it like it is. <em>You speak better every day.</em>',
   lead: 'Luna is an AI assistant – 100% artificial intelligence – with one goal: helping men and women talk to each other better. She focuses on speech itself: volume, timbre, tone, tempo, intonation and other details. After practice comes the fun: your own AI agent, Battles and rankings. Free to start, no ads – Luna would talk over them anyway 😄',
   try: '🚀 Try the app', dl: '📲 Download', listen: '▶ Hear Luna', t1: '✓ Free to start', t2: '✓ No ads', t3: '✓ 5 languages', t4: '✓ You can stay anonymous', ai: '🤖 Luna and the agents are AI-generated characters.',
   chip1: '🎙️ Voice chat', chip2: '⚔️ Agent battles', chip3: '👗 Boutique', alt_app: 'Real screenshot of the Luna app – chatting with Luna', alt_feed: 'Real screenshot of the app – the agents’ wall', alt_rank: 'Real screenshot of the app – battle ranking',
@@ -30,7 +31,8 @@ en: {kick: '🎙️ An AI assistant for better conversations · 18+', h1: 'Luna 
   st_les: 'voice lessons', st_out: 'outfits in the Boutique', st_scn: 'Battle sceneries', st_tst: 'of {l} tester places left',
   ag_empty_h: 'Your agent could shine here', ag_empty_p: 'The ranking starts with the first real reactions. We don’t add fillers – Luna would blush.', ag_off: 'Luna’s official looks', ag_create: '✨ Create an agent',
   likes: 'likes', wins: 'wins', bt_wait: 'Now: waiting for a rival – {n} missing. We never show fake rivals or votes.', bt_live: '🔴 A battle is on – come and vote!', bt_view: 'watching now', bk_free: 'Included', bk_colors: 'colours'},
-es: {kick: '🎙️ Una asistente de IA para conversar mejor · 18+', h1: 'Luna dice las cosas como son. <em>Tú hablas cada día mejor.</em>',
+es: {tst_h: 'Buscamos 1000 testers', tst_p: '2 meses de Premium gratis + insignia, 7 emoticonos, 4 avatares y color de marco', tst_go: 'Apúntate →', tst_left: 'Quedan {n} de {l} plazas',
+  kick: '🎙️ Una asistente de IA para conversar mejor · 18+', h1: 'Luna dice las cosas como son. <em>Tú hablas cada día mejor.</em>',
   lead: 'Luna es una asistente de IA, 100 % inteligencia artificial, con un objetivo: que hombres y mujeres conversen mejor. Se centra en el habla en sí: volumen, timbre, tono, ritmo, entonación y otros detalles. Después de practicar llega la diversión: tu propia agente de IA, Batallas y rankings. Gratis para empezar, sin anuncios: Luna hablaría más que ellos 😄',
   try: '🚀 Prueba la app', dl: '📲 Descargar', listen: '▶ Escucha a Luna', t1: '✓ Gratis para empezar', t2: '✓ Sin anuncios', t3: '✓ 5 idiomas', t4: '✓ Puedes ser anónimo/a', ai: '🤖 Luna y las agentes son personajes generados por IA.',
   chip1: '🎙️ Chat de voz', chip2: '⚔️ Batallas de agentes', chip3: '👗 Boutique', alt_app: 'Captura real de la app Luna: conversación con Luna', alt_feed: 'Captura real de la app: el muro de agentes', alt_rank: 'Captura real de la app: ranking de batallas',
@@ -53,7 +55,8 @@ es: {kick: '🎙️ Una asistente de IA para conversar mejor · 18+', h1: 'Luna 
   st_les: 'lecciones de voz', st_out: 'prendas en la Boutique', st_scn: 'escenarios de Batallas', st_tst: 'de {l} plazas de tester libres',
   ag_empty_h: 'Aquí puede brillar tu agente', ag_empty_p: 'El ranking empieza con las primeras reacciones reales. No ponemos relleno: Luna se sonrojaría.', ag_off: 'Looks oficiales de Luna', ag_create: '✨ Crear agente',
   likes: 'me gusta', wins: 'victorias', bt_wait: 'Ahora: esperamos a una rival – faltan {n}. Nunca mostramos rivales ni votos falsos.', bt_live: '🔴 Hay una batalla en curso: ¡entra y vota!', bt_view: 'mirando ahora', bk_free: 'Incluido', bk_colors: 'colores'},
-de: {kick: '🎙️ Eine KI-Assistentin für bessere Gespräche · 18+', h1: 'Luna sagt, wie es ist. <em>Du sprichst jeden Tag besser.</em>',
+de: {tst_h: 'Wir suchen 1000 Tester', tst_p: '2 Monate Premium gratis + Abzeichen, 7 Emotes, 4 Avatare und eine Rahmenfarbe', tst_go: 'Jetzt bewerben →', tst_left: 'Noch {n} von {l} Plätzen frei',
+  kick: '🎙️ Eine KI-Assistentin für bessere Gespräche · 18+', h1: 'Luna sagt, wie es ist. <em>Du sprichst jeden Tag besser.</em>',
   lead: 'Luna ist eine KI-Assistentin – zu 100 % künstliche Intelligenz – mit einem Ziel: dass Männer und Frauen besser miteinander sprechen. Sie konzentriert sich auf das Sprechen selbst: Lautstärke, Klangfarbe, Tonfall, Tempo, Intonation und weitere Details. Nach dem Üben kommt der Spaß: deine eigene KI-Agentin, Battles und Rankings. Kostenlos zum Start, ohne Werbung – Luna würde sie eh übertönen 😄',
   try: '🚀 App ausprobieren', dl: '📲 Herunterladen', listen: '▶ Luna anhören', t1: '✓ Kostenlos zum Start', t2: '✓ Ohne Werbung', t3: '✓ 5 Sprachen', t4: '✓ Du kannst anonym bleiben', ai: '🤖 Luna und die Agentinnen sind KI-generierte Figuren.',
   chip1: '🎙️ Sprachchat', chip2: '⚔️ Agentinnen-Battles', chip3: '👗 Boutique', alt_app: 'Echter Screenshot der Luna-App – Gespräch mit Luna', alt_feed: 'Echter Screenshot der App – Pinnwand der Agentinnen', alt_rank: 'Echter Screenshot der App – Battle-Ranking',
@@ -76,7 +79,8 @@ de: {kick: '🎙️ Eine KI-Assistentin für bessere Gespräche · 18+', h1: 'Lu
   st_les: 'Stimmlektionen', st_out: 'Outfits in der Boutique', st_scn: 'Battle-Kulissen', st_tst: 'von {l} Testerplätzen frei',
   ag_empty_h: 'Hier kann deine Agentin glänzen', ag_empty_p: 'Das Ranking startet mit den ersten echten Reaktionen. Wir füllen nichts auf – Luna würde rot werden.', ag_off: 'Lunas offizielle Looks', ag_create: '✨ Agentin erschaffen',
   likes: 'Likes', wins: 'Siege', bt_wait: 'Jetzt: Wir warten auf eine Rivalin – es fehlen {n}. Wir zeigen nie erfundene Rivalinnen oder Stimmen.', bt_live: '🔴 Ein Battle läuft – komm und stimm ab!', bt_view: 'schauen gerade zu', bk_free: 'Inklusive', bk_colors: 'Farben'},
-uk: {kick: '🎙️ ШІ-асистентка для кращих розмов · 18+', h1: 'Луна каже як є. <em>А ти говориш щодня краще.</em>',
+uk: {tst_h: 'Шукаємо 1000 тестувальників', tst_p: '2 місяці Premium безкоштовно + значок, 7 емодзі, 4 аватари й колір рамки', tst_go: 'Зголоситися →', tst_left: 'Залишилося {n} з {l} місць',
+  kick: '🎙️ ШІ-асистентка для кращих розмов · 18+', h1: 'Луна каже як є. <em>А ти говориш щодня краще.</em>',
   lead: 'Луна — ШІ-асистентка, на 100 % штучний інтелект, з однією метою: щоб чоловікам і жінкам краще розмовлялося одне з одним. Вона зосереджується на самому мовленні: гучності, тембрі, тоні, темпі, інтонації та інших деталях. Після тренування — розваги: власна ШІ-агентка, Битви й рейтинги. Безкоштовно на старті, без реклами – Луна все одно її перебалакала б 😄',
   try: '🚀 Спробувати застосунок', dl: '📲 Завантажити', listen: '▶ Послухати Луну', t1: '✓ Безкоштовно на старті', t2: '✓ Без реклами', t3: '✓ 5 мов', t4: '✓ Можна лишатися анонімно', ai: '🤖 Луна й агентки – персонажі, згенеровані ШІ.',
   chip1: '🎙️ Голосова розмова', chip2: '⚔️ Битви агенток', chip3: '👗 Бутик', alt_app: 'Справжній знімок застосунку Luna – розмова з Луною', alt_feed: 'Справжній знімок застосунку – стіна агенток', alt_rank: 'Справжній знімок застосунку – рейтинг битв',
@@ -121,6 +125,8 @@ const drawStats = () => {
 };
 J('/api/library' + lq).then(l => { stats.les = (l.items || []).filter(i => i.kind !== 'faq').length; drawStats(); }).catch(() => {});
 J('/api/testers').then(t => { stats.tst = +t.remaining || 0; stats.tl = +t.limit || 0; drawStats();
+  const hs = document.getElementById('scTst'), hl = document.getElementById('scTstLeft');   /* pasek w hero: tylko prawdziwa liczba, przy komplecie ukryty */
+  if (hs){ if (!(stats.tl > 0) || stats.tst <= 0) hs.hidden = true; else if (hl){ hl.textContent = T.tst_left.replace('{n}', nf(stats.tst)).replace('{l}', nf(stats.tl)); hl.hidden = false; } }
   const em = document.querySelector('#dolacz .tst-left');   /* karta w wizytówce – prawdziwa liczba, w języku strony */
   if (em){ if (stats.tst > 0 && stats.tl){ em.classList.remove('tst-left'); em.textContent = `${nf(stats.tst)} ${T.st_tst.replace('{l}', stats.tl)} →`; } else em.hidden = true; }
 }).catch(() => {});
