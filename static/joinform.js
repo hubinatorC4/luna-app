@@ -17,7 +17,7 @@ f.onsubmit = async e => {
   }
   const fd = new FormData(f);
   const body = {name: fd.get('name'), email: fd.get('email'), role: fd.get('role'), role_other: fd.get('role_other') || '', message: fd.get('message'),
-    portfolio: fd.get('portfolio') || '', dob: fd.get('dob'), adult: !!fd.get('adult'), consent: !!fd.get('consent'), website: fd.get('website') || '', t0,
+    portfolio: fd.get('portfolio') || '', adult: !!fd.get('adult'), consent: !!fd.get('consent'), website: fd.get('website') || '', t0,
     height: fd.get('height') || '', img_consent: !!fd.get('img_consent')};
   const btn = f.querySelector('[type=submit]'); btn.disabled = true;
   try {

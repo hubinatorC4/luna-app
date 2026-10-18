@@ -64,7 +64,6 @@ FORM_COMMON = lambda P, extra="": f"""
   <label><span data-i18n="f_name">{C.DOLACZ['pl']['f_name']}</span><input name="name" required maxlength="60" autocomplete="given-name"></label>
   <label><span data-i18n="f_email">{C.DOLACZ['pl']['f_email']}</span><input name="email" type="email" required maxlength="254" autocomplete="email"></label>
   {extra}
-  <label><span data-i18n="f_dob">{C.DOLACZ['pl']['f_dob']}</span><input name="dob" type="date" required></label>
   <label class="consent"><input type="checkbox" name="adult" required> <span data-i18n="f_adult">{C.DOLACZ['pl']['f_adult']}</span></label>
   <label class="consent"><input type="checkbox" name="consent" required> <span data-i18n="f_consent">{C.DOLACZ['pl']['f_consent']}</span> <a href="/privacy.html" target="_blank">↗</a></label>
   <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
@@ -90,7 +89,7 @@ page("dolacz.html", P["_title"], "Dołącz do projektu Luna mówi jak jest – s
 
 # ---------- twarz ----------
 P = C.TWARZ["pl"]
-TW = {l: {**{k: C.DOLACZ[l][k] for k in ("f_name", "f_email", "f_dob", "f_adult", "f_consent")}, **C.TWARZ[l]} for l in C.TWARZ}
+TW = {l: {**{k: C.DOLACZ[l][k] for k in ("f_name", "f_email", "f_adult", "f_consent")}, **C.TWARZ[l]} for l in C.TWARZ}
 body = f"""<main class="page">
 {L}
 <div class="xmas-only xmas-banner" hidden><p data-i18n="xmas">{P['xmas']}</p></div>

@@ -9,8 +9,6 @@ const L = (k, html) => `<span data-k="${k}"${html ? ' data-h="1"' : ''}>${html ?
 const tr = root => root.querySelectorAll('[data-k]').forEach(e => { if (e.dataset.h) e.innerHTML = t(e.dataset.k); else e.textContent = t(e.dataset.k); });
 let CFG = null;
 const cfg = () => CFG || (CFG = fetch('/api/forms/config', {credentials: 'same-origin'}).then(r => r.json()).catch(() => ({verify: 'soon', methods: {}, options: {}})));
-const ageOf = d => { const b = new Date(d + 'T00:00:00'); if (isNaN(b)) return null; const n = new Date(); let a = n.getFullYear() - b.getFullYear(); if (n.getMonth() < b.getMonth() || (n.getMonth() === b.getMonth() && n.getDate() < b.getDate())) a--; return a; };
-const today = () => new Date().toISOString().slice(0, 10);
 const chips = (name, vals, pre, type) => `<div class="f18chips">${vals.map(v => `<label class="f18chip"><input type="${type || 'checkbox'}" name="${name}" value="${v}"><span>${L(pre + v)}</span></label>`).join('')}</div>`;
 
 function testerHTML(o){
@@ -50,7 +48,8 @@ function castingHTML(o){
     <label><input type="checkbox" name="c_withdraw"> ${L('cc_withdraw')}</label>
     <label><input type="checkbox" name="c_gdpr"> ${L('cc_gdpr', 1)}</label></fieldset>`;
 }
-const dobHTML = () => `<label class="f18f">${L('dob')} *<input name="dob" type="date" required min="1900-01-01" max="${today()}"><small>${L('dob_h')}</small></label>`;
+/* 18+: tylko „Masz 18 lat?” Tak / Nie – bez daty urodzenia (zasada właściciela: nigdy nie zbieramy daty urodzenia) */
+const dobHTML = () => `<fieldset class="f18f f18age"><legend>${L('a18_q')} *</legend><div class="f18chips"><label class="f18chip"><input type="radio" name="adult18" value="yes" required><span>${L('a18_yes')}</span></label><label class="f18chip"><input type="radio" name="adult18" value="no" required><span>${L('a18_no')}</span></label></div><small>${L('a18_h')}</small></fieldset>`;
 
 function underage(box){ box.innerHTML = `<div class="f18done f18under" role="alert"><div class="f18ico">🌙</div><h3>${L('under_h')}</h3><p>${L('under')}</p></div>`; }
 
@@ -71,15 +70,15 @@ async function mount(box){
     <button type="submit" class="f18btn">${L('send')}</button><p class="f18err" role="alert" aria-live="polite"></p></form>`;
   const f = box.querySelector('form'); let ts = '';
   if (c.turnstile) loadTS().then(() => { window.turnstile.render(f.querySelector('.f18ts'), {sitekey: c.turnstile, language: lang(), callback: v => { ts = v; }}); }).catch(() => {});
-  f.dob.addEventListener('change', () => { const a = ageOf(f.dob.value); if (a != null && a < 18 && a >= 0) underage(box); });
+  f.querySelectorAll('[name=adult18]').forEach(r => r.addEventListener('change', () => { if (r.checked && r.value === 'no') underage(box); }));
   if (f.cats) f.addEventListener('change', e => { if (e.target.name === 'cats'){ const on = f.querySelectorAll('[name=cats]:checked'); if (on.length > 3) e.target.checked = false; } });
   f.onsubmit = async e => {
     e.preventDefault(); const err = f.querySelector('.f18err'); err.textContent = '';
     /* QA: formularz ma novalidate (własne komunikaty), więc puste pola sprawdzamy tutaj – inaczej puste zgłoszenie dawało ekran „Dziękujemy” bez zapisu */
-    if (!f.checkValidity()){ const bad = f.querySelector(':invalid'); if (bad){ try { bad.focus({preventScroll: false}); bad.scrollIntoView({block: 'center'}); } catch(x){} } const nm = bad && bad.closest('label') && bad.closest('label').querySelector('span[data-k]'); err.textContent = '⚠️ ' + (nm ? nm.textContent.trim() + ': ' : '') + t('req').replace(/^\*\s*/, ''); return; }
+    if (!f.checkValidity()){ const bad = f.querySelector(':invalid'); if (bad){ try { bad.focus({preventScroll: false}); bad.scrollIntoView({block: 'center'}); } catch(x){} } const nm = bad && (bad.closest('fieldset.f18age') ? bad.closest('fieldset').querySelector('legend span[data-k]') : bad.closest('label') && bad.closest('label').querySelector('span[data-k]')); err.textContent = '⚠️ ' + (nm ? nm.textContent.trim() + ': ' : '') + t('req').replace(/^\*\s*/, ''); return; }
     const fd = new FormData(f); const all = n => fd.getAll(n);
-    const a = ageOf(f.dob.value); if (a != null && a < 18 && a >= 0) return underage(box);
-    const body = {email: fd.get('email'), dob: fd.get('dob'), website: fd.get('website') || '', t0, turnstile: ts, lang: lang(), consents: {}};
+    if ((new FormData(f)).get('adult18') === 'no') return underage(box);
+    const body = {email: fd.get('email'), adult_confirmed: fd.get('adult18') === 'yes', website: fd.get('website') || '', t0, turnstile: ts, lang: lang(), consents: {}};
     f.querySelectorAll('input[name^="c_"]').forEach(x => { body.consents[x.name.slice(2)] = x.checked; });
     if (kind === 'tester') Object.assign(body, {nickname: fd.get('nickname'), device: fd.get('device'), topics: all('topics'), note: fd.get('note') || ''});
     else {

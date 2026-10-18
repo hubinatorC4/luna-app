@@ -59,10 +59,12 @@ def _antispam(d):
         if time.time() * 1000 - float(d.get("t0", 0)) < 4000: raise PermissionError("spam")
     except (TypeError, ValueError): raise PermissionError("spam")
 
-def _dob(d):
-    dob = str(d.get("dob", "")).strip()
-    if age.age_of(dob) < 18: raise age.Underage(age.UNDER_MSG)
-    return dob
+def _adult(d):
+    """18+: tylko „Masz 18 lat?” Tak / Nie – bez daty urodzenia (nie zbieramy jej). Starsze klienty z datą: nadal odmowa < 18, daty nie zapisujemy."""
+    if d.get("adult_confirmed") is False: raise age.Underage(age.UNDER_MSG)
+    if d.get("dob") and age.age_of(str(d.get("dob")).strip()) < 18: raise age.Underage(age.UNDER_MSG)
+    if d.get("adult_confirmed") is not True and not d.get("dob"): raise ValueError("Potwierdź, że masz ukończone 18 lat.")
+    return True
 
 def _voice(data_url):
     """Próbka głosu (opcjonalna): audio ≤ 3 MB, przekodowane ffmpeg do mono MP3 ≤ 60 s bez metadanych. Zwraca base64 MP3."""
@@ -84,11 +86,11 @@ def submit(kind, d, ip_hash="", uid=""):
     _antispam(d)
     email = str(d.get("email", "")).strip()[:254]
     if not EMAIL_RE.fullmatch(email): raise ValueError("Podaj poprawny adres e-mail do kontaktu.")
-    dob = _dob(d)
+    _adult(d)
     miss = [c for c in CONSENTS[kind] if (d.get("consents") or {}).get(c) is not True]
     if miss: raise ValueError("Zaznacz wymagane zgody.")
     now = int(time.time())
-    r = {"id": secrets.token_hex(6), "kind": kind, "t": now, "email": email, "dob_declared": True, "age": age.age_of(dob),
+    r = {"id": secrets.token_hex(6), "kind": kind, "t": now, "email": email, "adult_confirmed": True, "adult_confirmed_at": now,
          "consents": {c: CONSENT_TEXT[c] for c in CONSENTS[kind]}, "consents_at": now,
          "verification": {"status": "pending", "method": None, "at": 0, "provider": None, "ref": None},
          "decision": "new", "decided_at": 0, "ip": ip_hash, "uid": uid or "", "read": False}

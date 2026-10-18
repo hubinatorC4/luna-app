@@ -49,7 +49,6 @@ function render(d){
       <label class="ring-opt"><input type="radio" name="android" value="0">Nie</label>
       <p class="hint">Do zamkniętych testów w Google Play potrzebny jest adres e-mail powiązany z Twoim kontem Google – najlepiej podaj właśnie ten.</p>
     </fieldset>
-    <label>Data urodzenia *<input name="dob" type="date" required></label>
     <label class="consent"><input type="checkbox" name="adult" required> <span>Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe. *</span></label>
     <label class="consent"><input type="checkbox" name="consent" required> <span>${esc(d.consent)} * <a href="/privacy.html" target="_blank">Informacja o danych</a></span></label>
     <button class="btn primary" type="submit">Zgłaszam się do testów</button>
@@ -59,7 +58,7 @@ function render(d){
   f.onsubmit = async e => {
     e.preventDefault(); const fd = new FormData(f), err = f.querySelector('.tst-err'); err.textContent = '';
     const body = {name: fd.get('name'), email: fd.get('email'), reason: fd.get('reason'), ring: fd.get('ring'),
-      android: fd.get('android') === null ? null : fd.get('android') === '1', consent: !!fd.get('consent'), dob: fd.get('dob'), adult: !!fd.get('adult')};
+      android: fd.get('android') === null ? null : fd.get('android') === '1', consent: !!fd.get('consent'), adult: !!fd.get('adult')};
     f.querySelector('button').disabled = true;
     try {
       const r = await fetch('/api/testers/signup', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});

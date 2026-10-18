@@ -25,7 +25,7 @@ def signup(d, ip_hash=""):
     if not EMAIL_RE.fullmatch(email): raise ValueError("Podaj poprawny adres e-mail.")
     if not ring: raise ValueError("Wybierz kolor obwódki.")
     if android not in (True, False): raise ValueError("Zaznacz, czy masz telefon z Androidem.")
-    decl = age.check(d)  # 18+: data urodzenia i oświadczenie (Underage → grzeczna odmowa)
+    decl = age.check(d)  # 18+: samo oświadczenie, bez daty urodzenia (Underage → grzeczna odmowa)
     if d.get("consent") is not True: raise ValueError("Zaznacz zgodę na przetwarzanie danych.")
     with _lock:
         t = _all()

@@ -20,11 +20,12 @@ def age_of(dob):
     return t.year - b.year - ((t.month, t.day) < (b.month, b.day))
 
 def check(d):
-    """Zwraca dict z danymi deklaracji albo rzuca ValueError/Underage."""
-    dob = str(d.get("dob", "")).strip()
-    if age_of(dob) < 18: raise Underage(UNDER_MSG)
-    if d.get("adult") is not True: raise ValueError("Zaznacz oświadczenie o pełnoletności i posiadaniu własnego konta bankowego.")
-    return {"dob": dob, "adult": True, "adult_text": ADULT_TEXT, "adult_at": int(time.time())}
+    """Oświadczenie 18+ w formularzach (Dołącz, Twarz AI, tester w aplikacji) – BEZ daty urodzenia (nie zbieramy jej).
+    Starsze klienty mogą jeszcze wysłać datę: nadal odmawiamy osobom < 18, ale daty nie zapisujemy."""
+    if d.get("adult_confirmed") is False: raise Underage(UNDER_MSG)
+    if d.get("dob") and age_of(str(d.get("dob")).strip()) < 18: raise Underage(UNDER_MSG)
+    if d.get("adult") is not True and d.get("adult_confirmed") is not True: raise ValueError("Zaznacz oświadczenie o pełnoletności (18+).")
+    return {"adult": True, "adult_text": ADULT_TEXT, "adult_at": int(time.time())}
 
 CONFIRM_TEXT = "Masz 18 lat? – Tak"
 
