@@ -12,7 +12,7 @@ Luna to aplikacja webowa (PWA). Rozmawia po polsku ciepłym, niskim głosem z hi
 - tryb hologram, okrągłe awatary Luny i użytkownika
 - muzyka w tle: 10 utworów smooth jazz (Kevin MacLeod, CC BY 4.0, zob. `static/music/LICENSES.md`)
 - czat na żywo „Napisz do twórcy” (💬): rozmowy odwiedzających z anonimowym identyfikatorem, imieniem i awatarem; skrzynka moderatora (📥) z licznikami nieprzeczytanych i odpowiedziami; limity wiadomości; komunikat o czasie odpowiedzi (edytowalny w panelu) jako baner i automatyczna wiadomość po pierwszym pytaniu
-- **v1.3:** portal porad (`/promo.html`) z wyszukiwarką, zakładkami i filtrami; **Luna Live** (`/live.html`) – cotygodniowa transmisja (domyślnie niedziela 20:00–23:00, czas polski), czat widzów, kolejka pytań, odpowiedzi głosem Luny dla wszystkich, ćwiczenia i komendy, „Stream w basenie”; rekrutacja **testerów** (50 miejsc, Premium na 60 dni, fioletowa/niebieska obwódka); powiadomienia **Web Push** i przypomnienia **e-mail**; nowy domyślny głos „Ciepła chrypka”
+- **v1.3:** portal porad (`/promo.html`) z wyszukiwarką, zakładkami i filtrami; **Luna Live** (`/live.html`) – cotygodniowa transmisja (domyślnie niedziela 20:00–23:00, czas polski), czat widzów, kolejka pytań, odpowiedzi głosem Luny dla wszystkich, ćwiczenia i komendy, „Stream w basenie”; rekrutacja **testerów** (1000 miejsc, Premium na 60 dni, fioletowa/niebieska obwódka); powiadomienia **Web Push** i przypomnienia **e-mail**; nowy domyślny głos „Ciepła chrypka”
 - panel producenta: osobowość, teksty, baza wiedzy, reguły, głos, wygląd, katalog postaci i playlista
 
 ## Uruchomienie lokalne
