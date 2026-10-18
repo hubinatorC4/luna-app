@@ -16259,17 +16259,19 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-058_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-058_chocolatebrown.webp"
     },
     {
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/cla-058_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-058_caramel.webp"
     }
    ],
    "description_en": "Cable-knit sweater from the Classic line, “Weekend w Mieście” collection. Material: cashmere-wool blend. Colour: olive (also in terracotta, chocolate brown, caramel). Details: ribbed trims, elbow patches, accompanied by matching pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -16334,25 +16336,28 @@
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cla-059_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-059_dustyblue.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-059_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-059_cream.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cla-059_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-059_champagne.webp"
     }
    ],
    "description_en": "Sleeved cape coat from the Classic line, “Jesienne Tony” collection. Material: bouclé wool. Colour: sage green (also in dusty blue, cream, champagne). Details: buckled belt, wide lapels, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -16417,25 +16422,28 @@
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cla-060_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-060_rubyred.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-060_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-060_navy.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-060_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-060_burgundy.webp"
     }
    ],
    "description_en": "Long-sleeve gown from the Classic line, “Scena i Mikrofon” collection. Material: wool crepe. Colour: cobalt blue (also in ruby red, navy, burgundy). Details: contrast piping, beaded cuffs, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -16500,25 +16508,28 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-061_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-061_black.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-061_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-061_camel.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-061_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-061_navy.webp"
     }
    ],
    "description_en": "Long-sleeve yoga set from the Classic line, “Weekend w Mieście” collection. Material: velour. Colour: graphite (also in black, camel, navy). Details: drawstring waist, full zip to the neck, reflective trims. Elegant, fully covering cut in opaque fabric.",
@@ -16578,25 +16589,28 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-062_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-062_burgundy.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-062_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-062_cream.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-062_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-062_mustard.webp"
     }
    ],
    "description_en": "Buckle belt from the Classic line, “Jesienne Tony” collection. Material: leather. Colour: chocolate brown (also in burgundy, cream, mustard). Details: silver hardware, crystal accents. Elegant, fully covering cut in opaque fabric.",
@@ -16843,25 +16857,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-065_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-065_cream.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-065_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-065_camel.webp"
     },
     {
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cla-065_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-065_graphite.webp"
     }
    ],
    "description_en": "Box-pleat midi skirt from the Classic line, “Klasyka Biura” collection. Material: wool crepe. Colour: white (also in cream, camel, graphite). Details: piped waistband, waist tie, concealed side zip, accompanied by matching pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -16931,25 +16948,28 @@
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-066_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-066_sagegreen.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-066_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-066_lavender.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cla-066_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-066_powderpink.webp"
     }
    ],
    "description_en": "Palazzo trousers from the Classic line, “Klasyka Biura” collection. Material: lined heavy silk. Colour: dusty blue (also in sage green, lavender, powder pink). Details: piped waistband, covered buttons, hand-sewn seed pearls, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -17019,25 +17039,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-067_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-067_cream.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-067_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-067_mustard.webp"
     },
     {
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/cla-067_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-067_terracotta.webp"
     }
    ],
    "description_en": "Oversized blazer from the Classic line, “Klasyka Biura” collection. Material: gabardine. Colour: olive (also in cream, mustard, terracotta). Details: cord trim, fabric appliqués, in-seam pockets, accompanied by matching hat placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -17107,25 +17130,28 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-068_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-068_mustard.webp"
     },
     {
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-068_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-068_chocolatebrown.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-068_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-068_burgundy.webp"
     }
    ],
    "description_en": "Boat-neck sweater from the Classic line, “Jesienne Tony” collection. Material: cashmere-wool blend. Colour: bottle green (also in mustard, chocolate brown, burgundy). Details: cable-knit yoke, mother-of-pearl buttons, contrast cuff stripes, accompanied by matching silk scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -17190,25 +17216,28 @@
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-069_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-069_sagegreen.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cla-069_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-069_dustyblue.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-069_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-069_lavender.webp"
     }
    ],
    "description_en": "Wrap coat from the Classic line, “Klasyka Biura” collection. Material: cashmere-wool blend. Colour: champagne (also in sage green, dusty blue, lavender). Details: embroidered collar, quilted lining, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -17268,25 +17297,28 @@
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-070_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-070_sagegreen.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-070_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-070_cream.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-070_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-070_lavender.webp"
     }
    ],
    "description_en": "Turtleneck column gown from the Classic line, “Scena i Mikrofon” collection. Material: lined heavy silk. Colour: dusty blue (also in sage green, cream, lavender). Details: gold buttons, waist tie. Elegant, fully covering cut in opaque fabric.",
@@ -17356,25 +17388,28 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-071_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-071_burgundy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cla-071_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-071_cobaltblue.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cla-071_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-071_deepteal.webp"
     }
    ],
    "description_en": "Hoodie and joggers set from the Classic line, “Weekend w Mieście” collection. Material: velour. Colour: plum (also in burgundy, cobalt blue, deep teal). Details: ankle cuffs, reflective trims, full zip to the neck, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -17434,25 +17469,28 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-072_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-072_burgundy.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cla-072_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-072_bottlegreen.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-072_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-072_olive.webp"
     }
    ],
    "description_en": "Clutch bag from the Classic line, “Jesienne Tony” collection. Material: leather. Colour: mustard (also in burgundy, bottle green, olive). Details: leather wrist strap, simple plain gold clasp. Elegant, fully covering cut in opaque fabric.",
@@ -17689,25 +17727,28 @@
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cla-075_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-075_rubyred.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cla-075_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-075_plum.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cla-075_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-075_cobaltblue.webp"
     }
    ],
    "description_en": "Below-knee pencil skirt from the Classic line, “Spokojna Elegancja” collection. Material: gabardine. Colour: emerald (also in ruby red, plum, cobalt blue). Details: belt loops, hand-pleated front, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -17777,25 +17818,28 @@
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cla-076_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-076_rubyred.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cla-076_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-076_plum.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cla-076_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-076_deepteal.webp"
     }
    ],
    "description_en": "Chino trousers from the Classic line, “Klasyka Biura” collection. Material: gabardine. Colour: emerald (also in ruby red, plum, deep teal). Details: pleated inserts, covered buttons, hand-pleated front, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -17865,25 +17909,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-077_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-077_cream.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-077_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-077_camel.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-077_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-077_black.webp"
     }
    ],
    "description_en": "Double-breasted blazer from the Classic line, “Klasyka Biura” collection. Material: gabardine. Colour: white (also in cream, camel, black). Details: contrast piping, gathered shoulders, cord trim, accompanied by matching pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -17943,25 +17990,28 @@
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/cla-078_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-078_caramel.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-078_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-078_mustard.webp"
     },
     {
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/cla-078_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-078_terracotta.webp"
     }
    ],
    "description_en": "Jacquard-pattern sweater from the Classic line, “Weekend w Mieście” collection. Material: alpaca wool. Colour: cream (also in caramel, mustard, terracotta). Details: cable-knit sleeves, mother-of-pearl buttons. Elegant, fully covering cut in opaque fabric.",
@@ -18026,25 +18076,28 @@
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cla-079_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-079_bottlegreen.webp"
     },
     {
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-079_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-079_chocolatebrown.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-079_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-079_olive.webp"
     }
    ],
    "description_en": "Trench coat from the Classic line, “Jesienne Tony” collection. Material: tweed. Colour: burgundy (also in bottle green, chocolate brown, olive). Details: flap pockets, hand-finished buttonholes, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -18114,25 +18167,28 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-080_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-080_navy.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cla-080_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-080_white.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-080_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-080_camel.webp"
     }
    ],
    "description_en": "High-neck gown from the Classic line, “Scena i Mikrofon” collection. Material: jacquard. Colour: pearl grey (also in navy, white, camel). Details: covered buttons, decorative topstitching, gathered shoulders, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -18192,25 +18248,28 @@
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cla-081_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-081_deepteal.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-081_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-081_burgundy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cla-081_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-081_cobaltblue.webp"
     }
    ],
    "description_en": "Long tunic set from the Classic line, “Weekend w Mieście” collection. Material: velour. Colour: emerald (also in deep teal, burgundy, cobalt blue). Details: contrast side stripes, full zip to the neck. Elegant, fully covering cut in opaque fabric.",
@@ -18229,7 +18288,7 @@
     "oliwkowy"
    ],
    "material": "aksamit",
-   "description": "Opaska do włosów z linii Classic, kolekcja „Jesienne Tony”. Materiał: aksamit. Kolor: oliwkowy (dostępne też: czekoladowy, kremowy, musztardowy). Detale: haft w drobne gwiazdki, kryształki. Elegancki, w pełni zakrywający krój z nieprześwitującej tkaniny.",
+   "description": "Opaska do włosów z linii Classic, kolekcja „Jesienne Tony”. Materiał: aksamit. Kolor: oliwkowy (dostępne też: czekoladowy, kremowy, musztardowy). Detale: ręcznie przeszyty tonalny brzeg, kryształki. Elegancki, w pełni zakrywający krój z nieprześwitującej tkaniny.",
    "price": {
     "usd": 22.99,
     "eur": 20.99,
@@ -18237,14 +18296,14 @@
    },
    "tier": "premium",
    "rarity": "rzadki",
-   "image_prompt": "Elegant luxury e-commerce product photograph of an olive velvet padded headband, featuring embroidered tiny stars, crystal accents, displayed on a small brass display stand, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
+   "image_prompt": "Elegant luxury e-commerce product photograph of an olive velvet padded headband, plain smooth velvet with no embroidery, no stars and no emblem, hand-stitched tonal edging, a few tiny crystal accents, displayed on a small brass display stand, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
    "image": "/catalog/butik/cla-082.jpg",
    "status": "planned",
    "release_version": null,
    "details": [
     {
-     "pl": "haft w drobne gwiazdki",
-     "en": "embroidered tiny stars",
+     "pl": "ręcznie przeszyty tonalny brzeg",
+     "en": "hand-stitched tonal edging",
      "handmade": true
     },
     {
@@ -18270,28 +18329,31 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-082_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-082_chocolatebrown.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-082_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-082_cream.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-082_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-082_mustard.webp"
     }
    ],
-   "description_en": "Headband from the Classic line, “Jesienne Tony” collection. Material: velvet. Colour: olive (also in chocolate brown, cream, mustard). Details: embroidered tiny stars, crystal accents. Elegant, fully covering cut in opaque fabric.",
+   "description_en": "Headband from the Classic line, “Jesienne Tony” collection. Material: velvet. Colour: olive (also in chocolate brown, cream, mustard). Details: hand-stitched tonal edging, crystal accents. Elegant, fully covering cut in opaque fabric.",
    "price_tier": "T5",
    "price_reason": "linia classic; kolekcja everyday (+0); rzadkość rzadki (+1); 2 detale (+0); rękodzieło (+2); 0 dodatki w zestawie (+0) = 3 pkt → T5",
    "image_webp": "/catalog/butik/cla-082.webp"
@@ -18520,25 +18582,28 @@
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-085_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-085_lavender.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cla-085_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-085_powderpink.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cla-085_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-085_dustyblue.webp"
     }
    ],
    "description_en": "Flounced maxi skirt from the Classic line, “Klasyka Biura” collection. Material: lined heavy silk. Colour: cream (also in lavender, powder pink, dusty blue). Details: hand-pleated front, beaded waistband, accompanied by matching hat placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -18598,25 +18663,28 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-086_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-086_chocolatebrown.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-086_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-086_olive.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cla-086_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-086_bottlegreen.webp"
     }
    ],
    "description_en": "Mid-calf culottes from the Classic line, “Weekend w Mieście” collection. Material: jacquard. Colour: mustard (also in chocolate brown, olive, bottle green). Details: contrast piping, pearl buttons. Elegant, fully covering cut in opaque fabric.",
@@ -18681,25 +18749,28 @@
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/cla-087_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-087_terracotta.webp"
     },
     {
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/cla-087_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-087_caramel.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-087_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-087_olive.webp"
     }
    ],
    "description_en": "Tuxedo blazer from the Classic line, “Scena i Mikrofon” collection. Material: velour. Colour: mustard (also in terracotta, caramel, olive). Details: hand-embroidered floral motif, cuffed sleeves, accompanied by matching hat placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -18764,25 +18835,28 @@
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/cla-088_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-088_terracotta.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-088_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-088_cream.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-088_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-088_olive.webp"
     }
    ],
    "description_en": "Shawl-collar sweater from the Classic line, “Jesienne Tony” collection. Material: alpaca wool. Colour: chocolate brown (also in terracotta, cream, olive). Details: cable-knit yoke, contrast cuff stripes, accompanied by matching hat placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -18852,25 +18926,28 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-089_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-089_burgundy.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cla-089_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-089_bottlegreen.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-089_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-089_mustard.webp"
     }
    ],
    "description_en": "Hooded coat from the Classic line, “Klasyka Biura” collection. Material: bouclé wool. Colour: chocolate brown (also in burgundy, bottle green, mustard). Details: epaulettes, velvet collar, embroidered collar, accompanied by matching pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -18935,25 +19012,28 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-090_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-090_mustard.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-090_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-090_cream.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-090_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-090_olive.webp"
     }
    ],
    "description_en": "Pleated-skirt gown from the Classic line, “Scena i Mikrofon” collection. Material: lined heavy silk. Colour: terracotta (also in mustard, cream, olive). Details: hand-embroidered floral motif, contrast piping, gold-thread embroidery. Elegant, fully covering cut in opaque fabric.",
@@ -19023,25 +19103,28 @@
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cla-091_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-091_deepteal.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-091_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-091_navy.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-091_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-091_burgundy.webp"
     }
    ],
    "description_en": "Ski suit from the Classic line, “Weekend w Mieście” collection. Material: quilted softshell. Colour: cobalt blue (also in deep teal, navy, burgundy). Details: full zip to the neck, small moon patch, drawstring waist, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -19101,25 +19184,28 @@
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-092_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-092_camel.webp"
     },
     {
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cla-092_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-092_pearlgrey.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-092_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-092_black.webp"
     }
    ],
    "description_en": "Long scarf from the Classic line, “Spokojna Elegancja” collection. Material: cashmere-wool. Colour: graphite (also in camel, pearl grey, black). Details: fringed ends, hand-rolled edges. Elegant, fully covering cut in opaque fabric.",
@@ -19361,25 +19447,28 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cla-095_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-095_champagne.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-095_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-095_lavender.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-095_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-095_sagegreen.webp"
     }
    ],
    "description_en": "Tie-wrap midi skirt from the Classic line, “Klasyka Biura” collection. Material: lined heavy silk. Colour: dusty blue (also in champagne, lavender, sage green). Details: hand-embroidered hem, gold buttons, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -19439,25 +19528,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-096_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-096_cream.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-096_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-096_mustard.webp"
     },
     {
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/cla-096_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-096_terracotta.webp"
     }
    ],
    "description_en": "Marlene trousers from the Classic line, “Klasyka Biura” collection. Material: wool crepe. Colour: caramel (also in cream, mustard, terracotta). Details: piped waistband, cord trim. Elegant, fully covering cut in opaque fabric.",
@@ -19522,25 +19614,28 @@
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cla-097_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-097_dustyblue.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cla-097_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-097_champagne.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-097_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-097_cream.webp"
     }
    ],
    "description_en": "Waist-length spencer jacket from the Classic line, “Klasyka Biura” collection. Material: gabardine. Colour: powder pink (also in dusty blue, champagne, cream). Details: in-seam pockets, fabric appliqués, beaded cuffs. Elegant, fully covering cut in opaque fabric.",
@@ -19605,25 +19700,28 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-098_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-098_chocolatebrown.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-098_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-098_mustard.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cla-098_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-098_bottlegreen.webp"
     }
    ],
    "description_en": "Turtleneck sweater from the Classic line, “Weekend w Mieście” collection. Material: alpaca wool. Colour: burgundy (also in chocolate brown, mustard, bottle green). Details: mother-of-pearl buttons, embroidered yoke, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -19688,25 +19786,28 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-099_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-099_chocolatebrown.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-099_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-099_cream.webp"
     },
     {
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/cla-099_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-099_caramel.webp"
     }
    ],
    "description_en": "Double-breasted coat from the Classic line, “Klasyka Biura” collection. Material: tweed. Colour: terracotta (also in chocolate brown, cream, caramel). Details: embroidered collar, epaulettes, velvet collar. Elegant, fully covering cut in opaque fabric.",
@@ -19771,25 +19872,28 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-100_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-100_navy.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-100_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-100_cream.webp"
     },
     {
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cla-100_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-100_pearlgrey.webp"
     }
    ],
    "description_en": "High-neck gown from the Classic line, “Scena i Mikrofon” collection. Material: gabardine. Colour: graphite (also in navy, cream, pearl grey). Details: beaded cuffs, fabric appliqués, covered buttons. Elegant, fully covering cut in opaque fabric.",
@@ -19849,25 +19953,28 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cla-101_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-101_champagne.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-101_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-101_sagegreen.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-101_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-101_lavender.webp"
     }
    ],
    "description_en": "Tennis set with pleated midi skirt from the Classic line, “Weekend w Mieście” collection. Material: technical knit. Colour: dusty blue (also in champagne, sage green, lavender). Details: contrast side stripes, embroidered crescent moon. Elegant, fully covering cut in opaque fabric.",
@@ -19894,7 +20001,7 @@
    },
    "tier": "premium",
    "rarity": "rzadki",
-   "image_prompt": "Elegant luxury e-commerce product photograph of a bottle green velvet envelope clutch bag, featuring diamond quilting, pearl accents, displayed on a small brass display stand, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
+   "image_prompt": "Elegant luxury e-commerce product photograph of a bottle green velvet envelope clutch bag, smooth plain velvet with no quilting, featuring pearl accents along the flap edge, displayed on a small brass display stand, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
    "image": "/catalog/butik/cla-102.jpg",
    "status": "planned",
    "release_version": null,
@@ -19927,25 +20034,28 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-102_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-102_mustard.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-102_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-102_olive.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-102_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-102_cream.webp"
     }
    ],
    "description_en": "Clutch bag from the Classic line, “Jesienne Tony” collection. Material: velvet. Colour: bottle green (also in mustard, olive, cream). Details: smooth plain velvet, pearl accents. Elegant, fully covering cut in opaque fabric.",
@@ -20182,25 +20292,28 @@
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-105_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-105_sagegreen.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cla-105_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-105_champagne.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-105_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-105_lavender.webp"
     }
    ],
    "description_en": "Pleated midi skirt from the Classic line, “Spokojna Elegancja” collection. Material: jacquard. Colour: powder pink (also in sage green, champagne, lavender). Details: piped waistband, waist tie, decorative topstitching. Elegant, fully covering cut in opaque fabric.",
@@ -20265,25 +20378,28 @@
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-106_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-106_lavender.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-106_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-106_cream.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-106_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-106_sagegreen.webp"
     }
    ],
    "description_en": "Wide-leg trousers from the Classic line, “Klasyka Biura” collection. Material: lined heavy silk. Colour: powder pink (also in lavender, cream, sage green). Details: gold-thread embroidery, piped waistband, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -20348,25 +20464,28 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-107_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-107_black.webp"
     },
     {
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cla-107_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-107_graphite.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cla-107_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-107_white.webp"
     }
    ],
    "description_en": "Peplum jacket from the Classic line, “Scena i Mikrofon” collection. Material: wool crepe. Colour: camel (also in black, graphite, white). Details: velvet piping, in-seam pockets, contrast piping. Elegant, fully covering cut in opaque fabric.",
@@ -20431,25 +20550,28 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-108_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-108_burgundy.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-108_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-108_olive.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-108_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-108_cream.webp"
     }
    ],
    "description_en": "Boat-neck sweater from the Classic line, “Weekend w Mieście” collection. Material: merino wool. Colour: bottle green (also in burgundy, olive, cream). Details: mother-of-pearl buttons, ribbed trims, accompanied by matching gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -20519,25 +20641,28 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-109_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-109_navy.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cla-109_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-109_rubyred.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cla-109_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-109_deepteal.webp"
     }
    ],
    "description_en": "Trench coat from the Classic line, “Jesienne Tony” collection. Material: wool. Colour: cobalt blue (also in navy, ruby red, deep teal). Details: epaulettes, horn buttons, embroidered collar, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -20602,25 +20727,28 @@
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cla-110_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-110_dustyblue.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-110_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-110_sagegreen.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-110_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-110_cream.webp"
     }
    ],
    "description_en": "Turtleneck column gown from the Classic line, “Scena i Mikrofon” collection. Material: velour. Colour: powder pink (also in dusty blue, sage green, cream). Details: fabric appliqués, in-seam pockets, accompanied by matching pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -20690,25 +20818,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-111_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-111_cream.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-111_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-111_olive.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-111_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-111_mustard.webp"
     }
    ],
    "description_en": "Long-sleeve yoga set from the Classic line, “Weekend w Mieście” collection. Material: merino jersey. Colour: chocolate brown (also in cream, olive, mustard). Details: small moon patch, full zip to the neck, reflective trims, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -20727,7 +20858,7 @@
     "bordowy"
    ],
    "material": "angora z wełną",
-   "description": "Beret z linii Classic, kolekcja „Spokojna Elegancja”. Materiał: angora z wełną. Kolor: bordowy (dostępne też: oliwkowy, musztardowy, kremowy). Detale: haft w drobne gwiazdki, perełki. Elegancki, w pełni zakrywający krój z nieprześwitującej tkaniny.",
+   "description": "Beret z linii Classic, kolekcja „Spokojna Elegancja”. Materiał: angora z wełną. Kolor: bordowy (dostępne też: oliwkowy, musztardowy, kremowy). Detale: ręcznie przeszyty tonalny brzeg, perełki. Elegancki, w pełni zakrywający krój z nieprześwitującej tkaniny.",
    "price": {
     "usd": 22.99,
     "eur": 20.99,
@@ -20735,14 +20866,14 @@
    },
    "tier": "premium",
    "rarity": "rzadki",
-   "image_prompt": "Elegant luxury e-commerce product photograph of a burgundy wool-angora classic beret, featuring embroidered tiny stars, pearl accents, displayed on a small brass display stand, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
+   "image_prompt": "Elegant luxury e-commerce product photograph of a burgundy wool-angora classic beret, plain smooth wool-angora with no embroidery, no stars and no emblem, hand-stitched tonal edging, a few scattered small pearl accents, displayed on a small brass display stand, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
    "image": "/catalog/butik/cla-112.jpg",
    "status": "planned",
    "release_version": null,
    "details": [
     {
-     "pl": "haft w drobne gwiazdki",
-     "en": "embroidered tiny stars",
+     "pl": "ręcznie przeszyty tonalny brzeg",
+     "en": "hand-stitched tonal edging",
      "handmade": true
     },
     {
@@ -20768,28 +20899,31 @@
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-112_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-112_olive.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-112_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-112_mustard.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-112_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-112_cream.webp"
     }
    ],
-   "description_en": "Beret from the Classic line, “Spokojna Elegancja” collection. Material: wool-angora. Colour: burgundy (also in olive, mustard, cream). Details: embroidered tiny stars, pearl accents. Elegant, fully covering cut in opaque fabric.",
+   "description_en": "Beret from the Classic line, “Spokojna Elegancja” collection. Material: wool-angora. Colour: burgundy (also in olive, mustard, cream). Details: hand-stitched tonal edging, pearl accents. Elegant, fully covering cut in opaque fabric.",
    "price_tier": "T5",
    "price_reason": "linia classic; kolekcja business (+1); rzadkość rzadki (+1); 2 detale (+0); rękodzieło (+2); 0 dodatki w zestawie (+0) = 4 pkt → T5",
    "image_webp": "/catalog/butik/cla-112.webp"
@@ -21028,25 +21162,28 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-115_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-115_navy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cla-115_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-115_cobaltblue.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cla-115_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-115_rubyred.webp"
     }
    ],
    "description_en": "Flared midi skirt from the Classic line, “Spokojna Elegancja” collection. Material: lined heavy silk. Colour: deep teal (also in navy, cobalt blue, ruby red). Details: decorative topstitching, hand-sewn seed pearls, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -21111,25 +21248,28 @@
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cla-116_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-116_pearlgrey.webp"
     },
     {
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cla-116_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-116_graphite.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-116_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-116_black.webp"
     }
    ],
    "description_en": "Paperbag-waist trousers from the Classic line, “Klasyka Biura” collection. Material: lined heavy silk. Colour: white (also in pearl grey, graphite, black). Details: hand-sewn seed pearls, gold-thread embroidery, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -21189,25 +21329,28 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-117_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-117_navy.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cla-117_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-117_white.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-117_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-117_black.webp"
     }
    ],
    "description_en": "Tailored blazer from the Classic line, “Scena i Mikrofon” collection. Material: gabardine. Colour: graphite (also in navy, white, black). Details: hand-sewn seed pearls, in-seam pockets. Elegant, fully covering cut in opaque fabric.",
@@ -21272,25 +21415,28 @@
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cla-118_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-118_rubyred.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cla-118_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-118_cobaltblue.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-118_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-118_burgundy.webp"
     }
    ],
    "description_en": "Jacquard-pattern sweater from the Classic line, “Jesienne Tony” collection. Material: cashmere-wool blend. Colour: emerald (also in ruby red, cobalt blue, burgundy). Details: contrast cuff stripes, elbow patches, accompanied by matching pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -21355,25 +21501,28 @@
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cla-119_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-119_powderpink.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-119_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-119_sagegreen.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-119_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-119_cream.webp"
     }
    ],
    "description_en": "Sleeved cape coat from the Classic line, “Jesienne Tony” collection. Material: wool. Colour: lavender (also in powder pink, sage green, cream). Details: epaulettes, horn buttons, wide lapels. Elegant, fully covering cut in opaque fabric.",
@@ -21433,25 +21582,28 @@
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cla-120_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-120_graphite.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-120_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-120_camel.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-120_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-120_cream.webp"
     }
    ],
    "description_en": "Caped gown from the Classic line, “Scena i Mikrofon” collection. Material: gabardine. Colour: pearl grey (also in graphite, camel, cream). Details: in-seam pockets, hand-embroidered floral motif. Elegant, fully covering cut in opaque fabric.",
@@ -21511,25 +21663,28 @@
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cla-121_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-121_graphite.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-121_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-121_cream.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cla-121_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-121_white.webp"
     }
    ],
    "description_en": "Hoodie and joggers set from the Classic line, “Weekend w Mieście” collection. Material: softshell. Colour: camel (also in graphite, cream, white). Details: drawstring waist, kangaroo pocket. Elegant, fully covering cut in opaque fabric.",
@@ -21589,25 +21744,28 @@
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-122_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-122_camel.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-122_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-122_navy.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-122_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-122_black.webp"
     }
    ],
    "description_en": "Top-handle bag from the Classic line, “Jesienne Tony” collection. Material: suede. Colour: white (also in camel, navy, black). Details: hand-finished edges, smooth plain suede. Elegant, fully covering cut in opaque fabric.",
@@ -21839,25 +21997,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-125_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-125_cream.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-125_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-125_mustard.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-125_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-125_burgundy.webp"
     }
    ],
    "description_en": "Below-knee A-line skirt from the Classic line, “Klasyka Biura” collection. Material: lined heavy silk. Colour: chocolate brown (also in cream, mustard, burgundy). Details: pleated inserts, concealed side zip, accompanied by matching pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -21927,25 +22088,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-126_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-126_cream.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-126_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-126_navy.webp"
     },
     {
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cla-126_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-126_pearlgrey.webp"
     }
    ],
    "description_en": "Chino trousers from the Classic line, “Weekend w Mieście” collection. Material: velour. Colour: camel (also in cream, navy, pearl grey). Details: gold-thread embroidery, piped waistband, hand-sewn seed pearls, accompanied by matching pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -22010,25 +22174,28 @@
      "color_name_pl": "szmaragdowy",
      "color_name_en": "emerald",
      "hex": "#0F6B4F",
-     "image": "",
+     "image": "/catalog/butik/cla-127_emerald.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-127_emerald.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cla-127_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-127_cobaltblue.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-127_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-127_navy.webp"
     }
    ],
    "description_en": "Trimmed jacket from the Classic line, “Klasyka Biura” collection. Material: lined heavy silk. Colour: plum (also in emerald, cobalt blue, navy). Details: velvet piping, pearl buttons, cuffed sleeves. Elegant, fully covering cut in opaque fabric.",
@@ -22177,25 +22344,28 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-129_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-129_mustard.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-129_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-129_burgundy.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-129_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-129_olive.webp"
     }
    ],
    "description_en": "Cocoon coat from the Classic line, “Jesienne Tony” collection. Material: wool. Colour: cream (also in mustard, burgundy, olive). Details: velvet collar, buckled belt, quilted lining, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -22265,25 +22435,28 @@
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-130_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-130_olive.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-130_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-130_mustard.webp"
     },
     {
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/cla-130_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-130_caramel.webp"
     }
    ],
    "description_en": "Pleated-skirt gown from the Classic line, “Scena i Mikrofon” collection. Material: velour. Colour: chocolate brown (also in olive, mustard, caramel). Details: pearl buttons, hand-sewn seed pearls, waist tie, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -22353,25 +22526,28 @@
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cla-131_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-131_sagegreen.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-131_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-131_cream.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-131_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-131_lavender.webp"
     }
    ],
    "description_en": "Long tunic set from the Classic line, “Weekend w Mieście” collection. Material: technical knit. Colour: champagne (also in sage green, cream, lavender). Details: drawstring waist, reflective trims, contrast side stripes, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -22431,25 +22607,28 @@
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cla-132_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-132_pearlgrey.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-132_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-132_navy.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-132_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-132_black.webp"
     }
    ],
    "description_en": "Headband from the Classic line, “Spokojna Elegancja” collection. Material: satin. Colour: camel (also in pearl grey, navy, black). Details: pearl accents, small polka-dot print. Elegant, fully covering cut in opaque fabric.",
@@ -22691,25 +22870,28 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-135_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-135_chocolatebrown.webp"
     },
     {
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/cla-135_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-135_caramel.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-135_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-135_cream.webp"
     }
    ],
    "description_en": "Tulip midi skirt from the Classic line, “Klasyka Biura” collection. Material: gabardine. Colour: terracotta (also in chocolate brown, caramel, cream). Details: velvet piping, fabric appliqués, contrast piping, accompanied by matching silk scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -22769,25 +22951,28 @@
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cla-136_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-136_powderpink.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cla-136_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-136_lavender.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cla-136_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-136_dustyblue.webp"
     }
    ],
    "description_en": "Cigarette trousers from the Classic line, “Klasyka Biura” collection. Material: wool crepe. Colour: sage green (also in powder pink, lavender, dusty blue). Details: gold-thread embroidery, gold buttons. Elegant, fully covering cut in opaque fabric.",
@@ -22852,25 +23037,28 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-137_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-137_mustard.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cla-137_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-137_bottlegreen.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cla-137_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-137_burgundy.webp"
     }
    ],
    "description_en": "Collarless jacket from the Classic line, “Scena i Mikrofon” collection. Material: gabardine. Colour: cream (also in mustard, bottle green, burgundy). Details: hand-embroidered floral motif, fabric appliqués, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -22940,25 +23128,28 @@
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-138_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-138_olive.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cla-138_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-138_bottlegreen.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-138_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-138_cream.webp"
     }
    ],
    "description_en": "Puff-sleeve sweater from the Classic line, “Weekend w Mieście” collection. Material: alpaca wool. Colour: mustard (also in olive, bottle green, cream). Details: cable-knit yoke, ribbed trims, mother-of-pearl buttons, accompanied by matching gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -23028,25 +23219,28 @@
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/cla-139_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-139_caramel.webp"
     },
     {
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-139_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-139_chocolatebrown.webp"
     },
     {
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/cla-139_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-139_terracotta.webp"
     }
    ],
    "description_en": "Caped coat from the Classic line, “Klasyka Biura” collection. Material: wool. Colour: mustard (also in caramel, chocolate brown, terracotta). Details: buckled belt, flap pockets, embroidered collar, accompanied by matching gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -23106,25 +23300,28 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cla-140_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-140_champagne.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cla-140_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-140_powderpink.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-140_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-140_cream.webp"
     }
    ],
    "description_en": "Covered-shoulder gown from the Classic line, “Scena i Mikrofon” collection. Material: velour. Colour: sage green (also in champagne, powder pink, cream). Details: pearl buttons, hand-sewn seed pearls. Elegant, fully covering cut in opaque fabric.",
@@ -23194,25 +23391,28 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-141_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-141_navy.webp"
     },
     {
      "color_name_pl": "szmaragdowy",
      "color_name_en": "emerald",
      "hex": "#0F6B4F",
-     "image": "",
+     "image": "/catalog/butik/cla-141_emerald.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-141_emerald.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cla-141_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-141_cobaltblue.webp"
     }
    ],
    "description_en": "Relaxed sweatshirt set from the Classic line, “Weekend w Mieście” collection. Material: velour. Colour: ruby red (also in navy, emerald, cobalt blue). Details: drawstring waist, embroidered crescent moon, kangaroo pocket, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -23231,7 +23431,7 @@
     "musztardowy"
    ],
    "material": "wełna",
-   "description": "Rękawiczki z linii Classic, kolekcja „Spokojna Elegancja”. Materiał: wełna. Kolor: musztardowy (dostępne też: oliwkowy, butelkowa zieleń, czekoladowy). Detale: pikowanie w romby, kokarda z wstążki. Elegancki, w pełni zakrywający krój z nieprześwitującej tkaniny.",
+   "description": "Rękawiczki z linii Classic, kolekcja „Spokojna Elegancja”. Materiał: wełna. Kolor: musztardowy (dostępne też: oliwkowy, butelkowa zieleń, czekoladowy). Detale: gładki mankiet z lamówką, kokarda z wstążki. Elegancki, w pełni zakrywający krój z nieprześwitującej tkaniny.",
    "price": {
     "usd": 11.99,
     "eur": 10.99,
@@ -23239,14 +23439,14 @@
    },
    "tier": "premium",
    "rarity": "rzadki",
-   "image_prompt": "Elegant luxury e-commerce product photograph of a mustard wool pair of wrist-length gloves, featuring diamond quilting, ribbon bow, arranged as a neat flat lay on a dark navy velvet surface, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
+   "image_prompt": "Elegant luxury e-commerce product photograph of a mustard wool pair of wrist-length gloves, smooth plain knit with no quilting and no stitched pattern, smooth piped cuff, small ribbon bow, arranged as a neat flat lay on a dark navy velvet surface, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
    "image": "/catalog/butik/cla-142.jpg",
    "status": "planned",
    "release_version": null,
    "details": [
     {
-     "pl": "pikowanie w romby",
-     "en": "diamond quilting",
+     "pl": "gładki mankiet z lamówką",
+     "en": "smooth piped cuff",
      "handmade": false
     },
     {
@@ -23272,28 +23472,31 @@
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-142_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-142_olive.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cla-142_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-142_bottlegreen.webp"
     },
     {
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-142_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-142_chocolatebrown.webp"
     }
    ],
-   "description_en": "Gloves from the Classic line, “Spokojna Elegancja” collection. Material: wool. Colour: mustard (also in olive, bottle green, chocolate brown). Details: diamond quilting, ribbon bow. Elegant, fully covering cut in opaque fabric.",
+   "description_en": "Gloves from the Classic line, “Spokojna Elegancja” collection. Material: wool. Colour: mustard (also in olive, bottle green, chocolate brown). Details: smooth piped cuff, ribbon bow. Elegant, fully covering cut in opaque fabric.",
    "price_tier": "T4",
    "price_reason": "linia classic; kolekcja business (+1); rzadkość rzadki (+1); 2 detale (+0); rękodzieło (+0); 0 dodatki w zestawie (+0) = 2 pkt → T4",
    "image_webp": "/catalog/butik/cla-142.webp"
@@ -23537,25 +23740,28 @@
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cla-145_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-145_pearlgrey.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-145_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-145_cream.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-145_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-145_black.webp"
     }
    ],
    "description_en": "Box-pleat midi skirt from the Classic line, “Klasyka Biura” collection. Material: velour. Colour: graphite (also in pearl grey, cream, black). Details: cord trim, gold-thread embroidery, beaded waistband, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -23625,25 +23831,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-146_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-146_cream.webp"
     },
     {
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cla-146_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-146_graphite.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-146_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-146_camel.webp"
     }
    ],
    "description_en": "Creased straight trousers from the Classic line, “Klasyka Biura” collection. Material: wool crepe. Colour: black (also in cream, graphite, camel). Details: cord trim, waist tie, covered buttons, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -23708,25 +23917,28 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-147_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-147_cream.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-147_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-147_olive.webp"
     },
     {
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/cla-147_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-147_caramel.webp"
     }
    ],
    "description_en": "Belted blazer from the Classic line, “Scena i Mikrofon” collection. Material: wool crepe. Colour: terracotta (also in cream, olive, caramel). Details: hand-pleated front, pearl buttons, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -23791,25 +24003,28 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-148_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-148_navy.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cla-148_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-148_white.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cla-148_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-148_camel.webp"
     }
    ],
    "description_en": "Oversized sweater from the Classic line, “Jesienne Tony” collection. Material: alpaca wool. Colour: pearl grey (also in navy, white, camel). Details: mother-of-pearl buttons, cable-knit yoke, accompanied by matching hat placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -23879,25 +24094,28 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cla-149_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-149_black.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cla-149_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-149_navy.webp"
     },
     {
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cla-149_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-149_graphite.webp"
     }
    ],
    "description_en": "Hooded coat from the Classic line, “Jesienne Tony” collection. Material: cashmere-wool blend. Colour: pearl grey (also in black, navy, graphite). Details: wide lapels, embroidered collar, hand-finished buttonholes, accompanied by matching pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -23967,25 +24185,28 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/cla-150_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-150_mustard.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-150_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-150_olive.webp"
     },
     {
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/cla-150_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-150_chocolatebrown.webp"
     }
    ],
    "description_en": "3/4-sleeve ball gown from the Classic line, “Scena i Mikrofon” collection. Material: jacquard. Colour: caramel (also in mustard, olive, chocolate brown). Details: velvet piping, cord trim, decorative topstitching, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -24338,33 +24559,37 @@
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cou-004_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-004_pearlgrey.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-004_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-004_navy.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cou-004_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-004_white.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-004_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-004_black.webp"
     }
    ],
    "description_en": "Godet maxi skirt from the Couture line, “Złota Scena” collection. Material: silk mikado. Colour: graphite (also in pearl grey, navy, white, black). Details: decorative topstitching, fabric appliqués, hand-embroidered floral motif, accompanied by matching silk scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -24438,33 +24663,37 @@
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-005_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-005_powderpink.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-005_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-005_cream.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-005_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-005_champagne.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cou-005_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-005_sagegreen.webp"
     }
    ],
    "description_en": "Creased straight trousers from the Couture line, “Złota Scena” collection. Material: velvet. Colour: dusty blue (also in powder pink, cream, champagne, sage green). Details: gold-thread embroidery, hand-sewn seed pearls, decorative topstitching, accompanied by matching scarf and gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -24538,33 +24767,37 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-006_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-006_black.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-006_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-006_champagne.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-006_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-006_navy.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-006_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-006_burgundy.webp"
     }
    ],
    "description_en": "Collarless jacket from the Couture line, “Haute Couture Luna” collection. Material: silk taffeta. Colour: silver (also in black, champagne, navy, burgundy). Details: beaded cuffs, tucked cuffs, pearl buttons, accompanied by matching scarf and pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -24634,17 +24867,19 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-007_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-007_champagne.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-007_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-007_burgundy.webp"
     }
    ],
    "description_en": "Knitted polo sweater from the Couture line, “Limitowana Aurora” collection. Material: cashmere-silk. Colour: silver (also in champagne, burgundy). Details: elbow patches, embroidered yoke, cable-knit yoke, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -24714,33 +24949,37 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-008_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-008_champagne.webp"
     },
     {
      "color_name_pl": "złoty",
      "color_name_en": "gold",
      "hex": "#C9A246",
-     "image": "",
+     "image": "/catalog/butik/cou-008_gold.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-008_gold.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-008_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-008_black.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-008_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-008_burgundy.webp"
     }
    ],
    "description_en": "Long belted coat from the Couture line, “Haute Couture Luna” collection. Material: velvet. Colour: silver (also in champagne, gold, black, burgundy). Details: flap pockets, horn buttons, hand-finished buttonholes, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -24814,17 +25053,19 @@
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cou-009_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-009_deepteal.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-009_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-009_plum.webp"
     }
    ],
    "description_en": "3/4-sleeve ball gown from the Couture line, “Limitowana Aurora” collection. Material: duchesse satin. Colour: ruby red (also in deep teal, plum). Details: covered buttons, fabric appliqués, velvet piping, accompanied by matching pearl earrings and pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -24898,17 +25139,19 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-010_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-010_burgundy.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-010_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-010_navy.webp"
     }
    ],
    "description_en": "Hoodie and joggers set from the Couture line, “Limitowana Aurora” collection. Material: lustrous knit. Colour: deep teal (also in burgundy, navy). Details: reflective trims, small moon patch, contrast side stripes, accompanied by matching pearl brooch and pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -25281,17 +25524,19 @@
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cou-014_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-014_deepteal.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-014_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-014_cobaltblue.webp"
     }
    ],
    "description_en": "Box-pleat midi skirt from the Couture line, “Limitowana Aurora” collection. Material: brocade. Colour: plum (also in deep teal, cobalt blue). Details: covered buttons, velvet piping, piped waistband, accompanied by matching gloves and beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -25361,33 +25606,37 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-015_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-015_champagne.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cou-015_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-015_sagegreen.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cou-015_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-015_dustyblue.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-015_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-015_cream.webp"
     }
    ],
    "description_en": "Mid-calf culottes from the Couture line, “Haute Couture Luna” collection. Material: sequined silk crepe on opaque lining. Colour: lavender (also in champagne, sage green, dusty blue, cream). Details: pleated inserts, cord trim, beaded waistband, accompanied by matching gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -25457,17 +25706,19 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-016_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-016_champagne.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-016_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-016_navy.webp"
     }
    ],
    "description_en": "Belted blazer from the Couture line, “Limitowana Aurora” collection. Material: duchesse satin. Colour: gold (also in champagne, navy). Details: cuffed sleeves, pleated inserts, beaded cuffs, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -25541,33 +25792,37 @@
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cou-017_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-017_graphite.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-017_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-017_cream.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cou-017_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-017_white.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-017_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-017_navy.webp"
     }
    ],
    "description_en": "Oversized sweater from the Couture line, “Haute Couture Luna” collection. Material: fine metallic-thread knit. Colour: black (also in graphite, cream, white, navy). Details: ribbed trims, cable-knit yoke, elbow patches, accompanied by matching hat and buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -25641,17 +25896,19 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-018_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-018_navy.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-018_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-018_black.webp"
     }
    ],
    "description_en": "Cocoon coat from the Couture line, “Limitowana Aurora” collection. Material: velvet. Colour: gold (also in navy, black). Details: wide lapels, quilted lining, hand-finished buttonholes, accompanied by matching gloves and buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -25725,33 +25982,37 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-019_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-019_burgundy.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-019_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-019_navy.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-019_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-019_rubyred.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-019_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-019_cobaltblue.webp"
     }
    ],
    "description_en": "Covered-shoulder gown from the Couture line, “Gala Księżycowa” collection. Material: silk mikado. Colour: emerald (also in burgundy, navy, ruby red, cobalt blue). Details: velvet piping, hand-pleated front, gold buttons, accompanied by matching gloves and pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -25821,17 +26082,19 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-020_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-020_burgundy.webp"
     },
     {
      "color_name_pl": "złoty",
      "color_name_en": "gold",
      "hex": "#C9A246",
-     "image": "",
+     "image": "/catalog/butik/cou-020_gold.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-020_gold.webp"
     }
    ],
    "description_en": "Tennis set with pleated midi skirt from the Couture line, “Limitowana Aurora” collection. Material: lustrous knit. Colour: silver (also in burgundy, gold). Details: embroidered crescent moon, small moon patch, drawstring waist, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -25896,33 +26159,37 @@
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cou-021_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-021_camel.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-021_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-021_black.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-021_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-021_cream.webp"
     },
     {
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cou-021_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-021_pearlgrey.webp"
     }
    ],
    "description_en": "Beret from the Couture line, “Noc Premiery” collection. Material: cashmere. Colour: graphite (also in camel, black, cream, pearl grey). Details: crystal accents, contrast edging, pearl accents. Elegant, fully covering cut in opaque fabric.",
@@ -26074,17 +26341,19 @@
      "color_name_pl": "szmaragdowy",
      "color_name_en": "emerald",
      "hex": "#0F6B4F",
-     "image": "",
+     "image": "/catalog/butik/cou-023_emerald.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-023_emerald.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-023_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-023_plum.webp"
     }
    ],
    "description_en": "Below-knee A-line skirt from the Couture line, “Limitowana Aurora” collection. Material: duchesse satin. Colour: cobalt blue (also in emerald, plum). Details: hand-pleated front, fabric appliqués, covered buttons, accompanied by matching pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26154,33 +26423,37 @@
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cou-024_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-024_lavender.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cou-024_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-024_dustyblue.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cou-024_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-024_sagegreen.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-024_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-024_powderpink.webp"
     }
    ],
    "description_en": "Pleated tapered trousers from the Couture line, “Noc Premiery” collection. Material: velvet. Colour: cream (also in lavender, dusty blue, sage green, powder pink). Details: gold-thread embroidery, contrast piping, hand-sewn seed pearls, accompanied by matching pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26250,17 +26523,19 @@
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-025_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-025_rubyred.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cou-025_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-025_deepteal.webp"
     }
    ],
    "description_en": "Double-breasted blazer from the Couture line, “Limitowana Aurora” collection. Material: duchesse satin. Colour: cobalt blue (also in ruby red, deep teal). Details: hand-pleated front, pearl buttons, contrast piping, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26334,17 +26609,19 @@
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-026_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-026_plum.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-026_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-026_navy.webp"
     }
    ],
    "description_en": "Button cardigan from the Couture line, “Limitowana Aurora” collection. Material: fine metallic-thread knit. Colour: cobalt blue (also in plum, navy). Details: embroidered yoke, hand-knitted flowers, cable-knit yoke, accompanied by matching silk scarf and pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26414,17 +26691,19 @@
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cou-027_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-027_pearlgrey.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-027_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-027_navy.webp"
     }
    ],
    "description_en": "Hooded coat from the Couture line, “Limitowana Aurora” collection. Material: velvet. Colour: graphite (also in pearl grey, navy). Details: buckled belt, hand-finished buttonholes, velvet collar, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26494,33 +26773,37 @@
      "color_name_pl": "srebrny",
      "color_name_en": "silver",
      "hex": "#BFC3C8",
-     "image": "",
+     "image": "/catalog/butik/cou-028_silver.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-028_silver.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-028_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-028_burgundy.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-028_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-028_black.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-028_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-028_champagne.webp"
     }
    ],
    "description_en": "Gown with bolero from the Couture line, “Złota Scena” collection. Material: sequined silk crepe on opaque lining. Colour: gold (also in silver, burgundy, black, champagne). Details: covered buttons, velvet piping, fabric appliqués, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26594,33 +26877,37 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-029_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-029_burgundy.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-029_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-029_rubyred.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-029_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-029_cobaltblue.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-029_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-029_navy.webp"
     }
    ],
    "description_en": "Relaxed sweatshirt set from the Couture line, “Gala Księżycowa” collection. Material: premium merino. Colour: emerald (also in burgundy, ruby red, cobalt blue, navy). Details: drawstring waist, small moon patch, embroidered crescent moon, accompanied by matching clutch bag and pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26680,33 +26967,37 @@
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-030_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-030_rubyred.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-030_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-030_burgundy.webp"
     },
     {
      "color_name_pl": "szmaragdowy",
      "color_name_en": "emerald",
      "hex": "#0F6B4F",
-     "image": "",
+     "image": "/catalog/butik/cou-030_emerald.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-030_emerald.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cou-030_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-030_deepteal.webp"
     }
    ],
    "description_en": "Buckle belt from the Couture line, “Noc Premiery” collection. Material: embossed leather. Colour: plum (also in ruby red, burgundy, emerald, deep teal). Details: embroidered tiny stars, silver hardware. Elegant, fully covering cut in opaque fabric.",
@@ -26966,33 +27257,37 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-033_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-033_champagne.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-033_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-033_burgundy.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-033_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-033_navy.webp"
     },
     {
      "color_name_pl": "złoty",
      "color_name_en": "gold",
      "hex": "#C9A246",
-     "image": "",
+     "image": "/catalog/butik/cou-033_gold.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-033_gold.webp"
     }
    ],
    "description_en": "Flounced maxi skirt from the Couture line, “Gala Księżycowa” collection. Material: duchesse satin. Colour: silver (also in champagne, burgundy, navy, gold). Details: waist tie, pleated inserts, gold-thread embroidery, accompanied by matching gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -27066,33 +27361,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-034_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-034_navy.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cou-034_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-034_deepteal.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-034_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-034_plum.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-034_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-034_burgundy.webp"
     }
    ],
    "description_en": "Paperbag-waist trousers from the Couture line, “Noc Premiery” collection. Material: brocade. Colour: ruby red (also in navy, deep teal, plum, burgundy). Details: pearl buttons, belt loops, gold-thread embroidery, accompanied by matching buckle belt and pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -27166,33 +27465,37 @@
      "color_name_pl": "złoty",
      "color_name_en": "gold",
      "hex": "#C9A246",
-     "image": "",
+     "image": "/catalog/butik/cou-035_gold.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-035_gold.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-035_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-035_black.webp"
     },
     {
      "color_name_pl": "srebrny",
      "color_name_en": "silver",
      "hex": "#BFC3C8",
-     "image": "",
+     "image": "/catalog/butik/cou-035_silver.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-035_silver.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-035_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-035_navy.webp"
     }
    ],
    "description_en": "Trimmed jacket from the Couture line, “Gala Księżycowa” collection. Material: silk taffeta. Colour: burgundy (also in gold, black, silver, navy). Details: decorative topstitching, beaded cuffs, hand-sewn seed pearls, accompanied by matching buckle belt and beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -27262,17 +27565,19 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-036_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-036_champagne.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-036_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-036_navy.webp"
     }
    ],
    "description_en": "Puff-sleeve sweater from the Couture line, “Limitowana Aurora” collection. Material: pure cashmere. Colour: gold (also in champagne, navy). Details: cable-knit yoke, contrast cuff stripes, hand-knitted flowers, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -27342,33 +27647,37 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-037_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-037_burgundy.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-037_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-037_navy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-037_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-037_cobaltblue.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-037_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-037_plum.webp"
     }
    ],
    "description_en": "Trench coat from the Couture line, “Gala Księżycowa” collection. Material: velvet. Colour: deep teal (also in burgundy, navy, cobalt blue, plum). Details: hand-finished buttonholes, epaulettes, flap pockets, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -27438,33 +27747,37 @@
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cou-038_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-038_dustyblue.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-038_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-038_powderpink.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-038_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-038_cream.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-038_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-038_champagne.webp"
     }
    ],
    "description_en": "Pleated-skirt gown from the Couture line, “Noc Premiery” collection. Material: brocade. Colour: lavender (also in dusty blue, powder pink, cream, champagne). Details: pearl buttons, hand-pleated front, contrast piping, accompanied by matching pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -29407,7 +29720,7 @@
     "lawendowy"
    ],
    "material": "skóra jagnięca",
-   "description": "Rękawiczki z linii Couture, kolekcja „Noc Premiery”. Materiał: skóra jagnięca. Kolor: lawendowy (dostępne też: kremowy, pudrowy róż, szampański, gołębi błękit). Detale: pikowanie w romby, kokarda z wstążki. Elegancki, w pełni zakrywający krój z nieprześwitującej tkaniny.",
+   "description": "Rękawiczki z linii Couture, kolekcja „Noc Premiery”. Materiał: skóra jagnięca. Kolor: lawendowy (dostępne też: kremowy, pudrowy róż, szampański, gołębi błękit). Detale: gładka, miękka skóra jagnięca, kokarda z wstążki. Elegancki, w pełni zakrywający krój z nieprześwitującej tkaniny.",
    "price": {
     "usd": 37.99,
     "eur": 34.99,
@@ -29415,14 +29728,14 @@
    },
    "tier": "pro",
    "rarity": "ekskluzywny",
-   "image_prompt": "Elegant luxury e-commerce product photograph of a lavender lambskin leather pair of wrist-length gloves, featuring diamond quilting, ribbon bow, arranged as a neat flat lay on a dark navy velvet surface, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
+   "image_prompt": "Elegant luxury e-commerce product photograph, top-down flat lay of a pair of lavender smooth lambskin leather wrist-length five-finger gloves laid side by side on dark navy crushed velvet, five clearly separated fingers with the thumb pointing outward, a small matching ribbon bow tied at each wrist, completely smooth plain leather with no quilting, no diamond pattern, no stitching pattern, a simple plain smooth cuff, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, modest fully covering design, no person, no face, no hands, no text, no logo, no monogram, photorealistic, high detail",
    "image": "/catalog/butik/cou-059.jpg",
    "status": "planned",
    "release_version": null,
    "details": [
     {
-     "pl": "pikowanie w romby",
-     "en": "diamond quilting",
+     "pl": "gładka, miękka skóra jagnięca",
+     "en": "smooth soft lambskin leather",
      "handmade": false
     },
     {
@@ -29481,7 +29794,7 @@
      "image_webp": "/catalog/butik/cou-059_dustyblue.webp"
     }
    ],
-   "description_en": "Gloves from the Couture line, “Noc Premiery” collection. Material: lambskin leather. Colour: lavender (also in cream, powder pink, champagne, dusty blue). Details: diamond quilting, ribbon bow. Elegant, fully covering cut in opaque fabric.",
+   "description_en": "Gloves from the Couture line, “Noc Premiery” collection. Material: lambskin leather. Colour: lavender (also in cream, powder pink, champagne, dusty blue). Details: smooth soft lambskin leather, ribbon bow. Elegant, fully covering cut in opaque fabric.",
    "price_tier": "T6",
    "price_reason": "linia couture; kolekcja evening (+2); rzadkość ekskluzywny (+2); 2 detale (+0); rękodzieło (+0); 0 dodatki w zestawie (+0) = 4 pkt → T6",
    "image_webp": "/catalog/butik/cou-059.webp"
