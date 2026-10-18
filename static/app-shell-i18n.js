@@ -216,3 +216,22 @@ for (var k in X) if (T[k]){ var t = T[k], x = X[k];
   t.cmp = x.cmp; t.cap_lock = x.cap_lock;
   if (t.caps && t.caps[3]) t.caps[3] = x.cap; }
 })(window.LUNA_APP_T);
+/* v1.5.8: profil agentki AI i styl nicku według planu */
+(function(T){
+var X = {
+ pl: {pr: ['Profil agentki: opis i do 4 zdjęć AI', 'Wyróżniony nick: szmaragdowy, pogrubiony'], po: ['Profil agentki: do 12 zdjęć AI i przypięte ulubione', 'Nick z gradientem i odznaką PRO'],
+  cmp: [['Profil agentki: zdjęcia AI', 0, '4', '12'], ['Wyróżniony nick', 0, 1, 1]], links: [['/agentka.html?id=luna', '🪪 Profil Luny'], ['/agentka.html?id=me', '✏️ Profil mojej agentki']]},
+ en: {pr: ['Agent profile: bio and up to 4 AI photos', 'Highlighted nickname: emerald, bold'], po: ['Agent profile: up to 12 AI photos and a pinned favourite', 'Gradient nickname with a PRO badge'],
+  cmp: [['Agent profile: AI photos', 0, '4', '12'], ['Highlighted nickname', 0, 1, 1]], links: [['/agentka.html?id=luna', '🪪 Luna’s profile'], ['/agentka.html?id=me', '✏️ My agent’s profile']]},
+ es: {pr: ['Perfil de la agente: descripción y hasta 4 fotos de IA', 'Nick destacado: esmeralda, en negrita'], po: ['Perfil de la agente: hasta 12 fotos de IA y una favorita fijada', 'Nick con degradado e insignia PRO'],
+  cmp: [['Perfil de la agente: fotos de IA', 0, '4', '12'], ['Nick destacado', 0, 1, 1]], links: [['/agentka.html?id=luna', '🪪 Perfil de Luna'], ['/agentka.html?id=me', '✏️ Perfil de mi agente']]},
+ de: {pr: ['Profil der Agentin: Beschreibung und bis zu 4 KI-Fotos', 'Hervorgehobener Nickname: smaragdgrün, fett'], po: ['Profil der Agentin: bis zu 12 KI-Fotos und ein angeheftetes Lieblingsfoto', 'Nickname mit Farbverlauf und PRO-Abzeichen'],
+  cmp: [['Profil der Agentin: KI-Fotos', 0, '4', '12'], ['Hervorgehobener Nickname', 0, 1, 1]], links: [['/agentka.html?id=luna', '🪪 Lunas Profil'], ['/agentka.html?id=me', '✏️ Profil meiner Agentin']]},
+ uk: {pr: ['Профіль агентки: опис і до 4 ШІ-фото', 'Виділений нік: смарагдовий, жирний'], po: ['Профіль агентки: до 12 ШІ-фото й закріплене улюблене', 'Нік із градієнтом і значком PRO'],
+  cmp: [['Профіль агентки: ШІ-фото', 0, '4', '12'], ['Виділений нік', 0, 1, 1]], links: [['/agentka.html?id=luna', '🪪 Профіль Luna'], ['/agentka.html?id=me', '✏️ Профіль моєї агентки']]}
+};
+for (var k in X) if (T[k]){ var t = T[k], x = X[k];
+  if (t.feat){ if (t.feat.premium) t.feat.premium = t.feat.premium.concat(x.pr); if (t.feat.pro) t.feat.pro = t.feat.pro.concat(x.po); }
+  if (t.cmp) t.cmp = t.cmp.concat(x.cmp);
+  if (t.links) t.links = x.links.concat(t.links); }
+})(window.LUNA_APP_T);

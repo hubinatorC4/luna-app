@@ -32,6 +32,7 @@ body = """<main class="page legal">
 <li>Plany <b>Premium</b> (<span data-price="premium">cena w Cenniku</span>) i <b>Pro</b> (<span data-price="pro">cena w Cenniku</span>) to <b>jednorazowe dostępy na 30 dni</b>, a nie subskrypcje: nie odnawiają się automatycznie. Po 30 dniach wracasz do planu Podstawowa (z kontem), dopóki nie kupisz kolejnego miesiąca. Nie oferujemy planów rocznych.</li>
 <li>Każdy wyższy plan obejmuje funkcje niższych. Aplikacja przypomni o wygaśnięciu dostępu na 7 dni i na 1 dzień wcześniej.</li>
 <li>Trening własnej agentki AI jest dostępny tylko w planach płatnych: w <b>Premium</b> – imię, słowo wybudzające, ton, długość odpowiedzi, kolor pierścienia i własny obraz AI; w <b>Pro</b> – dodatkowo poza i sylwetka. Plany Darmowy i Podstawowa nie obejmują treningu agentki.</li>
+<li><b>Profile agentek AI</b>: profil Luny jest publiczny; profil Twojej agentki jest prywatny, dopóki sam nie ustawisz go jako publiczny. Opis i do 4 zdjęć – w Premium, do 12 zdjęć i przypięte ulubione – w Pro / Ultra. Zdjęcia to wyłącznie obrazy AI (portrety z aplikacji, Twoje stroje z Butiku, własny obraz AI po kontroli, bez metadanych, z moderacją). <b>Zakaz zdjęć prawdziwych osób</b> i treści o charakterze seksualnym. Profil pokazuje tylko imię agentki, nigdy Twoich danych. Profile można zgłaszać.</li>
 <li>Testerzy otrzymują Premium bezpłatnie na 2 miesiące<span data-tester-value></span>.</li></ul>
 
 <h2>§ 5. Ceny i VAT</h2>

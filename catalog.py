@@ -22,9 +22,9 @@ DEFAULT = {
         {"id": "podstawowa", "name": "Podstawowa", "price": "", "period": "",
          "features": ["Wszystko z planu Darmowy, oraz:", "Rozmowa z Luną bez dziennego limitu", "Pytania do Luny w Luna Live", "Barwa głosu: presety i suwaki", "2 stroje awatara i hologram"]},
         {"id": "premium", "name": "Premium", "price": "", "period": "",
-         "features": ["Wszystko z planu Podstawowa, oraz:", "Trening własnej agentki AI: imię, słowo wybudzające, ton, długość odpowiedzi", "Styl agentki: kolor pierścienia i własny obraz AI", "4 stroje awatara"]},
+         "features": ["Wszystko z planu Podstawowa, oraz:", "Trening własnej agentki AI: imię, słowo wybudzające, ton, długość odpowiedzi", "Styl agentki: kolor pierścienia i własny obraz AI", "4 stroje awatara", "Profil agentki: opis i do 4 zdjęć AI", "Wyróżniony nick: szmaragdowy, pogrubiony"]},
         {"id": "pro", "name": "Pro / Ultra", "price": "", "period": "",
-         "features": ["Wszystko z planów Podstawowa i Premium, oraz:", "Pełny trening agentki AI: także poza i sylwetka (wzrost, budowa)", "Wszystkie stroje (6)"]},
+         "features": ["Wszystko z planów Podstawowa i Premium, oraz:", "Pełny trening agentki AI: także poza i sylwetka (wzrost, budowa)", "Wszystkie stroje (6)", "Profil agentki: do 12 zdjęć AI i przypięte ulubione", "Nick z gradientem i odznaką PRO"]},
     ],
     "agents": [{
         "id": "luna", "name": "Luna", "wake_word": "Luna", "plan": "podstawowa", "tone": "ciepla",
@@ -97,14 +97,15 @@ def sanitize(c):
 
 # v1.5.5: trening agentki AI tylko w planach płatnych – stare domyślne opisy planów zamieniamy na nowe
 # (opisy zmienione ręcznie w panelu zostają bez zmian)
-_OLD_FEATURES = {"premium": ["Wszystko z planu Podstawowa, oraz:", "4 stroje awatara", "Stwórz własną asystentkę: imię, słowo wybudzające, ton, długość odpowiedzi", "Własny kolor pierścienia i własny obraz awatara"], "pro": ["Wszystko z planów Podstawowa i Premium, oraz:", "Wszystkie stroje (6)", "Zmiana pozy awatara", "Wybór sylwetki (wzrost, budowa)", "Dodatkowe postacie z katalogu"]}
-_NEW_FEATURES = {"premium": ["Wszystko z planu Podstawowa, oraz:", "Trening własnej agentki AI: imię, słowo wybudzające, ton, długość odpowiedzi", "Styl agentki: kolor pierścienia i własny obraz AI", "4 stroje awatara"], "pro": ["Wszystko z planów Podstawowa i Premium, oraz:", "Pełny trening agentki AI: także poza i sylwetka (wzrost, budowa)", "Wszystkie stroje (6)"]}
+_OLD_V1 = {"premium": ["Wszystko z planu Podstawowa, oraz:", "4 stroje awatara", "Stwórz własną asystentkę: imię, słowo wybudzające, ton, długość odpowiedzi", "Własny kolor pierścienia i własny obraz awatara"], "pro": ["Wszystko z planów Podstawowa i Premium, oraz:", "Wszystkie stroje (6)", "Zmiana pozy awatara", "Wybór sylwetki (wzrost, budowa)", "Dodatkowe postacie z katalogu"]}
+_OLD_V2 = {"premium": ["Wszystko z planu Podstawowa, oraz:", "Trening własnej agentki AI: imię, słowo wybudzające, ton, długość odpowiedzi", "Styl agentki: kolor pierścienia i własny obraz AI", "4 stroje awatara"], "pro": ["Wszystko z planów Podstawowa i Premium, oraz:", "Pełny trening agentki AI: także poza i sylwetka (wzrost, budowa)", "Wszystkie stroje (6)"]}
+_NEW_FEATURES = {"premium": ["Wszystko z planu Podstawowa, oraz:", "Trening własnej agentki AI: imię, słowo wybudzające, ton, długość odpowiedzi", "Styl agentki: kolor pierścienia i własny obraz AI", "4 stroje awatara", "Profil agentki: opis i do 4 zdjęć AI", "Wyróżniony nick: szmaragdowy, pogrubiony"], "pro": ["Wszystko z planów Podstawowa i Premium, oraz:", "Pełny trening agentki AI: także poza i sylwetka (wzrost, budowa)", "Wszystkie stroje (6)", "Profil agentki: do 12 zdjęć AI i przypięte ulubione", "Nick z gradientem i odznaką PRO"]}
 
 def public(c):
     """Wersja dla klienta: uzupełnia obrazy (plik w repo → wgrany → zastępczy)."""
     c = copy.deepcopy(c)
     for p in c.get("plans", []):
-        if p.get("features") == _OLD_FEATURES.get(p.get("id")): p["features"] = list(_NEW_FEATURES[p["id"]])
+        if p.get("id") in _NEW_FEATURES and p.get("features") in (_OLD_V1.get(p["id"]), _OLD_V2.get(p["id"])): p["features"] = list(_NEW_FEATURES[p["id"]])
     for a in c["agents"]:
         for k in KINDS:
             for o in a[k]:

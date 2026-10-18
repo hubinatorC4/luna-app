@@ -165,6 +165,8 @@ fetch('/api/config').then(r => r.json()).then(c => {
   const b = banner('💳 ' + pn.text, 'info'); b.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('luna.payNotice', pn.t); } catch(e){} });
 }).catch(() => {});
 const NEWS = [
+  ['🪪 Profile agentek AI', 'Luna i Twoja agentka mają profil: opis, cechy, ulubione ćwiczenie i zdjęcia AI. Prywatny domyślnie – publiczny tylko, gdy zechcesz.'],
+  ['💎 Nick według planu', 'Premium: szmaragdowy i pogrubiony. Pro / Ultra: gradient i odznaka PRO.'],
   ['⚔️ Bitwy agentek', 'Dwie agentki AI naprzeciw siebie: głosujesz (1 konto = 1 głos) i piszesz na czacie na żywo. Bitwa trwa od 1 do 7 dni. Swoją agentkę zgłosisz w planie Premium lub Pro.'],
   ['🔒 Trening agentki AI w planach płatnych', 'Premium: imię, słowo wybudzające, ton, długość odpowiedzi i styl. Pro / Ultra: także poza i sylwetka.'],
   ['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.'],
@@ -180,10 +182,10 @@ const NEWS = [
 window.LunaNews = () => {
   let d = $('#newsDlg');
   if (!d){ d = document.createElement('dialog'); d.id = 'newsDlg'; d.className = 'news';
-    d.innerHTML = '<h2>Co nowego w wersji 1.6.0</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
+    d.innerHTML = '<h2>Co nowego w wersji 1.6.1</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
     document.body.appendChild(d); }
-  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.0'); } catch(e){}
+  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.1'); } catch(e){}
 };
-try { if (localStorage.getItem('luna.seenVer') !== '1.6.0' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
+try { if (localStorage.getItem('luna.seenVer') !== '1.6.1' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-news]')){ e.preventDefault(); window.LunaNews(); } });
 })();

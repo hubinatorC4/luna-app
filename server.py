@@ -18,7 +18,7 @@ FFMPEG = _ffmpeg()
 import knowledge
 import api_i18n
 import textutil
-import catalog, base64, training
+import catalog, base64, training, profiles, nicktier
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles
 from datetime import datetime, timedelta
 try:
@@ -27,7 +27,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.6.0"
+VERSION = "1.6.1"
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
@@ -680,7 +680,7 @@ class H(SimpleHTTPRequestHandler):
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         p = urlparse(self.path).path
-        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post", "/api/battles/enter") else 64 * 1024
+        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own") else 64 * 1024
         if n > lim: raise ValueError("too large")
         return textutil.fix_surrogates(json.loads(self.rfile.read(n) or b"{}")) if n else {}
 
@@ -700,6 +700,25 @@ class H(SimpleHTTPRequestHandler):
         return {"plan": pl, "name": plans.NAMES[pl], "free": fr, "until": until, "source": ap.get("source") if until else None,
                 "days_left": round((until - time.time()) / 86400, 1) if until else None, "chat_seconds_left": None if left is None else int(left),
                 "payments": "wkrótce", "logged_in": bool(uid)}
+    def _owner_plan(self, uid):
+        u = accounts._accts().get(uid)
+        return accounts.plan(u)["plan"] if u else "darmowy"
+    def _profile_get(self, u):
+        q = parse_qs(u.query); pid = q.get("id", [""])[0][:12]; lang = api_i18n.req_lang(u.query, self.headers) or "pl"
+        uid, dev = self._who(); viewer = social.author_key(uid, dev)
+        if pid == "me":
+            pl, puid = self._plan()
+            if not puid: return self._json({"login": True, "caps": profiles.caps(pl)})
+            mp, r = profiles.mine(puid)
+            items = (accounts._accts().get(puid) or {}).get("items", [])
+            edit = {k: r.get(k) for k in ("name", "bio", "tags", "exercise", "photos", "pinned", "public")} if r else None
+            return self._json({"id": mp, "caps": profiles.caps(pl), "edit": edit, "view": profiles.view(mp, lang, viewer, puid, pl) if mp else None,
+                               "options": profiles.options(pl, items, mp, (r or {}).get("own", ""))})
+        r = profiles._P().get(pid) if pid != "luna" else None
+        pl, puid = self._plan()
+        v = profiles.view(pid, lang, viewer, puid, pl if r and r["uid"] == puid else (self._owner_plan(r["uid"]) if r else None))
+        if not v: return self._json({"private": True, "error": "Ten profil jest prywatny albo nie istnieje."})
+        return self._json(dict(v, battles_page=os.path.isfile(os.path.join(STATIC, "bitwy.html"))))
     def _ring(self, data):
         a = self._acct()
         if a:
@@ -741,7 +760,7 @@ class H(SimpleHTTPRequestHandler):
                 if not livechat.rate_ok("del:" + ip, 3, 20): return self._json({"error": "Za dużo prób."}, 429)
                 try: referral.forget(usr["uid"])
                 except Exception: pass
-                try: accounts.delete(usr["uid"], data.get("password") or None)
+                try: accounts.delete(usr["uid"], data.get("password") or None); profiles.delete_owner(usr["uid"])
                 except ValueError as e: return self._json({"error": str(e)}, 400)
                 social.anonymise_author("u:" + usr["uid"]); antibot.forget("u:" + usr["uid"])
                 self._set_sid("", 0); return self._json({"ok": True})
@@ -1117,6 +1136,14 @@ class H(SimpleHTTPRequestHandler):
             if r is not None: return r
         if u.path == "/api/age/status":
             return self._json(age.status(parse_qs(u.query).get("vid", [""])[0][:40]))
+        if u.path == "/api/agent/profile": return self._profile_get(u)
+        m = re.fullmatch(r"/api/agent/profile/img/([0-9a-f]{10})\.jpg", u.path)
+        if m:
+            i = profiles.own_img(m.group(1))
+            if not i: return self._json({"error": "not found"}, 404)
+            b = base64.b64decode(i["b"])
+            self.send_response(200); self.send_header("Content-Type", "image/png" if i["ext"] == "png" else "image/jpeg"); self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "public, max-age=86400"); self.end_headers(); self.wfile.write(b); return
         if u.path == "/api/agent/tiers":
             pl, _uid = self._plan()
             return self._json(dict(training.public(), plan=pl))
@@ -1275,7 +1302,19 @@ class H(SimpleHTTPRequestHandler):
                         dsc = _h.escape((po["nick"] + ": " + po["text"])[:200], quote=True)
                         doc = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{dsc}">', doc)
                         if po.get("img"): doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{notify.PUBLIC_URL}/api/wall/img/{po["img"]}">', doc)
-                NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html")
+                if u.path == "/agentka.html":
+                    import html as _h
+                    apid = parse_qs(u.query).get("id", ["luna"])[0][:12] or "luna"
+                    ar = profiles._P().get(apid) if apid != "luna" else None
+                    av = profiles.view(apid, lang or "pl", None, None, self._owner_plan(ar["uid"]) if ar else None)
+                    if av:
+                        ttl = _h.escape(av["name"] + " – " + {"en": "AI agent profile", "es": "perfil de agente IA", "de": "Profil der KI-Agentin", "uk": "профіль ШІ-агентки"}.get(lang, "profil agentki AI"), quote=True)
+                        doc = re.sub(r"<title>[^<]*</title>", f"<title>{ttl} · Luna mówi jak jest</title>", doc, 1)
+                        doc = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{ttl}">', doc, 1)
+                        if av["bio"]: doc = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{_h.escape(av["bio"][:200], quote=True)}">', doc, 1)
+                        if av["photos"] and not av["photos"][0]["url"].startswith("/api/"):
+                            doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{notify.PUBLIC_URL.rstrip("/")}{av["photos"][0]["url"]}">', doc, 1)
+                NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
                 if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
                 b = doc.encode()
                 self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
@@ -1307,6 +1346,26 @@ class H(SimpleHTTPRequestHandler):
         if not isinstance(data, dict): return self._json({"error": "bad json"}, 400)
         r = self._post_account(u, data)
         if r is not None: return r
+        if u.path in ("/api/agent/profile", "/api/agent/profile/own"):
+            # profil własnej agentki: plan sprawdzany na serwerze (Premium: opis + 4 zdjęcia, Pro / Ultra: 12 zdjęć + przypięte)
+            pl, uid = self._plan()
+            if not uid: return self._json({"error": "Zaloguj się, aby edytować profil agentki.", "login": True}, 401)
+            if not livechat.rate_ok("prof:" + uid, 20, 600): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
+            try:
+                if u.path.endswith("/own"):
+                    h, err = profiles.save_own(uid, pl, data.get("data"), data.get("ai_declared"))
+                    if err: return self._json(err, 402)
+                    return self._json({"ok": True, "own": h, "ref": "own:" + h})
+                items = (accounts._accts().get(uid) or {}).get("items", [])
+                r, err = profiles.save(uid, pl, items, data)
+            except PermissionError as e: return self._json({"error": str(e), "camera": True}, 422)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            if err: return self._json(err, 402)
+            return self._json({"ok": True, "id": r["id"], "public": r["public"]})
+        if u.path == "/api/admin/agent-profile":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try: return self._json({"ok": True, "profile": profiles.admin(str(data.get("id", ""))[:12], data.get("action"))})
+            except (KeyError, ValueError) as e: return self._json({"error": str(e)}, 400)
         if u.path == "/api/agent/custom":
             # zapis/trening własnej agentki: serwer sprawdza plan dla każdej opcji
             pl, _uid = self._plan()
@@ -1378,7 +1437,7 @@ class H(SimpleHTTPRequestHandler):
                 return self._json({"error": "W planie Darmowy możesz oglądać Luna Live i pisać na czacie, ale pytania do Luny są dostępne od planu Podstawowa (płatności wkrótce).", "plan_required": "podstawowa"}, 402)
             if cmd and cmd not in COMMANDS and cmd not in ("!pytanie", "!temat"): return self._json({"ok": True, "system": "Nieznana komenda. " + HELP})
             av = "" if vid[:8] in avatars.blocked_uids() else data.get("avatar", "")
-            try: m = liveroom.post(vid, data.get("name", ""), av, text, ask, self._ring(data))
+            try: m = liveroom.post(vid, data.get("name", ""), av, text, ask, self._ring(data), nicktier.of_uid(self._who()[0]))
             except PermissionError as e: return self._json({"error": str(e)}, 403)
             except ValueError as e: return self._json({"error": str(e)}, 400)
             liveroom.add_greet(vid, m["name"])
@@ -1449,7 +1508,7 @@ class H(SimpleHTTPRequestHandler):
                 return self._json({"error": "Za dużo wiadomości – spróbuj za chwilę."}, 429)
             if vid[:8] in liveroom.S["banned"]: return self._json({"error": "Nie możesz pisać na tym czacie."}, 403)
             av = "" if vid[:8] in avatars.blocked_uids() else data.get("avatar", "")
-            try: msgs = livechat.visitor_send(vid, data.get("name", ""), av, data.get("text", ""), CFG.get("chat_notice", ""), self._ring(data))
+            try: msgs = livechat.visitor_send(vid, data.get("name", ""), av, data.get("text", ""), CFG.get("chat_notice", ""), self._ring(data), nicktier.of_uid(self._who()[0]))
             except ValueError as e: return self._json({"error": str(e)}, 400)
             return self._json({"ok": True, "msgs": msgs})
         if u.path in ("/api/admin/live/reply", "/api/admin/live/delete"):
