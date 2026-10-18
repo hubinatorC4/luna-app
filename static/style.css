@@ -68,3 +68,4 @@ dialog select{background:#241810;color:var(--text);border:1px solid rgba(240,160
 .presets button{padding:8px;border-radius:10px;border:1px solid rgba(240,160,64,.4);background:#241810;color:var(--amber2);font-size:13px;cursor:pointer}
 .presets button.on{background:var(--amber);color:#1b0f06;border-color:var(--amber)}
 dialog{max-height:90dvh;overflow-y:auto}
+.ai-label{align-self:center;margin:0 12px 2px;padding:4px 12px;border-radius:12px;background:rgba(23,15,10,.75);border:1px solid rgba(240,160,64,.35);color:var(--amber2);font-size:12px;text-align:center}

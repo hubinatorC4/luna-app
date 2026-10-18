@@ -70,7 +70,7 @@ async function ask(q){
   try {
     const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:q, history})});
     reply = (await r.json()).reply;
-  } catch(e){ reply = 'Ay, cariño, straciłam połączenie z serwerem. Spróbuj za chwilę.'; }
+  } catch(e){ reply = 'Ay, cariño, straciłam połączenie z serwerem. Spróbuj za chwilę. (Luna, asystentka AI)'; }
   t.remove(); addMsg(reply, 'luna');
   history.push({role:'assistant', content:reply}); history = history.slice(-20);
   sessionStorage.setItem('luna.history', JSON.stringify(history));
@@ -112,7 +112,7 @@ async function onResult(ev){
       if (!m) continue;
       const rest = text.slice(m.index + m[0].length).replace(/^[\s,.!?:;-]+/, '').trim();
       if (rest.split(/\s+/).filter(Boolean).length >= 2){ await ask(rest); }
-      else { addMsg('Słyszę cię, cariño.', 'luna'); await speak('Słyszę cię, cariño.'); setAwaitQuestion(); }
+      else { const ack = 'Słyszę cię, cariño. Jestem Luna, sztucznie stworzona asystentka AI.'; addMsg(ack, 'luna'); await speak(ack); setAwaitQuestion(); }
     }
   }
 }
@@ -161,6 +161,6 @@ $('#testVoice').onclick = () => speak('Hola, cariño. Mów szczerze, cicho i pow
 
 /* ---------- Start ---------- */
 if (history.length){ history.forEach(h => addMsg(h.content, h.role === 'user' ? 'me' : 'luna')); }
-else addMsg('Hola, cariño. Jestem Luna. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.', 'luna');
+else addMsg('Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.', 'luna');
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();

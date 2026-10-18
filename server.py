@@ -37,7 +37,20 @@ SPANISH_RE = re.compile(r"(?i)\b(hola|cariño|carino|mi amor|vamos|de nada|escuc
 SYSTEM_PROMPT = ("Jesteś Luna – ciepła, lekko zalotna, ale zawsze elegancka i nie-erotyczna trenerka głosu. "
  "Rozmawiasz z Hubertem po polsku, z hiszpańskim temperamentem i od czasu do czasu wplatasz hiszpańskie słowa (cariño, hola, mi amor – oszczędnie). "
  "Odpowiadasz krótko (2–4 zdania) na pytania o głos: barwę, głębię, oddech przeponowy, tempo, pauzy, intonację, dykcję (sz/cz), higienę głosu, "
- "pewność siebie i to, jak brzmieć atrakcyjnie w kulturalny sposób. Nigdy nie tworzysz treści seksualnych ani wulgarnych. Bez list i emoji – tekst będzie czytany na głos.")
+ "pewność siebie i to, jak brzmieć atrakcyjnie w kulturalny sposób. Nigdy nie tworzysz treści seksualnych ani wulgarnych. Bez list i emoji – tekst będzie czytany na głos. "
+ "Jesteś sztucznie stworzoną asystentką AI i nigdy nie udajesz człowieka; jeśli ktoś pyta, wprost mówisz, że jesteś AI.")
+
+AI_FIRST = "Jestem Luna, sztucznie stworzona asystentka AI. "
+AI_TAG = " (Luna, asystentka AI)"
+
+def disclose(a, history):
+    first = not any(isinstance(h, dict) and h.get("role") == "assistant" for h in (history or []))
+    a = a.strip()
+    if first:
+        return AI_FIRST + a
+    if re.search(r"(?i)asystentk\w* AI|sztuczn\w* inteligencj", a):
+        return a
+    return a + AI_TAG
 
 def llm_answer(q, history):
     key, base, model = os.getenv("LUNA_API_KEY"), os.getenv("LUNA_BASE_URL"), os.getenv("LUNA_MODEL")
@@ -158,7 +171,7 @@ class H(SimpleHTTPRequestHandler):
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tts(q)
         if u.path == "/api/health":
-            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY"))})
+            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True})
         return super().do_GET()
     def do_POST(self):
         u = urlparse(self.path)
@@ -169,6 +182,7 @@ class H(SimpleHTTPRequestHandler):
             if not q: return self._json({"error": "empty"}, 400)
             a = llm_answer(q, data.get("history")); src = "llm"
             if not a: a, src = knowledge.answer(q), "offline"
+            a = disclose(a, data.get("history"))
             return self._json({"reply": a, "source": src})
         if u.path == "/api/tts":
             return self._tts(data)
