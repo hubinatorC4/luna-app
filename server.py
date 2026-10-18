@@ -1251,7 +1251,7 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/agent/custom":
             # zapis/trening własnej agentki: serwer sprawdza plan dla każdej opcji
             pl, _uid = self._plan()
-            err = training.check(pl, data if isinstance(data, dict) else {}, CAT)
+            err = training.check(pl, data if isinstance(data, dict) else {}, globals()["CAT"])
             if err: return self._json(err, 402)
             return self._json({"ok": True, "plan": pl})
         if u.path == "/api/chat":
@@ -1268,7 +1268,7 @@ class H(SimpleHTTPRequestHandler):
                     return self._json({"error": "limit", "limit": True, "reply": f"Na dziś wykorzystano limit planu Darmowy (ok. {CFG['free']['chat_minutes']} min rozmowy). Wróć jutro albo wybierz plan Podstawowa lub wyższy – płatności wkrótce. Luna to asystentka AI."}, 402)
             hist = data.get("history")
             pers, plocked = training.strip_persona(pl, data.get("persona"))
-            ag = next((a for a in CAT["agents"] if a["id"] == pers.get("agent")), None)
+            ag = next((a for a in globals()["CAT"]["agents"] if a["id"] == pers.get("agent")), None)
             if ag and not plans.has(pl, ag.get("plan", "darmowy")): pers.pop("agent", None); plocked.append("agent")
             ctx = persona_ctx(pers)
             rr = rule_reply(q)

@@ -23,7 +23,7 @@ const TIER = {name: 'premium', wake: 'premium', tone: 'premium', length: 'premiu
 function priceOf(plan){ const p = CAT && CAT.plans && CAT.plans.find(x => x.id === plan); return p && p.prices && p.prices.pln ? p.prices.pln + ' zł' : PRICE[plan]; }
 function lockMsg(need, focus){
   const el = $('#c_lock'); if (!el) return;
-  need = need || (has('premium') ? 'pro' : 'premium');
+  need = need || 'premium';
   el.hidden = has(need);
   if (el.hidden) return;
   $('#c_lockH').textContent = (focus ? LKT[4] : LKT[0]) + PLAN_NAME[need];
