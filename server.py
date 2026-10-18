@@ -31,7 +31,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.6.7"
+VERSION = "1.6.8"
 STATIC_CACHE = re.compile(r"\.(webp|avif|jpe?g|png|ico|svg|woff2)$")
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
