@@ -63,7 +63,7 @@ async function mount(box){
   if (kind === 'casting' && c.casting_open === false){ box.innerHTML = `<p class="f18note">${L('closed')}</p>`; return; }
   if (kind === 'tester' && c.testers_left === 0){ box.innerHTML = `<p class="f18note">${L('full')}</p>`; return; }
   const t0 = Date.now();
-  box.innerHTML = `<form class="f18" novalidate>${kind === 'tester' ? testerHTML(o) : castingHTML(o)}
+  box.innerHTML = `<form class="f18" method="post" novalidate>${kind === 'tester' ? testerHTML(o) : castingHTML(o)}
     ${kind === 'tester' && c.testers_left != null ? `<p class="f18hint">${L('left')} <b>${c.testers_left}</b></p>` : ''}
     <div class="f18ts"></div>
     <input class="f18hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">

@@ -27,7 +27,7 @@
 <p class="lead" data-i18n="lead">Coś nie gra? Luna też nie lubi fałszu. Opisz problem, a my go naprawimy.</p>
 <p><button type="button" class="pill primary" data-support="form" data-i18n="mod_b">✉️ Napisz do moderatora</button> <button type="button" class="pill ghost" data-support="mine" data-i18n="mine_b">📬 Moje zgłoszenia</button></p>
 <p class="warnbox" data-i18n="warn">Nigdy nie podawaj haseł, kodów BLIK ani numerów kart – nikt z zespołu Luny o nie nie poprosi.</p>
-<form class="form card" id="tkForm" novalidate>
+<form class="form card" id="tkForm" method="post" novalidate>
   <label><span data-i18n="f_cat">Kategoria *</span><select name="category" required><option value=""></option><option value="Płatności" data-i18n="c_pay">Płatności</option><option value="Dźwięk/głos" data-i18n="c_voice">Dźwięk/głos</option><option value="Mikrofon" data-i18n="c_mic">Mikrofon</option><option value="Konto/logowanie" data-i18n="c_acc">Konto/logowanie</option><option value="Butik" data-i18n="c_shop">Butik</option><option value="Luna Live" data-i18n="c_live">Luna Live</option><option value="Aplikacja Android" data-i18n="c_android">Aplikacja Android</option><option value="Inne" data-i18n="c_other">Inne</option></select></label>
   <label><span data-i18n="f_desc">Opis problemu *</span><textarea name="description" rows="5" maxlength="3000" required data-i18n-ph="f_desc_ph" placeholder="Co się stało? Co robiłeś/-aś tuż przed? Im więcej szczegółów, tym szybciej to naprawimy."></textarea></label>
   <label><span data-i18n="f_email">E-mail do odpowiedzi (opcjonalnie)</span><input name="email" type="email" maxlength="254" autocomplete="email"></label>
@@ -39,7 +39,7 @@
   <div class="ok" role="status" hidden><p><span data-i18n="f_ok">Dziękujemy! Numer Twojego zgłoszenia:</span> <b id="tkId"></b></p><p data-i18n="f_keep">Zachowaj go – możesz sprawdzić status poniżej.</p></div>
 </form>
 <div class="card"><h2 data-i18n="st_h">Sprawdź status zgłoszenia</h2>
-<form id="stForm" class="form"><input name="id" placeholder="LUNA-0001" maxlength="12"><button class="pill ghost" data-i18n="st_btn">Sprawdź</button></form><p id="stOut"></p></div>
+<form id="stForm" class="form" method="post"><input name="id" placeholder="LUNA-0001" maxlength="12"><button class="pill ghost" data-i18n="st_btn">Sprawdź</button></form><p id="stOut"></p></div>
 </main>
 <footer class="sitefoot">
   <img class="fbadge" src="/brand-badge-96.webp" srcset="/brand-badge-96.webp 1x, /brand-badge-192.webp 2x" width="96" height="96" alt="Luna mówi jak jest" loading="lazy">
