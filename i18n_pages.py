@@ -7,9 +7,9 @@ PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "
          "/privacy.html": ["privacy_v140", "privacy", "common", "app_fix"], "/o-lunie.html": ["olunie", "common"], "/galeria.html": ["common"],
          "/index.html": ["app_index"],
          **{x: ["common"] for x in ("/scianka.html", "/butik.html", "/testerzy.html", "/dolacz.html", "/twarz.html", "/wesprzyj.html", "/problemy.html")}}
-JS = {"portal.js": ["js_portal", "js_fix"], "live.js": "js_live", "testers.js": "js_testers", "push.js": "js_push",
+JS = {"portal.js": ["js_portal", "js_fix"], "legal.js": "js_fix", "live.js": "js_live", "testers.js": "js_testers", "push.js": "js_push",
       "app.js": "js_app", "account.js": "js_account", "custom.js": "js_custom", "livechat.js": "js_livechat", "profile.js": "js_profile"}
-JS_ON = ("/promo.html", "/live.html", "/index.html", "/testerzy.html")
+JS_ON = ("/promo.html", "/live.html", "/index.html", "/testerzy.html", "/regulamin.html")
 _c = {}
 def _load(n):
     if n not in _c:

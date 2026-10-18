@@ -3,24 +3,40 @@
 [
 "if (/oraz:$/.test(f))",
 "if (/:$/.test(f))"
+],
+[
+"` (wartość ${",
+"` (worth ${"
 ]
 ],
 "es": [
 [
 "if (/oraz:$/.test(f))",
 "if (/:$/.test(f))"
+],
+[
+"` (wartość ${",
+"` (valor: ${"
 ]
 ],
 "de": [
 [
 "if (/oraz:$/.test(f))",
 "if (/:$/.test(f))"
+],
+[
+"` (wartość ${",
+"` (im Wert von ${"
 ]
 ],
 "uk": [
 [
 "if (/oraz:$/.test(f))",
 "if (/:$/.test(f))"
+],
+[
+"` (wartość ${",
+"` (вартість ${"
 ]
 ]
 }
