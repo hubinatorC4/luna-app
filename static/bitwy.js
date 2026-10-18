@@ -28,7 +28,7 @@ const HEART = '<svg class="bt-heart" viewBox="0 0 64 64" aria-hidden="true"><def
 function heart(btn){ if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; btn.insertAdjacentHTML('beforeend', HEART); const h = btn.lastElementChild; setTimeout(() => h.remove(), 900); }
 /* Ostre obrazy: sceneria 1x/2x w AVIF i WebP (image-set), agentki z katalogu 1x/2x (WebP z zapasowym JPG). Limit źródła scenerii: 1280×720. */
 const SCN = (B.CF.scenes || []).concat(['city', 'studio', 'promenade', 'winter', 'gala', 'garden']);
-const scName = s => t['scene_' + s] || B.titleName(s).replace(/^(Miss|Міс)\s/, '');
+const scName = s => t['scene_' + s] || (B.X.sc || {})[s] || B.titleName(s).replace(/^(Miss|Міс)\s/, '');
 let CUR_CAT = null;
 const sceneStyle = s => { s = SCN.includes(s) ? s : 'studio'; const u = (x, e) => `url('/bitwy/${s}${x}.${e}')`;
   return `background-image:${u('', 'webp')};background-image:-webkit-image-set(${u('', 'webp')} 1x,${u('@2x', 'webp')} 2x);background-image:image-set(${u('', 'avif')} type('image/avif') 1x,${u('@2x', 'avif')} type('image/avif') 2x,${u('', 'webp')} type('image/webp') 1x,${u('@2x', 'webp')} type('image/webp') 2x)`; };
