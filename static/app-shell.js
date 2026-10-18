@@ -65,7 +65,7 @@ function capsCard(d){
     el.innerHTML = `<style>#lunaCaps{margin:10px 14px 4px;padding:12px;border:1px solid rgba(240,160,64,.35);border-radius:18px;background:linear-gradient(180deg,rgba(240,160,64,.10),rgba(240,160,64,.03))}
 #lunaCaps h2{margin:0 0 8px;font-size:16px;color:#f6c27a;font-family:inherit}#lunaCaps .cg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #lunaCaps button{display:flex;gap:8px;align-items:flex-start;text-align:left;padding:9px 10px;border-radius:14px;border:1px solid #3a2a1c;background:#1a120c;color:#f6e9da;font:inherit;cursor:pointer}
-#lunaCaps button:last-child:nth-child(odd){grid-column:1/-1}#lunaCaps b{display:block;font-size:14px}#lunaCaps small{display:block;font-size:12px;opacity:.75;line-height:1.3}#lunaCaps i{font-style:normal;font-size:20px;line-height:1}</style>
+#lunaCaps button:last-child:nth-child(odd){grid-column:1/-1}#lunaCaps b{display:block;font-size:14px}#lunaCaps small{display:block;font-size:12px;opacity:.75;line-height:1.3}#lunaCaps i{font-style:normal;font-size:20px;line-height:1}body.chatting #lunaCaps{display:none}</style>
 <h2>⭐ ${esc(T.cap_h)}</h2><div class="cg">${T.caps.map((c, i) => `<button type="button" data-cap="${i}"><i aria-hidden="true">${c[0]}</i><span><b>${esc(c[1])}</b><small>${esc(c[2])}</small></span></button>`).join('')}</div>`;
     hero.after(el);
     const click = id => { const b = d.getElementById(id); if (b) b.click(); };
