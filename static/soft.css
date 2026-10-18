@@ -68,3 +68,58 @@ a{transition:color var(--t) var(--ease)}
 #galGrid:empty{min-height:120vh}
 .hero h1,main h1{overflow-wrap:break-word}
 .consent input[type=checkbox]{margin:2px 10px 2px 0;flex:0 0 24px}
+
+/* =====================================================================================================
+   v1.6.1 – LUNA DESIGN TOKENS (wspólne dla całej aplikacji: Bitwy, Ściana, ustawienia, powiadomienia).
+   Używaj tych zmiennych w nowych komponentach (np. bitwy.css), zamiast wpisywać wartości na sztywno:
+   --luna-r-card (22px)  --luna-r-card-sm (20px)  --luna-r-pill (999px)  --luna-r-input (16px)  --luna-r-bubble (22px)
+   --luna-shadow-soft  --luna-shadow-pop  --luna-glow-emerald  --luna-glow-orange  --luna-glow-pink
+   --luna-t-fast (150ms)  --luna-t (200ms)  --luna-t-slow (250ms)  --luna-ease
+   --luna-emerald #2ecc71  --luna-orange #f0a040  --luna-pink #FF6FB5  --luna-pink-2 #FF9BD2
+   --luna-surface (karta)  --luna-surface-2 (dymek)  --luna-line (miękka linia zamiast twardej ramki)  --luna-text  --luna-muted
+   --luna-font-head (Poppins – nagłówki komponentów i nicki)  --luna-font-body (Nunito)  --luna-font-display (Playfair – motyw Luny)
+   ===================================================================================================== */
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/poppins-regular.woff2) format('woff2')}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/poppins-bold.woff2) format('woff2')}
+:root{
+  --luna-r-card:22px; --luna-r-card-sm:20px; --luna-r-pill:999px; --luna-r-input:16px; --luna-r-bubble:22px;
+  --luna-shadow-soft:0 14px 34px -16px rgba(0,0,0,.7),0 3px 10px -4px rgba(0,0,0,.35);
+  --luna-shadow-pop:0 22px 48px -18px rgba(0,0,0,.8),0 6px 18px -8px rgba(0,0,0,.45);
+  --luna-glow-emerald:0 8px 26px -10px rgba(46,204,113,.45); --luna-glow-orange:0 8px 26px -10px rgba(240,160,64,.45); --luna-glow-pink:0 8px 26px -10px rgba(255,111,181,.5);
+  --luna-t-fast:.15s; --luna-t:.2s; --luna-t-slow:.25s; --luna-ease:cubic-bezier(.22,.8,.3,1);
+  --luna-emerald:#2ecc71; --luna-orange:#f0a040; --luna-pink:#FF6FB5; --luna-pink-2:#FF9BD2;
+  --luna-surface:#16141a; --luna-surface-2:#1e1a22; --luna-line:rgba(255,255,255,.07); --luna-text:#f3eee8; --luna-muted:#c3b6a8;
+  --luna-font-head:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --luna-font-body:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --luna-font-display:"Playfair Display",Georgia,serif;
+  /* dotychczasowe zmienne – łagodniej, zgodnie z tokenami */
+  --r-card:var(--luna-r-card); --r-card-sm:var(--luna-r-card-sm); --r-input:var(--luna-r-input); --t:var(--luna-t);
+  --shadow-soft:var(--luna-shadow-soft);
+}
+/* nagłówki komponentów (nie hero/brand) – Poppins; h1 stron i marka zostają w Playfair (motyw Luny) */
+.card h3,.plan h3,dialog h3,.wl h3,.bt-champ h2,.bt-wrap h3,[class^="bt-"] h3,.ph-ed h3,.menu b{font-family:var(--luna-font-head);letter-spacing:0}
+/* miękkie cienie zamiast twardych ramek */
+.card,.plan,.item,.wl,details.card,.ph-head,.ph-ex,.planbox{border-color:var(--luna-line)}
+.card,.plan,.wl{transition:transform var(--luna-t) var(--luna-ease),box-shadow var(--luna-t) var(--luna-ease)}
+.ph-main,.wl-av,.cav,.mav,.bt-mine img:first-child{border-radius:50%!important}
+.ph-main{object-fit:cover}
+.pill,.act,.wl-f button,.ph-tags span,.ad-tag{border-radius:var(--luna-r-pill)!important}
+.ad-tag{border-radius:8px!important}
+/* ---------- powiadomienia: puszyste dymki ---------- */
+@keyframes lunaPop{0%{opacity:0;transform:translate(var(--pop-x,0),8px) scale(.94)}60%{opacity:1;transform:translate(var(--pop-x,0),-2px) scale(1.01)}100%{opacity:1;transform:translate(var(--pop-x,0),0) scale(1)}}
+.toast,.pay-banner,.notice-bubble,.bt-champ,#newsDlg{border-radius:var(--luna-r-bubble)!important;box-shadow:var(--luna-shadow-pop)!important}
+.toast,.pay-banner{--pop-x:-50%;border:1px solid var(--luna-line)!important;background:var(--luna-surface-2)!important;color:var(--luna-text)!important;
+  padding:12px 40px 12px 58px!important;min-height:48px;display:flex;align-items:center;line-height:1.4;
+  background-image:url(/brand-emblem-96.webp)!important;background-repeat:no-repeat!important;background-size:34px 34px!important;background-position:12px 50%!important;
+  animation:lunaPop var(--luna-t-slow) var(--luna-ease) both}
+.toast{padding-right:18px!important}
+.toast::after,.pay-banner::after{content:"";position:absolute;left:28px;bottom:-7px;width:14px;height:14px;background:var(--luna-surface-2);border-right:1px solid var(--luna-line);border-bottom:1px solid var(--luna-line);transform:rotate(45deg);border-radius:0 0 4px 0}
+.pay-banner.ok{box-shadow:var(--luna-shadow-pop),var(--luna-glow-emerald)!important}.pay-banner.warn{box-shadow:var(--luna-shadow-pop),var(--luna-glow-orange)!important}
+.pay-banner.info{box-shadow:var(--luna-shadow-pop),var(--luna-glow-pink)!important}
+.pay-banner button{border-radius:50%!important;width:30px;height:30px;top:50%!important;transform:translateY(-50%)}
+#newsDlg{animation:lunaPop var(--luna-t-slow) var(--luna-ease) both}
+#newsDlg li{list-style:none;position:relative;margin:0 0 10px;padding:10px 14px;border-radius:18px;background:var(--luna-surface-2);box-shadow:var(--luna-shadow-soft)}
+#newsDlg ul{padding:0}
+.bt-champ{padding:12px;background:var(--luna-surface-2);animation:lunaPop var(--luna-t-slow) var(--luna-ease) both;position:relative}
+.bt-champ::before{content:"🏆";position:absolute;left:-6px;top:-10px;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:var(--luna-surface);box-shadow:var(--luna-glow-orange);font-size:18px}
+@media (prefers-reduced-motion:reduce){.toast,.pay-banner,#newsDlg,.bt-champ{animation:none!important}}
+.toast[hidden],.pay-banner[hidden]{display:none!important}
