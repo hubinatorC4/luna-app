@@ -89,6 +89,11 @@ def inbox(since_ts):
                                      "offer": r.get("offer"), "has_voice_sample": bool(r.get("voice")), "time": _iso(r["t"])}
                                     for r in forms18.admin_list() if r.get("t", 0) > since_ts or r["verification"].get("at", 0) > since_ts]
     except Exception: out["form_applications"] = []
+    try:  # „Dołącz do zespołu” – nowe zgłoszenia (bez e-maili)
+        import team
+        out["team_applications"] = [{"id": a["id"], "nickname": _short(a["nick"], 30), "areas": a["areas"], "status": a["status"], "time": _iso(a["t"])}
+                                    for a in team.admin_list() if a.get("t", 0) > since_ts]
+    except Exception: out["team_applications"] = []
     try:  # Zgłoś 🚩: sprawy czekające na decyzję (bez danych zgłaszających)
         import reports
         out["reports_open"] = reports.open_count()

@@ -84,6 +84,8 @@ try:  # strona „Bezpieczeństwo i anonimowość” (treść w tools/trust_cont
     from trust_content import C as _TC
     _L5 = ["pl", "en", "es", "de", "uk"]
     PAGES["/zaufanie.html"] = {l: (_TC["_title"][i], _TC["lead"][i][:160]) for i, l in enumerate(_L5) if l in LANGS}
+    from team_content import C as _TM   # „Dołącz do zespołu”
+    PAGES["/zespol.html"] = {l: (_TM["_title"][i], _TM["lead"][i][:160]) for i, l in enumerate(_L5) if l in LANGS}
 except Exception:
     pass
 

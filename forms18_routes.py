@@ -131,13 +131,15 @@ def needs_adult(h, path):
     a = h._acct()
     return bool(a and not a[0].get("adult_confirmed_at"))
 
+FOOT_LINKS = (('/zaufanie.html', '🛡️ Bezpieczeństwo i anonimowość'), ('/zespol.html', '🤝 Dołącz do zespołu'))
 def trust_link(doc, path):
-    """Dodaje link „Bezpieczeństwo i anonimowość” w stopce każdej strony (przed „Regulamin”)."""
-    if path == "/panel.html" or "/zaufanie.html" in doc[doc.rfind("<footer"):] if "<footer" in doc else True: return doc
+    """Dodaje w stopce każdej strony linki „Bezpieczeństwo i anonimowość” i „Dołącz do zespołu” (przed „Regulamin”)."""
+    if path == "/panel.html" or "<footer" not in doc: return doc
     i = doc.rfind("<footer"); foot = doc[i:]
-    for sep, needle in ((" · ", ' · <a href="/regulamin.html">'), ("", '<a href="/regulamin.html">')):
-        if needle in foot:
-            link = '<a href="/zaufanie.html">🛡️ Bezpieczeństwo i anonimowość</a>'
-            foot = foot.replace(needle, (sep + link + needle) if sep else (link + needle), 1)
-            return doc[:i] + foot
-    return doc
+    for href, label in FOOT_LINKS:
+        if f'href="{href}"' in foot: continue
+        for sep, needle in ((" · ", ' · <a href="/regulamin.html">'), ("", '<a href="/regulamin.html">')):
+            if needle in foot:
+                link = f'<a href="{href}">{label}</a>'
+                foot = foot.replace(needle, (sep + link + needle) if sep else (link + needle), 1); break
+    return doc[:i] + foot

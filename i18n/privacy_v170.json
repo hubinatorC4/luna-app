@@ -71,6 +71,22 @@
 [
 "Karta jest słabszym dowodem (kartę debetową może mieć osoba niepełnoletnia), dlatego łączymy ją z Twoim oświadczeniem o dacie urodzenia. Karty przedpłacone nie są akceptowane. Podstawa prawna: zgoda (art. 6 ust. 1 lit. a RODO) oraz prawnie uzasadniony interes – ochrona małoletnich (lit. f). Bez włączonej weryfikacji zgłoszenie pozostaje „oczekujące na weryfikację” i nie może zostać przyjęte.",
 "A card is weaker proof (a debit card can belong to a minor), so we combine it with your date-of-birth declaration. Prepaid cards are not accepted. Legal basis: consent (Art. 6(1)(a) GDPR) and legitimate interest – protecting minors (Art. 6(1)(f)). While verification is not yet enabled, an application stays “pending verification” and cannot be accepted."
+],
+[
+"Zgłoszenia do zespołu („Dołącz do zespołu”): nick, e-mail kontaktowy, wybrane obszary, opis, opcjonalny link do portfolio, potwierdzenie pełnoletności i zgoda (z datą), skrót adresu IP, status zgłoszenia",
+"Team applications (“Join the team”): nickname, contact e-mail, chosen areas, description, optional portfolio link, adulthood confirmation and consent (with date), hashed IP address, application status"
+],
+[
+"Odpowiedź na Twoje zgłoszenie i rozmowa o ewentualnej współpracy (zgoda). Warunki współpracy ustalamy indywidualnie – samo zgłoszenie niczego nie przesądza",
+"Replying to your application and talking about possible collaboration (consent). Terms are agreed individually – applying alone does not commit anyone to anything"
+],
+[
+"Tak, jeśli wysyłasz zgłoszenie (link – nie)",
+"Yes, if you apply (link – no)"
+],
+[
+"Do wycofania zgody lub zakończenia rozmów; odrzucone zgłoszenia – usuwamy po 90 dniach",
+"Until you withdraw consent or the talks end; rejected applications are deleted after 90 days"
 ]
 ],
 "es": [
@@ -145,6 +161,22 @@
 [
 "Karta jest słabszym dowodem (kartę debetową może mieć osoba niepełnoletnia), dlatego łączymy ją z Twoim oświadczeniem o dacie urodzenia. Karty przedpłacone nie są akceptowane. Podstawa prawna: zgoda (art. 6 ust. 1 lit. a RODO) oraz prawnie uzasadniony interes – ochrona małoletnich (lit. f). Bez włączonej weryfikacji zgłoszenie pozostaje „oczekujące na weryfikację” i nie może zostać przyjęte.",
 "La tarjeta es una prueba más débil (una tarjeta de débito puede pertenecer a un menor), por eso la combinamos con tu declaración de fecha de nacimiento. No se aceptan tarjetas prepago. Base jurídica: consentimiento (art. 6.1.a RGPD) e interés legítimo, la protección de menores (art. 6.1.f). Mientras la verificación no esté activa, la solicitud queda «pendiente de verificación» y no puede aceptarse."
+],
+[
+"Zgłoszenia do zespołu („Dołącz do zespołu”): nick, e-mail kontaktowy, wybrane obszary, opis, opcjonalny link do portfolio, potwierdzenie pełnoletności i zgoda (z datą), skrót adresu IP, status zgłoszenia",
+"Solicitudes al equipo («Únete al equipo»): apodo, correo de contacto, áreas elegidas, descripción, enlace opcional al portafolio, confirmación de mayoría de edad y consentimiento (con fecha), hash de la dirección IP, estado de la solicitud"
+],
+[
+"Odpowiedź na Twoje zgłoszenie i rozmowa o ewentualnej współpracy (zgoda). Warunki współpracy ustalamy indywidualnie – samo zgłoszenie niczego nie przesądza",
+"Responder a tu solicitud y hablar de una posible colaboración (consentimiento). Las condiciones se acuerdan individualmente: enviar la solicitud no compromete a nada"
+],
+[
+"Tak, jeśli wysyłasz zgłoszenie (link – nie)",
+"Sí, si envías la solicitud (enlace: no)"
+],
+[
+"Do wycofania zgody lub zakończenia rozmów; odrzucone zgłoszenia – usuwamy po 90 dniach",
+"Hasta que retires el consentimiento o terminen las conversaciones; las solicitudes rechazadas se eliminan a los 90 días"
 ]
 ],
 "de": [
@@ -219,6 +251,22 @@
 [
 "Karta jest słabszym dowodem (kartę debetową może mieć osoba niepełnoletnia), dlatego łączymy ją z Twoim oświadczeniem o dacie urodzenia. Karty przedpłacone nie są akceptowane. Podstawa prawna: zgoda (art. 6 ust. 1 lit. a RODO) oraz prawnie uzasadniony interes – ochrona małoletnich (lit. f). Bez włączonej weryfikacji zgłoszenie pozostaje „oczekujące na weryfikację” i nie może zostać przyjęte.",
 "Eine Karte ist ein schwächerer Nachweis (eine Debitkarte kann Minderjährigen gehören), daher kombinieren wir sie mit deiner Angabe zum Geburtsdatum. Prepaid-Karten werden nicht akzeptiert. Rechtsgrundlage: Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) und berechtigtes Interesse – Schutz Minderjähriger (lit. f). Solange die Prüfung nicht aktiv ist, bleibt eine Bewerbung „wartet auf Prüfung“ und kann nicht angenommen werden."
+],
+[
+"Zgłoszenia do zespołu („Dołącz do zespołu”): nick, e-mail kontaktowy, wybrane obszary, opis, opcjonalny link do portfolio, potwierdzenie pełnoletności i zgoda (z datą), skrót adresu IP, status zgłoszenia",
+"Team-Bewerbungen („Werde Teil des Teams“): Nickname, Kontakt-E-Mail, gewählte Bereiche, Beschreibung, optionaler Portfolio-Link, Bestätigung der Volljährigkeit und Einwilligung (mit Datum), gehashte IP-Adresse, Status der Bewerbung"
+],
+[
+"Odpowiedź na Twoje zgłoszenie i rozmowa o ewentualnej współpracy (zgoda). Warunki współpracy ustalamy indywidualnie – samo zgłoszenie niczego nie przesądza",
+"Antwort auf deine Bewerbung und Gespräch über eine mögliche Zusammenarbeit (Einwilligung). Bedingungen werden individuell vereinbart – die Bewerbung allein verpflichtet zu nichts"
+],
+[
+"Tak, jeśli wysyłasz zgłoszenie (link – nie)",
+"Ja, wenn du dich bewirbst (Link – nein)"
+],
+[
+"Do wycofania zgody lub zakończenia rozmów; odrzucone zgłoszenia – usuwamy po 90 dniach",
+"Bis zum Widerruf der Einwilligung oder dem Ende der Gespräche; abgelehnte Bewerbungen löschen wir nach 90 Tagen"
 ]
 ],
 "uk": [
@@ -293,6 +341,22 @@
 [
 "Karta jest słabszym dowodem (kartę debetową może mieć osoba niepełnoletnia), dlatego łączymy ją z Twoim oświadczeniem o dacie urodzenia. Karty przedpłacone nie są akceptowane. Podstawa prawna: zgoda (art. 6 ust. 1 lit. a RODO) oraz prawnie uzasadniony interes – ochrona małoletnich (lit. f). Bez włączonej weryfikacji zgłoszenie pozostaje „oczekujące na weryfikację” i nie może zostać przyjęte.",
 "Картка – слабший доказ (дебетову картку може мати неповнолітній), тому поєднуємо її з вашою заявою про дату народження. Передплачені картки не приймаються. Правова підстава: згода (ст. 6 ч. 1 п. a GDPR) і законний інтерес – захист неповнолітніх (п. f). Доки перевірку не ввімкнено, заявка залишається «очікує перевірки» і не може бути прийнята."
+],
+[
+"Zgłoszenia do zespołu („Dołącz do zespołu”): nick, e-mail kontaktowy, wybrane obszary, opis, opcjonalny link do portfolio, potwierdzenie pełnoletności i zgoda (z datą), skrót adresu IP, status zgłoszenia",
+"Заявки до команди («Приєднуйтесь до команди»): нік, контактний e-mail, обрані напрями, опис, необов’язкове посилання на портфоліо, підтвердження повноліття та згода (з датою), хеш IP-адреси, статус заявки"
+],
+[
+"Odpowiedź na Twoje zgłoszenie i rozmowa o ewentualnej współpracy (zgoda). Warunki współpracy ustalamy indywidualnie – samo zgłoszenie niczego nie przesądza",
+"Відповідь на вашу заявку та розмова про можливу співпрацю (згода). Умови погоджуємо індивідуально – сама заявка ні до чого не зобов’язує"
+],
+[
+"Tak, jeśli wysyłasz zgłoszenie (link – nie)",
+"Так, якщо подаєте заявку (посилання – ні)"
+],
+[
+"Do wycofania zgody lub zakończenia rozmów; odrzucone zgłoszenia – usuwamy po 90 dniach",
+"До відкликання згоди або завершення розмов; відхилені заявки видаляємо через 90 днів"
 ]
 ]
 }

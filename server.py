@@ -23,7 +23,7 @@ import catalog, base64, training, profiles, nicktier, partners, agentwall, quali
 import promo_share
 import forms18_routes
 import nsfw_filter
-import reports_routes, reports
+import reports_routes, reports, team
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox, support
 from datetime import datetime, timedelta
 try:
@@ -1526,6 +1526,9 @@ class H(SimpleHTTPRequestHandler):
             b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
             self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/api/admin/team":
+            r = team.get(self, u, token_ok)
+            if r is not None: return r
         if u.path in ("/api/me/standing", "/api/admin/reports") or u.path.startswith("/api/admin/user/avatar/"):
             r = reports_routes.get(self, u, token_ok)   # Zgłoś 🚩: stan konta i kolejka moderatora
             if r is not None: return r
@@ -1729,6 +1732,12 @@ class H(SimpleHTTPRequestHandler):
         if r is not None: return r
         if u.path in ("/api/report", "/api/admin/reports"):
             r = reports_routes.post(self, u, data, token_ok)
+            if r is not None: return r
+        if u.path in ("/api/team/apply", "/api/admin/team"):   # „Dołącz do zespołu” (team.py)
+            r = team.post(self, u, data, token_ok)
+            if getattr(self, "_team_new", None):
+                try: _mod_push("🤝 Dołącz do zespołu: nowe zgłoszenie", self._team_new["nick"] + ": " + ", ".join(team.AREA_PL[a] for a in self._team_new["areas"]))
+                except Exception: pass
             if r is not None: return r
         r = self._post_account(u, data)
         if r is not None: return r
