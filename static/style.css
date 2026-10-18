@@ -214,3 +214,27 @@ dialog.news ul{padding-left:18px;line-height:1.5}dialog.news li{margin:8px 0}
 .hb-fab{bottom:100px!important;width:48px!important;height:48px!important;font-size:21px!important}
 .refbox{margin:12px 0;padding:12px 14px;border-radius:16px;background:rgba(255,190,120,.07);border:1px solid rgba(255,190,120,.25)}
 .refbox h4{margin:0 0 4px}.refrow{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.refrow input{flex:1 1 180px;min-width:0}
+/* v1.4.5 – telefony: czat dostaje co najmniej ~55% ekranu; po rozpoczęciu rozmowy hero się zwija */
+@media (max-width:600px){
+  .apk-hint,.live-cta{display:none}
+  .ring{width:84px;height:84px}
+  body.speaking .ring,body.listening .ring{width:128px;height:128px}
+  body.speaking .hero,body.listening .hero{padding:8px 0 4px}
+  .hero{padding:4px 0 2px}
+  .disclaimer{font-size:11px;line-height:1.3;margin:0 12px 4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cta-row{margin:0 10px 4px;gap:6px}.cta-row .convo-btn,.cta-row .apk-btn{padding:7px 12px;font-size:13px;min-height:40px}
+  .tester-strip{margin:0 10px 4px;padding:5px 10px;font-size:12px}
+  .ai-label{font-size:11px;padding:3px 10px}
+  main#chat{min-height:55vh}
+  body.chatting .hero{padding:2px 0 0}
+  body.chatting:not(.speaking):not(.listening) .ring{width:52px;height:52px}
+  body.chatting .eq,body.chatting .holo-cone{display:none}
+  body.chatting .disclaimer,body.chatting .tester-strip,body.chatting .cta-row .apk-btn{display:none}
+}
+@media (max-width:600px) and (max-height:700px){
+  .ring{width:64px;height:64px}
+  body.chatting:not(.speaking):not(.listening) .hero{display:none}
+  main#chat{min-height:50vh}
+}
+@media (max-width:600px){.hb-fab{bottom:84px!important;right:12px!important;width:46px!important;height:46px!important;font-size:21px!important}}
+@media (max-width:600px){body.chatting .appfoot{display:none}.appfoot{max-height:44px;overflow:hidden;font-size:11px}}
