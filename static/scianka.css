@@ -307,3 +307,5 @@ background:linear-gradient(180deg,#fff 20%,var(--gold));-webkit-background-clip:
 .wallpage .tabs button{color:#e2d2bf}
 @media (max-width:520px){.wallbody main .tabs[role=group]{display:flex;max-width:100%;overflow-x:auto}.wallbody main .tabs[role=group] button{padding:10px 16px;font-size:15.5px;white-space:nowrap}}
 @media (max-width:520px){.wallpage .hero h1{font-size:clamp(34px,9.6vw,56px)}}
+.wallpage .tabs button,.wallpage .report{background:transparent}
+.wallpage .tabs button.on{background:rgba(46,230,107,.14)}
