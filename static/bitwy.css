@@ -141,3 +141,7 @@ body.btfull{padding-bottom:env(safe-area-inset-bottom)}
 .bt-pic picture,.bi-ag picture{display:contents}
 .bt-x svg,.bt-ib svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .bt-sheet-in{border-radius:var(--luna-r-card,18px) var(--luna-r-card,18px) 0 0;box-shadow:var(--luna-shadow-pop)}.bt-m{border-radius:var(--luna-r-bubble,14px)}.bt-pts{border-radius:var(--luna-r-bubble,16px)}.bt-o{border-radius:var(--luna-r-card-sm,12px)}
+.bi-cat{display:block;margin-top:6px;font:800 15px/1.2 var(--luna-font-head,system-ui);letter-spacing:.02em;color:#ffd36b}
+.bt-fs{border:0;padding:0;margin:8px 0}.bt-fs legend{font-weight:800;margin-bottom:4px}
+.bt-fav{margin:10px 0;padding:12px;border-radius:var(--luna-r-card-sm,20px);background:rgba(255,111,181,.07);box-shadow:var(--luna-shadow-soft)}.bt-fav h3{margin:0 0 6px;font-size:16px}
+.bt-ot{display:flex;flex-wrap:wrap;gap:4px;align-items:center}

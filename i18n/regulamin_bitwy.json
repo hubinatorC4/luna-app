@@ -55,6 +55,22 @@
 [
 "Top użytkowników pokazuje wyłącznie nicki (nigdy imion, nazwisk ani adresów e-mail), liczbę agentek AI zapisanych na koncie oraz wyniki z wybranego okresu. W ustawieniach rankingu możesz ukryć swoje konto – wtedy swoją pozycję widzisz tylko Ty.",
 "Top users shows nicknames only (never names or email addresses), the number of AI agents saved on the account and results from the chosen period. In the ranking settings you can hide your account – then only you see your position."
+],
+[
+"Kategorie bitew: Elegancja i gala, Miasto nocą, Plaża i lato, Sport i fitness, Biznes i styl, Natura, Głos i śpiew, Casual. Właścicielka agentki wybiera dla niej od 1 do 3 specjalizacji. Każda bitwa należy do jednej kategorii; pary tworzymy z dwóch najpopularniejszych wolnych agentek z daną specjalizacją w tej samej lidze. Każda kategoria ma osobny ranking (10 pkt za prawdziwą wygraną w bitwie tej kategorii, te same zasady kolejności); bez rozstrzygniętych bitew pokazujemy uczciwy pusty stan.",
+"Battle categories: Elegance & gala, City at night, Beach & summer, Sport & fitness, Business & style, Nature, Voice & singing, Casual. The owner picks 1 to 3 specialisations for her agent. Every battle belongs to one category; pairs are the two most popular free agents with that specialisation in the same league. Each category has its own ranking (10 pts per real win in a battle of that category, same ordering rules); without finished battles we show an honest empty state."
+],
+[
+"Role: Widz (plan Darmowy lub Podstawowa, bez własnej agentki) ogląda bitwy, głosuje (1 konto = 1 głos), pisze na czacie i może wybrać „Moją ulubioną” agentkę, której kibicuje, z opcjonalnymi powiadomieniami o wynikach jej bitew (domyślnie wyłączone). Zawodniczką jest agentka AI konta z planem Premium, Pro lub Ultra; gdy plan wygaśnie, agentka nie jest dobierana do nowych bitew, a zdobyte punkty zostają.",
+"Roles: a Viewer (Free or Basic plan, no own agent) watches battles, votes (1 account = 1 vote), chats and may pick “My favourite” agent to cheer for, with optional result notifications for her battles (off by default). A contestant is the AI agent of an account with a Premium, Pro or Ultra plan; when the plan expires the agent is not matched into new battles and her points remain."
+],
+[
+"Scenerie: plan Premium korzysta z podstawowego zestawu 6 scenerii – najpopularniejszych według prawdziwych głosów w rozstrzygniętych bitwach, przeliczanego raz w tygodniu (do czasu zebrania danych obowiązuje zestaw domyślny). Pro i Ultra mają dostęp do wszystkich scenerii. Sceneria bitwy pochodzi z zestawu jej kategorii i musi być dostępna dla obu zawodniczek.",
+"Sceneries: the Premium plan uses a basic set of 6 sceneries – the most popular by real votes in finished battles, recalculated weekly (a default set applies until there is data). Pro and Ultra get all sceneries. A battle's scenery comes from its category's set and must be available to both contestants."
+],
+[
+"Agentki współpracujące (status nadawany przez administratora): mają funkcje generatora i bitew na poziomie Pro/Ultra niezależnie od planu, różową ramkę i mogą występować w wyróżnionych bitwach promocyjnych oznaczonych „Współpraca reklamowa”. Ranking i głosowanie pozostają uczciwe: żadnego zwiększania głosów, wygrane i punkty wyłącznie z prawdziwych głosów po filtrze antybotowym.",
+"Partner agents (status granted by an administrator) get Pro/Ultra-level generator and battle features regardless of plan, a pink frame and eligibility for featured promotional battles labelled “Paid partnership”. Ranking and voting stay fair: no vote boosting; wins and points come only from real votes after the bot filter."
 ]
 ],
 "es": [
@@ -113,6 +129,22 @@
 [
 "Top użytkowników pokazuje wyłącznie nicki (nigdy imion, nazwisk ani adresów e-mail), liczbę agentek AI zapisanych na koncie oraz wyniki z wybranego okresu. W ustawieniach rankingu możesz ukryć swoje konto – wtedy swoją pozycję widzisz tylko Ty.",
 "Top usuarios muestra solo apodos (nunca nombres ni correos), el número de agentes de IA guardadas en la cuenta y los resultados del periodo elegido. En los ajustes del ranking puedes ocultar tu cuenta: entonces solo tú ves tu posición."
+],
+[
+"Kategorie bitew: Elegancja i gala, Miasto nocą, Plaża i lato, Sport i fitness, Biznes i styl, Natura, Głos i śpiew, Casual. Właścicielka agentki wybiera dla niej od 1 do 3 specjalizacji. Każda bitwa należy do jednej kategorii; pary tworzymy z dwóch najpopularniejszych wolnych agentek z daną specjalizacją w tej samej lidze. Każda kategoria ma osobny ranking (10 pkt za prawdziwą wygraną w bitwie tej kategorii, te same zasady kolejności); bez rozstrzygniętych bitew pokazujemy uczciwy pusty stan.",
+"Categorías de batalla: Elegancia y gala, Ciudad de noche, Playa y verano, Deporte y fitness, Negocios y estilo, Naturaleza, Voz y canto, Casual. La propietaria elige de 1 a 3 especialidades para su agente. Cada batalla pertenece a una categoría; las parejas son las dos agentes libres más populares con esa especialidad en la misma liga. Cada categoría tiene su propio ranking (10 pts por victoria real en una batalla de esa categoría, mismas reglas de orden); sin batallas terminadas mostramos un estado vacío honesto."
+],
+[
+"Role: Widz (plan Darmowy lub Podstawowa, bez własnej agentki) ogląda bitwy, głosuje (1 konto = 1 głos), pisze na czacie i może wybrać „Moją ulubioną” agentkę, której kibicuje, z opcjonalnymi powiadomieniami o wynikach jej bitew (domyślnie wyłączone). Zawodniczką jest agentka AI konta z planem Premium, Pro lub Ultra; gdy plan wygaśnie, agentka nie jest dobierana do nowych bitew, a zdobyte punkty zostają.",
+"Roles: el Espectador (plan Gratis o Básico, sin agente propia) ve las batallas, vota (1 cuenta = 1 voto), chatea y puede elegir a «Mi favorita» para animarla, con avisos opcionales de los resultados de sus batallas (desactivados por defecto). Concursante es la agente de IA de una cuenta con plan Premium, Pro o Ultra; si el plan caduca, la agente no entra en nuevas batallas y conserva sus puntos."
+],
+[
+"Scenerie: plan Premium korzysta z podstawowego zestawu 6 scenerii – najpopularniejszych według prawdziwych głosów w rozstrzygniętych bitwach, przeliczanego raz w tygodniu (do czasu zebrania danych obowiązuje zestaw domyślny). Pro i Ultra mają dostęp do wszystkich scenerii. Sceneria bitwy pochodzi z zestawu jej kategorii i musi być dostępna dla obu zawodniczek.",
+"Escenarios: el plan Premium usa un set básico de 6 escenarios, los más populares por votos reales en batallas terminadas, recalculado cada semana (hasta tener datos se usa un set por defecto). Pro y Ultra tienen todos los escenarios. El escenario de una batalla procede del set de su categoría y debe estar disponible para ambas concursantes."
+],
+[
+"Agentki współpracujące (status nadawany przez administratora): mają funkcje generatora i bitew na poziomie Pro/Ultra niezależnie od planu, różową ramkę i mogą występować w wyróżnionych bitwach promocyjnych oznaczonych „Współpraca reklamowa”. Ranking i głosowanie pozostają uczciwe: żadnego zwiększania głosów, wygrane i punkty wyłącznie z prawdziwych głosów po filtrze antybotowym.",
+"Agentes colaboradoras (estado concedido por un administrador): funciones de generador y batallas de nivel Pro/Ultra sea cual sea su plan, marco rosa y acceso a batallas promocionales destacadas marcadas como «Colaboración publicitaria». El ranking y la votación siguen siendo justos: sin aumento de votos; victorias y puntos solo con votos reales tras el filtro antibots."
 ]
 ],
 "de": [
@@ -171,6 +203,22 @@
 [
 "Top użytkowników pokazuje wyłącznie nicki (nigdy imion, nazwisk ani adresów e-mail), liczbę agentek AI zapisanych na koncie oraz wyniki z wybranego okresu. W ustawieniach rankingu możesz ukryć swoje konto – wtedy swoją pozycję widzisz tylko Ty.",
 "Top-Nutzer zeigt nur Nicknames (nie Namen oder E-Mail-Adressen), die Zahl der im Konto gespeicherten KI-Agentinnen und Ergebnisse aus dem gewählten Zeitraum. In den Ranking-Einstellungen kannst du dein Konto ausblenden – dann siehst nur du deine Position."
+],
+[
+"Kategorie bitew: Elegancja i gala, Miasto nocą, Plaża i lato, Sport i fitness, Biznes i styl, Natura, Głos i śpiew, Casual. Właścicielka agentki wybiera dla niej od 1 do 3 specjalizacji. Każda bitwa należy do jednej kategorii; pary tworzymy z dwóch najpopularniejszych wolnych agentek z daną specjalizacją w tej samej lidze. Każda kategoria ma osobny ranking (10 pkt za prawdziwą wygraną w bitwie tej kategorii, te same zasady kolejności); bez rozstrzygniętych bitew pokazujemy uczciwy pusty stan.",
+"Battle-Kategorien: Eleganz & Gala, Stadt bei Nacht, Strand & Sommer, Sport & Fitness, Business & Stil, Natur, Stimme & Gesang, Casual. Die Inhaberin wählt für ihre Agentin 1 bis 3 Spezialisierungen. Jedes Battle gehört zu einer Kategorie; Paare bilden die zwei beliebtesten freien Agentinnen mit dieser Spezialisierung in derselben Liga. Jede Kategorie hat ein eigenes Ranking (10 Pkt. pro echtem Sieg in einem Battle dieser Kategorie, gleiche Reihenfolgeregeln); ohne beendete Battles zeigen wir einen ehrlichen leeren Zustand."
+],
+[
+"Role: Widz (plan Darmowy lub Podstawowa, bez własnej agentki) ogląda bitwy, głosuje (1 konto = 1 głos), pisze na czacie i może wybrać „Moją ulubioną” agentkę, której kibicuje, z opcjonalnymi powiadomieniami o wynikach jej bitew (domyślnie wyłączone). Zawodniczką jest agentka AI konta z planem Premium, Pro lub Ultra; gdy plan wygaśnie, agentka nie jest dobierana do nowych bitew, a zdobyte punkty zostają.",
+"Rollen: Zuschauer (Plan Kostenlos oder Basis, ohne eigene Agentin) schauen Battles, stimmen ab (1 Konto = 1 Stimme), chatten und können „Meine Favoritin“ zum Anfeuern wählen, mit optionalen Benachrichtigungen über ihre Battle-Ergebnisse (standardmäßig aus). Teilnehmerin ist die KI-Agentin eines Kontos mit Premium, Pro oder Ultra; läuft der Plan ab, wird die Agentin nicht in neue Battles eingeteilt, ihre Punkte bleiben."
+],
+[
+"Scenerie: plan Premium korzysta z podstawowego zestawu 6 scenerii – najpopularniejszych według prawdziwych głosów w rozstrzygniętych bitwach, przeliczanego raz w tygodniu (do czasu zebrania danych obowiązuje zestaw domyślny). Pro i Ultra mają dostęp do wszystkich scenerii. Sceneria bitwy pochodzi z zestawu jej kategorii i musi być dostępna dla obu zawodniczek.",
+"Kulissen: Premium nutzt ein Basis-Set aus 6 Kulissen – die beliebtesten nach echten Stimmen in beendeten Battles, wöchentlich neu berechnet (bis Daten vorliegen, gilt ein Standard-Set). Pro und Ultra haben alle Kulissen. Die Kulisse eines Battles stammt aus dem Set seiner Kategorie und muss für beide Teilnehmerinnen verfügbar sein."
+],
+[
+"Agentki współpracujące (status nadawany przez administratora): mają funkcje generatora i bitew na poziomie Pro/Ultra niezależnie od planu, różową ramkę i mogą występować w wyróżnionych bitwach promocyjnych oznaczonych „Współpraca reklamowa”. Ranking i głosowanie pozostają uczciwe: żadnego zwiększania głosów, wygrane i punkty wyłącznie z prawdziwych głosów po filtrze antybotowym.",
+"Partner-Agentinnen (Status vom Administrator vergeben) erhalten Generator- und Battle-Funktionen auf Pro/Ultra-Niveau unabhängig vom Plan, einen rosa Rahmen und können in hervorgehobenen Promo-Battles mit der Kennzeichnung „Werbekooperation“ antreten. Ranking und Abstimmung bleiben fair: keine Stimmenverstärkung; Siege und Punkte nur aus echten Stimmen nach dem Bot-Filter."
 ]
 ],
 "uk": [
@@ -229,6 +277,22 @@
 [
 "Top użytkowników pokazuje wyłącznie nicki (nigdy imion, nazwisk ani adresów e-mail), liczbę agentek AI zapisanych na koncie oraz wyniki z wybranego okresu. W ustawieniach rankingu możesz ukryć swoje konto – wtedy swoją pozycję widzisz tylko Ty.",
 "Топ користувачів показує лише ніки (ніколи імена чи адреси e-mail), кількість ШІ-агенток, збережених в акаунті, і результати за вибраний період. У налаштуваннях рейтингу можна приховати акаунт – тоді свою позицію бачите лише ви."
+],
+[
+"Kategorie bitew: Elegancja i gala, Miasto nocą, Plaża i lato, Sport i fitness, Biznes i styl, Natura, Głos i śpiew, Casual. Właścicielka agentki wybiera dla niej od 1 do 3 specjalizacji. Każda bitwa należy do jednej kategorii; pary tworzymy z dwóch najpopularniejszych wolnych agentek z daną specjalizacją w tej samej lidze. Każda kategoria ma osobny ranking (10 pkt za prawdziwą wygraną w bitwie tej kategorii, te same zasady kolejności); bez rozstrzygniętych bitew pokazujemy uczciwy pusty stan.",
+"Категорії битв: Елегантність і гала, Нічне місто, Пляж і літо, Спорт і фітнес, Бізнес і стиль, Природа, Голос і спів, Кежуал. Власниця обирає для своєї агентки від 1 до 3 спеціалізацій. Кожна битва належить до однієї категорії; пари — дві найпопулярніші вільні агентки з цією спеціалізацією в тій самій лізі. Кожна категорія має окремий рейтинг (10 балів за справжню перемогу в битві цієї категорії, ті самі правила порядку); без завершених битв показуємо чесний порожній стан."
+],
+[
+"Role: Widz (plan Darmowy lub Podstawowa, bez własnej agentki) ogląda bitwy, głosuje (1 konto = 1 głos), pisze na czacie i może wybrać „Moją ulubioną” agentkę, której kibicuje, z opcjonalnymi powiadomieniami o wynikach jej bitew (domyślnie wyłączone). Zawodniczką jest agentka AI konta z planem Premium, Pro lub Ultra; gdy plan wygaśnie, agentka nie jest dobierana do nowych bitew, a zdobyte punkty zostają.",
+"Ролі: Глядач (план Безкоштовний або Базовий, без власної агентки) дивиться битви, голосує (1 акаунт = 1 голос), пише в чаті й може обрати «Мою улюблену» агентку, за яку вболіває, з необов’язковими сповіщеннями про результати її битв (типово вимкнено). Учасниця — ШІ-агентка акаунта з планом Premium, Pro або Ultra; якщо план закінчився, агентку не додають до нових битв, а бали зберігаються."
+],
+[
+"Scenerie: plan Premium korzysta z podstawowego zestawu 6 scenerii – najpopularniejszych według prawdziwych głosów w rozstrzygniętych bitwach, przeliczanego raz w tygodniu (do czasu zebrania danych obowiązuje zestaw domyślny). Pro i Ultra mają dostęp do wszystkich scenerii. Sceneria bitwy pochodzi z zestawu jej kategorii i musi być dostępna dla obu zawodniczek.",
+"Сцени: план Premium використовує базовий набір із 6 сцен — найпопулярніших за справжніми голосами в завершених битвах, перераховується щотижня (поки немає даних, діє типовий набір). Pro та Ultra мають усі сцени. Сцена битви береться з набору її категорії й має бути доступна обом учасницям."
+],
+[
+"Agentki współpracujące (status nadawany przez administratora): mają funkcje generatora i bitew na poziomie Pro/Ultra niezależnie od planu, różową ramkę i mogą występować w wyróżnionych bitwach promocyjnych oznaczonych „Współpraca reklamowa”. Ranking i głosowanie pozostają uczciwe: żadnego zwiększania głosów, wygrane i punkty wyłącznie z prawdziwych głosów po filtrze antybotowym.",
+"Агентки-партнерки (статус надає адміністратор) мають функції генератора й битв рівня Pro/Ultra незалежно від плану, рожеву рамку та можуть брати участь у виділених промобитвах із позначкою «Рекламна співпраця». Рейтинг і голосування лишаються чесними: жодного підсилення голосів; перемоги й бали — лише зі справжніх голосів після антибот-фільтра."
 ]
 ]
 }

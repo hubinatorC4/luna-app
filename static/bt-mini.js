@@ -5,7 +5,8 @@
 (() => {
 if (window.LunaBtPrefs) return;
 const LS = {get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }};
-const DEF = {luna_bt_show: '1', luna_bt_intro: '1', luna_bt_notify: '0'};
+const DEF = {luna_bt_show: '1', luna_bt_intro: '1', luna_bt_notify: '0', luna_bt_fav_n: '0'};
+const wantNotes = () => pref('luna_bt_notify') || pref('luna_bt_fav_n');
 const pref = k => (LS.get(k) ?? DEF[k]) === '1';
 const L0 = (document.documentElement.lang || 'pl').slice(0, 2);
 const T = {
@@ -97,7 +98,7 @@ document.addEventListener('visibilitychange', () => { if (!pill) return; if (doc
 /* ---------- powiadomienia o wyniku (opcjonalne) ---------- */
 let csrf = null;
 async function notes(){
-  if (!pref('luna_bt_notify') || document.hidden) return [];
+  if (!wantNotes() || document.hidden) return [];
   try { const r = await fetch('/api/battles/notes?lang=' + L0, {credentials: 'same-origin'}); if (!r.ok) return []; const d = await r.json(); return d.items || []; } catch (e) { return []; }
 }
 async function seen(bids){
@@ -119,7 +120,7 @@ async function checkNotes(){
   document.dispatchEvent(new CustomEvent('lunabt:notes', {detail: N}));
 }
 let nv = 0;
-function notesLoop(){ clearInterval(nv); if (!pref('luna_bt_notify')) return; checkNotes(); nv = setInterval(() => { if (!document.hidden) checkNotes(); }, 60000); }
+function notesLoop(){ clearInterval(nv); if (!wantNotes()) return; checkNotes(); nv = setInterval(() => { if (!document.hidden) checkNotes(); }, 60000); }
 
 
 /* ---------- ustawienia (strona Bitew i Ustawienia aplikacji: elementy [data-bt-settings]) ---------- */
@@ -142,7 +143,7 @@ async function notifyServer(on, sub){
   const r = await fetch('/api/battles/notify', {method: 'POST', credentials: 'same-origin', headers: {'Content-Type': 'application/json', 'X-CSRF-Token': csrf}, body: JSON.stringify({on, lang: L0, sub: sub || null})});
   if (!r.ok) throw new Error(r.status === 401 ? 'login' : 'err');
 }
-async function pushOptIn(){
+async function pushOptIn(after){
   // tylko po włączeniu przełącznika (gest użytkownika) i tylko gdy przeglądarka i serwer obsługują push
   if (!('serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window)) return 'na';
   const k = await (await fetch('/api/push/key')).json(); if (!k.enabled || !k.key) return 'na';
@@ -150,7 +151,7 @@ async function pushOptIn(){
   if (perm !== 'granted') return 'denied';
   const reg = await navigator.serviceWorker.register('/sw.js'); await navigator.serviceWorker.ready;
   const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64(k.key)});
-  await notifyServer(true, sub.toJSON()); return 'ok';
+  if (after) await after(sub.toJSON()); else await notifyServer(true, sub.toJSON()); return 'ok';
 }
 let css2on = false;
 function renderSettings(host){
@@ -175,7 +176,8 @@ const css2 = `.bts h3{margin:0 0 8px;font-size:16px}.bts h4{margin:14px 0 6px;fo
 .bts-row input{width:20px;height:20px;margin-top:2px;flex:0 0 auto}.bts-row span{display:flex;flex-direction:column;gap:2px}.bts-row small{opacity:.75;font-size:12px}.bts-msg{font-size:12px;color:#ffb347;min-height:1em;margin:6px 0 0}
 .bts-notes{display:flex;flex-direction:column;gap:6px}.bts-n{display:block;padding:8px 10px;border-radius:10px;background:rgba(127,127,127,.12);color:inherit;text-decoration:none;font-size:13px}.bts-n.new{box-shadow:inset 3px 0 0 #ffd36b}`;
 window.LunaBtPrefs = {
-  get: pref, set: (k, on) => { LS.set(k, on ? '1' : '0'); if (k === 'luna_bt_show'){ applyShow(); if (!on && pill){ pill.remove(); pill = null; stopTimers(); } else showPill(); } if (k === 'luna_bt_notify') notesLoop(); },
+  push: after => pushOptIn(after),
+  get: pref, set: (k, on) => { LS.set(k, on ? '1' : '0'); if (k === 'luna_bt_show'){ applyShow(); if (!on && pill){ pill.remove(); pill = null; stopTimers(); } else showPill(); } if (k === 'luna_bt_notify' || k === 'luna_bt_fav_n') notesLoop(); },
   minimize: st => setMin(st), renderSettings, restoreState: () => { const s = getMin(); setMin(null); return s; }, notes, seen, toast,
 };
 const boot = () => { navEntry(); showPill(); notesLoop(); document.querySelectorAll('[data-bt-settings]').forEach(renderSettings); };
