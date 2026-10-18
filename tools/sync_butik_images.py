@@ -20,8 +20,18 @@ for f in sorted(os.listdir(os.path.join(B, "img"))):
 have = set(os.listdir(DST)); static = os.path.join(R, "static")
 exists = lambda url: bool(url) and os.path.exists(os.path.join(static, url.lstrip("/")))
 cat = json.load(open(os.path.join(B, "catalog_outfits_v2.json"), encoding="utf-8"))
+# Wstrzymane stroje (np. zdjęcie do poprawki): tools/butik_hold.json {"id": "sha256 starego zdjęcia"}.
+# Strój jest ukryty, dopóki plik img/<id>.jpg ma ten sam skrót; gdy przyjdzie nowe zdjęcie, wstrzymanie znika samo.
+HOLDF = os.path.join(R, "tools/butik_hold.json")
+hold = json.load(open(HOLDF)) if os.path.exists(HOLDF) else {}
+def _sha(f): return hashlib.sha256(open(f, "rb").read()).hexdigest() if os.path.exists(f) else ""
+held = {i for i, h in hold.items() if _sha(os.path.join(B, "img", i + ".jpg")) == h}
 heroes = ready = 0
 for it in cat["items"]:
+    if it.get("id") in held:
+        it["image"] = ""; it.pop("image_webp", None)
+        for v in it.get("variants") or []: v["image_ready"] = False; v["image"] = ""; v.pop("image_webp", None)
+        continue
     if not exists(it.get("image", "")): it["image"] = ""; it.pop("image_webp", None)
     else: heroes += 1
     if it.get("image_webp") and not exists(it["image_webp"]): it.pop("image_webp")
@@ -35,4 +45,5 @@ for it in cat["items"]:
 old = open(CAT, "rb").read() if os.path.exists(CAT) else b""
 new = json.dumps(cat, ensure_ascii=False, indent=1).encode()
 if new != old: open(CAT, "wb").write(new)
+print("wstrzymane:", ", ".join(sorted(held)) or "brak", "| zwolnione (nowe zdjęcie):", ", ".join(sorted(set(hold) - held)) or "brak")
 print(f"skopiowano plików: {copied} · stroje ze zdjęciem: {heroes}/{len(cat['items'])} · warianty ze zdjęciem: {ready} · katalog {'ZMIENIONY' if new != old else 'bez zmian'} · skrót {hashlib.sha256(new).hexdigest()[:10]}")

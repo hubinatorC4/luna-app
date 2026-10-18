@@ -1653,9 +1653,10 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-021_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-021_cream.webp"
     }
    ],
    "description_en": "Long tunic set from the Ekonomiczna line, “Ciepły Dom” collection. Material: fleece. Colour: powder pink (also in lavender, cream). Details: small moon patch, reflective trims. Elegant, fully covering cut in opaque fabric.",
@@ -2095,17 +2096,19 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/eko-027_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-027_mustard.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/eko-027_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-027_olive.webp"
     }
    ],
    "description_en": "Tuxedo blazer from the Ekonomiczna line, “Miejski Poranek” collection. Material: heavy jersey. Colour: bottle green (also in mustard, olive). Details: pleated inserts, velvet piping, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -2165,17 +2168,19 @@
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/eko-028_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-028_dustyblue.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-028_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-028_cream.webp"
     }
    ],
    "description_en": "Button cardigan from the Ekonomiczna line, “Ciepły Dom” collection. Material: viscose knit. Colour: champagne (also in dusty blue, cream). Details: ribbed trims, elbow patches. Elegant, fully covering cut in opaque fabric.",
@@ -2235,17 +2240,19 @@
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/eko-029_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-029_white.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/eko-029_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-029_black.webp"
     }
    ],
    "description_en": "Hooded coat from the Ekonomiczna line, “Miejski Poranek” collection. Material: quilted fabric. Colour: navy (also in white, black). Details: buckled belt, wide lapels. Elegant, fully covering cut in opaque fabric.",
@@ -2310,17 +2317,19 @@
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/eko-030_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-030_pearlgrey.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-030_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-030_cream.webp"
     }
    ],
    "description_en": "Gown with train from the Ekonomiczna line, “Pierwszy Krok” collection. Material: linen. Colour: camel (also in pearl grey, cream). Details: contrast piping, in-seam pockets, accompanied by matching pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -2385,17 +2394,19 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/eko-031_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-031_mustard.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-031_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-031_cream.webp"
     }
    ],
    "description_en": "Tennis set with pleated midi skirt from the Ekonomiczna line, “Miejski Poranek” collection. Material: stretch cotton. Colour: caramel (also in mustard, cream). Details: ankle cuffs, contrast side stripes, full zip to the neck. Elegant, fully covering cut in opaque fabric.",
@@ -2455,17 +2466,19 @@
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/eko-032_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-032_terracotta.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-032_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-032_cream.webp"
     }
    ],
    "description_en": "Long scarf from the Ekonomiczna line, “Miejski Poranek” collection. Material: cotton. Colour: chocolate brown (also in terracotta, cream). Details: contrast edging, small polka-dot print. Elegant, fully covering cut in opaque fabric.",
@@ -2530,17 +2543,19 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/eko-033_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-033_burgundy.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/eko-033_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-033_mustard.webp"
     }
    ],
    "description_en": "Stand-collar pleated dress from the Ekonomiczna line, “Pierwszy Krok” collection. Material: cotton. Colour: bottle green (also in burgundy, mustard). Details: pleated inserts, in-seam pockets, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -2600,17 +2615,19 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/eko-034_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-034_chocolatebrown.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/eko-034_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-034_olive.webp"
     }
    ],
    "description_en": "Tie-neck blouse from the Ekonomiczna line, “Codzienna Lekkość” collection. Material: heavy jersey. Colour: cream (also in chocolate brown, olive). Details: cuffed sleeves, decorative topstitching. Elegant, fully covering cut in opaque fabric.",
@@ -2675,17 +2692,19 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-035_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-035_cream.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/eko-035_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-035_powderpink.webp"
     }
    ],
    "description_en": "Below-knee pencil skirt from the Ekonomiczna line, “Codzienna Lekkość” collection. Material: cotton poplin. Colour: dusty blue (also in cream, powder pink). Details: velvet piping, covered buttons, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -2745,17 +2764,19 @@
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/eko-036_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-036_lavender.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/eko-036_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-036_champagne.webp"
     }
    ],
    "description_en": "Pleated tapered trousers from the Ekonomiczna line, “Kawa i Notatki” collection. Material: cotton. Colour: sage green (also in lavender, champagne). Details: pearl buttons, waist tie. Elegant, fully covering cut in opaque fabric.",
@@ -2815,17 +2836,19 @@
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/eko-037_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-037_olive.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-037_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-037_cream.webp"
     }
    ],
    "description_en": "Waist-length spencer jacket from the Ekonomiczna line, “Miejski Poranek” collection. Material: linen. Colour: mustard (also in olive, cream). Details: gold buttons, contrast piping. Elegant, fully covering cut in opaque fabric.",
@@ -2885,17 +2908,19 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/eko-038_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-038_chocolatebrown.webp"
     },
     {
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/eko-038_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-038_terracotta.webp"
     }
    ],
    "description_en": "Puff-sleeve sweater from the Ekonomiczna line, “Kawa i Notatki” collection. Material: waffle knit. Colour: mustard (also in chocolate brown, terracotta). Details: ribbed trims, cable-knit yoke. Elegant, fully covering cut in opaque fabric.",
@@ -2960,17 +2985,19 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/eko-039_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-039_black.webp"
     },
     {
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/eko-039_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-039_graphite.webp"
     }
    ],
    "description_en": "Double-breasted coat from the Ekonomiczna line, “Miejski Poranek” collection. Material: cotton gabardine. Colour: pearl grey (also in black, graphite). Details: horn buttons, velvet collar, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -3035,17 +3062,19 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-040_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-040_cream.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/eko-040_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-040_lavender.webp"
     }
    ],
    "description_en": "Gown with bolero from the Ekonomiczna line, “Pierwszy Krok” collection. Material: linen. Colour: champagne (also in cream, lavender). Details: pleated inserts, gold buttons, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -3110,17 +3139,19 @@
      "color_name_pl": "czekoladowy",
      "color_name_en": "chocolate brown",
      "hex": "#4E3326",
-     "image": "",
+     "image": "/catalog/butik/eko-041_chocolatebrown.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-041_chocolatebrown.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-041_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-041_cream.webp"
     }
    ],
    "description_en": "Relaxed sweatshirt set from the Ekonomiczna line, “Miejski Poranek” collection. Material: french terry. Colour: terracotta (also in chocolate brown, cream). Details: drawstring waist, ankle cuffs, reflective trims. Elegant, fully covering cut in opaque fabric.",
@@ -3180,17 +3211,19 @@
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/eko-042_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-042_caramel.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-042_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-042_cream.webp"
     }
    ],
    "description_en": "Clutch bag from the Ekonomiczna line, “Miejski Poranek” collection. Material: vegan leather. Colour: terracotta (also in caramel, cream). Details: chain strap, diamond quilting. Elegant, fully covering cut in opaque fabric.",
@@ -3250,17 +3283,19 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-043_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-043_cream.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/eko-043_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-043_powderpink.webp"
     }
    ],
    "description_en": "Long-sleeve maxi dress from the Ekonomiczna line, “Pierwszy Krok” collection. Material: viscose. Colour: dusty blue (also in cream, powder pink). Details: waist tie, cord trim. Elegant, fully covering cut in opaque fabric.",
@@ -3325,17 +3360,19 @@
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/eko-044_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-044_sagegreen.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/eko-044_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-044_champagne.webp"
     }
    ],
    "description_en": "Oversized shirt from the Ekonomiczna line, “Codzienna Lekkość” collection. Material: linen. Colour: dusty blue (also in sage green, champagne). Details: pleated inserts, gold buttons, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -3400,17 +3437,19 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-045_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-045_cream.webp"
     },
     {
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/eko-045_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-045_caramel.webp"
     }
    ],
    "description_en": "Tie-wrap midi skirt from the Ekonomiczna line, “Kawa i Notatki” collection. Material: heavy jersey. Colour: chocolate brown (also in cream, caramel). Details: gold buttons, concealed side zip, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -3470,17 +3509,19 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/eko-046_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-046_burgundy.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-046_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-046_cream.webp"
     }
    ],
    "description_en": "Marlene trousers from the Ekonomiczna line, “Kawa i Notatki” collection. Material: linen. Colour: olive (also in burgundy, cream). Details: covered buttons, velvet piping. Elegant, fully covering cut in opaque fabric.",
@@ -3550,17 +3591,19 @@
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/eko-047_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-047_mustard.webp"
     },
     {
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/eko-047_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-047_olive.webp"
     }
    ],
    "description_en": "Tailored blazer from the Ekonomiczna line, “Miejski Poranek” collection. Material: cotton. Colour: chocolate brown (also in mustard, olive). Details: decorative topstitching, cuffed sleeves, pleated inserts, accompanied by matching silk scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -3620,17 +3663,19 @@
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/eko-048_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-048_olive.webp"
     },
     {
      "color_name_pl": "musztardowy",
      "color_name_en": "mustard",
      "hex": "#C99A2E",
-     "image": "",
+     "image": "/catalog/butik/eko-048_mustard.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-048_mustard.webp"
     }
    ],
    "description_en": "Boat-neck sweater from the Ekonomiczna line, “Kawa i Notatki” collection. Material: cotton knit. Colour: terracotta (also in olive, mustard). Details: cable-knit yoke, mother-of-pearl buttons. Elegant, fully covering cut in opaque fabric.",
@@ -3690,17 +3735,19 @@
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/eko-049_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-049_graphite.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-049_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-049_cream.webp"
     }
    ],
    "description_en": "Long belted coat from the Ekonomiczna line, “Miejski Poranek” collection. Material: quilted fabric. Colour: white (also in graphite, cream). Details: horn buttons, wide lapels. Elegant, fully covering cut in opaque fabric.",
@@ -3760,17 +3807,19 @@
      "color_name_pl": "karmelowy",
      "color_name_en": "caramel",
      "hex": "#B07A45",
-     "image": "",
+     "image": "/catalog/butik/eko-050_caramel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-050_caramel.webp"
     },
     {
      "color_name_pl": "terakota",
      "color_name_en": "terracotta",
      "hex": "#B5573A",
-     "image": "",
+     "image": "/catalog/butik/eko-050_terracotta.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-050_terracotta.webp"
     }
    ],
    "description_en": "3/4-sleeve ball gown from the Ekonomiczna line, “Pierwszy Krok” collection. Material: linen. Colour: olive (also in caramel, terracotta). Details: in-seam pockets, gathered shoulders. Elegant, fully covering cut in opaque fabric.",
@@ -3830,17 +3879,19 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/eko-051_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-051_navy.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/eko-051_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-051_black.webp"
     }
    ],
    "description_en": "Velour tracksuit from the Ekonomiczna line, “Miejski Poranek” collection. Material: fleece. Colour: white (also in navy, black). Details: kangaroo pocket, small moon patch. Elegant, fully covering cut in opaque fabric.",
@@ -3900,17 +3951,19 @@
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/eko-052_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-052_lavender.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/eko-052_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-052_champagne.webp"
     }
    ],
    "description_en": "Top-handle bag from the Ekonomiczna line, “Miejski Poranek” collection. Material: vegan leather. Colour: dusty blue (also in lavender, champagne). Details: silver hardware, chain strap. Elegant, fully covering cut in opaque fabric.",
@@ -3970,17 +4023,19 @@
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/eko-053_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-053_powderpink.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/eko-053_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-053_lavender.webp"
     }
    ],
    "description_en": "Belted 3/4-sleeve midi dress from the Ekonomiczna line, “Codzienna Lekkość” collection. Material: cotton poplin. Colour: sage green (also in powder pink, lavender). Details: in-seam pockets, pearl buttons. Elegant, fully covering cut in opaque fabric.",
@@ -4040,17 +4095,19 @@
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/eko-054_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-054_dustyblue.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/eko-054_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-054_champagne.webp"
     }
    ],
    "description_en": "Jabot blouse from the Ekonomiczna line, “Kawa i Notatki” collection. Material: heavy jersey. Colour: powder pink (also in dusty blue, champagne). Details: decorative topstitching, tucked cuffs. Elegant, fully covering cut in opaque fabric.",
@@ -4115,17 +4172,19 @@
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/eko-055_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-055_olive.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/eko-055_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-055_cream.webp"
     }
    ],
    "description_en": "Pleated midi skirt from the Ekonomiczna line, “Codzienna Lekkość” collection. Material: heavy jersey. Colour: mustard (also in olive, cream). Details: gold buttons, concealed side zip, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -4190,9 +4249,10 @@
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/eko-056_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/eko-056_graphite.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
@@ -11236,17 +11296,19 @@
      "color_name_pl": "oliwkowy",
      "color_name_en": "olive",
      "hex": "#6B6B3A",
-     "image": "",
+     "image": "/catalog/butik/cla-003_olive.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-003_olive.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cla-003_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cla-003_cream.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
@@ -24465,7 +24527,7 @@
    "tier": "pro",
    "rarity": "ekskluzywny",
    "image_prompt": "Elegant luxury e-commerce product photograph of a gold patent leather structured top-handle handbag, featuring diamond quilting, embroidered tiny stars, gold buckle, displayed on a small brass display stand, centered, the entire item visible, soft dark navy studio backdrop with a gentle warm gold rim light, subtle soft shadow, opaque fabric, modest fully covering design, no person, no face, no hands, no text, no logo, photorealistic, high detail",
-   "image": "/catalog/butik/cou-011.jpg",
+   "image": "",
    "status": "planned",
    "release_version": null,
    "details": [
@@ -24494,51 +24556,46 @@
      "color_name_pl": "złoty",
      "color_name_en": "gold",
      "hex": "#C9A246",
-     "image": "/catalog/butik/cou-011.jpg",
+     "image": "",
      "default": true,
-     "image_ready": true
+     "image_ready": false
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "/catalog/butik/cou-011_champagne.jpg",
+     "image": "",
      "default": false,
-     "image_ready": true,
-     "image_webp": "/catalog/butik/cou-011_champagne.webp"
+     "image_ready": false
     },
     {
      "color_name_pl": "srebrny",
      "color_name_en": "silver",
      "hex": "#BFC3C8",
-     "image": "/catalog/butik/cou-011_silver.jpg",
+     "image": "",
      "default": false,
-     "image_ready": true,
-     "image_webp": "/catalog/butik/cou-011_silver.webp"
+     "image_ready": false
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "/catalog/butik/cou-011_burgundy.jpg",
+     "image": "",
      "default": false,
-     "image_ready": true,
-     "image_webp": "/catalog/butik/cou-011_burgundy.webp"
+     "image_ready": false
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "/catalog/butik/cou-011_navy.jpg",
+     "image": "",
      "default": false,
-     "image_ready": true,
-     "image_webp": "/catalog/butik/cou-011_navy.webp"
+     "image_ready": false
     }
    ],
    "description_en": "Top-handle bag from the Couture line, “Haute Couture Luna” collection. Material: patent leather. Colour: gold (also in champagne, silver, burgundy, navy). Details: diamond quilting, embroidered tiny stars, gold buckle. Elegant, fully covering cut in opaque fabric.",
    "price_tier": "T6",
-   "price_reason": "linia couture; kolekcja evening (+2); rzadkość ekskluzywny (+2); 3 detale (+1); rękodzieło (+1); 0 dodatki w zestawie (+0) = 6 pkt → T6",
-   "image_webp": "/catalog/butik/cou-011.webp"
+   "price_reason": "linia couture; kolekcja evening (+2); rzadkość ekskluzywny (+2); 3 detale (+1); rękodzieło (+1); 0 dodatki w zestawie (+0) = 6 pkt → T6"
   },
   {
    "id": "cou-012",
@@ -25530,9 +25587,10 @@
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-022_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-022_powderpink.webp"
     }
    ],
    "description_en": "High-wrap blouse from the Couture line, “Limitowana Aurora” collection. Material: silk taffeta. Colour: lavender (also in dusty blue, powder pink). Details: hand-sewn seed pearls, velvet piping, gold buttons, accompanied by matching pearl earrings placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26326,17 +26384,19 @@
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cou-031_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-031_lavender.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cou-031_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-031_dustyblue.webp"
     }
    ],
    "description_en": "Mock-neck tulip dress from the Couture line, “Złota Scena” collection. Material: brocade. Colour: champagne (also in powder pink, cream, lavender, dusty blue). Details: covered buttons, cord trim, fabric appliqués, accompanied by matching hat and pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -26410,17 +26470,19 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-032_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-032_navy.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-032_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-032_burgundy.webp"
     }
    ],
    "description_en": "Collared blouse from the Couture line, “Limitowana Aurora” collection. Material: sequined silk crepe on opaque lining. Colour: emerald (also in navy, burgundy). Details: gold-thread embroidery, cord trim, tucked cuffs, accompanied by matching silk scarf and clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -27245,33 +27307,37 @@
      "color_name_pl": "szmaragdowy",
      "color_name_en": "emerald",
      "hex": "#0F6B4F",
-     "image": "",
+     "image": "/catalog/butik/cou-041_emerald.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-041_emerald.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cou-041_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-041_deepteal.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-041_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-041_cobaltblue.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-041_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-041_burgundy.webp"
     }
    ],
    "description_en": "Puff-sleeve empire dress from the Couture line, “Złota Scena” collection. Material: brocade. Colour: plum (also in emerald, deep teal, cobalt blue, burgundy). Details: pleated inserts, velvet piping, hand-pleated front, accompanied by matching gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -27345,33 +27411,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-042_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-042_navy.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-042_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-042_cream.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-042_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-042_black.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cou-042_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-042_white.webp"
     }
    ],
    "description_en": "Tie-neck blouse from the Couture line, “Noc Premiery” collection. Material: sequined silk crepe on opaque lining. Colour: graphite (also in navy, cream, black, white). Details: gathered shoulders, gold buttons, fabric appliqués, accompanied by matching pearl earrings and gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -28216,17 +28286,19 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-051_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-051_champagne.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-051_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-051_burgundy.webp"
     }
    ],
    "description_en": "Belted shirt dress from the Couture line, “Limitowana Aurora” collection. Material: duchesse satin. Colour: silver (also in champagne, burgundy). Details: pearl buttons, contrast piping, gold-thread embroidery, accompanied by matching clutch bag and beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -28296,33 +28368,37 @@
      "color_name_pl": "szmaragdowy",
      "color_name_en": "emerald",
      "hex": "#0F6B4F",
-     "image": "",
+     "image": "/catalog/butik/cou-052_emerald.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-052_emerald.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-052_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-052_burgundy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-052_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-052_cobaltblue.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-052_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-052_rubyred.webp"
     }
    ],
    "description_en": "Stand-collar blouse from the Couture line, “Złota Scena” collection. Material: duchesse satin. Colour: deep teal (also in emerald, burgundy, cobalt blue, ruby red). Details: pearl buttons, beaded cuffs, hand-embroidered floral motif, accompanied by matching pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -28998,33 +29074,37 @@
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cou-060_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-060_dustyblue.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cou-060_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-060_lavender.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cou-060_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-060_sagegreen.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-060_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-060_cream.webp"
     }
    ],
    "description_en": "High-wrap midi dress from the Couture line, “Haute Couture Luna” collection. Material: silk taffeta. Colour: champagne (also in dusty blue, lavender, sage green, cream). Details: waist tie, covered buttons, hand-embroidered floral motif, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -29094,33 +29174,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-061_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-061_navy.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-061_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-061_champagne.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-061_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-061_burgundy.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-061_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-061_black.webp"
     }
    ],
    "description_en": "Jabot blouse from the Couture line, “Noc Premiery” collection. Material: sequined silk crepe on opaque lining. Colour: gold (also in navy, champagne, burgundy, black). Details: in-seam pockets, pearl buttons, tucked cuffs, accompanied by matching silk scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -29916,33 +30000,37 @@
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-070_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-070_cobaltblue.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-070_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-070_plum.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-070_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-070_burgundy.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-070_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-070_rubyred.webp"
     }
    ],
    "description_en": "Oversized shirt from the Couture line, “Haute Couture Luna” collection. Material: silk mikado. Colour: emerald (also in cobalt blue, plum, burgundy, ruby red). Details: decorative topstitching, fabric appliqués, beaded cuffs, accompanied by matching hat and beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -30783,33 +30871,37 @@
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-079_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-079_powderpink.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-079_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-079_champagne.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cou-079_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-079_dustyblue.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-079_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-079_cream.webp"
     }
    ],
    "description_en": "Peplum midi dress from the Couture line, “Gala Księżycowa” collection. Material: silk taffeta. Colour: sage green (also in powder pink, champagne, dusty blue, cream). Details: hand-embroidered floral motif, cord trim, decorative topstitching, accompanied by matching clutch bag and pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -30883,33 +30975,37 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-080_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-080_black.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-080_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-080_champagne.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-080_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-080_burgundy.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-080_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-080_navy.webp"
     }
    ],
    "description_en": "Puff-sleeve blouse from the Couture line, “Noc Premiery” collection. Material: silk taffeta. Colour: silver (also in black, champagne, burgundy, navy). Details: hand-embroidered floral motif, velvet piping, in-seam pockets, accompanied by matching gloves and beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -31702,33 +31798,37 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-089_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-089_cream.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cou-089_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-089_camel.webp"
     },
     {
      "color_name_pl": "perłowy szary",
      "color_name_en": "pearl grey",
      "hex": "#CFCFCB",
-     "image": "",
+     "image": "/catalog/butik/cou-089_pearlgrey.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-089_pearlgrey.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-089_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-089_black.webp"
     }
    ],
    "description_en": "Collared A-line dress from the Couture line, “Haute Couture Luna” collection. Material: silk mikado. Colour: white (also in cream, camel, pearl grey, black). Details: tucked cuffs, hand-sewn seed pearls, velvet piping, accompanied by matching gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -31798,33 +31898,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-090_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-090_navy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-090_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-090_cobaltblue.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-090_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-090_burgundy.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-090_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-090_plum.webp"
     }
    ],
    "description_en": "Gathered-yoke blouse from the Couture line, “Noc Premiery” collection. Material: sequined silk crepe on opaque lining. Colour: ruby red (also in navy, cobalt blue, burgundy, plum). Details: beaded cuffs, in-seam pockets, gold buttons, accompanied by matching gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -32608,33 +32712,37 @@
      "color_name_pl": "złoty",
      "color_name_en": "gold",
      "hex": "#C9A246",
-     "image": "",
+     "image": "/catalog/butik/cou-099_gold.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-099_gold.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-099_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-099_burgundy.webp"
     },
     {
      "color_name_pl": "srebrny",
      "color_name_en": "silver",
      "hex": "#BFC3C8",
-     "image": "",
+     "image": "/catalog/butik/cou-099_silver.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-099_silver.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-099_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-099_navy.webp"
     }
    ],
    "description_en": "Stand-collar pleated dress from the Couture line, “Gala Księżycowa” collection. Material: duchesse satin. Colour: black (also in gold, burgundy, silver, navy). Details: decorative topstitching, beaded cuffs, waist tie, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -32708,33 +32816,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-100_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-100_navy.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-100_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-100_cream.webp"
     },
     {
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cou-100_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-100_graphite.webp"
     },
     {
      "color_name_pl": "wielbłądzi",
      "color_name_en": "camel",
      "hex": "#B48A5A",
-     "image": "",
+     "image": "/catalog/butik/cou-100_camel.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-100_camel.webp"
     }
    ],
    "description_en": "Stand-collar blouse from the Couture line, “Złota Scena” collection. Material: brocade. Colour: pearl grey (also in navy, cream, graphite, camel). Details: hand-sewn seed pearls, in-seam pockets, hand-pleated front, accompanied by matching silk scarf and pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -33486,33 +33598,37 @@
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-109_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-109_cobaltblue.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-109_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-109_plum.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-109_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-109_burgundy.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-109_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-109_rubyred.webp"
     }
    ],
    "description_en": "Oversized shirt from the Couture line, “Gala Księżycowa” collection. Material: sequined silk crepe on opaque lining. Colour: navy (also in cobalt blue, plum, burgundy, ruby red). Details: gold buttons, in-seam pockets, beaded cuffs, accompanied by matching silk scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -34190,17 +34306,19 @@
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-117_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-117_cream.webp"
     },
     {
      "color_name_pl": "butelkowa zieleń",
      "color_name_en": "bottle green",
      "hex": "#1F4A35",
-     "image": "",
+     "image": "/catalog/butik/cou-117_bottlegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-117_bottlegreen.webp"
     }
    ],
    "description_en": "Square scarf from the Couture line, “Gala Księżycowa” collection. Material: hand-rolled silk. Colour: burgundy (also in cream, bottle green). Details: contrast edging, pearl accents. Elegant, fully covering cut in opaque fabric.",
@@ -34270,33 +34388,37 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-118_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-118_black.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cou-118_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-118_white.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-118_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-118_cream.webp"
     },
     {
      "color_name_pl": "grafitowy",
      "color_name_en": "graphite",
      "hex": "#3F4148",
-     "image": "",
+     "image": "/catalog/butik/cou-118_graphite.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-118_graphite.webp"
     }
    ],
    "description_en": "Stand-collar pleated dress from the Couture line, “Noc Premiery” collection. Material: silk mikado. Colour: navy (also in black, white, cream, graphite). Details: hand-embroidered floral motif, waist tie, covered buttons, accompanied by matching buckle belt placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -34370,33 +34492,37 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-119_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-119_burgundy.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-119_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-119_rubyred.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-119_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-119_navy.webp"
     },
     {
      "color_name_pl": "szmaragdowy",
      "color_name_en": "emerald",
      "hex": "#0F6B4F",
-     "image": "",
+     "image": "/catalog/butik/cou-119_emerald.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-119_emerald.webp"
     }
    ],
    "description_en": "Ruffle-cuff blouse from the Couture line, “Haute Couture Luna” collection. Material: duchesse satin. Colour: cobalt blue (also in burgundy, ruby red, navy, emerald). Details: hand-embroidered floral motif, gathered shoulders, pleated inserts, accompanied by matching beret and silk scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -34858,17 +34984,19 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-124_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-124_burgundy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-124_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-124_cobaltblue.webp"
     },
     {
      "color_name_pl": "granatowy",
@@ -34954,33 +35082,37 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-125_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-125_black.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-125_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-125_navy.webp"
     },
     {
      "color_name_pl": "srebrny",
      "color_name_en": "silver",
      "hex": "#BFC3C8",
-     "image": "",
+     "image": "/catalog/butik/cou-125_silver.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-125_silver.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-125_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-125_burgundy.webp"
     }
    ],
    "description_en": "Pleated-skirt gown from the Couture line, “Noc Premiery” collection. Material: velvet. Colour: gold (also in black, navy, silver, burgundy). Details: pleated inserts, beaded cuffs, hand-pleated front, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35120,33 +35252,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-127_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-127_navy.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cou-127_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-127_deepteal.webp"
     },
     {
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-127_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-127_rubyred.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-127_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-127_plum.webp"
     }
    ],
    "description_en": "Top-handle bag from the Couture line, “Gala Księżycowa” collection. Material: brocade. Colour: cobalt blue (also in navy, deep teal, ruby red, plum). Details: crystal accents, embroidered tiny stars. Elegant, fully covering cut in opaque fabric.",
@@ -35216,17 +35352,19 @@
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cou-128_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-128_white.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-128_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-128_black.webp"
     }
    ],
    "description_en": "Puff-sleeve empire dress from the Couture line, “Limitowana Aurora” collection. Material: silk mikado. Colour: graphite (also in white, black). Details: waist tie, hand-embroidered floral motif, fabric appliqués, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35296,33 +35434,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-129_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-129_navy.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-129_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-129_burgundy.webp"
     },
     {
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-129_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-129_black.webp"
     },
     {
      "color_name_pl": "srebrny",
      "color_name_en": "silver",
      "hex": "#BFC3C8",
-     "image": "",
+     "image": "/catalog/butik/cou-129_silver.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-129_silver.webp"
     }
    ],
    "description_en": "Collared blouse from the Couture line, “Gala Księżycowa” collection. Material: velvet. Colour: gold (also in navy, burgundy, black, silver). Details: tucked cuffs, cuffed sleeves, gold-thread embroidery, accompanied by matching scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35392,33 +35534,37 @@
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-130_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-130_burgundy.webp"
     },
     {
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-130_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-130_navy.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-130_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-130_champagne.webp"
     },
     {
      "color_name_pl": "złoty",
      "color_name_en": "gold",
      "hex": "#C9A246",
-     "image": "",
+     "image": "/catalog/butik/cou-130_gold.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-130_gold.webp"
     }
    ],
    "description_en": "Tie-wrap midi skirt from the Couture line, “Gala Księżycowa” collection. Material: silk mikado. Colour: silver (also in burgundy, navy, champagne, gold). Details: gold-thread embroidery, beaded waistband, pearl buttons, accompanied by matching clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35492,33 +35638,37 @@
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-131_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-131_powderpink.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cou-131_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-131_sagegreen.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cou-131_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-131_lavender.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-131_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-131_champagne.webp"
     }
    ],
    "description_en": "Marlene trousers from the Couture line, “Noc Premiery” collection. Material: brocade. Colour: cream (also in powder pink, sage green, lavender, champagne). Details: beaded waistband, flap pockets, piped waistband, accompanied by matching pearl earrings and gloves placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35592,33 +35742,37 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-132_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-132_champagne.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cou-132_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-132_dustyblue.webp"
     },
     {
      "color_name_pl": "kremowy",
      "color_name_en": "cream",
      "hex": "#F1E6D0",
-     "image": "",
+     "image": "/catalog/butik/cou-132_cream.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-132_cream.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-132_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-132_powderpink.webp"
     }
    ],
    "description_en": "Double-breasted blazer from the Couture line, “Haute Couture Luna” collection. Material: silk mikado. Colour: lavender (also in champagne, dusty blue, cream, powder pink). Details: gold buttons, pleated inserts, hand-sewn seed pearls, accompanied by matching gloves and clutch bag placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35688,17 +35842,19 @@
      "color_name_pl": "czarny",
      "color_name_en": "black",
      "hex": "#1A1A1A",
-     "image": "",
+     "image": "/catalog/butik/cou-133_black.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-133_black.webp"
     },
     {
      "color_name_pl": "biały",
      "color_name_en": "white",
      "hex": "#F7F7F5",
-     "image": "",
+     "image": "/catalog/butik/cou-133_white.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-133_white.webp"
     }
    ],
    "description_en": "Puff-sleeve sweater from the Couture line, “Limitowana Aurora” collection. Material: cashmere-silk. Colour: graphite (also in black, white). Details: ribbed trims, elbow patches, contrast cuff stripes, accompanied by matching pearl brooch placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35768,33 +35924,37 @@
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-134_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-134_champagne.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-134_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-134_powderpink.webp"
     },
     {
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cou-134_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-134_lavender.webp"
     },
     {
      "color_name_pl": "gołębi błękit",
      "color_name_en": "dusty blue",
      "hex": "#7D96B5",
-     "image": "",
+     "image": "/catalog/butik/cou-134_dustyblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-134_dustyblue.webp"
     }
    ],
    "description_en": "Covered-shoulder gown from the Couture line, “Noc Premiery” collection. Material: brocade. Colour: cream (also in champagne, powder pink, lavender, dusty blue). Details: beaded cuffs, pleated inserts, tucked cuffs, accompanied by matching silk scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35868,33 +36028,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-135_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-135_navy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-135_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-135_cobaltblue.webp"
     },
     {
      "color_name_pl": "szmaragdowy",
      "color_name_en": "emerald",
      "hex": "#0F6B4F",
-     "image": "",
+     "image": "/catalog/butik/cou-135_emerald.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-135_emerald.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-135_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-135_burgundy.webp"
     }
    ],
    "description_en": "Velour tracksuit from the Couture line, “Złota Scena” collection. Material: cashmere jersey. Colour: ruby red (also in navy, cobalt blue, emerald, burgundy). Details: full zip to the neck, contrast side stripes, embroidered crescent moon, accompanied by matching gloves and beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -35959,33 +36123,37 @@
      "color_name_pl": "granatowy",
      "color_name_en": "navy",
      "hex": "#1F2A44",
-     "image": "",
+     "image": "/catalog/butik/cou-136_navy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-136_navy.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-136_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-136_cobaltblue.webp"
     },
     {
      "color_name_pl": "bordowy",
      "color_name_en": "burgundy",
      "hex": "#6D1F2C",
-     "image": "",
+     "image": "/catalog/butik/cou-136_burgundy.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-136_burgundy.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-136_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-136_plum.webp"
     }
    ],
    "description_en": "Beret from the Couture line, “Haute Couture Luna” collection. Material: velvet. Colour: deep teal (also in navy, cobalt blue, burgundy, plum). Details: pearl accents, ribbon bow, crystal accents. Elegant, fully covering cut in opaque fabric.",
@@ -36055,33 +36223,37 @@
      "color_name_pl": "rubinowy",
      "color_name_en": "ruby red",
      "hex": "#8E1530",
-     "image": "",
+     "image": "/catalog/butik/cou-137_rubyred.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-137_rubyred.webp"
     },
     {
      "color_name_pl": "morski",
      "color_name_en": "deep teal",
      "hex": "#1E6B6E",
-     "image": "",
+     "image": "/catalog/butik/cou-137_deepteal.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-137_deepteal.webp"
     },
     {
      "color_name_pl": "śliwkowy",
      "color_name_en": "plum",
      "hex": "#5E2A4A",
-     "image": "",
+     "image": "/catalog/butik/cou-137_plum.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-137_plum.webp"
     },
     {
      "color_name_pl": "kobaltowy",
      "color_name_en": "cobalt blue",
      "hex": "#1F4FA8",
-     "image": "",
+     "image": "/catalog/butik/cou-137_cobaltblue.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-137_cobaltblue.webp"
     }
    ],
    "description_en": "Long-sleeve maxi dress from the Couture line, “Noc Premiery” collection. Material: sequined silk crepe on opaque lining. Colour: emerald (also in ruby red, deep teal, plum, cobalt blue). Details: pleated inserts, fabric appliqués, gathered shoulders, accompanied by matching beret placed beside it. Elegant, fully covering cut in opaque fabric.",
@@ -36155,33 +36327,37 @@
      "color_name_pl": "lawendowy",
      "color_name_en": "lavender",
      "hex": "#B8A8D6",
-     "image": "",
+     "image": "/catalog/butik/cou-138_lavender.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-138_lavender.webp"
     },
     {
      "color_name_pl": "szałwiowy",
      "color_name_en": "sage green",
      "hex": "#9CAF94",
-     "image": "",
+     "image": "/catalog/butik/cou-138_sagegreen.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-138_sagegreen.webp"
     },
     {
      "color_name_pl": "szampański",
      "color_name_en": "champagne",
      "hex": "#E6D3B0",
-     "image": "",
+     "image": "/catalog/butik/cou-138_champagne.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-138_champagne.webp"
     },
     {
      "color_name_pl": "pudrowy róż",
      "color_name_en": "powder pink",
      "hex": "#E8C4C4",
-     "image": "",
+     "image": "/catalog/butik/cou-138_powderpink.jpg",
      "default": false,
-     "image_ready": false
+     "image_ready": true,
+     "image_webp": "/catalog/butik/cou-138_powderpink.webp"
     }
    ],
    "description_en": "Tie-neck blouse from the Couture line, “Haute Couture Luna” collection. Material: silk mikado. Colour: dusty blue (also in lavender, sage green, champagne, powder pink). Details: cord trim, tucked cuffs, hand-sewn seed pearls, accompanied by matching pearl brooch and scarf placed beside it. Elegant, fully covering cut in opaque fabric.",
