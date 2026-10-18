@@ -976,7 +976,7 @@ class H(SimpleHTTPRequestHandler):
             except PermissionError: return self._json({"ok": True})  # spam: udajemy sukces, nic nie zapisujemy
             except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
             except ValueError as e: return self._json({"error": str(e)}, 400)
-            try: _mod_push("Nowe zgłoszenie do projektu Luna", f"{rec['name']} – {rec['role_other'] or rec['role']}")
+            try: _mod_push("Nowe zgłoszenie do projektu Luna", f"{rec['name'] or '(bez pseudonimu)'} – {rec['role_other'] or rec['role']}")
             except Exception: pass
             return self._json({"ok": True})
         if p == "/api/track":

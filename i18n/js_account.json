@@ -13,10 +13,6 @@
 "['🎵 Luna’s quiet music', 'New original jazz tracks behind the chat – off by default, quiet (15%), paused during voice chat and in the background. Agent videos now land in your Inbox, and the wall shows video quality.']"
 ],
 [
-"const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';",
-"const ADULT = 'I declare that I am an adult (18+) and have my own bank account.';"
-],
-[
 "{darmowy: 'Darmowy', podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'}",
 "{darmowy: 'Free', podstawowa: 'Basic', premium: 'Premium', pro: 'Pro / Ultra'}"
 ],
@@ -69,10 +65,6 @@
 "' – email confirmation is coming soon'"
 ],
 [
-"Oświadczenie 18+: ${ME.adult ? 'złożone ' + fmtD(ME.adult_at) : 'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until) : ''}",
-"18+ declaration: ${ME.adult ? 'made ' + fmtD(ME.adult_at) : 'none'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' until ' + fmtD(ME.until) : ''}"
-],
-[
 "<label>Kod testera<input",
 "<label>Tester code<input"
 ],
@@ -113,16 +105,8 @@
 "<label>Nickname * (shown publicly, no first or last name)<input"
 ],
 [
-"<label>Data urodzenia *<input",
-"<label>Date of birth *<input"
-],
-[
 "Akceptuję <a href=\"/regulamin.html\" target=\"_blank\">regulamin</a> i <a href=\"/privacy.html\" target=\"_blank\">informację o prywatności</a>. *",
 "I accept the <a href=\"/regulamin.html\" target=\"_blank\">terms</a> and the <a href=\"/privacy.html\" target=\"_blank\">privacy notice</a>. *"
-],
-[
-"To oświadczenie – nie weryfikujemy wieku ani konta bankowego.",
-"This is a declaration – we don’t verify your age or bank account."
 ],
 [
 "type=\"button\">Zaloguj</button>",
@@ -153,10 +137,6 @@
 "`Payment received ✅ The ${p.name} plan is active until ${"
 ],
 [
-"}. Potwierdzenie wyśle Stripe na Twój e-mail.`",
-"}. Stripe will email you a confirmation.`"
-],
-[
 "'Płatność jest jeszcze w toku (np. BLIK czeka na potwierdzenie w banku). Odśwież stronę za chwilę – jeśli dostęp się nie pojawi, zgłoś to w zakładce „Problemy techniczne”.'",
 "'The payment is still in progress (e.g. BLIK is waiting for bank confirmation). Refresh in a moment – if access doesn’t appear, report it under “Technical problems”.'"
 ],
@@ -179,10 +159,6 @@
 [
 "['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.']",
 "['🛍 The whole new Boutique collection', 'Every outfit with a photo is now on sale. More arrive as soon as they have a photo.']"
-],
-[
-"['🎁 Poleć Lunę', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
-"['🎁 Recommend Luna', 'You both get 7 days of Premium after the referred person’s first purchase (max. 10 a month). Your link is in Settings.']"
 ],
 [
 "['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
@@ -263,6 +239,18 @@
 [
 "['💌 Skrzynka, Znajomi i czat', 'Ikona 📬 w aplikacji: ważne sprawy, nowości i wyniki Bitew. Znajomi po nicku, linku lub QR i prywatny czat z emoji. Tylko nicki – bez e-maili.']",
 "['💌 Inbox, Friends and chat', 'The 📬 icon in the app: important matters, news and Battle results. Friends by nickname, link or QR and a private chat with emoji. Nicknames only – no e-mails.']"
+],
+[
+"'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until)",
+"'none'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' until ' + fmtD(ME.until)"
+],
+[
+"Potwierdzenie wyśle partner płatniczy na Twój e-mail.",
+"The payment partner will send a confirmation to your email."
+],
+[
+"['🎁 Zaproś znajomych', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
+"['🎁 Invite friends', 'You recommend – you both get 7 days of Premium after the invited person’s first purchase (max. 10 per month). You’ll find your link in Settings.']"
 ]
 ],
 "es": [
@@ -277,10 +265,6 @@
 [
 "['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.']",
 "['🎵 Música suave de Luna', 'Nuevas piezas de jazz originales de fondo en el chat: desactivadas por defecto, bajito (15 %), en pausa durante la conversación por voz y en segundo plano. Los vídeos de agentes llegan al Buzón y el muro muestra la calidad del vídeo.']"
-],
-[
-"const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';",
-"const ADULT = 'Declaro que soy mayor de edad (18+) y tengo una cuenta bancaria propia.';"
 ],
 [
 "{darmowy: 'Darmowy', podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'}",
@@ -335,10 +319,6 @@
 "': la confirmación por correo llegará pronto'"
 ],
 [
-"Oświadczenie 18+: ${ME.adult ? 'złożone ' + fmtD(ME.adult_at) : 'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until) : ''}",
-"Declaración 18+: ${ME.adult ? 'hecha el ' + fmtD(ME.adult_at) : 'no'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' hasta el ' + fmtD(ME.until) : ''}"
-],
-[
 "<label>Kod testera<input",
 "<label>Código de tester<input"
 ],
@@ -379,16 +359,8 @@
 "<label>Apodo * (público, sin nombre ni apellidos)<input"
 ],
 [
-"<label>Data urodzenia *<input",
-"<label>Fecha de nacimiento *<input"
-],
-[
 "Akceptuję <a href=\"/regulamin.html\" target=\"_blank\">regulamin</a> i <a href=\"/privacy.html\" target=\"_blank\">informację o prywatności</a>. *",
 "Acepto las <a href=\"/regulamin.html\" target=\"_blank\">condiciones</a> y la <a href=\"/privacy.html\" target=\"_blank\">información de privacidad</a>. *"
-],
-[
-"To oświadczenie – nie weryfikujemy wieku ani konta bankowego.",
-"Es una declaración: no verificamos la edad ni la cuenta bancaria."
 ],
 [
 "type=\"button\">Zaloguj</button>",
@@ -419,10 +391,6 @@
 "`Pago recibido ✅ El plan ${p.name} está activo hasta el ${"
 ],
 [
-"}. Potwierdzenie wyśle Stripe na Twój e-mail.`",
-"}. Stripe te enviará la confirmación por correo.`"
-],
-[
 "'Płatność jest jeszcze w toku (np. BLIK czeka na potwierdzenie w banku). Odśwież stronę za chwilę – jeśli dostęp się nie pojawi, zgłoś to w zakładce „Problemy techniczne”.'",
 "'El pago sigue en curso (p. ej., BLIK espera la confirmación del banco). Recarga en un momento; si el acceso no aparece, avísanos en «Problemas técnicos».'"
 ],
@@ -445,10 +413,6 @@
 [
 "['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.']",
 "['🛍 Toda la nueva colección de la Boutique', 'Todos los conjuntos con foto ya están a la venta. Llegan más en cuanto tienen foto.']"
-],
-[
-"['🎁 Poleć Lunę', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
-"['🎁 Recomienda a Luna', 'Ambos recibís 7 días de Premium tras la primera compra de la persona recomendada (máx. 10 al mes). Tu enlace está en Ajustes.']"
 ],
 [
 "['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
@@ -529,6 +493,18 @@
 [
 "['💌 Skrzynka, Znajomi i czat', 'Ikona 📬 w aplikacji: ważne sprawy, nowości i wyniki Bitew. Znajomi po nicku, linku lub QR i prywatny czat z emoji. Tylko nicki – bez e-maili.']",
 "['💌 Buzón, Amigos y chat', 'El icono 📬 en la app: asuntos importantes, novedades y resultados de Batallas. Amigos por nick, enlace o QR y chat privado con emoji. Solo nicks, sin e-mails.']"
+],
+[
+"'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until)",
+"'no'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' hasta ' + fmtD(ME.until)"
+],
+[
+"Potwierdzenie wyśle partner płatniczy na Twój e-mail.",
+"El socio de pagos te enviará la confirmación por correo."
+],
+[
+"['🎁 Zaproś znajomych', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
+"['🎁 Invita a tus amigos', 'Recomiendas y ambos recibís 7 días de Premium tras la primera compra de la persona invitada (máx. 10 al mes). Tu enlace está en Ajustes.']"
 ]
 ],
 "de": [
@@ -543,10 +519,6 @@
 [
 "['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.']",
 "['🎵 Lunas leise Musik', 'Neue, eigene Jazz-Stücke im Chat-Hintergrund – standardmäßig aus, leise (15 %), Pause beim Sprachchat und im Hintergrund. Agentinnen-Videos landen im Postfach, die Wand zeigt die Videoqualität.']"
-],
-[
-"const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';",
-"const ADULT = 'Ich erkläre, dass ich volljährig (18+) bin und ein eigenes Bankkonto habe.';"
 ],
 [
 "{darmowy: 'Darmowy', podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'}",
@@ -601,10 +573,6 @@
 "' – E-Mail-Bestätigung folgt bald'"
 ],
 [
-"Oświadczenie 18+: ${ME.adult ? 'złożone ' + fmtD(ME.adult_at) : 'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until) : ''}",
-"18+-Erklärung: ${ME.adult ? 'abgegeben am ' + fmtD(ME.adult_at) : 'keine'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' bis ' + fmtD(ME.until) : ''}"
-],
-[
 "<label>Kod testera<input",
 "<label>Tester-Code<input"
 ],
@@ -645,16 +613,8 @@
 "<label>Nickname * (öffentlich sichtbar, ohne Vor- und Nachnamen)<input"
 ],
 [
-"<label>Data urodzenia *<input",
-"<label>Geburtsdatum *<input"
-],
-[
 "Akceptuję <a href=\"/regulamin.html\" target=\"_blank\">regulamin</a> i <a href=\"/privacy.html\" target=\"_blank\">informację o prywatności</a>. *",
 "Ich akzeptiere die <a href=\"/regulamin.html\" target=\"_blank\">AGB</a> und die <a href=\"/privacy.html\" target=\"_blank\">Datenschutzhinweise</a>. *"
-],
-[
-"To oświadczenie – nie weryfikujemy wieku ani konta bankowego.",
-"Das ist eine Erklärung – wir prüfen weder Alter noch Bankkonto."
 ],
 [
 "type=\"button\">Zaloguj</button>",
@@ -685,10 +645,6 @@
 "`Zahlung erhalten ✅ Der Plan ${p.name} ist aktiv bis ${"
 ],
 [
-"}. Potwierdzenie wyśle Stripe na Twój e-mail.`",
-"}. Stripe schickt dir eine Bestätigung per E-Mail.`"
-],
-[
 "'Płatność jest jeszcze w toku (np. BLIK czeka na potwierdzenie w banku). Odśwież stronę za chwilę – jeśli dostęp się nie pojawi, zgłoś to w zakładce „Problemy techniczne”.'",
 "'Die Zahlung läuft noch (z. B. wartet BLIK auf die Bankbestätigung). Lade gleich neu – erscheint der Zugang nicht, melde es unter „Technische Probleme“.'"
 ],
@@ -711,10 +667,6 @@
 [
 "['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.']",
 "['🛍 Die ganze neue Boutique-Kollektion', 'Alle Outfits mit Foto sind jetzt erhältlich. Weitere kommen, sobald sie ein Foto haben.']"
-],
-[
-"['🎁 Poleć Lunę', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
-"['🎁 Luna empfehlen', 'Ihr bekommt beide 7 Tage Premium nach dem ersten Kauf der empfohlenen Person (max. 10 pro Monat). Deinen Link findest du in den Einstellungen.']"
 ],
 [
 "['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
@@ -795,6 +747,18 @@
 [
 "['💌 Skrzynka, Znajomi i czat', 'Ikona 📬 w aplikacji: ważne sprawy, nowości i wyniki Bitew. Znajomi po nicku, linku lub QR i prywatny czat z emoji. Tylko nicki – bez e-maili.']",
 "['💌 Postfach, Freunde und Chat', 'Das 📬-Symbol in der App: Wichtiges, Neuigkeiten und Battle-Ergebnisse. Freunde per Nick, Link oder QR und privater Chat mit Emoji. Nur Nicks – keine E-Mails.']"
+],
+[
+"'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until)",
+"'keine'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' bis ' + fmtD(ME.until)"
+],
+[
+"Potwierdzenie wyśle partner płatniczy na Twój e-mail.",
+"Die Bestätigung schickt dir der Zahlungspartner per E-Mail."
+],
+[
+"['🎁 Zaproś znajomych', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
+"['🎁 Freunde einladen', 'Du empfiehlst – ihr bekommt beide 7 Tage Premium nach dem ersten Kauf der eingeladenen Person (max. 10 pro Monat). Deinen Link findest du in den Einstellungen.']"
 ]
 ],
 "uk": [
@@ -809,10 +773,6 @@
 [
 "['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.']",
 "['🎵 Тиха музика Луни', 'Нові оригінальні джазові треки у фоні чату – типово вимкнені, тихо (15 %), пауза під час голосової розмови та у фоні. Відео агенток надходять у Скриньку, а на стіні видно якість відео.']"
-],
-[
-"const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';",
-"const ADULT = 'Заявляю, що я повнолітня особа (18+) і маю власний банківський рахунок.';"
 ],
 [
 "{darmowy: 'Darmowy', podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'}",
@@ -867,10 +827,6 @@
 "' — підтвердження е-пошти незабаром'"
 ],
 [
-"Oświadczenie 18+: ${ME.adult ? 'złożone ' + fmtD(ME.adult_at) : 'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until) : ''}",
-"Заява 18+: ${ME.adult ? 'подана ' + fmtD(ME.adult_at) : 'немає'} · План: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' до ' + fmtD(ME.until) : ''}"
-],
-[
 "<label>Kod testera<input",
 "<label>Код тестувальника<input"
 ],
@@ -911,16 +867,8 @@
 "<label>Нікнейм * (видно публічно, без імені та прізвища)<input"
 ],
 [
-"<label>Data urodzenia *<input",
-"<label>Дата народження *<input"
-],
-[
 "Akceptuję <a href=\"/regulamin.html\" target=\"_blank\">regulamin</a> i <a href=\"/privacy.html\" target=\"_blank\">informację o prywatności</a>. *",
 "Приймаю <a href=\"/regulamin.html\" target=\"_blank\">правила</a> та <a href=\"/privacy.html\" target=\"_blank\">інформацію про конфіденційність</a>. *"
-],
-[
-"To oświadczenie – nie weryfikujemy wieku ani konta bankowego.",
-"Це заява — ми не перевіряємо вік чи банківський рахунок."
 ],
 [
 "type=\"button\">Zaloguj</button>",
@@ -951,10 +899,6 @@
 "`Оплату отримано ✅ План ${p.name} активний до ${"
 ],
 [
-"}. Potwierdzenie wyśle Stripe na Twój e-mail.`",
-"}. Підтвердження Stripe надішле на вашу е-пошту.`"
-],
-[
 "'Płatność jest jeszcze w toku (np. BLIK czeka na potwierdzenie w banku). Odśwież stronę za chwilę – jeśli dostęp się nie pojawi, zgłoś to w zakładce „Problemy techniczne”.'",
 "'Оплата ще триває (напр. BLIK чекає підтвердження банку). Оновіть сторінку за мить — якщо доступ не з’явиться, повідомте в «Технічні проблеми».'"
 ],
@@ -977,10 +921,6 @@
 [
 "['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.']",
 "['🛍 Уся нова колекція Бутика', 'Усі вбрання з фото вже в продажу. Нові з’являються, щойно мають фото.']"
-],
-[
-"['🎁 Poleć Lunę', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
-"['🎁 Порадь Луну', 'Ви обоє отримаєте 7 днів Premium після першої покупки рекомендованої людини (макс. 10 на місяць). Посилання – у Налаштуваннях.']"
 ],
 [
 "['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
@@ -1061,6 +1001,18 @@
 [
 "['💌 Skrzynka, Znajomi i czat', 'Ikona 📬 w aplikacji: ważne sprawy, nowości i wyniki Bitew. Znajomi po nicku, linku lub QR i prywatny czat z emoji. Tylko nicki – bez e-maili.']",
 "['💌 Скринька, Друзі й чат', 'Значок 📬 у застосунку: важливе, новини й результати Битв. Друзі за ніком, посиланням або QR і приватний чат з емодзі. Лише ніки – без e-mail.']"
+],
+[
+"'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until)",
+"'немає'} · План: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' до ' + fmtD(ME.until)"
+],
+[
+"Potwierdzenie wyśle partner płatniczy na Twój e-mail.",
+"Підтвердження надішле платіжний партнер на вашу е-пошту."
+],
+[
+"['🎁 Zaproś znajomych', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
+"['🎁 Запроси друзів', 'Рекомендуєте — ви обоє отримуєте 7 днів Premium після першої покупки запрошеної особи (макс. 10 на місяць). Посилання знайдете в Налаштуваннях.']"
 ]
 ]
 }

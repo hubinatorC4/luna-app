@@ -79,14 +79,7 @@ function acctUI(){
     $('#a_logout').onclick = async () => { await api('/api/account/logout', {}).catch(() => {}); ME = null; CSRF = ''; acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); };
     $('#a_link').onclick = async () => { try { const r = await api('/api/account/link-tester', {code: $('#a_tester').value}); ME = r.user; localStorage.setItem('luna.tester', ME.tester); acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); } catch(e){ $('#a_err').textContent = '⚠️ ' + e.message; } };
     $('#a_delete').onclick = async () => {
-      const L = (localStorage.getItem('luna.lang') || navigator.language || 'pl').slice(0, 2).toLowerCase();
-      const M = {pl: ['Usunąć konto na zawsze?\n\nUsuniemy konto i dane osobowe (e-mail, imię, hasło, sesje, zgłoszenie testera). Twoje dawne komentarze i wpisy zostaną zanonimizowane jako „Usunięty użytkownik”. Tego nie da się cofnąć.', 'Konto i dane osobowe zostały usunięte.'],
-        en: ['Delete your account for good?\n\nWe will delete your account and personal data (email, name, password, sessions, tester application). Your past comments and posts will be anonymised as “Deleted user”. This cannot be undone.', 'Your account and personal data have been deleted.'],
-        es: ['¿Eliminar tu cuenta para siempre?\n\nEliminaremos la cuenta y tus datos personales (correo, nombre, contraseña, sesiones, solicitud de tester). Tus comentarios y publicaciones anteriores se anonimizarán como «Usuario eliminado». No se puede deshacer.', 'Tu cuenta y tus datos personales se han eliminado.'],
-        de: ['Konto endgültig löschen?\n\nWir löschen dein Konto und deine personenbezogenen Daten (E-Mail, Name, Passwort, Sitzungen, Testeranmeldung). Frühere Kommentare und Beiträge werden als „Gelöschter Nutzer“ anonymisiert. Das kann nicht rückgängig gemacht werden.', 'Dein Konto und deine personenbezogenen Daten wurden gelöscht.'],
-        uk: ['Видалити акаунт назавжди?\n\nМи видалимо акаунт і персональні дані (е-пошту, ім’я, пароль, сесії, заявку тестувальника). Ваші попередні коментарі та дописи буде анонімізовано як «Видалений користувач». Цю дію не можна скасувати.', 'Акаунт і персональні дані видалено.']}[L] || null;
-      // Spójnie z Regulaminem i Polityką prywatności: usuwanie konta w 2 krokach (wpisz nick) z 30 dniami na przywrócenie – w Mój panel.
-      void M; location.href = '/ustawienia.html#del';
+      location.href = '/ustawienia.html#del';
     };
     return;
   }
