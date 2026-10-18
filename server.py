@@ -27,7 +27,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.6.3"
+VERSION = "1.6.4"
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
@@ -624,7 +624,7 @@ def _bg_loop():
             except Exception as e: print("reminder error", repr(e)[:200], file=sys.stderr)
         time.sleep(1)
 
-INBOX_NEWS = {"1.6.3": (
+INBOX_NEWS = {"1.6.4": (
     {"pl": "✨ Co nowego: Skrzynka, Znajomi i czat", "en": "✨ What’s new: Inbox, Friends and chat", "es": "✨ Novedades: Buzón, Amigos y chat", "de": "✨ Neu: Postfach, Freunde und Chat", "uk": "✨ Що нового: Скринька, Друзі й чат"},
     {"pl": "Masz prywatną Skrzynkę 📬 z kategoriami Ważne, Aktualizacje, Bitwy i Znajomi. Dodawaj znajomych po nicku, linku albo kodzie QR i pisz z nimi na prostym czacie z emoji. Tylko nicki – bez e-maili i prawdziwych danych.",
      "en": "You now have a private Inbox 📬 with Important, Updates, Battles and Friends. Add friends by nickname, link or QR code and chat with them using emoji. Nicknames only – no e-mails or real data.",
@@ -892,7 +892,7 @@ class H(SimpleHTTPRequestHandler):
                     return self._json({"ok": True, **battles.chat_list(str(data.get("bid", "")), uid, int(data.get("since") or 0))})
                 if p == "/api/battles/enter":
                     pl, _ = self._plan()
-                    if not plans.has(pl, battles.ENTER_PLAN):
+                    if not battles.is_contestant(uid, pl):   # Premium/Pro/Ultra albo agentka współpracująca
                         return self._json({"error": "plan_required", "required": battles.ENTER_PLAN, "price": CFG["pricing"]["plans"]["premium"]["pln"]}, 402)
                     if not livechat.rate_ok("bte:" + uid, 2, 6): return self._json({"error": "Za szybko."}, 429)
                     e = battles.enter(uid, data)
@@ -908,6 +908,14 @@ class H(SimpleHTTPRequestHandler):
                         try: notify.subscribe(data["sub"], ["battle"], uid, merge=True)
                         except ValueError: pass
                     return self._json({"on": battles.set_notify(uid, on, str(data.get("lang", "pl"))[:2])})
+                if p == "/api/battles/prefs":
+                    return self._json(battles.set_prefs(uid, {k: data[k] for k in ("cats", "scene") if k in data}))
+                if p == "/api/battles/fav":
+                    on = data.get("notify") is True
+                    if on and isinstance(data.get("sub"), dict):
+                        try: notify.subscribe(data["sub"], ["battle"], uid, merge=True)
+                        except ValueError: pass
+                    return self._json({"fav": battles.set_fav(uid, str(data.get("id") or "")[:20], on, str(data.get("lang", "pl"))[:2])})
                 if p == "/api/battles/notes/seen":
                     battles.notes_seen(uid, [str(x)[:12] for x in (data.get("bids") or [])][:30]); return self._json({"ok": True})
                 if p == "/api/battles/privacy":
@@ -1049,7 +1057,7 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"ok": True, "items": avatars.admin_list()})
         return None
     def _bt_pub(self, d, uid):
-        pl, _ = self._plan(); d["my_plan"] = pl; d["logged_in"] = bool(uid); d["can_enter"] = plans.has(pl, battles.ENTER_PLAN)
+        pl, _ = self._plan(); d["my_plan"] = pl; d["logged_in"] = bool(uid); d["can_enter"] = battles.is_contestant(uid, pl)
         show = CFG["pricing"]["show"]
         d["price"] = CFG["pricing"]["plans"]["premium"]["pln"] if show else None
         d["price_pro"] = CFG["pricing"]["plans"]["pro"]["pln"] if show else None
@@ -1074,6 +1082,9 @@ class H(SimpleHTTPRequestHandler):
             if p == "/api/battles":
                 if dev and not antibot.UA_BOT.search(self.headers.get("User-Agent", "") or "bot"): battles.touch(dev)
                 return self._json(self._bt_pub(battles.public(uid, dev, (q.get("b") or [""])[0][:12] or None), uid))
+            if p == "/api/battles/categories":
+                import battle_categories
+                return self._json(dict(battle_categories.public(), basic=battles.basic_scenes()))
             if p == "/api/battles/notes":
                 lg = (q.get("lang") or ["pl"])[0][:2]
                 return self._json({"on": battles.notify_on(uid), "items": [dict(n, text=battles.note_text(n, lg)) for n in battles.notes(uid)]})

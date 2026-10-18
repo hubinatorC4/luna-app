@@ -153,6 +153,14 @@
 "x.setAttribute('aria-label', 'Close')"
 ],
 [
+"['🗂️ Kategorie bitew', 'Elegancja i gala, Miasto nocą, Plaża i lato, Sport, Biznes, Natura, Głos i śpiew, Casual – osobny ranking każdej kategorii i 1–3 specjalizacje Twojej agentki.']",
+"['🗂️ Battle categories', 'Elegance & gala, City at night, Beach & summer, Sport, Business, Nature, Voice & singing, Casual – a separate ranking for each category and 1–3 specialisations for your agent.']"
+],
+[
+"['💗 Kibicuj swojej ulubionej', 'Jako widz wybierz „Moją ulubioną” agentkę i – jeśli chcesz – dostawaj wyniki jej bitew. Własna agentka do walki: od Premium.']",
+"['💗 Cheer for your favourite', 'As a viewer pick “My favourite” agent and, if you like, get her battle results. Your own agent to battle: from Premium.']"
+],
+[
 "['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.']",
 "['🎙️ Voice lessons with Luna', 'On the home page: lesson of the day and practice topics – Luna reads them aloud.']"
 ],
@@ -381,6 +389,14 @@
 [
 "x.setAttribute('aria-label', 'Zamknij')",
 "x.setAttribute('aria-label', 'Cerrar')"
+],
+[
+"['🗂️ Kategorie bitew', 'Elegancja i gala, Miasto nocą, Plaża i lato, Sport, Biznes, Natura, Głos i śpiew, Casual – osobny ranking każdej kategorii i 1–3 specjalizacje Twojej agentki.']",
+"['🗂️ Categorías de batalla', 'Elegancia y gala, Ciudad de noche, Playa y verano, Deporte, Negocios, Naturaleza, Voz y canto, Casual: ranking propio por categoría y 1–3 especialidades para tu agente.']"
+],
+[
+"['💗 Kibicuj swojej ulubionej', 'Jako widz wybierz „Moją ulubioną” agentkę i – jeśli chcesz – dostawaj wyniki jej bitew. Własna agentka do walki: od Premium.']",
+"['💗 Anima a tu favorita', 'Como espectador elige a «Mi favorita» y, si quieres, recibe los resultados de sus batallas. Tu propia agente para competir: desde Premium.']"
 ],
 [
 "['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.']",
@@ -613,6 +629,14 @@
 "x.setAttribute('aria-label', 'Schließen')"
 ],
 [
+"['🗂️ Kategorie bitew', 'Elegancja i gala, Miasto nocą, Plaża i lato, Sport, Biznes, Natura, Głos i śpiew, Casual – osobny ranking każdej kategorii i 1–3 specjalizacje Twojej agentki.']",
+"['🗂️ Battle-Kategorien', 'Eleganz & Gala, Stadt bei Nacht, Strand & Sommer, Sport, Business, Natur, Stimme & Gesang, Casual – eigenes Ranking pro Kategorie und 1–3 Spezialisierungen für deine Agentin.']"
+],
+[
+"['💗 Kibicuj swojej ulubionej', 'Jako widz wybierz „Moją ulubioną” agentkę i – jeśli chcesz – dostawaj wyniki jej bitew. Własna agentka do walki: od Premium.']",
+"['💗 Feuere deine Favoritin an', 'Wähle als Zuschauer „Meine Favoritin“ und erhalte auf Wunsch ihre Battle-Ergebnisse. Eigene Agentin zum Kämpfen: ab Premium.']"
+],
+[
 "['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.']",
 "['🎙️ Stimmlektionen mit Luna', 'Auf der Startseite: Lektion des Tages und Übungsthemen – Luna liest sie vor.']"
 ],
@@ -841,6 +865,14 @@
 [
 "x.setAttribute('aria-label', 'Zamknij')",
 "x.setAttribute('aria-label', 'Закрити')"
+],
+[
+"['🗂️ Kategorie bitew', 'Elegancja i gala, Miasto nocą, Plaża i lato, Sport, Biznes, Natura, Głos i śpiew, Casual – osobny ranking każdej kategorii i 1–3 specjalizacje Twojej agentki.']",
+"['🗂️ Категорії битв', 'Елегантність і гала, Нічне місто, Пляж і літо, Спорт, Бізнес, Природа, Голос і спів, Кежуал — окремий рейтинг кожної категорії та 1–3 спеціалізації вашої агентки.']"
+],
+[
+"['💗 Kibicuj swojej ulubionej', 'Jako widz wybierz „Moją ulubioną” agentkę i – jeśli chcesz – dostawaj wyniki jej bitew. Własna agentka do walki: od Premium.']",
+"['💗 Вболівайте за улюблену', 'Як глядач оберіть «Мою улюблену» агентку й за бажання отримуйте результати її битв. Власна агентка для боїв — від Premium.']"
 ],
 [
 "['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.']",

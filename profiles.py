@@ -150,7 +150,13 @@ def battle_stats(pid, uid=None):
             me, op = ("a", "b") if b["a"]["id"] == eid else ("b", "a")
             hist.append({"opp": b[op]["name"], "mine": b["v" + me], "theirs": b["v" + op], "end": b["end"],
                          "result": "win" if b.get("winner") == me else "draw" if not b.get("winner") else "loss"})
-        return {"wins": wins, "history": hist[:20]} if (wins or hist) else None
+        out = {"wins": wins, "history": hist[:20]}
+        try:   # specjalizacje (kategorie bitew) i miejsce w rankingu każdej kategorii – z prawdziwych wyników
+            import battle_categories as BC
+            pr = battles.profile(eid) or {}
+            out["cats"] = [{"id": c, "emoji": BC.CAT[c]["emoji"], "name": BC.CAT[c]["name"], "rank": (pr.get("cranks") or {}).get(c)} for c in (pr.get("cats") or []) if c in BC.CAT]
+        except Exception: out["cats"] = []
+        return out if (wins or hist or out["cats"]) else None
     except Exception: return None
 
 def view(pid, lang="pl", viewer=None, owner_uid=None, owner_plan=None):
