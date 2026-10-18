@@ -79,6 +79,13 @@ def load_generated():
     except Exception:
         pass
 load_generated()
+try:  # strona „Bezpieczeństwo i anonimowość” (treść w tools/trust_content.py)
+    import sys as _s; _s.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools"))
+    from trust_content import C as _TC
+    _L5 = ["pl", "en", "es", "de", "uk"]
+    PAGES["/zaufanie.html"] = {l: (_TC["_title"][i], _TC["lead"][i][:160]) for i, l in enumerate(_L5) if l in LANGS}
+except Exception:
+    pass
 
 def alternates(base, path):
     p = "/" if path in ("", "/index.html") else path

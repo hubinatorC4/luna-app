@@ -38,6 +38,23 @@ def signup(d, ip_hash=""):
         store.put("testers", t)
         return code, LIMIT - len(t)
 
+def from_application(app):
+    """Przyjęte zgłoszenie z nowego formularza testera (forms18, zweryfikowane 18+) → kod testera + Premium na 60 dni."""
+    with _lock:
+        t = _all()
+        if len(t) >= LIMIT: raise OverflowError("Komplet! Wszystkie 50 miejsc dla testerów jest już zajętych.")
+        old = next((v for v in t.values() if v["email"].lower() == app["email"].lower()), None)
+        if old: code = old["code"]
+        else:
+            code = secrets.token_hex(4).upper()
+            while code in t: code = secrets.token_hex(4).upper()
+            t[code] = {"code": code, "name": app["nickname"], "email": app["email"], "reason": app.get("note", ""), "ring": "fioletowa",
+                       "android": app.get("device") == "android", "t": int(time.time()), "consent": CONSENT, "granted": False, "until": 0,
+                       "ip": app.get("ip", ""), "adult": True, "adult_text": "Weryfikacja 18+ (" + str(app["verification"].get("method")) + ")",
+                       "adult_at": app["verification"].get("at", 0), "f18": app["id"]}
+        t[code]["granted"] = True; t[code]["until"] = int(time.time() + GRANT_DAYS * 86400)
+        store.put("testers", t); return code
+
 def status(code):
     v = _all().get(str(code or "").upper().strip())
     if not v: return {"found": False}

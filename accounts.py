@@ -44,7 +44,7 @@ def signup(d, base_url=""):
     name = re.sub(r"[<>\x00-\x1f]", "", name)
     if not EMAIL_RE.fullmatch(email): raise ValueError("Podaj poprawny adres e-mail.")
     validate_pw(pw)
-    decl = age.check(d)  # Underage → grzeczna odmowa, nic nie zapisujemy
+    decl = age.confirm(d)  # „Masz 18 lat?” → Tak (samodeklaracja, bez daty urodzenia); stare klienty z datą < 18 → Underage
     if d.get("terms") is not True: raise ValueError("Zaakceptuj regulamin i informację o prywatności.")
     import userprof, social
     nick = social.nick_ok(d.get("nick") or name)  # tylko nick (bez imienia i nazwiska); wymagany, unikalny, moderowany
@@ -220,8 +220,17 @@ def expiring(days_lo, days_hi, tag):
 
 def public(u):
     return {"uid": u["uid"], "email": u["email"], "name": u["name"], "verified": u["verified"], "created": u["created"],
-            "adult": bool(u.get("adult")), "adult_at": u.get("adult_at", 0), "tester": u.get("tester", ""), "items": u.get("items", []), **plan(u),
+            "adult": bool(u.get("adult")), "adult_at": u.get("adult_at", 0),
+            "adult_confirmed": bool(u.get("adult_confirmed_at")), "adult_confirmed_at": u.get("adult_confirmed_at", 0), "tester": u.get("tester", ""), "items": u.get("items", []), **plan(u),
             "email_verification_available": notify.email_enabled(), "totp": bool(u.get("totp"))}
+
+def confirm_adult(uid):
+    """Konto bez potwierdzenia 18+ (założone przed wprowadzeniem „Masz 18 lat?”) – potwierdzenie przy następnym logowaniu."""
+    rec = age.confirm({"adult_confirmed": True})
+    with _lock:
+        a = _accts(); u = a.get(uid)
+        if not u: raise KeyError("not found")
+        u.update(rec); store.put("accounts", a); return u
 
 def link_tester(uid, code):
     code = str(code or "").strip().upper()[:12]

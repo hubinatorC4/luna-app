@@ -1,4 +1,6 @@
-"""Deklaracja pełnoletności (18+). To wyłącznie oświadczenie użytkownika – nie weryfikujemy wieku ani konta bankowego."""
+"""Pełnoletność (18+).
+• Strona, aplikacja i rejestracja: proste pytanie „Masz 18 lat?” Tak / Nie – samodeklaracja, zapisujemy tylko adult_confirmed + znacznik czasu.
+• Formularze testerów i castingu: data urodzenia (check) + osobna weryfikacja u zewnętrznego dostawcy (verify18.py)."""
 import datetime, re, threading, time
 import store
 
@@ -24,9 +26,20 @@ def check(d):
     if d.get("adult") is not True: raise ValueError("Zaznacz oświadczenie o pełnoletności i posiadaniu własnego konta bankowego.")
     return {"dob": dob, "adult": True, "adult_text": ADULT_TEXT, "adult_at": int(time.time())}
 
+CONFIRM_TEXT = "Masz 18 lat? – Tak"
+
+def confirm(d):
+    """Samodeklaracja „Masz 18 lat?” → Tak. Bez daty urodzenia. Zwraca pola do zapisania na koncie/urządzeniu."""
+    if d.get("adult_confirmed") is not True and d.get("adult") is not True:
+        raise ValueError("Potwierdź, że masz ukończone 18 lat.")
+    if d.get("dob"):  # starsze wersje aplikacji wciąż wysyłają datę urodzenia – nadal odmawiamy osobom poniżej 18 lat
+        if age_of(str(d.get("dob")).strip()) < 18: raise Underage(UNDER_MSG)
+    now = int(time.time())
+    return {"adult": True, "adult_at": now, "adult_text": CONFIRM_TEXT, "adult_confirmed": True, "adult_confirmed_at": now}
+
 def declare(vid, d, name=""):
     if not re.fullmatch(r"[0-9a-f]{16,32}", str(vid or "")): raise ValueError("bad id")
-    rec = check(d); rec.update({"vid": vid, "name": str(name or "").strip()[:40], "source": str(d.get("source", "app"))[:12]})
+    rec = confirm(d); rec.update({"vid": vid, "name": str(name or "").strip()[:40], "source": str(d.get("source", "app"))[:12]})
     with _lock:
         a = store.get("age_decl", {}) or {}
         a[vid] = rec; store.put("age_decl", a)
@@ -39,5 +52,5 @@ def status(vid):
 def admin_list():
     out = []
     for v in (store.get("age_decl", {}) or {}).values():
-        out.append({"vid": v["vid"], "name": v.get("name", ""), "age": age_of(v["dob"]), "adult": v["adult"], "at": v["adult_at"], "source": v.get("source", "app")})
+        out.append({"vid": v["vid"], "name": v.get("name", ""), "age": age_of(v["dob"]) if v.get("dob") else None, "adult": v["adult"], "at": v["adult_at"], "source": v.get("source", "app")})
     return sorted(out, key=lambda x: -x["at"])

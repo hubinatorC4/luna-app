@@ -1,0 +1,234 @@
+{
+"en": [
+[
+"Konto: e-mail, skrót hasła (Argon2id), nick lub imię (opcjonalnie), potwierdzenie pełnoletności („Masz 18 lat?” – Tak) z datą i godziną, plan i data ważności dostępu. Konta założone przed tą zmianą mogą mieć zapisaną datę urodzenia z wcześniejszego oświadczenia.",
+"Account: email, password hash (Argon2id), nickname or first name (optional), confirmation of adulthood (“Are you 18?” – Yes) with date and time, plan and access expiry date. Accounts created before this change may still hold a date of birth from the earlier declaration."
+],
+[
+"Potwierdzenie 18+ bez konta: odpowiedź „Tak” z datą i losowy identyfikator urządzenia; w przeglądarce zapamiętujemy wybór na 30 dni (localStorage i ciasteczko luna_age18)",
+"18+ confirmation without an account: the “Yes” answer with its date and a random device identifier; your browser remembers the choice for 30 days (localStorage and the luna_age18 cookie)"
+],
+[
+"Zgłoszenia „Dołącz do projektu” (i dawne zgłoszenia „Twarz AI”): imię, e-mail, rola, wiadomość, link, opcjonalny wzrost, data urodzenia, oświadczenie 18+",
+"“Join the project” applications (and earlier “AI face” applications): name, email, role, message, link, optional height, date of birth, 18+ declaration"
+],
+[
+"Formularze testerów i castingu: nick lub pseudonim (bez imienia i nazwiska), e-mail, opcjonalnie telefon i kraj, odpowiedzi z formularza, data urodzenia (tylko do sprawdzenia wieku), treść zgód z datą, opcjonalna próbka głosu (prywatna, bez metadanych, słyszy ją tylko moderator) oraz wynik weryfikacji 18+",
+"Tester and casting forms: nickname or pseudonym (no real name), email, optional phone and country, form answers, date of birth (only to check age), consent wording with date, optional voice sample (private, metadata removed, heard only by the moderator) and the 18+ verification result"
+],
+[
+"Rekrutacja testerów i castingu, potwierdzenie pełnoletności",
+"Recruiting testers and casting, confirming adulthood"
+],
+[
+"Tak, jeśli wysyłasz zgłoszenie (pola dodatkowe – nie)",
+"Yes, if you apply (extra fields – no)"
+],
+[
+"Odrzucone – usuwamy po 90 dniach; pozostałe do 12 miesięcy lub do wycofania zgody. Zgłoszenie i dane możesz usunąć w każdej chwili przez swój link do statusu.",
+"Rejected – deleted after 90 days; others up to 12 months or until you withdraw consent. You can delete your application and data at any time via your status link."
+],
+[
+"Stripe – weryfikacja pełnoletności w formularzach testerów i castingu (Stripe Identity lub karta przez Stripe Checkout, bez obciążenia),",
+"Stripe – adulthood verification in the tester and casting forms (Stripe Identity or a card via Stripe Checkout, no charge),"
+],
+[
+"Cloudflare (Turnstile) – ochrona formularzy przed botami, jeśli jest włączona,",
+"Cloudflare (Turnstile) – protecting forms against bots, if enabled,"
+],
+[
+"Serwis jest przeznaczony wyłącznie dla osób dorosłych (18+). Przy wejściu i przy rejestracji pytamy „Masz 18 lat?” – to samodeklaracja, której nie weryfikujemy. Osobom, które wybiorą „Nie”, odmawiamy dostępu i nie zapisujemy ich danych.",
+"The service is for adults (18+) only. On entry and at registration we ask “Are you 18?” – this is a self-declaration that we do not verify. Anyone who chooses “No” is refused access and we store none of their data."
+],
+[
+"8a. Weryfikacja wieku w formularzach testerów i castingu",
+"8a. Age verification in the tester and casting forms"
+],
+[
+"Tylko w tych dwóch formularzach potwierdzasz pełnoletność u zewnętrznego dostawcy – Stripe (Stripe Payments Europe Ltd., Irlandia): dokumentem tożsamości w Stripe Identity albo kartą płatniczą przez Stripe Checkout, bez obciążenia.",
+"Only in these two forms do you confirm your adulthood with an external provider – Stripe (Stripe Payments Europe Ltd., Ireland): with an ID document in Stripe Identity or with a bank card via Stripe Checkout, without any charge."
+],
+[
+"Dokument, zdjęcie i dane karty wprowadzasz wyłącznie na stronach Stripe – nie trafiają na nasz serwer. Od Stripe zapisujemy tylko: wynik (18+ tak/nie), datę, metodę i identyfikator sesji, a przy karcie markę, 4 ostatnie cyfry i typ karty. Kartę po sprawdzeniu odłączamy. Datę urodzenia z dokumentu odczytujemy wyłącznie do obliczenia wieku i jej nie zapisujemy. Stripe przetwarza dane zgodnie z własną polityką prywatności.",
+"You enter the document, photo and card details only on Stripe’s pages – they never reach our server. From Stripe we store only: the result (18+ yes/no), the date, the method and the session identifier, plus the card brand, last 4 digits and card type for cards. The card is detached after the check. We read the date of birth from the document only to calculate your age and do not store it. Stripe processes data under its own privacy policy."
+],
+[
+"Karta jest słabszym dowodem (kartę debetową może mieć osoba niepełnoletnia), dlatego łączymy ją z Twoim oświadczeniem o dacie urodzenia. Karty przedpłacone nie są akceptowane. Podstawa prawna: zgoda (art. 6 ust. 1 lit. a RODO) oraz prawnie uzasadniony interes – ochrona małoletnich (lit. f). Bez włączonej weryfikacji zgłoszenie pozostaje „oczekujące na weryfikację” i nie może zostać przyjęte.",
+"A card is weaker proof (a debit card can belong to a minor), so we combine it with your date-of-birth declaration. Prepaid cards are not accepted. Legal basis: consent (Art. 6(1)(a) GDPR) and legitimate interest – protecting minors (Art. 6(1)(f)). While verification is not yet enabled, an application stays “pending verification” and cannot be accepted."
+]
+],
+"es": [
+[
+"Konto: e-mail, skrót hasła (Argon2id), nick lub imię (opcjonalnie), potwierdzenie pełnoletności („Masz 18 lat?” – Tak) z datą i godziną, plan i data ważności dostępu. Konta założone przed tą zmianą mogą mieć zapisaną datę urodzenia z wcześniejszego oświadczenia.",
+"Cuenta: correo, hash de la contraseña (Argon2id), apodo o nombre (opcional), confirmación de mayoría de edad («¿Tienes 18 años?» – Sí) con fecha y hora, plan y fecha de caducidad del acceso. Las cuentas creadas antes de este cambio pueden conservar la fecha de nacimiento de la declaración anterior."
+],
+[
+"Potwierdzenie 18+ bez konta: odpowiedź „Tak” z datą i losowy identyfikator urządzenia; w przeglądarce zapamiętujemy wybór na 30 dni (localStorage i ciasteczko luna_age18)",
+"Confirmación 18+ sin cuenta: la respuesta «Sí» con su fecha y un identificador aleatorio del dispositivo; el navegador recuerda la elección 30 días (localStorage y la cookie luna_age18)"
+],
+[
+"Zgłoszenia „Dołącz do projektu” (i dawne zgłoszenia „Twarz AI”): imię, e-mail, rola, wiadomość, link, opcjonalny wzrost, data urodzenia, oświadczenie 18+",
+"Solicitudes «Únete al proyecto» (y antiguas solicitudes «Cara IA»): nombre, correo, rol, mensaje, enlace, altura opcional, fecha de nacimiento, declaración 18+"
+],
+[
+"Formularze testerów i castingu: nick lub pseudonim (bez imienia i nazwiska), e-mail, opcjonalnie telefon i kraj, odpowiedzi z formularza, data urodzenia (tylko do sprawdzenia wieku), treść zgód z datą, opcjonalna próbka głosu (prywatna, bez metadanych, słyszy ją tylko moderator) oraz wynik weryfikacji 18+",
+"Formularios de testers y casting: apodo o seudónimo (sin nombre real), correo, teléfono y país opcionales, respuestas del formulario, fecha de nacimiento (solo para comprobar la edad), texto de los consentimientos con fecha, muestra de voz opcional (privada, sin metadatos, solo la escucha el moderador) y el resultado de la verificación 18+"
+],
+[
+"Rekrutacja testerów i castingu, potwierdzenie pełnoletności",
+"Selección de testers y casting, confirmación de la mayoría de edad"
+],
+[
+"Tak, jeśli wysyłasz zgłoszenie (pola dodatkowe – nie)",
+"Sí, si envías una solicitud (campos adicionales – no)"
+],
+[
+"Odrzucone – usuwamy po 90 dniach; pozostałe do 12 miesięcy lub do wycofania zgody. Zgłoszenie i dane możesz usunąć w każdej chwili przez swój link do statusu.",
+"Rechazadas: se eliminan a los 90 días; las demás, hasta 12 meses o hasta que retires el consentimiento. Puedes eliminar tu solicitud y tus datos en cualquier momento desde tu enlace de estado."
+],
+[
+"Stripe – weryfikacja pełnoletności w formularzach testerów i castingu (Stripe Identity lub karta przez Stripe Checkout, bez obciążenia),",
+"Stripe: verificación de la mayoría de edad en los formularios de testers y casting (Stripe Identity o tarjeta mediante Stripe Checkout, sin cargo),"
+],
+[
+"Cloudflare (Turnstile) – ochrona formularzy przed botami, jeśli jest włączona,",
+"Cloudflare (Turnstile): protección de los formularios contra bots, si está activada,"
+],
+[
+"Serwis jest przeznaczony wyłącznie dla osób dorosłych (18+). Przy wejściu i przy rejestracji pytamy „Masz 18 lat?” – to samodeklaracja, której nie weryfikujemy. Osobom, które wybiorą „Nie”, odmawiamy dostępu i nie zapisujemy ich danych.",
+"El servicio es solo para adultos (18+). Al entrar y al registrarte preguntamos «¿Tienes 18 años?»: es una autodeclaración que no verificamos. A quien elige «No» le denegamos el acceso y no guardamos sus datos."
+],
+[
+"8a. Weryfikacja wieku w formularzach testerów i castingu",
+"8a. Verificación de edad en los formularios de testers y casting"
+],
+[
+"Tylko w tych dwóch formularzach potwierdzasz pełnoletność u zewnętrznego dostawcy – Stripe (Stripe Payments Europe Ltd., Irlandia): dokumentem tożsamości w Stripe Identity albo kartą płatniczą przez Stripe Checkout, bez obciążenia.",
+"Solo en estos dos formularios confirmas tu mayoría de edad con un proveedor externo, Stripe (Stripe Payments Europe Ltd., Irlanda): con un documento de identidad en Stripe Identity o con una tarjeta bancaria mediante Stripe Checkout, sin cargo."
+],
+[
+"Dokument, zdjęcie i dane karty wprowadzasz wyłącznie na stronach Stripe – nie trafiają na nasz serwer. Od Stripe zapisujemy tylko: wynik (18+ tak/nie), datę, metodę i identyfikator sesji, a przy karcie markę, 4 ostatnie cyfry i typ karty. Kartę po sprawdzeniu odłączamy. Datę urodzenia z dokumentu odczytujemy wyłącznie do obliczenia wieku i jej nie zapisujemy. Stripe przetwarza dane zgodnie z własną polityką prywatności.",
+"El documento, la foto y los datos de la tarjeta los introduces solo en las páginas de Stripe: nunca llegan a nuestro servidor. De Stripe guardamos solo el resultado (18+ sí/no), la fecha, el método y el identificador de sesión y, con tarjeta, la marca, los 4 últimos dígitos y el tipo. Tras la comprobación desvinculamos la tarjeta. Leemos la fecha de nacimiento del documento solo para calcular la edad y no la guardamos. Stripe trata los datos según su propia política de privacidad."
+],
+[
+"Karta jest słabszym dowodem (kartę debetową może mieć osoba niepełnoletnia), dlatego łączymy ją z Twoim oświadczeniem o dacie urodzenia. Karty przedpłacone nie są akceptowane. Podstawa prawna: zgoda (art. 6 ust. 1 lit. a RODO) oraz prawnie uzasadniony interes – ochrona małoletnich (lit. f). Bez włączonej weryfikacji zgłoszenie pozostaje „oczekujące na weryfikację” i nie może zostać przyjęte.",
+"La tarjeta es una prueba más débil (una tarjeta de débito puede pertenecer a un menor), por eso la combinamos con tu declaración de fecha de nacimiento. No se aceptan tarjetas prepago. Base jurídica: consentimiento (art. 6.1.a RGPD) e interés legítimo, la protección de menores (art. 6.1.f). Mientras la verificación no esté activa, la solicitud queda «pendiente de verificación» y no puede aceptarse."
+]
+],
+"de": [
+[
+"Konto: e-mail, skrót hasła (Argon2id), nick lub imię (opcjonalnie), potwierdzenie pełnoletności („Masz 18 lat?” – Tak) z datą i godziną, plan i data ważności dostępu. Konta założone przed tą zmianą mogą mieć zapisaną datę urodzenia z wcześniejszego oświadczenia.",
+"Konto: E-Mail, Passwort-Hash (Argon2id), Nickname oder Vorname (optional), Bestätigung der Volljährigkeit („Bist du 18?“ – Ja) mit Datum und Uhrzeit, Plan und Ablaufdatum des Zugangs. Vor dieser Änderung erstellte Konten können noch ein Geburtsdatum aus der früheren Erklärung enthalten."
+],
+[
+"Potwierdzenie 18+ bez konta: odpowiedź „Tak” z datą i losowy identyfikator urządzenia; w przeglądarce zapamiętujemy wybór na 30 dni (localStorage i ciasteczko luna_age18)",
+"18+-Bestätigung ohne Konto: die Antwort „Ja“ mit Datum und eine zufällige Gerätekennung; der Browser merkt sich die Wahl 30 Tage lang (localStorage und Cookie luna_age18)"
+],
+[
+"Zgłoszenia „Dołącz do projektu” (i dawne zgłoszenia „Twarz AI”): imię, e-mail, rola, wiadomość, link, opcjonalny wzrost, data urodzenia, oświadczenie 18+",
+"Bewerbungen „Mach mit beim Projekt“ (und frühere „KI-Gesicht“-Bewerbungen): Name, E-Mail, Rolle, Nachricht, Link, optionale Größe, Geburtsdatum, 18+-Erklärung"
+],
+[
+"Formularze testerów i castingu: nick lub pseudonim (bez imienia i nazwiska), e-mail, opcjonalnie telefon i kraj, odpowiedzi z formularza, data urodzenia (tylko do sprawdzenia wieku), treść zgód z datą, opcjonalna próbka głosu (prywatna, bez metadanych, słyszy ją tylko moderator) oraz wynik weryfikacji 18+",
+"Tester- und Casting-Formulare: Nickname oder Pseudonym (kein echter Name), E-Mail, optional Telefon und Land, Formularantworten, Geburtsdatum (nur zur Altersprüfung), Wortlaut der Einwilligungen mit Datum, optionale Stimmprobe (privat, ohne Metadaten, nur für die Moderation hörbar) und das Ergebnis der 18+-Prüfung"
+],
+[
+"Rekrutacja testerów i castingu, potwierdzenie pełnoletności",
+"Auswahl von Testern und Casting, Bestätigung der Volljährigkeit"
+],
+[
+"Tak, jeśli wysyłasz zgłoszenie (pola dodatkowe – nie)",
+"Ja, wenn du dich bewirbst (Zusatzfelder – nein)"
+],
+[
+"Odrzucone – usuwamy po 90 dniach; pozostałe do 12 miesięcy lub do wycofania zgody. Zgłoszenie i dane możesz usunąć w każdej chwili przez swój link do statusu.",
+"Abgelehnte – nach 90 Tagen gelöscht; übrige bis zu 12 Monate oder bis zum Widerruf. Bewerbung und Daten kannst du jederzeit über deinen Status-Link löschen."
+],
+[
+"Stripe – weryfikacja pełnoletności w formularzach testerów i castingu (Stripe Identity lub karta przez Stripe Checkout, bez obciążenia),",
+"Stripe – Prüfung der Volljährigkeit in den Tester- und Casting-Formularen (Stripe Identity oder Karte über Stripe Checkout, ohne Belastung),"
+],
+[
+"Cloudflare (Turnstile) – ochrona formularzy przed botami, jeśli jest włączona,",
+"Cloudflare (Turnstile) – Schutz der Formulare vor Bots, falls aktiviert,"
+],
+[
+"Serwis jest przeznaczony wyłącznie dla osób dorosłych (18+). Przy wejściu i przy rejestracji pytamy „Masz 18 lat?” – to samodeklaracja, której nie weryfikujemy. Osobom, które wybiorą „Nie”, odmawiamy dostępu i nie zapisujemy ich danych.",
+"Der Dienst ist nur für Erwachsene (18+). Beim Aufruf und bei der Registrierung fragen wir „Bist du 18?“ – eine Selbstauskunft, die wir nicht prüfen. Wer „Nein“ wählt, erhält keinen Zugang, und wir speichern keine Daten."
+],
+[
+"8a. Weryfikacja wieku w formularzach testerów i castingu",
+"8a. Altersprüfung in den Tester- und Casting-Formularen"
+],
+[
+"Tylko w tych dwóch formularzach potwierdzasz pełnoletność u zewnętrznego dostawcy – Stripe (Stripe Payments Europe Ltd., Irlandia): dokumentem tożsamości w Stripe Identity albo kartą płatniczą przez Stripe Checkout, bez obciążenia.",
+"Nur in diesen beiden Formularen bestätigst du deine Volljährigkeit bei einem externen Anbieter – Stripe (Stripe Payments Europe Ltd., Irland): per Ausweis in Stripe Identity oder per Bankkarte über Stripe Checkout, ohne Belastung."
+],
+[
+"Dokument, zdjęcie i dane karty wprowadzasz wyłącznie na stronach Stripe – nie trafiają na nasz serwer. Od Stripe zapisujemy tylko: wynik (18+ tak/nie), datę, metodę i identyfikator sesji, a przy karcie markę, 4 ostatnie cyfry i typ karty. Kartę po sprawdzeniu odłączamy. Datę urodzenia z dokumentu odczytujemy wyłącznie do obliczenia wieku i jej nie zapisujemy. Stripe przetwarza dane zgodnie z własną polityką prywatności.",
+"Ausweis, Foto und Kartendaten gibst du nur auf den Seiten von Stripe ein – sie erreichen unseren Server nie. Von Stripe speichern wir nur: Ergebnis (18+ ja/nein), Datum, Methode und Sitzungskennung, bei Karten zusätzlich Marke, letzte 4 Ziffern und Kartentyp. Die Karte wird nach der Prüfung entfernt. Das Geburtsdatum aus dem Ausweis lesen wir nur zur Altersberechnung und speichern es nicht. Stripe verarbeitet Daten nach eigener Datenschutzerklärung."
+],
+[
+"Karta jest słabszym dowodem (kartę debetową może mieć osoba niepełnoletnia), dlatego łączymy ją z Twoim oświadczeniem o dacie urodzenia. Karty przedpłacone nie są akceptowane. Podstawa prawna: zgoda (art. 6 ust. 1 lit. a RODO) oraz prawnie uzasadniony interes – ochrona małoletnich (lit. f). Bez włączonej weryfikacji zgłoszenie pozostaje „oczekujące na weryfikację” i nie może zostać przyjęte.",
+"Eine Karte ist ein schwächerer Nachweis (eine Debitkarte kann Minderjährigen gehören), daher kombinieren wir sie mit deiner Angabe zum Geburtsdatum. Prepaid-Karten werden nicht akzeptiert. Rechtsgrundlage: Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) und berechtigtes Interesse – Schutz Minderjähriger (lit. f). Solange die Prüfung nicht aktiv ist, bleibt eine Bewerbung „wartet auf Prüfung“ und kann nicht angenommen werden."
+]
+],
+"uk": [
+[
+"Konto: e-mail, skrót hasła (Argon2id), nick lub imię (opcjonalnie), potwierdzenie pełnoletności („Masz 18 lat?” – Tak) z datą i godziną, plan i data ważności dostępu. Konta założone przed tą zmianą mogą mieć zapisaną datę urodzenia z wcześniejszego oświadczenia.",
+"Акаунт: е-пошта, хеш пароля (Argon2id), нік або ім’я (необов’язково), підтвердження повноліття («Вам є 18?» – Так) з датою й часом, план і дата завершення доступу. Акаунти, створені до цієї зміни, можуть ще містити дату народження з попередньої заяви."
+],
+[
+"Potwierdzenie 18+ bez konta: odpowiedź „Tak” z datą i losowy identyfikator urządzenia; w przeglądarce zapamiętujemy wybór na 30 dni (localStorage i ciasteczko luna_age18)",
+"Підтвердження 18+ без акаунта: відповідь «Так» із датою та випадковий ідентифікатор пристрою; браузер пам’ятає вибір 30 днів (localStorage і cookie luna_age18)"
+],
+[
+"Zgłoszenia „Dołącz do projektu” (i dawne zgłoszenia „Twarz AI”): imię, e-mail, rola, wiadomość, link, opcjonalny wzrost, data urodzenia, oświadczenie 18+",
+"Заявки «Приєднатися до проєкту» (і давні заявки «ШІ-обличчя»): ім’я, е-пошта, роль, повідомлення, посилання, необов’язковий зріст, дата народження, заява 18+"
+],
+[
+"Formularze testerów i castingu: nick lub pseudonim (bez imienia i nazwiska), e-mail, opcjonalnie telefon i kraj, odpowiedzi z formularza, data urodzenia (tylko do sprawdzenia wieku), treść zgód z datą, opcjonalna próbka głosu (prywatna, bez metadanych, słyszy ją tylko moderator) oraz wynik weryfikacji 18+",
+"Форми тестувальників і кастингу: нік або псевдонім (без імені й прізвища), е-пошта, необов’язково телефон і країна, відповіді з форми, дата народження (лише для перевірки віку), текст згод із датою, необов’язковий зразок голосу (приватний, без метаданих, чує лише модератор) і результат перевірки 18+"
+],
+[
+"Rekrutacja testerów i castingu, potwierdzenie pełnoletności",
+"Набір тестувальників і кастинг, підтвердження повноліття"
+],
+[
+"Tak, jeśli wysyłasz zgłoszenie (pola dodatkowe – nie)",
+"Так, якщо надсилаєте заявку (додаткові поля – ні)"
+],
+[
+"Odrzucone – usuwamy po 90 dniach; pozostałe do 12 miesięcy lub do wycofania zgody. Zgłoszenie i dane możesz usunąć w każdej chwili przez swój link do statusu.",
+"Відхилені – видаляємо через 90 днів; інші – до 12 місяців або до відкликання згоди. Заявку й дані можна будь-коли видалити через посилання на статус."
+],
+[
+"Stripe – weryfikacja pełnoletności w formularzach testerów i castingu (Stripe Identity lub karta przez Stripe Checkout, bez obciążenia),",
+"Stripe – перевірка повноліття у формах тестувальників і кастингу (Stripe Identity або картка через Stripe Checkout, без списання),"
+],
+[
+"Cloudflare (Turnstile) – ochrona formularzy przed botami, jeśli jest włączona,",
+"Cloudflare (Turnstile) – захист форм від ботів, якщо ввімкнено,"
+],
+[
+"Serwis jest przeznaczony wyłącznie dla osób dorosłych (18+). Przy wejściu i przy rejestracji pytamy „Masz 18 lat?” – to samodeklaracja, której nie weryfikujemy. Osobom, które wybiorą „Nie”, odmawiamy dostępu i nie zapisujemy ich danych.",
+"Сервіс призначений лише для дорослих (18+). Під час входу й реєстрації ми питаємо «Вам є 18?» – це самодекларація, яку ми не перевіряємо. Тим, хто обирає «Ні», відмовляємо в доступі й не зберігаємо їхніх даних."
+],
+[
+"8a. Weryfikacja wieku w formularzach testerów i castingu",
+"8a. Перевірка віку у формах тестувальників і кастингу"
+],
+[
+"Tylko w tych dwóch formularzach potwierdzasz pełnoletność u zewnętrznego dostawcy – Stripe (Stripe Payments Europe Ltd., Irlandia): dokumentem tożsamości w Stripe Identity albo kartą płatniczą przez Stripe Checkout, bez obciążenia.",
+"Лише в цих двох формах ви підтверджуєте повноліття у зовнішнього провайдера – Stripe (Stripe Payments Europe Ltd., Ірландія): документом у Stripe Identity або банківською карткою через Stripe Checkout, без списання."
+],
+[
+"Dokument, zdjęcie i dane karty wprowadzasz wyłącznie na stronach Stripe – nie trafiają na nasz serwer. Od Stripe zapisujemy tylko: wynik (18+ tak/nie), datę, metodę i identyfikator sesji, a przy karcie markę, 4 ostatnie cyfry i typ karty. Kartę po sprawdzeniu odłączamy. Datę urodzenia z dokumentu odczytujemy wyłącznie do obliczenia wieku i jej nie zapisujemy. Stripe przetwarza dane zgodnie z własną polityką prywatności.",
+"Документ, фото й дані картки ви вводите лише на сторінках Stripe – вони не потрапляють на наш сервер. Від Stripe зберігаємо лише: результат (18+ так/ні), дату, метод та ідентифікатор сесії, а для картки – платіжну систему, 4 останні цифри й тип картки. Після перевірки картку від’єднуємо. Дату народження з документа зчитуємо лише для обчислення віку й не зберігаємо. Stripe обробляє дані згідно з власною політикою приватності."
+],
+[
+"Karta jest słabszym dowodem (kartę debetową może mieć osoba niepełnoletnia), dlatego łączymy ją z Twoim oświadczeniem o dacie urodzenia. Karty przedpłacone nie są akceptowane. Podstawa prawna: zgoda (art. 6 ust. 1 lit. a RODO) oraz prawnie uzasadniony interes – ochrona małoletnich (lit. f). Bez włączonej weryfikacji zgłoszenie pozostaje „oczekujące na weryfikację” i nie może zostać przyjęte.",
+"Картка – слабший доказ (дебетову картку може мати неповнолітній), тому поєднуємо її з вашою заявою про дату народження. Передплачені картки не приймаються. Правова підстава: згода (ст. 6 ч. 1 п. a GDPR) і законний інтерес – захист неповнолітніх (п. f). Доки перевірку не ввімкнено, заявка залишається «очікує перевірки» і не може бути прийнята."
+]
+]
+}

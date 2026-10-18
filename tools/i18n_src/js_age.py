@@ -1,0 +1,8 @@
+# account.js – „Masz 18 lat?” przy rejestracji (podmiana podciągów, dlatego klucze są długie i jednoznaczne)
+E = [
+["<b id=\"a18q\">Masz 18 lat? *</b>", "<b id=\"a18q\">Are you 18? *</b>", "<b id=\"a18q\">¿Tienes 18 años? *</b>", "<b id=\"a18q\">Bist du 18? *</b>", "<b id=\"a18q\">Вам є 18? *</b>"],
+["aria-pressed=\"false\">Tak</button>", "aria-pressed=\"false\">Yes</button>", "aria-pressed=\"false\">Sí</button>", "aria-pressed=\"false\">Ja</button>", "aria-pressed=\"false\">Так</button>"],
+["aria-pressed=\"false\">Nie</button>", "aria-pressed=\"false\">No</button>", "aria-pressed=\"false\">No</button>", "aria-pressed=\"false\">Nein</button>", "aria-pressed=\"false\">Ні</button>"],
+["Dziękujemy za szczerość 💚 Luna jest tylko dla osób pełnoletnich. Wróć, gdy skończysz 18 lat – Luna poczeka, ona i tak nie śpi 😉", "Thanks for being honest 💚 Luna is for adults only. Come back when you turn 18 – Luna will wait, she never sleeps anyway 😉", "Gracias por tu sinceridad 💚 Luna es solo para personas adultas. Vuelve cuando cumplas 18: Luna esperará, total, nunca duerme 😉", "Danke für deine Ehrlichkeit 💚 Luna ist nur für Erwachsene. Komm wieder, wenn du 18 bist – Luna wartet, sie schläft ja sowieso nie 😉", "Дякуємо за чесність 💚 Луна лише для повнолітніх. Повертайтеся, коли виповниться 18 – Луна зачекає, вона ж однаково не спить 😉"],
+["Potwierdzenie 18+: ${ME.adult_confirmed ? 'tak, '", "18+ confirmation: ${ME.adult_confirmed ? 'yes, '", "Confirmación 18+: ${ME.adult_confirmed ? 'sí, '", "18+-Bestätigung: ${ME.adult_confirmed ? 'ja, '", "Підтвердження 18+: ${ME.adult_confirmed ? 'так, '"],
+]

@@ -20,6 +20,7 @@ import api_i18n
 import textutil
 import catalog, base64, training, profiles, nicktier, partners, agentwall, quality, userprof, agentvideo, battle_categories
 import promo_share
+import forms18_routes
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox
 from datetime import datetime, timedelta
 try:
@@ -778,7 +779,7 @@ class H(SimpleHTTPRequestHandler):
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         p = urlparse(self.path).path
-        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own", "/api/me/avatar") else 64 * 1024
+        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own", "/api/me/avatar", "/api/forms/casting") else 64 * 1024
         if n > lim: raise ValueError("too large")
         return textutil.fix_surrogates(json.loads(self.rfile.read(n) or b"{}")) if n else {}
 
@@ -1467,6 +1468,9 @@ class H(SimpleHTTPRequestHandler):
             b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
             self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
+        if u.path.startswith(("/api/forms/", "/api/admin/forms")):
+            r = forms18_routes.get(self, u, token_ok, casting_state()["open"])
+            if r is not None: return r
         if u.path == "/api/testers":
             return self._json({"limit": testers.LIMIT, "remaining": testers.remaining(), "rings": testers.RINGS, "consent": testers.CONSENT, "persistent": store.status()["persistent"]})
         if u.path == "/api/testers/status":
@@ -1583,6 +1587,7 @@ class H(SimpleHTTPRequestHandler):
                     if lang == "pl": lang = ""
                     self._vary_lang = True
                 doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, lang, notify.PUBLIC_URL.rstrip("/"))
+                doc = forms18_routes.trust_link(doc, u.path)   # link „Bezpieczeństwo i anonimowość” w stopce (tłumaczony niżej)
                 doc = i18n_pages.legal_note(i18n_pages.apply(doc, u.path, lang), u.path, lang)
                 pid = parse_qs(u.query).get("post", [""])[0]
                 if u.path == "/scianka.html" and re.fullmatch(r"[0-9a-f]{12}|off-\d{1,3}", pid or ""):
@@ -1609,6 +1614,10 @@ class H(SimpleHTTPRequestHandler):
                         if av["photos"] and not av["photos"][0]["url"].startswith("/api/"):
                             doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{notify.PUBLIC_URL.rstrip("/")}{av["photos"][0]["url"]}">', doc, 1)
                 doc = promo_share.inject(doc, u.path, parse_qs(u.query), lang, notify.PUBLIC_URL.rstrip("/"), self._pid_plan)
+                if u.path in ("/index.html", "/agentka.html", "/bitwy.html") and "owner-line.js" not in doc:   # 👑 linia własności agentki
+                    doc = doc.replace("</body>", '<script src="/owner-line.js?v=1.0" defer></script>\n</body>', 1)
+                if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
+                    doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
                 NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
                 if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
                 doc = doc.replace("</head>", '<script src="/sec-client.js"></script>\n</head>', 1)
@@ -1630,6 +1639,10 @@ class H(SimpleHTTPRequestHandler):
             if n > 256 * 1024: return self._json({"error": "too large"}, 413)
             raw = self.rfile.read(n)
             if not payments.verify(raw, self.headers.get("Stripe-Signature", "")): return self._json({"error": "bad signature"}, 400)
+            try:
+                vr = forms18_routes.webhook(json.loads(raw))   # weryfikacja 18+ (formularze testerów i castingu)
+                if vr: return self._json({"ok": True, "result": vr})
+            except Exception as e: sys.stderr.write("verify18 webhook %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
             try: res = payments.handle(json.loads(raw), lambda uid, plan, m: _grant_and_notify(uid, plan, m, "stripe"), accounts.grant_item)
             except Exception as e: sys.stderr.write("webhook error %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
             return self._json({"ok": True, "result": res})
@@ -1642,6 +1655,10 @@ class H(SimpleHTTPRequestHandler):
         if not isinstance(data, dict): return self._json({"error": "bad json"}, 400)
         r = self._post_account(u, data)
         if r is not None: return r
+        if u.path.startswith(("/api/forms/", "/api/admin/forms", "/api/account/confirm-adult")):
+            r = forms18_routes.post(self, u, data, token_ok, casting_state()["open"], notify.PUBLIC_URL.rstrip("/"))
+            if r is not None: return r
+        if forms18_routes.needs_adult(self, u.path): return self._json({"error": "Potwierdź, że masz ukończone 18 lat.", "need_adult": True}, 403)
         if u.path.startswith(("/api/inbox", "/api/friends", "/api/dm", "/api/admin/inbox")):
             r = inbox.handle_post(self, u, data)  # Skrzynka, Znajomi, czat 1:1 (inbox.py)
             if r is not None: return r

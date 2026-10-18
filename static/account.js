@@ -2,7 +2,6 @@
 (() => {
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';
 const NAMES = {darmowy: 'Darmowy', podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'};
 let ME = null, CSRF = '';
 const vid = () => window.LunaVid ? window.LunaVid() : '';
@@ -13,32 +12,15 @@ async function api(path, body){
 }
 const fmtD = t => new Date(t * 1000).toLocaleDateString('pl-PL');
 
-/* ---------- bramka 18+ ---------- */
+/* ---------- bramka 18+: „Masz 18 lat?” Tak / Nie (agegate.js); konto musi mieć adult_confirmed ---------- */
 const AGE_KEY = 'luna.age';
-function ageOk(){ try { const a = JSON.parse(localStorage.getItem(AGE_KEY) || 'null'); return !!(a && a.adult && a.at); } catch(e){ return false; } }
+window.LunaConfirmAdult = async () => {
+  if (!ME || ME.adult_confirmed) return;
+  const r = await api('/api/account/confirm-adult', {adult_confirmed: true}); ME = r.user; acctUI();
+};
+(() => { const st = document.createElement('style'); st.textContent = '.age18q{margin:10px 0;padding:14px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-align:center}.age18q b{display:block;font-size:18px;margin-bottom:10px}.age18b{display:grid;grid-template-columns:1fr 1fr;gap:10px}.age18b button{min-height:52px;font-size:18px;font-weight:800;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:#26292e;color:#f2f2f4;cursor:pointer}.age18b .a18y[aria-pressed=true]{background:#3DDC97;color:#06120c;border-color:#3DDC97}.age18b .a18n[aria-pressed=true]{background:#3a2a2e;border-color:#ff8a9a}.a18bye{margin:10px 0 0;font-size:14px}'; document.head.appendChild(st); })();
 function ageGate(){
-  if (ageOk() || (ME && ME.adult)) return;
-  const d = $('#ageGate'); if (!d) return;
-  /* oświadczenie zapamiętane na tym urządzeniu (także po wyczyszczeniu pamięci przeglądarki, jeśli zostało zapisane na serwerze) */
-  const v = vid();
-  if (v && !ageGate.checked){ ageGate.checked = true;
-    fetch('/api/age/status?vid=' + encodeURIComponent(v), {credentials: 'same-origin'}).then(r => r.json()).then(st => {
-      if (st && st.declared){ try { localStorage.setItem(AGE_KEY, JSON.stringify({adult: true, at: st.at})); } catch(e){} return; }
-      ageGate();
-    }).catch(() => ageGate()); return; }
-  d.showModal();
-  d.addEventListener('cancel', e => e.preventDefault());
-  $('#ageForm').onsubmit = async e => {
-    e.preventDefault(); const err = $('#ageErr'); err.textContent = '';
-    const dob = $('#ageDob').value, adult = $('#ageChk').checked;
-    try {
-      const r = await api('/api/age/declare', {vid: vid(), dob, adult, name: window.UserName ? window.UserName() : '', source: 'app'});
-      localStorage.setItem(AGE_KEY, JSON.stringify({adult: true, at: r.at})); d.close();
-    } catch(x){
-      if (x.data && x.data.underage){ $('#ageForm').hidden = true; $('#ageBlocked').hidden = false; $('#ageBlocked p').textContent = x.message; }
-      else err.textContent = '⚠️ ' + x.message;
-    }
-  };
+  if (ME && !ME.adult_confirmed){ if (window.LunaAgeGate) window.LunaAgeGate.show({account: true}); else setTimeout(ageGate, 400); }
 }
 
 /* ---------- plan i wygaśnięcie dostępu ---------- */
@@ -86,7 +68,7 @@ function acctUI(){
   const box = $('#acctBox'); if (!box) return;
   if (ME){
     box.innerHTML = `<p>Zalogowano: <b>${esc(ME.email)}</b> ${ME.verified ? '✅' : `<span class="warn">(adres niepotwierdzony${ME.email_verification_available ? ' – sprawdź skrzynkę' : ' – potwierdzanie e-mail włączymy wkrótce'})</span>`}</p>
-      <p class="hint">Oświadczenie 18+: ${ME.adult ? 'złożone ' + fmtD(ME.adult_at) : 'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until) : ''}</p>
+      <p class="hint">Potwierdzenie 18+: ${ME.adult_confirmed ? 'tak, ' + fmtD(ME.adult_confirmed_at) : 'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until) : ''}</p>
       <div class="refbox" id="a_ref" hidden></div>
       <label>Kod testera<input id="a_tester" maxlength="12" value="${esc(ME.tester)}" placeholder="np. 1A2B3C4D"></label>
       <div class="btns"><button type="button" class="ghost" id="a_link">Przypisz kod testera</button>
@@ -116,10 +98,10 @@ function acctUI(){
       <div class="up" hidden>
         <p class="hint">Hasło: min. 10 znaków, małe i wielkie litery oraz cyfra.</p>
         <label>Nick * (widoczny publicznie, bez imienia i nazwiska)<input name="name" required minlength="2" maxlength="24" autocomplete="nickname"></label>
-        <label>Data urodzenia *<input name="dob" type="date" max="${new Date().toISOString().slice(0, 10)}"></label>
-        <label class="consent"><input type="checkbox" name="adult"> <span>${ADULT} *</span></label>
+        <div class="age18q" role="group" aria-labelledby="a18q"><b id="a18q">Masz 18 lat? *</b>
+          <div class="age18b"><button type="button" class="a18y" aria-pressed="false">Tak</button><button type="button" class="a18n" aria-pressed="false">Nie</button></div>
+          <p class="a18bye" hidden>Dziękujemy za szczerość 💚 Luna jest tylko dla osób pełnoletnich. Wróć, gdy skończysz 18 lat – Luna poczeka, ona i tak nie śpi 😉</p></div>
         <label class="consent"><input type="checkbox" name="terms"> <span>Akceptuję <a href="/regulamin.html" target="_blank">regulamin</a> i <a href="/privacy.html" target="_blank">informację o prywatności</a>. *</span></label>
-        <p class="hint">To oświadczenie – nie weryfikujemy wieku ani konta bankowego.</p>
       </div>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
       <div class="btns"><button class="primary a_submit" type="button">Zaloguj</button></div>
@@ -127,18 +109,23 @@ function acctUI(){
     </div>`;
   let mode = 'in'; const f = $('#a_form'); const shownAt = Date.now();
   /* formularz jest w <dialog><form> ustawień – zagnieżdżony <form> przeglądarka usuwa, więc działamy na <div> */
-  ['email', 'password', 'name', 'dob', 'adult', 'terms', 'website'].forEach(n => { f[n] = f.querySelector(`[name=${n}]`); });
-  box.querySelectorAll('.tabs2 button').forEach(b => b.onclick = () => { mode = b.dataset.t; box.querySelectorAll('.tabs2 button').forEach(x => x.classList.toggle('on', x === b)); f.querySelector('.up').hidden = mode !== 'up'; f.querySelector('.a_submit').textContent = mode === 'up' ? 'Załóż konto' : 'Zaloguj'; f.password.autocomplete = mode === 'up' ? 'new-password' : 'current-password'; });
+  ['email', 'password', 'name', 'terms', 'website'].forEach(n => { f[n] = f.querySelector(`[name=${n}]`); });
+  let adultYes = false;
+  const a18 = (yes) => { adultYes = yes; f.querySelector('.a18y').setAttribute('aria-pressed', String(yes)); f.querySelector('.a18n').setAttribute('aria-pressed', String(!yes));
+    f.querySelector('.a18bye').hidden = yes; f.querySelector('.a_submit').disabled = mode === 'up' && !yes; };
+  f.querySelector('.a18y').onclick = () => a18(true); f.querySelector('.a18n').onclick = () => a18(false);
+  box.querySelectorAll('.tabs2 button').forEach(b => b.onclick = () => { mode = b.dataset.t; box.querySelectorAll('.tabs2 button').forEach(x => x.classList.toggle('on', x === b)); f.querySelector('.up').hidden = mode !== 'up'; f.querySelector('.a_submit').textContent = mode === 'up' ? 'Załóż konto' : 'Zaloguj'; f.querySelector('.a_submit').disabled = mode === 'up' && f.querySelector('.a18n').getAttribute('aria-pressed') === 'true'; f.password.autocomplete = mode === 'up' ? 'new-password' : 'current-password'; });
   f.querySelector('.a_submit').onclick = () => f.onsubmit({preventDefault(){}});
   f.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox'){ e.preventDefault(); f.onsubmit(e); } });
   f.onsubmit = async e => {
     e.preventDefault(); const err = $('#a_err'); err.textContent = '';
     const body = {email: f.email.value.trim(), password: f.password.value};
-    if (mode === 'up') Object.assign(body, {name: f.name.value, dob: f.dob.value, adult: f.adult.checked, terms: f.terms.checked, website: f.website.value, fill_ms: Date.now() - shownAt, ref: (() => { try { return localStorage.getItem('luna.ref') || ''; } catch(e){ return ''; } })()});
+    if (mode === 'up') Object.assign(body, {name: f.name.value, adult_confirmed: adultYes, terms: f.terms.checked, website: f.website.value, fill_ms: Date.now() - shownAt, ref: (() => { try { return localStorage.getItem('luna.ref') || ''; } catch(e){ return ''; } })()});
     try {
       const r = await api(mode === 'up' ? '/api/account/signup' : '/api/account/login', body);
       ME = r.user; CSRF = r.csrf; f.password.value = '';
-      if (ME.adult) localStorage.setItem(AGE_KEY, JSON.stringify({adult: true, at: ME.adult_at}));
+      if (ME.adult_confirmed){ try { window.LunaAgeGate && window.LunaAgeGate.remember(); } catch(e){} }
+      ageGate();
       if (mode === 'up') alert(r.verification_sent ? 'Konto założone. Sprawdź skrzynkę, aby potwierdzić adres e-mail.' : 'Konto założone. Potwierdzanie adresu e-mail włączymy wkrótce – konto jest oznaczone jako niepotwierdzone.');
       acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh();
     } catch(x){ err.textContent = '⚠️ ' + x.message; }

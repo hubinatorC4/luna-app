@@ -82,6 +82,13 @@ def inbox(since_ts):
     out["applications"] = [{"id": m["id"], "nickname": _short(m.get("name"), 40), "role": m.get("role_other") or m.get("role"), "kind": m.get("kind"),
                             "message": _short(m.get("message"), 200), "has_contact": bool(m.get("email")), "has_portfolio": bool(m.get("portfolio")), "time": _iso(m["t"])}
                            for m in join._all() if m.get("t", 0) > since_ts]
+    try:  # nowe formularze 18+: testerzy i casting (status: pending/verified/failed/accepted/rejected; bez e-maili)
+        import forms18
+        out["form_applications"] = [{"id": r["id"], "form": r["kind"], "nickname": _short(r.get("nickname") or r.get("pseudonym"), 40),
+                                     "status": r["status"], "verification": r["verification"]["status"], "method": r["verification"].get("method"),
+                                     "offer": r.get("offer"), "has_voice_sample": bool(r.get("voice")), "time": _iso(r["t"])}
+                                    for r in forms18.admin_list() if r.get("t", 0) > since_ts or r["verification"].get("at", 0) > since_ts]
+    except Exception: out["form_applications"] = []
     acc = [u for u in (store.get("accounts", {}) or {}).values() if u.get("created", 0) > since_ts]
     out["signups"] = {"count": len(acc), "nicknames": [_short(u.get("name") or "—", 30) for u in acc][:50]}
     tk = [t for t in tickets._all() if t.get("t", 0) > since_ts]
