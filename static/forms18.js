@@ -75,6 +75,8 @@ async function mount(box){
   if (f.cats) f.addEventListener('change', e => { if (e.target.name === 'cats'){ const on = f.querySelectorAll('[name=cats]:checked'); if (on.length > 3) e.target.checked = false; } });
   f.onsubmit = async e => {
     e.preventDefault(); const err = f.querySelector('.f18err'); err.textContent = '';
+    /* QA: formularz ma novalidate (własne komunikaty), więc puste pola sprawdzamy tutaj – inaczej puste zgłoszenie dawało ekran „Dziękujemy” bez zapisu */
+    if (!f.checkValidity()){ const bad = f.querySelector(':invalid'); if (bad){ try { bad.focus({preventScroll: false}); bad.scrollIntoView({block: 'center'}); } catch(x){} } const nm = bad && bad.closest('label') && bad.closest('label').querySelector('span[data-k]'); err.textContent = '⚠️ ' + (nm ? nm.textContent.trim() + ': ' : '') + t('req').replace(/^\*\s*/, ''); return; }
     const fd = new FormData(f); const all = n => fd.getAll(n);
     const a = ageOf(f.dob.value); if (a != null && a < 18 && a >= 0) return underage(box);
     const body = {email: fd.get('email'), dob: fd.get('dob'), website: fd.get('website') || '', t0, turnstile: ts, lang: lang(), consents: {}};
