@@ -97,6 +97,11 @@ def nick_of(u):
     n = (u or {}).get("nick") or (u or {}).get("name") or ""
     return n.strip() or None
 
+def _ident(uid):
+    try:
+        import userprof; return userprof.ident(uid)
+    except Exception: return {}
+
 def person(uid, A=None):
     """Publiczna karta osoby: nick, styl nicku według planu, ramka partnera. Bez e-maila i uid."""
     u = (A or accounts._accts()).get(uid)
@@ -104,7 +109,7 @@ def person(uid, A=None):
     n = nick_of(u) or ("Luna·" + pid(uid)[:4])
     try: pr = partners.is_partner(uid)
     except Exception: pr = False
-    return {"pid": pid(uid), "nick": n, "tier": nicktier.of_uid(uid), "partner": bool(pr), "ini": n[:1].upper()}
+    return {"pid": pid(uid), "nick": n, "tier": nicktier.of_uid(uid), "partner": bool(pr), "ini": n[:1].upper(), "ident": _ident(uid)}
 
 # ---------- magazyn ----------
 def _ib(uid): return store.get("ib:" + uid, {}) or {}

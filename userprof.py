@@ -19,7 +19,51 @@ def get(uid):
     return {"nick": r.get("nick", "") or nick_of(uid), "bio": r.get("bio", ""), "interests": r.get("interests", []), "links": r.get("links", []),
             "avatar": r.get("avatar", ""), "public": bool(r.get("public")), "hide_rank": hidden_in_rank(uid),
             "show_bio": bool(r.get("show_bio", True)), "show_interests": bool(r.get("show_interests", True)), "show_links": bool(r.get("show_links", False)),
-            "tour_done": bool(r.get("tour_done"))}
+            "tour_done": bool(r.get("tour_done")),
+            # O mnie (opcjonalne, domyślnie ukryte; NIGDY nie trafia do reklam – tylko do nagłówka profilu, eksportu i usuwania konta)
+            "age": r.get("age") if isinstance(r.get("age"), int) else None, "gender": r.get("gender", ""), "gender_x": r.get("gender_x", ""),
+            "pron": r.get("pron", ""), "pron_x": r.get("pron_x", ""),
+            "show_age": bool(r.get("show_age")), "show_gender": bool(r.get("show_gender")), "show_pron": bool(r.get("show_pron"))}
+
+GENDERS = ("f", "m", "nb", "trans", "other", "na")   # Kobieta / Mężczyzna / Osoba niebinarna / Osoba transpłciowa / Inna / Wolę nie podawać
+PRONS = ("she", "he", "they", "custom")
+X_LEN = 30
+_X_BAD = re.compile(r"(sex|seks|porn|erot|nsfw|fetysz|fetish|nag[aio]\b|nude|nackt|desnud|https?:|www\.|@)", re.I)
+def _x(v):
+    v = re.sub(r"[<>\x00-\x1f\x7f]", "", str(v or "")).strip()
+    if not v: return ""
+    if len(v) > X_LEN: raise ValueError(f"Maksymalnie {X_LEN} znaków.")
+    if _X_BAD.search(v): raise ValueError("Ups, tego tu nie wpiszemy – spróbuj inaczej. 💚")
+    return social.check_text(v, X_LEN)
+
+def ident(uid, r=None):
+    """Tylko pola, które właściciel sam pokazał. Brak daty urodzenia – sam wiek (18–99)."""
+    g = r or get(uid); out = {}
+    if g["show_age"] and g["age"]: out["age"] = g["age"]
+    if g["show_gender"] and g["gender"] and g["gender"] != "na":
+        out["g"] = g["gender"]
+        if g["gender"] == "other" and g["gender_x"]: out["gx"] = g["gender_x"]
+    if g["show_pron"] and g["pron"]:
+        if g["pron"] != "custom": out["pn"] = g["pron"]
+        elif g["pron_x"]: out["pn"] = "custom"; out["pnx"] = g["pron_x"]
+    return out
+
+def seed_moderator():
+    """Jednorazowo (v1.6.9, prośba właściciela): konto moderatora Hubinator❤️ – płeć Mężczyzna, widoczna; wiek pusty."""
+    if store.get("ident_seed_hub"): return
+    k = _key("Hubinator❤️"); uid = None
+    for u, r in _P().items():
+        if k and _key(r.get("nick", "")) == k: uid = u
+    if not uid:
+        try:
+            import accounts; uid = next((x.get("uid") or u for u, x in accounts._accts().items() if _key(x.get("name") or "") == k), None)
+        except Exception: uid = None
+    if not uid: return
+    with _lock:
+        P = _P(); r = P.get(uid) or {}
+        if not r.get("gender"): r.update(gender="m", show_gender=True)
+        r.pop("age", None); r["show_age"] = False; P[uid] = r; store.put("user_profiles", P)
+    store.put("ident_seed_hub", int(time.time()))
 
 def nick_of(uid):
     n = (_P().get(uid) or {}).get("nick", "")
@@ -68,7 +112,25 @@ def save(uid, d):
         if "hide_rank" in d:
             import battles; battles.set_privacy(uid, d.get("hide_rank") is True)
         if d.get("lang") in ("pl", "en", "es", "de", "uk"): r["lang"] = d["lang"]
-        for k in ("public", "show_bio", "show_interests", "show_links", "tour_done"):
+        if "age" in d:
+            a = d.get("age")
+            if a in (None, "", 0): r["age"] = None
+            else:
+                try: a = int(str(a).strip())
+                except Exception: raise ValueError("Wiek podaj liczbą (18–99).")
+                if a < 18: raise ValueError("Luna jest tylko dla osób pełnoletnich – wiek musi wynosić co najmniej 18 lat.")
+                if a > 99: raise ValueError("Wiek podaj w zakresie 18–99.")
+                r["age"] = a
+        if "gender" in d:
+            g = str(d.get("gender") or "")
+            if g and g not in GENDERS: raise ValueError("Nieznana opcja płci.")
+            r["gender"] = g; r["gender_x"] = _x(d.get("gender_x")) if g == "other" else ""
+        if "pron" in d:
+            pn = str(d.get("pron") or "")
+            if pn and pn not in PRONS: raise ValueError("Nieznane zaimki.")
+            r["pron"] = pn; r["pron_x"] = _x(d.get("pron_x")) if pn == "custom" else ""
+            if pn == "custom" and not r["pron_x"]: r["pron"] = ""
+        for k in ("public", "show_bio", "show_interests", "show_links", "tour_done", "show_age", "show_gender", "show_pron"):
             if k in d: r[k] = d.get(k) is True
         if "avatar" in d and str(d["avatar"]).startswith("preset:"):
             v = str(d["avatar"])[7:]
@@ -132,7 +194,7 @@ def public_view(nick, viewer_uid=None):
             if av.startswith("up:") and not avatar_img(uid, viewer_uid): av = ""
             return {"nick": g["nick"], "avatar": av, "uref": uid[:8] if av.startswith("up:") else "",
                     "bio": g["bio"] if g["show_bio"] else "", "interests": g["interests"] if g["show_interests"] else [],
-                    "links": g["links"] if g["show_links"] else [], "mine": viewer_uid == uid, "pr": _pr(viewer_uid, uid)}
+                    "links": g["links"] if g["show_links"] else [], "mine": viewer_uid == uid, "pr": _pr(viewer_uid, uid), "ident": ident(uid, g)}
     return {"missing": True}
 
 def _pr(viewer, uid):

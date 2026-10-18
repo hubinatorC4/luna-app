@@ -29,6 +29,11 @@ const nk = p => `<span class="nk${p.tier ? ' nk-' + p.tier : ''}">${esc(p.nick)}
 const av = p => `<span class="ib-av${p.partner ? ' partner' : ''}${p.tier ? ' t-' + p.tier : ''}${p.pr && p.pr.on ? ' on' : ''}" aria-hidden="true">${esc(p.ini || '?')}</span>`;
 // status online (serwer zwraca pr tylko gdy osoba na to pozwala): {on:true} albo {min:X} ≤ 60
 const prTxt = p => !p.pr ? '' : p.pr.on ? T.online : T.ago.replace('{n}', p.pr.min);
+const idHtml = p => { const d = p.ident || {}, x = [];
+  if (d.g) x.push(d.g === 'other' && d.gx ? d.gx : T['g_' + d.g]);
+  if (d.pn) x.push(d.pn === 'custom' ? d.pnx : T['p_' + d.pn]);
+  if (d.age) x.push(String(T.id_age || '{n}').replace('{n}', d.age));
+  const y = x.filter(Boolean); return y.length ? `<small class="ib-id">${esc(y.join(' · '))}</small>` : ''; };
 const prHtml = p => p.pr ? `<small class="ib-pr${p.pr.on ? ' on' : ''}">${p.pr.on ? '<i class="on-dot" aria-hidden="true"></i>' : ''}${esc(prTxt(p))}</small>` : '';
 
 /* ---------- szkielet ---------- */
@@ -106,7 +111,7 @@ function rowBtns(p, kind){
   return `<button class="ib-btn ib-star${p.close ? ' on' : ''}" data-f="${p.close ? 'unclose' : 'close'}" aria-pressed="${p.close ? 'true' : 'false'}" aria-label="${esc(p.close ? T.close_rm : T.close_add)}" title="${esc(T.close_h)}">${p.close ? '★' : '☆'}</button><button class="ib-btn primary" data-f="chat">💬 ${esc(T.write)}${p.unread ? ` <b class="ib-badge">${p.unread}</b>` : ''}</button>
     <details class="ib-more"><summary aria-label="${esc(T.more)}">⋯</summary><div><button class="ib-btn" data-f="remove">${esc(T.remove)}</button><button class="ib-btn danger" data-f="block">${esc(T.block)}</button><button class="ib-btn danger" data-f="report" data-report="user:${p.pid}">🚩 ${esc(T.report)}</button></div></details>`;
 }
-const row = (p, kind) => `<li class="ib-fr" data-pid="${p.pid}">${av(p)}<span class="ib-fn">${nk(p)}${kind === 'friends' ? `${prHtml(p)}<small>${p.last ? esc(p.last.x) : esc(T.since) + ' ' + new Date(p.since * 1000).toLocaleDateString(lang)}</small>` : ''}</span><span class="ib-fa">${rowBtns(p, kind)}</span></li>`;
+const row = (p, kind) => `<li class="ib-fr" data-pid="${p.pid}">${av(p)}<span class="ib-fn">${nk(p)}${kind === 'friends' ? `${idHtml(p)}${prHtml(p)}<small>${p.last ? esc(p.last.x) : esc(T.since) + ' ' + new Date(p.since * 1000).toLocaleDateString(lang)}</small>` : ''}</span><span class="ib-fa">${rowBtns(p, kind)}</span></li>`;
 async function renderFriends(){
   const host = $('#pn-friends');
   let f; try { f = await loadFriends(); } catch(e){ host.innerHTML = `<p class="ib-empty">${esc(e.message)}</p>`; return; }
@@ -165,7 +170,7 @@ async function openChat(pid){
 }
 function draw(d){
   if (!chat) return;
-  $('#chatPeer').innerHTML = av(d.peer) + `<span class="ib-pn">${nk(d.peer)}${prHtml(d.peer)}</span>`;
+  $('#chatPeer').innerHTML = av(d.peer) + `<span class="ib-pn">${nk(d.peer)}${idHtml(d.peer)}${prHtml(d.peer)}</span>`;
   const log = $('#chatLog');
   if (!chat.last && !d.items.length) log.innerHTML = `<li class="ib-empty">${esc(T.chat_empty)}</li>`;
   if (d.items.length){ const e = log.querySelector('.ib-empty'); if (e) e.remove(); }

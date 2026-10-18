@@ -56,6 +56,14 @@ function rowHTML([id, ic, k, h, kind]){
   if (tog) return `<button type="button" class="${cls}" role="switch" aria-checked="${on}" data-id="${id}" data-kind="${kind}" data-kw="${kw}">${inner}</button>`;
   return `<button type="button" class="${cls}" data-id="${id}" data-kw="${kw}" aria-expanded="false" aria-controls="stSheet">${inner}</button>`;
 }
+// O mnie: w nagłówku tylko to, co właściciel sam pokazał (małym drukiem)
+function identLine(p){
+  const x = [];
+  if (p.show_gender && p.gender && p.gender !== 'na') x.push(p.gender === 'other' && p.gender_x ? p.gender_x : T('g_' + p.gender));
+  if (p.show_pron && p.pron) x.push(p.pron === 'custom' ? p.pron_x : T('p_' + p.pron));
+  if (p.show_age && p.age) x.push(F('id_age', {n: p.age}));
+  return x.filter(Boolean).length ? `<div class="st-id">${x.filter(Boolean).map(esc).join(' · ')}</div>` : '';
+}
 function draw(){
   const pr = P.profile, c = P.completion || {pct: 0};
   const tier = P.tier ? ` nk-${P.tier}` : '';
@@ -63,7 +71,8 @@ function draw(){
   <section class="st-head" id="stHead">
     <img class="st-av" src="${esc(avatarURL())}" alt="" width="72" height="72">
     <div class="st-who"><div class="st-nick nk${tier}">${esc(pr.nick || '—')}</div>
-      <span class="st-plan ${esc(P.plan)}">${esc(P.plan_name)}</span>${P.partner ? ' <span class="st-tag pt-mark">💖</span>' : ''}
+${identLine(pr)}
+            <span class="st-plan ${esc(P.plan)}">${esc(P.plan_name)}</span>${P.partner ? ' <span class="st-tag pt-mark">💖</span>' : ''}
       <div class="st-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${c.pct}" aria-label="${esc(F('compl', {p: c.pct}))}"><i style="width:${c.pct}%"></i></div>
       <div class="st-bl">${esc(F('compl', {p: c.pct}))} · ${esc(T('compl_h'))}</div>
       <button type="button" class="st-btn st-tourb" id="stTourB">🌙 ${esc(T('tour'))}</button>
@@ -138,6 +147,15 @@ const SHEETS = {
     <label class="st-chk"><input type="checkbox" id="sBio" ${p.show_bio ? 'checked' : ''}> <span>${esc(T('f_bio'))}</span></label>
     <label class="st-chk"><input type="checkbox" id="sInt" ${p.show_interests ? 'checked' : ''}> <span>${esc(T('f_int'))}</span></label>
     <label class="st-chk"><input type="checkbox" id="sLinks" ${p.show_links ? 'checked' : ''}> <span>${esc(T('f_links'))}</span></label>
+    <fieldset class="st-about"><legend>${esc(T('f_about'))}</legend><p class="hint">${esc(T('f_about_h'))}</p>
+    <label for="eAge">${esc(T('f_age'))}</label><input type="number" id="eAge" min="18" max="99" step="1" inputmode="numeric" value="${p.age || ''}" aria-describedby="eAgeH"><p class="hint" id="eAgeH">${esc(T('f_age_h'))}</p>
+    <label class="st-chk"><input type="checkbox" id="sAge" ${p.show_age ? 'checked' : ''}> <span>${esc(T('f_showin'))}: ${esc(T('f_age'))}</span></label>
+    <label for="eG">${esc(T('f_gender'))}</label><select id="eG"><option value="">${esc(T('g_none'))}</option>${['f', 'm', 'nb', 'trans', 'other', 'na'].map(v => `<option value="${v}" ${p.gender === v ? 'selected' : ''}>${esc(T('g_' + v))}</option>`).join('')}</select>
+    <div id="eGxW" ${p.gender === 'other' ? '' : 'hidden'}><label for="eGx">${esc(T('f_gx'))}</label><input type="text" id="eGx" maxlength="30" value="${esc(p.gender_x || '')}"></div>
+    <label class="st-chk"><input type="checkbox" id="sG" ${p.show_gender ? 'checked' : ''}> <span>${esc(T('f_showin'))}: ${esc(T('f_gender'))}</span></label>
+    <label for="eP">${esc(T('f_pron'))}</label><select id="eP"><option value="">${esc(T('g_none'))}</option>${['she', 'he', 'they', 'custom'].map(v => `<option value="${v}" ${p.pron === v ? 'selected' : ''}>${esc(T('p_' + v))}</option>`).join('')}</select>
+    <div id="ePxW" ${p.pron === 'custom' ? '' : 'hidden'}><label for="ePx">${esc(T('f_px'))}</label><input type="text" id="ePx" maxlength="30" value="${esc(p.pron_x || '')}"></div>
+    <label class="st-chk"><input type="checkbox" id="sP" ${p.show_pron ? 'checked' : ''}> <span>${esc(T('f_showin'))}: ${esc(T('f_pron'))}</span></label></fieldset>
     <div class="st-btns"><button type="button" class="primary" id="eSave">${esc(T('save'))}</button></div>`; },
   plan: () => { const c = P.caps; return `<h2>${esc(F('plan_now', {p: P.plan_name}))}</h2>
     <ul><li>${esc(F('q_img', {n: c.img}))}</li><li>${esc(F('q_vid', {n: c.video}))}</li><li>${c.gen ? esc(F('q_gen', {n: c.gen})) : esc(T('gen_lock'))}</li></ul>
@@ -172,9 +190,15 @@ const BIND = {
     const g = S.querySelector('#eGen'); if (g) g.onclick = () => { av = 'gen:' + P.agent.own; toast(T('f_av_gen'), '✨'); };
     S.querySelector('#eAv').onchange = async e => { const f = e.target.files[0]; if (!f) return;
       try { const r = await api('/api/me/avatar', {data: await readFile(f)}); P.profile.avatar = r.avatar; toast(T('av_pending'), '🕊️'); await reload(); sheet('edit'); } catch(err){ toast(err.message, '⚠️'); } };
+    S.querySelector('#eG').onchange = e => { S.querySelector('#eGxW').hidden = e.target.value !== 'other'; };
+    S.querySelector('#eP').onchange = e => { S.querySelector('#ePxW').hidden = e.target.value !== 'custom'; };
     S.querySelector('#eSave').onclick = async () => {
       const d = {nick: S.querySelector('#eNick').value, bio: S.querySelector('#eBio').value, interests: S.querySelector('#eInt').value.split(',').map(x => x.trim()).filter(Boolean),
         links: S.querySelector('#eLinks').value.split('\n').map(x => x.trim()).filter(Boolean), show_bio: S.querySelector('#sBio').checked, show_interests: S.querySelector('#sInt').checked, show_links: S.querySelector('#sLinks').checked};
+      const ag = S.querySelector('#eAge').value.trim();
+      if (ag && !(/^\d+$/.test(ag) && +ag >= 18 && +ag <= 99)) { toast(T('age_bad'), '🌙'); S.querySelector('#eAge').focus(); return; }
+      Object.assign(d, {age: ag ? +ag : null, gender: S.querySelector('#eG').value, gender_x: S.querySelector('#eGx').value, pron: S.querySelector('#eP').value, pron_x: S.querySelector('#ePx').value,
+        show_age: S.querySelector('#sAge').checked, show_gender: S.querySelector('#sG').checked, show_pron: S.querySelector('#sP').checked});
       if (av) d.avatar = av;
       if (await save(d)) { await reload(); }
     };

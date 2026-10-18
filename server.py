@@ -32,7 +32,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.6.8"
+VERSION = "1.6.9"
 STATIC_CACHE = re.compile(r"\.(webp|avif|jpe?g|png|ico|svg|woff2)$")
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -2031,6 +2031,8 @@ class H(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(os.getenv("PORT", sys.argv[1] if len(sys.argv) > 1 else 8765))
     print(f"Luna działa na http://0.0.0.0:{port}")
+    try: userprof.seed_moderator()
+    except Exception as e: sys.stderr.write("seed_moderator %s\n" % type(e).__name__)
     threading.Thread(target=_bg_loop, daemon=True).start()
     threading.Thread(target=_announce_update, daemon=True).start()
     try: inbox.announce_version(VERSION, INBOX_NEWS.get(VERSION))  # „Co nowego” trafia też do Skrzynki (kategoria Aktualizacje)

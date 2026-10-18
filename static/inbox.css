@@ -109,3 +109,6 @@ html.in-app .ibpage{padding-top:8px}
 .ib-pn{display:flex;flex-direction:column;line-height:1.25}
 .ib-star{min-width:44px;min-height:44px;border-radius:999px;font-size:20px;line-height:1;color:#ffcf66;padding:0 10px}
 .ib-star.on{background:#ffcf6622;box-shadow:0 0 0 1px #ffcf6655 inset}
+
+/* v1.6.9 O mnie */
+.ib-id{display:block;font-size:12px;color:#c9c4d8;line-height:1.3}
