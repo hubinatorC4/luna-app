@@ -91,18 +91,22 @@ function render(){
     if (!p.prices) return card(p.name, '–', esc(t.hidden));
     if (isFree(p)) return card(p.name, '0 zł', esc(t.with_acct));
     const fx = B.foreign && p.prices.eur ? `<br><small>${pl(p.prices.eur)} € · $${p.prices.usd}</small>` : '';
-    return card(p.name, `${pl(p.prices.pln)} zł`, `${esc(t.no_renew)}${fx}`, payBtn('pass', p.id), p.id === 'premium');
+    return card(p.name, window.LunaKasa ? LunaKasa.priceOf(p.id, p.prices.pln) : `${pl(p.prices.pln)} zł`, `${esc(t.no_renew)}${fx}`, payBtn('pass', p.id), p.id === 'premium');
   }).join('') + (B.foreign ? '' : `<p class="hint pfoot">${esc(t.zl_only)}</p>`);
   $('#itemPrices').innerHTML = show ? `<table class="tbl">${B.items.map(i => `<tr><td>${esc(en ? i.name_en : i.name)}</td><td>${money(i.price)}</td><td>${i.upcoming ? soon(i) : payBtn('item', i.id)}</td></tr>`).join('')}</table>` : `<p>${esc(t.hidden)}</p>`;
   const pb = $('#payBox');
-  pb.innerHTML = twa ? `<p>${esc(t.pay_twa)}</p>` : !B.payments.web ? `<p>💳 ${esc(t.pay_soon)} · BLIK · ${esc(B.payments.methods.slice(1).join(' · '))}</p>`
-    : `<label class="consent"><input type="checkbox" id="payConsent"> <span>${esc(t.consent)}</span></label>${ME ? '' : `<p class="hint">${esc(t.login)}</p>`}`;
+  const K = window.LunaKasa ? LunaKasa.T() : {};
+  pb.innerHTML = twa ? `<p>${esc(t.pay_twa)}</p>` : `<p>💳 ${B.payments.web ? '' : esc(t.pay_soon) + ' · '}${esc(B.payments.methods.join(' · '))}</p>` +
+    (window.LunaKasa ? `<p class="hint">🧾 ${esc(LunaKasa.vatNote(B.payments))}</p>` : '') +
+    (B.payments.web && ME ? `<p><button type="button" class="blik" id="kasaPortal">${esc(K.portal || '')}</button><br><small class="hint">${esc(K.portal_n || '')}</small></p>` : '') +
+    (B.payments.web && !ME ? `<p class="hint">${esc(t.login)}</p>` : '');
+  const kp = $('#kasaPortal'); if (kp) kp.onclick = () => LunaKasa.portal();
   document.querySelectorAll('[data-pay]').forEach(b => b.onclick = () => { if (b.dataset.kind === 'item' && window.LunaSocial && window.LunaSocial.track) window.LunaSocial.track('cart', 'item:' + b.dataset.pay); pay(b.dataset.kind, b.dataset.pay); });
 }
 function payBtn(kind, ref){
   const t = T(); if (twa) return '';
-  const dis = !B.payments.web || !B.prices_visible || !ME;
-  return `<button type="button" class="blik" data-kind="${kind}" data-pay="${esc(ref)}"${dis ? ' disabled title="' + esc(B.payments.web ? t.login : t.pay_soon) + '"' : ''}>${esc(t.pay_btn)} <b>BLIK</b></button>`;
+  const dis = !B.prices_visible;   // bez kluczy kasa i tak się otworzy – z uczciwym „płatności startują wkrótce”
+  return `<button type="button" class="blik" data-kind="${kind}" data-pay="${esc(ref)}"${dis ? ' disabled' : ''}>${esc(t.pay_btn)} <b>BLIK</b></button>`;
 }
 function coach(){
   try { if (localStorage.getItem('luna.coachBlik')) return; localStorage.setItem('luna.coachBlik', '1'); } catch(e){ return; }
@@ -112,6 +116,11 @@ function coach(){
 }
 async function pay(kind, ref){
   const t = T();
+  if (window.LunaKasa){
+    const en = document.documentElement.lang !== 'pl';
+    if (kind === 'pass'){ const p = B.plans.find(x => x.id === ref); return LunaKasa.open({kind, ref, name: 'Luna ' + (p ? p.name : ref), pln: p && p.prices ? p.prices.pln : ''}); }
+    const it = B.items.find(x => x.id === ref); return LunaKasa.open({kind, ref, name: it ? (en ? it.name_en : it.name) : ref, pln: it && it.price ? it.price.pln : ''});
+  }
   if (!$('#payConsent') || !$('#payConsent').checked){ alert(t.consent); return; }
   try {
     const r = await fetch('/api/pay/checkout', {method: 'POST', headers: {'Content-Type': 'application/json', 'X-CSRF-Token': CSRF}, credentials: 'same-origin', body: JSON.stringify({kind, ref, consent_immediate: true, twa})});
@@ -120,7 +129,7 @@ async function pay(kind, ref){
   } catch(e){ alert('⚠️ ' + e.message); }
 }
 Promise.all([fetch('/api/butik', {headers: h}).then(r => r.json()), fetch('/api/account/me', {credentials: 'same-origin'}).then(r => r.json()).catch(() => ({}))])
-  .then(([b, m]) => { B = b; ME = m.user; CSRF = m.csrf || ''; render(); }).catch(() => {});
+  .then(([b, m]) => { B = b; ME = m.user; CSRF = m.csrf || ''; render(); if (window.LunaKasa) LunaKasa.config().then(c => { if (c.local) render(); }); }).catch(() => {});
 window.addEventListener('luna-lang', render);
 })();
 /* Ogłoszenia Butiku (rotujący baner) i informacja o skromnych strojach. Tekst źródłowy PL (zatwierdzony), tłumaczenia EN/ES/DE/UK. */

@@ -721,6 +721,7 @@ def _wall_pricing():
 social.PRICING = _wall_pricing
 payments.ON_PAID = lambda ref, amt, cur: stats.add("item:" + str(ref) + ":buy")
 payments.ON_USER_PAID = lambda uid: referral.on_purchase(uid)
+payments.AUDIT = lambda action, detail: security.audit(action, "", detail)
 stats.threadsafe_start()
 
 def _help_prices():
@@ -749,6 +750,9 @@ class H(SimpleHTTPRequestHandler):
         for k, v in security.HEADERS.items():
             if k == "Content-Security-Policy":
                 v = security.csp(antibot.turnstile_on(), "'none'" if pth in ("/panel.html", "/panel") or pth.startswith("/api/") or pth.startswith(moderator.panel_prefix()) else "'self'")
+                if pth in ("/kasa.html", "/kasa"): v = security.csp_paddle(v)
+            if pth in ("/kasa.html", "/kasa") and k == "Permissions-Policy": v = v.replace("payment=()", 'payment=(self "https://buy.paddle.com" "https://sandbox-buy.paddle.com")')
+            if pth in ("/kasa.html", "/kasa") and k == "Cross-Origin-Opener-Policy": v = "same-origin-allow-popups"   # PayPal w oknie kasy
             if k == "X-Frame-Options" and (pth in ("/panel.html", "/panel") or pth.startswith("/api/") or pth.startswith(moderator.panel_prefix())): v = "DENY"
             self.send_header(k, v)
         if pth.endswith(".apk"):
@@ -1183,7 +1187,7 @@ class H(SimpleHTTPRequestHandler):
             except ValueError as e: return self._json({"error": str(e)}, 400)
             return self._json({"error": "bad action"}, 400)
         if p == "/api/pay/checkout":
-            if not payments.enabled(): return self._json({"error": "Płatności – wkrótce.", "soon": True}, 503)
+            if not payments.enabled(): return self._json({"error": "Płatności startują wkrótce.", "soon": True}, 503)
             if data.get("twa"): return self._json({"error": "W aplikacji z Google Play płatności odbywają się przez Google Play."}, 400)
             a = self._acct()
             if not a: return self._json({"error": "Zaloguj się, aby kupić dostęp."}, 401)
@@ -1199,8 +1203,20 @@ class H(SimpleHTTPRequestHandler):
             elif kind == "item" and butik.item(ref) and butik.eff_status(butik.item(ref)) == "released":
                 it = butik.item(ref); name, pln = f"Butik Luny – {it['name']}", it["price"]["pln"]
             else: return self._json({"error": "Nieznany produkt."}, 400)
-            try: return self._json({"ok": True, **payments.create_checkout(kind, ref, name, pln, usr["uid"], usr["email"], notify.PUBLIC_URL)})
+            sub = data.get("sub") is True and kind == "pass"
+            if sub: name = f"Luna – {plans.NAMES[ref]}, subskrypcja miesięczna (możesz anulować w każdej chwili)"
+            try: return self._json({"ok": True, **payments.create_checkout(kind, ref, name, pln, usr["uid"], usr["email"], notify.PUBLIC_URL, sub=sub, cust=payments.customer(usr["uid"])[0])})
             except Exception as e: sys.stderr.write("checkout error %s\n" % type(e).__name__); return self._json({"error": "Nie udało się rozpocząć płatności."}, 502)
+        if p == "/api/pay/portal":
+            if not payments.enabled(): return self._json({"error": "Płatności startują wkrótce.", "soon": True}, 503)
+            a = self._acct()
+            if not a: return self._json({"error": "Zaloguj się."}, 401)
+            usr, csrf = a
+            if not self._csrf_ok(csrf): return self._json({"error": "Nieprawidłowy token CSRF – odśwież stronę."}, 403)
+            cust, subs = payments.customer(usr["uid"])
+            if not cust: return self._json({"error": "Nie masz jeszcze żadnej płatności ani subskrypcji."}, 404)
+            try: return self._json({"ok": True, "url": payments.portal(cust, notify.PUBLIC_URL, subs)})
+            except Exception as e: sys.stderr.write("portal error %s\n" % type(e).__name__); return self._json({"error": "Nie udało się otworzyć portalu."}, 502)
         if p == "/api/admin/avatars":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             act, uid, id_ = data.get("action"), str(data.get("uid", ""))[:8], str(data.get("id", ""))[:20]
@@ -1232,7 +1248,7 @@ class H(SimpleHTTPRequestHandler):
             d["plans"] = [{"id": k, "name": plans.NAMES[k], **({"prices": (v if CFG["pricing"]["foreign"] else {"pln": v["pln"]})} if CFG["pricing"]["show"] or adm else {})} for k, v in CFG["pricing"]["plans"].items()]; d["foreign"] = CFG["pricing"]["foreign"]
             try: d["popular"] = owner.butik_popular(12)
             except Exception: d["popular"] = []
-            d["payments"] = {"web": payments.enabled(), "mode": payments.mode() if adm else None, "methods": ["BLIK", "karta / card"] + (["Przelewy24"] if payments.P24 else [])}
+            d["payments"] = {**payments.public_config(), "mode": payments.mode() if adm else None}
             return self._json(d)
         if p.startswith(("/api/battles", "/api/admin/battles")):
             uid, dev = self._who(); q = parse_qs(u.query)
@@ -1524,6 +1540,30 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/admin/config":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
+        if u.path == "/api/pay/config":
+            c = payments.public_config()
+            P = CFG["pricing"]
+            c["plans"] = {k: v["pln"] for k, v in P["plans"].items()} if P["show"] else {}
+            c["twa_note"] = True
+            cc = (self.headers.get("CF-IPCountry") or "").upper()
+            loc = payments.localized(cc if re.fullmatch(r"[A-Z]{2}", cc) and cc not in ("XX", "T1") else self._ip()) if P["show"] else None
+            c["local"] = loc   # dokładne ceny od dostawcy albo None → pokazujemy samo PLN
+            return self._json(c)
+        if u.path in ("/api/admin/revenue", "/api/admin/revenue.csv"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try: R = payments.revenue()
+            except Exception as e:
+                sys.stderr.write("revenue error %s\n" % type(e).__name__); return self._json({"error": "Nie udało się pobrać danych od dostawcy płatności."}, 502)
+            if u.path.endswith(".csv"):
+                m = (parse_qs(u.query).get("month") or [""])[0]
+                if not re.fullmatch(r"20\d\d-[01]\d", m): return self._json({"error": "month"}, 400)
+                b = payments.csv_month(R["rows"], m).encode("utf-8")
+                self.send_response(200); self.send_header("Content-Type", "text/csv; charset=utf-8")
+                self.send_header("Content-Disposition", f'attachment; filename="luna-przychody-{m}.csv"'); self.send_header("Content-Length", str(len(b)))
+                self.end_headers(); self.wfile.write(b); return
+            done = store.get("payments_done", {}) or {}
+            return self._json({**{k: v for k, v in R.items() if k != "rows"}, "months": payments.monthly(R["rows"]), "recent": R["rows"][:30],
+                               "granted": len(done), "config": payments.public_config(), "provider_set": payments.provider()})
         if u.path == "/api/catalog":
             pub = catalog.public(CAT)
             for pl in pub.get("plans", []):
@@ -1696,12 +1736,12 @@ class H(SimpleHTTPRequestHandler):
                 doc = promo_share.inject(doc, u.path, parse_qs(u.query), lang, notify.PUBLIC_URL.rstrip("/"), self._pid_plan)
                 if u.path in ("/index.html", "/agentka.html", "/bitwy.html") and "owner-line.js" not in doc:   # 👑 linia własności agentki
                     doc = doc.replace("</body>", '<script src="/owner-line.js?v=1.0" defer></script>\n</body>', 1)
-                if u.path not in ("/panel.html", "/admin-support.html") and "report.js" not in doc:   # Zgłoś 🚩 (arkusz zgłoszeń, 🚩 na zdjęciach) i Stan konta
+                if u.path not in ("/panel.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html") and "report.js" not in doc:   # Zgłoś 🚩 (arkusz zgłoszeń, 🚩 na zdjęciach) i Stan konta
                     doc = doc.replace("</body>", '<script src="/report.js?v=1.0" defer></script>\n<script src="/standing.js?v=1.0" defer></script>\n</body>', 1)
-                if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
+                if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
                     doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
                 doc = moderator.inject(doc, self, u.path)   # ogłoszenie + (tylko dla konta admin) link „🛡️ Panel admina”
-                NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html", "/admin-support.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
+                NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
                 if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
                 doc = doc.replace("</head>", '<script src="/sec-client.js"></script>\n</head>', 1)
                 b = doc.encode()
@@ -1728,6 +1768,14 @@ class H(SimpleHTTPRequestHandler):
             except Exception as e: sys.stderr.write("verify18 webhook %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
             try: res = payments.handle(json.loads(raw), lambda uid, plan, m: _grant_and_notify(uid, plan, m, "stripe"), accounts.grant_item)
             except Exception as e: sys.stderr.write("webhook error %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
+            return self._json({"ok": True, "result": res})
+        if u.path == "/api/paddle/webhook":
+            n = int(self.headers.get("Content-Length") or 0)
+            if n > 256 * 1024: return self._json({"error": "too large"}, 413)
+            raw = self.rfile.read(n)
+            if not payments.verify_paddle(raw, self.headers.get("Paddle-Signature", "")): return self._json({"error": "bad signature"}, 400)
+            try: res = payments.handle_paddle(json.loads(raw), lambda uid, plan, m: _grant_and_notify(uid, plan, m, "paddle"), accounts.grant_item)
+            except Exception as e: sys.stderr.write("paddle webhook error %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
             return self._json({"ok": True, "result": res})
         if not security.origin_ok(self.headers): return self._json({"error": "Niedozwolone źródło żądania."}, 403)
         try: nsfw_filter.set_lang(api_i18n.req_lang(u.query, self.headers) or "pl")  # język komunikatów filtra zdjęć

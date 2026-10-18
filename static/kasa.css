@@ -1,0 +1,32 @@
+/* Kasa Luny – 3 kroki */
+html.kasa-open{overflow:hidden}
+.kasa-bg{position:fixed;inset:0;z-index:2147483000;background:rgba(5,5,8,.72);display:flex;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(4px)}
+.kasa-bg[hidden]{display:none!important}
+.kasa{position:relative;width:100%;max-width:520px;max-height:92vh;overflow:auto;background:#16141a;color:#f3eee8;border:1px solid rgba(255,255,255,.1);border-radius:22px 22px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.5);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (min-width:640px){.kasa-bg{align-items:center;padding:20px}.kasa{border-radius:22px}}
+.kasa h2{font-size:18px;margin:0 36px 10px 0}
+.kasa-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:inherit;font-size:16px;cursor:pointer}
+.kasa-steps{display:flex;flex-wrap:wrap;gap:6px;align-items:center;list-style:none;padding:0;margin:0 0 14px;font-size:13px;color:#b9b2aa}
+.kasa-steps li b{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);margin-right:4px;font-size:12px}
+.kasa-steps li.on{color:#fff;font-weight:600}.kasa-steps li.on b{background:#f5a742;color:#1a1208}.kasa-steps li.done b{background:#2e9c5e;color:#fff}
+.kasa-steps .arr{opacity:.5}
+.kasa-prod{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);margin-bottom:8px}
+.kasa-prod b{font-size:20px;white-space:nowrap}.kasa-prod small{font-size:12px;opacity:.7}
+.kasa-vat{font-size:12.5px;color:#cfc6bd;margin:0 0 12px}
+.kasa-opts{display:grid;gap:8px;margin:6px 0 12px}
+.kasa-opt{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);cursor:pointer}
+.kasa-opt:has(input:checked){border-color:#f5a742;background:rgba(245,167,66,.08)}
+.kasa-opt input{margin-top:3px;width:18px;height:18px;accent-color:#f5a742}.kasa-opt small{display:block;color:#b9b2aa;font-size:12.5px;margin-top:2px}
+.kasa-n,.kasa-m{margin:8px 0}.kasa-safe{font-size:12.5px;color:#a9a19a;margin:10px 0 0}
+.kasa-cons{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:10px 0}.kasa-cons input{width:20px;height:20px;margin-top:2px;accent-color:#f5a742;flex:none}
+.kasa-msg{color:#ffb4a8;min-height:1.2em;margin:4px 0;font-size:13.5px}
+.kasa-soon{padding:12px 14px;border-radius:14px;background:rgba(245,167,66,.1);border:1px dashed rgba(245,167,66,.5);margin:10px 0}
+.kasa-soon h3{margin:0 0 6px;font-size:16px}.kasa-soon p{margin:0 0 8px}
+.kasa-act{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+.kasa-btn{appearance:none;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:inherit;border-radius:999px;padding:11px 18px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.kasa-btn.pri{background:#f5a742;border-color:#f5a742;color:#1a1208}
+.kasa-btn[disabled]{opacity:.45;cursor:not-allowed}
+.kasa-btn:focus-visible,.kasa-x:focus-visible,.kasa-opt:focus-within{outline:2px solid #fff;outline-offset:2px}
+.kasa-wait{color:#b9b2aa}
+.kasa-vatline{font-size:13px;color:inherit;opacity:.85}
+@media (prefers-reduced-motion:reduce){.kasa-bg{backdrop-filter:none}}

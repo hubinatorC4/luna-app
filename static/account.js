@@ -147,7 +147,7 @@ if (q){
     let n = 0; const before = (window.LunaPlan && window.LunaPlan().until) || 0;
     const poll = () => { window.LunaPlanRefresh && window.LunaPlanRefresh().then(() => {
       const p = window.LunaPlan ? window.LunaPlan() : {};
-      if (p.until && p.until !== before){ b.firstChild.textContent = `Płatność przyjęta ✅ Plan ${p.name} jest aktywny do ${new Date(p.until * 1000).toLocaleDateString('pl-PL')}. Potwierdzenie wyśle Stripe na Twój e-mail.`; return; }
+      if (p.until && p.until !== before){ b.firstChild.textContent = `Płatność przyjęta ✅ Plan ${p.name} jest aktywny do ${new Date(p.until * 1000).toLocaleDateString('pl-PL')}. Potwierdzenie wyśle partner płatniczy na Twój e-mail.`; return; }
       if (++n < 10) setTimeout(poll, 3000); else b.firstChild.textContent = 'Płatność jest jeszcze w toku (np. BLIK czeka na potwierdzenie w banku). Odśwież stronę za chwilę – jeśli dostęp się nie pojawi, zgłoś to w zakładce „Problemy techniczne”.';
     }); };
     setTimeout(poll, 1500);

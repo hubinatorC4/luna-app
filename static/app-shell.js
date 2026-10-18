@@ -182,6 +182,7 @@ async function renderPlans(){
   const price = id => pr[id] != null ? pr[id] : DEF[id];
   const user = me.user || null, csrf = me.csrf || '', myPlan = user && user.plan;
   const web = !!(bk.payments && bk.payments.web);
+  const kc = window.LunaKasa ? await LunaKasa.config() : null;
   const card = (id, hl) => {
     const free = Number(String(price(id)).replace(',', '.')) <= 0;
     const isMine = myPlan === id;
@@ -189,7 +190,7 @@ async function renderPlans(){
       : free ? (user ? '' : `<button class="btn full" data-go="account">${esc(T.free_btn)}</button>`)
       : `<button class="btn ${hl ? 'primary' : ''} full" data-buy="${id}">${esc(T.choose)} ${esc(pname(id))}</button>`;
     return `<div class="plan ${hl ? 'hl' : ''}">${hl ? `<span class="badge">${esc(T.rec)}</span>` : ''}<h3>${esc(pname(id))}</h3>
-      <div class="price">${free ? esc(T.free) : `${zl(price(id))} <small>zł</small>`}</div>
+      <div class="price">${free ? esc(T.free) : window.LunaKasa ? LunaKasa.priceOf(id, price(id), kc) : `${zl(price(id))} <small>zł</small>`}</div>
       <div class="pnote">${free ? esc(T.free_note) : `${esc(T.per)} · ${esc(T.pass_note)}`}</div>
       <ul>${T.feat[id].map(f => `<li>${esc(f)}</li>`).join('')}</ul>${act}</div>`;
   };
@@ -205,8 +206,9 @@ async function renderPlans(){
       <tbody>${T.cmp.map(r => `<tr><td>${esc(r[0])}</td>${yn(r[1])}${yn(r[2])}${yn(r[3])}</tr>`).join('')}</tbody></table></details>
     <div class="card" id="payBox"><h2 class="t" style="font-size:22px">${esc(T.pay_h)}</h2>
       <ul style="list-style:none;padding:0;margin:0 0 10px">${T.pay.map(p => `<li style="margin:6px 0">${esc(p)}</li>`).join('')}</ul>
+      ${kc ? `<p class="small">🧾 ${esc(LunaKasa.vatNote(kc))} ${esc(LunaKasa.locNote(kc))}</p>` : ''}
       ${status ? `<div class="tip" role="status"><span>ℹ️</span><span>${esc(status)}</span></div>${!TWA && web && !user ? `<button class="btn" data-go="account">${esc(T.go_login)}</button>` : ''}` :
-        `<label style="display:flex;gap:10px;align-items:flex-start;font-size:15px"><input type="checkbox" id="payConsent" style="margin-top:4px;width:20px;height:20px"> <span>${esc(T.consent)}</span></label><p class="small" id="payMsg" role="status"></p>`}
+        `<p class="small" id="payMsg" role="status"></p><button class="btn" id="kasaPortal" type="button">${esc(LunaKasa.T().portal)}</button>`}
     </div>
     <details class="more"><summary>${esc(T.pay_more)}</summary><p>${esc(T.pay_more_p)}</p>
       <p><a href="/regulamin.html" data-page>${esc(T.terms)}</a> · <a href="/privacy.html" data-page>${esc(T.privacy)}</a></p></details>
@@ -214,7 +216,9 @@ async function renderPlans(){
   tip('plans');
   host.querySelectorAll('[data-go=account]').forEach(b => b.onclick = openAccount);
   host.querySelectorAll('a[data-page]').forEach(a => a.onclick = e => { e.preventDefault(); openPage(a.getAttribute('href')); });
+  const kp = host.querySelector('#kasaPortal'); if (kp) kp.onclick = () => LunaKasa.portal();
   host.querySelectorAll('[data-buy]').forEach(b => b.onclick = async () => {
+    if (window.LunaKasa && !TWA){ LunaKasa.open({kind: 'pass', ref: b.dataset.buy, name: 'Luna ' + pname(b.dataset.buy), pln: price(b.dataset.buy)}); return; }
     if (status){ $('#payBox').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
     const msg = $('#payMsg');
     if (!$('#payConsent').checked){ msg.textContent = T.consent_need; $('#payConsent').focus(); return; }

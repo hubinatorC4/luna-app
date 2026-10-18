@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0a">
+<title>Przychody – panel moderatora · Luna</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="/panel.css?v=1.4.8">
+<link rel="stylesheet" href="/admin-support.css?v=1.6.7">
+</head>
+<body>
+<header class="ph"><b>💰 Przychody</b><span class="hint">Tylko prawdziwe dane pobrane od dostawcy płatności. Brak kluczy = brak danych (nic nie zgadujemy).</span><a class="plink" href="/panel.html">← Panel</a><button type="button" id="logout" hidden>Wyloguj</button></header>
+<main>
+<section id="login" class="card" hidden>
+  <h1>Zaloguj się</h1>
+  <p class="hint">Wpisz kod producenta. Kod nie jest zapisywany ani logowany; sesja wygasa po 30 minutach.</p>
+  <form id="lf"><input type="password" id="pass" autocomplete="current-password" aria-label="Kod producenta" placeholder="Kod producenta" required><button type="submit">Zaloguj</button></form>
+  <p class="err" id="lerr" role="alert"></p>
+</section>
+<section id="app" hidden>
+  <div class="card"><h2>Stan płatności</h2><div id="st"></div></div>
+  <div class="card" style="margin-top:16px"><h2>Miesiące <span class="hint">(brutto, opłaty pośrednika, VAT rozliczony przez pośrednika, netto do wypłaty)</span></h2>
+    <div id="months"></div>
+    <p class="hint">CSV dla księgowości: jeden plik na miesiąc (separator „;”, kwoty z przecinkiem). Dane pochodzą z API dostawcy; wiążące są miesięczne zestawienia i dokumenty wypłat w panelu dostawcy.</p></div>
+  <div class="card" style="margin-top:16px"><h2>Ostatnie transakcje</h2><div id="recent"></div></div>
+</section>
+<p class="err" id="err" role="alert"></p>
+</main>
+<script src="/admin-przychody.js?v=1.7.0"></script>
+</body>
+</html>

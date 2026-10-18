@@ -10,6 +10,7 @@ PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "
 PAGES.update({"/zaufanie.html": ["common"], "/zgloszenie.html": ["common"], "/zespol.html": ["common"], "/zasady-bitew.html": ["common"]})
 for _k in PAGES: PAGES[_k] = ["trust"] + PAGES[_k]   # link „Bezpieczeństwo i anonimowość” w stopce i karta na stronie/w aplikacji
 PAGES["/regulamin.html"] = ["regulamin_v170"] + PAGES["/regulamin.html"]; PAGES["/privacy.html"] = ["privacy_v170"] + PAGES["/privacy.html"]
+PAGES["/regulamin.html"] = ["regulamin_v171"] + PAGES["/regulamin.html"]; PAGES["/privacy.html"] = ["regulamin_v171"] + PAGES["/privacy.html"]   # v1.7.1: płatności (MoR)
 JS = {"portal.js": ["js_portal", "js_fix"], "legal.js": "js_fix", "live.js": "js_live", "testers.js": "js_testers", "push.js": "js_push",
       "app.js": "js_app", "account.js": ["js_account", "js_age"], "custom.js": "js_custom", "livechat.js": "js_livechat", "profile.js": "js_profile"}
 JS_ON = ("/promo.html", "/live.html", "/index.html", "/testerzy.html", "/regulamin.html")

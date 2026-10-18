@@ -13,6 +13,12 @@ def csp(turnstile=False, frame="'self'"):
     if turnstile:
         c = c.replace("script-src 'self'", "script-src 'self' " + TS_HOST).replace("connect-src 'self'", "connect-src 'self' " + TS_HOST) + "; frame-src " + TS_HOST
     return c
+PADDLE = "https://*.paddle.com"
+def csp_paddle(c):
+    """Tylko strona /kasa.html: skrypt i okno kasy Paddle (cdn.paddle.com, buy.paddle.com, sandbox-buy.paddle.com)."""
+    c = c.replace("script-src 'self'", "script-src 'self' " + PADDLE, 1).replace("connect-src 'self'", "connect-src 'self' " + PADDLE, 1)
+    c = c.replace("img-src 'self'", "img-src 'self' " + PADDLE, 1).replace("style-src 'self'", "style-src 'self' " + PADDLE, 1)
+    return c.replace("frame-src ", "frame-src " + PADDLE + " ", 1) if "frame-src" in c else c + "; frame-src " + PADDLE
 HEADERS = {
     "Content-Security-Policy": CSP,
     "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
