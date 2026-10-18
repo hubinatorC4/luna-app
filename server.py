@@ -1016,7 +1016,7 @@ class H(SimpleHTTPRequestHandler):
             try:
                 if p == "/api/admin/battles":
                     if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
-                    return self._json(battles.admin_action(data))
+                    return self._json(battles.admin_action(dict(data, _ip=self._ip())))
                 if p == "/api/battles/chat/report":
                     if not livechat.rate_ok("btr:" + ip, 5, 60): return self._json({"error": "Za dużo zgłoszeń."}, 429)
                     battles.chat_report(uid, dev, str(data.get("bid", "")), int(data.get("mid") or 0)); return self._json({"ok": True})
@@ -1232,6 +1232,8 @@ class H(SimpleHTTPRequestHandler):
             if p == "/api/battles":
                 if dev and not antibot.UA_BOT.search(self.headers.get("User-Agent", "") or "bot"): battles.touch(dev)
                 return self._json(self._bt_pub(battles.public(uid, dev, (q.get("b") or [""])[0][:12] or None), uid))
+            if p == "/api/battles/rules":   # 📜 Zasady bitew: liczby z konfiguracji + ile głosów usunięto jako oszustwo (bez nazw kont)
+                return self._json({"fraud": battles.fraud_counts(), "need": battles.NEED, "min_h": battles.MIN_H, "max_h": battles.MAX_H, "hours": battles.duration_h(), "pts_win": battles.PTS_WIN})
             if p == "/api/battles/categories":
                 import battle_categories
                 return self._json(dict(battle_categories.public(), basic=battles.basic_scenes()))
@@ -1376,6 +1378,9 @@ class H(SimpleHTTPRequestHandler):
             if promo_share.handle_get(self, u, self._pid_plan): return
         if u.path == "/api/age/status":
             return self._json(age.status(parse_qs(u.query).get("vid", [""])[0][:40]))
+        if u.path == "/api/agents/popular":   # 🔥 Najpopularniejsze agentki (prawdziwe zaangażowanie po filtrze antybotowym)
+            try: return self._json({"items": battles.popular(8)})
+            except Exception as e: sys.stderr.write("popular %s\n" % type(e).__name__); return self._json({"items": []})
         if u.path == "/api/agents/feed":
             # Ściana agentek w aplikacji: ranking prawdziwego zaangażowania + świeżość, filtry all|partner|video
             q = parse_qs(u.query); uid, dev = self._who(); off = (q.get("offset") or ["0"])[0]

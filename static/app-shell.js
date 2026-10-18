@@ -241,6 +241,10 @@ function openAccount(){
 const BT = {pl: ['⚔️ Bitwy agentek', 'Dwie agentki AI, Twój głos, czat na żywo'], en: ['⚔️ Agent battles', 'Two AI agents, your vote, live chat'], es: ['⚔️ Batallas de agentes', 'Dos agentes de IA, tu voto, chat en directo'],
   de: ['⚔️ Agentinnen-Battles', 'Zwei KI-Agentinnen, deine Stimme, Live-Chat'], uk: ['⚔️ Битви агенток', 'Дві ШІ-агентки, ваш голос, чат наживо']}[lang] || ['⚔️ Bitwy agentek', ''];
 const RK = {pl: ['🏆 Ranking bitew', 'Ligi, punkty i Top użytkowników'], en: ['🏆 Battle ranking', 'Leagues, points and top users'], es: ['🏆 Ranking de batallas', 'Ligas, puntos y top usuarios'], de: ['🏆 Battle-Ranking', 'Ligen, Punkte und Top-Nutzer'], uk: ['🏆 Рейтинг битв', 'Ліги, бали й топ користувачів']}[lang] || ['🏆 Ranking bitew', 'Ligi, punkty i Top użytkowników'];
+const ZB = {pl: ['📜 Zasady bitew', '1 konto = 1 głos, wygrywa więcej ważnych głosów'], en: ['📜 Battle rules', '1 account = 1 vote, more valid votes wins'], es: ['📜 Reglas de las batallas', '1 cuenta = 1 voto, gana quien tenga más votos válidos'],
+  de: ['📜 Battle-Regeln', '1 Konto = 1 Stimme, mehr gültige Stimmen gewinnen'], uk: ['📜 Правила битв', '1 акаунт = 1 голос, перемагає більше дійсних голосів']}[lang] || ['📜 Zasady bitew', ''];
+const PA = {pl: ['🔥 Najpopularniejsze agentki', 'Prawdziwe polubienia, komentarze i głosy'], en: ['🔥 Most popular agents', 'Real likes, comments and votes'], es: ['🔥 Agentes más populares', 'Me gusta, comentarios y votos reales'],
+  de: ['🔥 Beliebteste Agentinnen', 'Echte Likes, Kommentare und Stimmen'], uk: ['🔥 Найпопулярніші агентки', 'Справжні вподобання, коментарі й голоси']}[lang] || ['🔥 Najpopularniejsze agentki', ''];
 const SUP = {pl: ['🛟 Pomoc na żywo', 'Asystent AI od ręki, moderator albo „Napisz do moderatora”'], en: ['🛟 Live help', 'Instant AI assistant, a moderator or “Write to a moderator”'], es: ['🛟 Ayuda en directo', 'Asistente IA al instante, un moderador o «Escribir a un moderador»'],
   de: ['🛟 Live-Hilfe', 'KI-Assistent sofort, Moderation oder „Der Moderation schreiben“'], uk: ['🛟 Допомога наживо', 'ШІ-асистент одразу, модератор або «Написати модератору»']}[lang] || ['🛟 Pomoc na żywo', ''];
 function renderMore(){
@@ -252,7 +256,9 @@ function renderMore(){
       <li><a href="/problemy.html" data-page>${esc(T.problems)}</a></li>
       <li><a href="/twarz.html#castForm" data-page><span>${esc(T.cast)}<small>${esc(T.cast_s)}</small></span></a></li>
       <li data-bt><a href="/bitwy.html"><span>${esc(BT[0])}<small>${esc(BT[1])}</small></span></a></li>
-      <li data-bt><a href="/ranking.html" data-page><span>${esc(RK[0])}<small>${esc(RK[1])}</small></span></a></li></ul>
+      <li data-bt><a href="/ranking.html" data-page><span>${esc(RK[0])}<small>${esc(RK[1])}</small></span></a></li>
+      <li data-bt><a href="/zasady-bitew.html" data-page><span>${esc(ZB[0])}<small>${esc(ZB[1])}</small></span></a></li>
+      <li><a href="/agentki.html#popularne" data-page><span>${esc(PA[0])}<small>${esc(PA[1])}</small></span></a></li></ul>
     <h2 class="t" id="howH" style="font-size:22px">${esc(T.how_h)}</h2>
     ${T.how.map(([h, p]) => `<details class="more"><summary>${esc(h)}</summary><p>${esc(p)}</p></details>`).join('')}
     <ul class="menu"><li><button type="button" id="replay">${esc(T.replay)}</button></li></ul>

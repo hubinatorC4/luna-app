@@ -44,10 +44,12 @@ function renderA(){
   if (!list.length){ el.innerHTML = empty(t.empty_l); return; }
   el.innerHTML = rows(list, posOf);
 }
+function titlesOf(a){ const c = a.cat_titles || {}, k = Object.keys(c).filter(x => c[x] > 0);
+  return k.length ? `<br><small class="rk-tt" title="${esc(t.titles_h || '')}">👑 ${k.map(x => `${B.CAT[x] ? B.CAT[x].emoji : ''} ${esc(B.catName(x))} ×${fmt(c[x])}`).join(' · ')}</small>` : ''; }
 function rows(list, posOf){
   return `<ol class="rk-list">${list.map((a, i) => `<li class="rk-row${R.my_agent && R.my_agent.id === a.id ? ' me' : ''}"><span class="rk-pos">${fmt(posOf(a, i))}</span>
     <img src="${esc(a.img)}" alt="" width="40" height="52" loading="lazy"><span class="rk-name"><b>${esc(a.name)}</b> <span class="rk-ai">${esc(B.T.ai)}</span><br>${B.league(a.league, a.elite)}${cat ? '' : ' ' + (a.cats || []).map(c => B.CAT[c] ? `<span title="${esc(B.catName(c))}">${B.CAT[c].emoji}</span>` : '').join('')}</span>
-    <span class="rk-num"><b>${fmt(a.pts)}</b> ${esc(B.T.pts)}<br><small>${fmt(a.wins)}/${fmt(a.played)} · ${fmt(a.pct)}%</small></span></li>`).join('')}</ol>`;
+    <span class="rk-num"><b>${fmt(a.pts)}</b> ${esc(B.T.pts)}<br><small>${esc((t.wld || '{w}/{l}/{d}').replace('{w}', fmt(a.wins)).replace('{l}', fmt(a.losses || 0)).replace('{d}', fmt(a.draws || 0)))} · ${fmt(a.pct)}%</small>${titlesOf(a)}</span></li>`).join('')}</ol>`;
 }
 function userRow(u, pinned){
   return `<tr class="${u.me ? 'me' : ''}${pinned ? ' pin' : ''}"><td class="rk-pos">${u.pos ? fmt(u.pos) : '–'}</td>

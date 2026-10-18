@@ -38,6 +38,14 @@ const qPill = v => { if (!Q) return; const h = Math.min(v.videoHeight > v.videoW
   const p = v.parentNode.querySelector('.q-pill'); if (p && h) p.textContent = `${h}p · ${Q.plan_name}`; };
 document.addEventListener('loadedmetadata', e => { if (e.target.matches && e.target.matches('.wl-media')) qPill(e.target); }, true);
 document.addEventListener('click', e => { const b = e.target.closest('[data-qx]'); if (!b) return; try { localStorage.setItem('luna.qbub', '1'); } catch(_){} document.querySelectorAll('.q-bub').forEach(x => x.remove()); });
+async function popular(){   // 🔥 Najpopularniejsze agentki – tylko prawdziwe liczby z serwera
+  const el = $('#popList'); if (!el) return; const T = t();
+  try { const r = await (await fetch('/api/agents/popular')).json(); const L = r.items || [];
+    el.innerHTML = L.length ? L.map((a, i) => `<a class="wl-pc" href="/ranking.html${lq() ? '?' + lq() : ''}"><span class="pn">#${i + 1}</span><img src="${esc(a.img)}" alt="" loading="lazy" width="100" height="130"><b>${esc(a.name)}</b><small>${esc(T.pop_l.replace('{n}', a.likes))}${a.wins ? ' · ' + esc(T.pop_w.replace('{n}', a.wins)) : ''}</small><small class="ai-badge" style="position:static;display:inline-block">AI</small></a>`).join('')
+      : `<p class="hint">${esc(T.pop_none)}</p>`;
+  } catch(e){ el.innerHTML = `<p class="hint">${esc(T.pop_none)}</p>`; }
+}
+popular();
 async function load(){
   if (busy || next === null) return; busy = true; const g = gen;
   try {

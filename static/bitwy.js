@@ -90,7 +90,7 @@ function renderLast(){
   el.innerHTML = S.last.map(r => {
     const res = r.reason !== 'end' ? t.cancelled : r.winner ? `<span class="w">🏆 ${esc(r[r.winner].name)}</span> ${esc(t.won)} · 👑 ${esc(B.titleName(r.scene))} · +${S.pts_win || 10} ${esc(B.T.pts)}` : t.draw;
     const lgl = (r.feat ? B.featLabel() + ' ' : '') + (r.cat ? B.catPill(r.cat) + ' ' : '') + (r.lg ? `${B.league(r.lg)} ` : '');
-    return `<div class="bt-r"><img${r.a.partner ? ' class="pt-ring"' : ''} src="${esc(r.a.img)}" alt="" width="40" height="52"><img${r.b.partner ? ' class="pt-ring"' : ''} src="${esc(r.b.img)}" alt="" width="40" height="52"><div><b>${esc(r.a.name)}</b>${ptm(r.a)} ${fmt(r.va)} : ${fmt(r.vb)} <b>${esc(r.b.name)}</b>${ptm(r.b)}<br>${lgl}${res} · ${new Date(r.end * 1000).toLocaleDateString(L)}</div></div>`;
+    return `<div class="bt-r"><img${r.a.partner ? ' class="pt-ring"' : ''} src="${esc(r.a.img)}" alt="" width="40" height="52"><img${r.b.partner ? ' class="pt-ring"' : ''} src="${esc(r.b.img)}" alt="" width="40" height="52"><div><b>${esc(r.a.name)}</b>${ptm(r.a)} ${fmt(r.va)} : ${fmt(r.vb)} <b>${esc(r.b.name)}</b>${ptm(r.b)}<br>${lgl}${res} · ${new Date(r.end * 1000).toLocaleDateString(L)}${r.fraud ? ` · <small class="bt-fr">🛡️ ${esc(t.fraud_n.replace('{n}', fmt(r.fraud)))}</small>` : ''}</div></div>`;
   }).join('');
 }
 function renderEnter(){

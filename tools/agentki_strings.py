@@ -25,5 +25,11 @@ S = {
 "q_close": ["Zamknij", "Close", "Cerrar", "Schließen", "Закрити"],
 "q_pill": ["Jakość wideo", "Video quality", "Calidad de vídeo", "Videoqualität", "Якість відео"],
 }
+# v1.6.9 🔥 Najpopularniejsze agentki
+S["pop_h"] = ["🔥 Najpopularniejsze agentki", "🔥 Most popular agents", "🔥 Agentes más populares", "🔥 Beliebteste Agentinnen", "🔥 Найпопулярніші агентки"]
+S["pop_p"] = ["Według prawdziwych polubień, komentarzy i głosów w bitwach (po filtrze antybotowym). Bez kupionych serduszek.", "Based on real likes, comments and battle votes (after the bot filter). No bought hearts.", "Según me gusta, comentarios y votos reales en batallas (tras el filtro antibots). Sin corazones comprados.", "Nach echten Likes, Kommentaren und Battle-Stimmen (nach dem Bot-Filter). Keine gekauften Herzen.", "За справжніми вподобаннями, коментарями й голосами в битвах (після антибот-фільтра). Без куплених сердечок."]
+S["pop_none"] = ["Ranking ruszy, gdy pojawią się pierwsze prawdziwe reakcje. Polub, skomentuj, zagłosuj – i będzie o kim mówić. 😉", "The ranking starts once the first real reactions come in. Like, comment, vote – and there’ll be someone to talk about. 😉", "El ranking arrancará con las primeras reacciones reales. Da me gusta, comenta, vota… y habrá de quién hablar. 😉", "Das Ranking startet mit den ersten echten Reaktionen. Liken, kommentieren, abstimmen – dann gibt’s Gesprächsstoff. 😉", "Рейтинг з’явиться з першими справжніми реакціями. Вподобай, прокоментуй, проголосуй – і буде про кого говорити. 😉"]
+S["pop_l"] = ["❤️ {n}", "❤️ {n}", "❤️ {n}", "❤️ {n}", "❤️ {n}"]
+S["pop_w"] = ["🏆 {n} wygr.", "🏆 {n} wins", "🏆 {n} vict.", "🏆 {n} Siege", "🏆 {n} перем."]
 L = ["pl", "en", "es", "de", "uk"]
 def dicts(): return {l: {k: v[i] for k, v in S.items()} for i, l in enumerate(L)}

@@ -190,10 +190,13 @@ def _stats(since=0, cat=None):
     for r in _results():
         if r["t"] < since or (cat and r.get("cat") != cat): continue
         for side in ("a", "b"):
-            c = r[side]; s = A.setdefault(c["id"], {"wins": 0, "played": 0, "votes": 0, "last": 0, "uid": c.get("uid"), "titles": []})
+            c = r[side]; s = A.setdefault(c["id"], {"wins": 0, "played": 0, "votes": 0, "last": 0, "uid": c.get("uid"), "titles": [], "losses": 0, "draws": 0, "cat_titles": {}})
             s["played"] += 1; s["votes"] += r["v" + side]
             if r["win"] == side:
                 s["wins"] += 1; s["last"] = max(s["last"], r["t"]); s["titles"].append(r["scene"])
+                if r.get("cat"): s["cat_titles"][r["cat"]] = s["cat_titles"].get(r["cat"], 0) + 1   # tytuły w kategorii = wygrane bitwy tej kategorii
+            elif r["win"] is None: s["draws"] += 1
+            else: s["losses"] += 1
     for s in A.values():
         s["pts"] = s["wins"] * PTS_WIN; s["pct"] = round(s["wins"] * 100 / s["played"]) if s["played"] else 0
     return A
@@ -206,7 +209,7 @@ def _agent_rows(A=None):
     A = A if A is not None else _stats()
     rows = [dict(LUNA, uid=None, t=0, cats=list(BC.LUNA_CATS))] + [{"id": e["id"], "uid": e["uid"], "name": e["name"], "img": "/api/battles/img/" + e["id"], "official": False, "t": e["t"], "cats": list(e.get("cats") or BC.DEFAULT_CATS)}
                                          for e in _entries() if e["status"] == "approved" and not social.banned(e["ak"])]
-    z = {"wins": 0, "played": 0, "votes": 0, "last": 0, "titles": [], "pts": 0, "pct": 0}
+    z = {"wins": 0, "played": 0, "votes": 0, "last": 0, "titles": [], "pts": 0, "pct": 0, "losses": 0, "draws": 0, "cat_titles": {}}
     out = []
     for r in rows:
         s = A.get(r["id"], z); out.append(dict(r, **{k: s[k] for k in z}))
@@ -283,6 +286,10 @@ def _finalize(st, b, now, reason="end"):
     if b is st.get("cur"): st["cur"] = None
     elif b is st.get("feat"): st["feat"] = None
     else: st["lg"] = {k: v for k, v in (st.get("lg") or {}).items() if v is not b}
+    try:   # archiwum głosów (tylko klucze kont) – żeby moderacja mogła usunąć udowodnione oszustwo także po zakończeniu
+        AV = store.get("bt_votes_arch", {}) or {}; AV[b["id"]] = dict(b["votes"])
+        store.put("bt_votes_arch", dict(list(AV.items())[-400:]))
+    except Exception: pass
     if reason == "end":   # tylko rozstrzygnięte normalnie bitwy trafiają do punktów; przerwane = bez punktów
         R = _results()
         R.append({"bid": b["id"], "t": res["end"], "scene": b["scene"], "lg": b.get("lg"), "cat": b.get("cat"), "va": va, "vb": vb, "win": win,
@@ -380,7 +387,8 @@ def public(uid=None, dev="", bid=None):
     out["others"] = [_summary(x, X) for x in _all(st)]
     ch = st.get("champ")
     if ch and ch["until"] > now: out["champion"] = ch
-    out["last"] = [{k: h.get(k) for k in ("id", "a", "b", "scene", "lg", "cat", "feat", "end", "va", "vb", "winner", "reason")} for h in st.get("hist", [])[:5]]
+    FC = fraud_counts()
+    out["last"] = [dict({k: h.get(k) for k in ("id", "a", "b", "scene", "lg", "cat", "feat", "end", "va", "vb", "winner", "reason")}, fraud=FC.get(h["id"], 0)) for h in st.get("hist", [])[:5]]
     _mark_partners(out)
     me = my_entry(uid)
     if me:
@@ -413,7 +421,7 @@ def profile(aid):
     """Publiczny profil agentki: imię, obraz, punkty, liga, Elita, wygrane i tytuły (tylko z prawdziwych wyników)."""
     r = _badge_map().get(aid)
     if not r: return None
-    return {k: r[k] for k in ("id", "name", "img", "official", "wins", "played", "pct", "pts", "league", "elite", "titles", "pos", "cats")} | {"next": next_league(r["pts"]), "cranks": _cranks().get(aid, {})}
+    return {k: r.get(k) for k in ("id", "name", "img", "official", "wins", "played", "pct", "pts", "league", "elite", "titles", "pos", "cats", "losses", "draws", "cat_titles")} | {"next": next_league(r["pts"]), "cranks": _cranks().get(aid, {})}
 
 def vote(uid, dev, bid, side):
     if not uid: raise PermissionError("Zaloguj się, aby głosować – 1 konto = 1 głos.")
@@ -491,7 +499,7 @@ def users_board(period="all", uid=None, accts=None, plan_of=None, limit=100):
 
 def ranking(uid=None, period="all", accts=None, plan_of=None):
     rows = _agent_rows()
-    pub = lambda r: {k: r[k] for k in ("pos", "id", "name", "img", "official", "pts", "wins", "played", "pct", "votes", "league", "elite", "titles", "cats")}
+    pub = lambda r: {k: r.get(k) for k in ("pos", "id", "name", "img", "official", "pts", "wins", "played", "pct", "votes", "league", "elite", "titles", "cats", "losses", "draws", "cat_titles")}
     by = {k: [] for k, _ in LEAGUES}
     for r in rows: by[r["league"]].append(pub(r) | {"lpos": len(by[r["league"]]) + 1})
     mine = None
@@ -661,6 +669,8 @@ def admin_action(d):
             store.put("bt_entries", E)
         if a in ("reject", "remove"): _cancel_if_in_battle(lambda c: c.get("id") == i, "removed")
         return admin_list()
+    if a == "fraud_votes":   # jedyna dozwolona ingerencja w głosy; brak akcji „ustaw zwycięzcę” – celowo
+        return remove_fraud_votes(str(d.get("bid", "")), d.get("accounts") or [], d.get("reason"), d.get("_ip", ""))
     if a in ("chat_delete", "chat_restore", "chat_ban"):
         bid = str(d.get("bid", "")); mid = int(d.get("mid", 0))
         with _lock:
@@ -673,3 +683,77 @@ def admin_action(d):
             B = social._bans(); B.add(m["ak"]); store.put("social_bans", sorted(B))
         return admin_list()
     raise ValueError("bad action")
+
+
+# ---------- uczciwość: zasady, popularne agentki, usuwanie udowodnionych oszustw (bez ręcznej zmiany wyniku) ----------
+FRAUD_MIN_REASON = 10
+def _fraud_log(): return store.get("bt_fraud_log", []) or []
+
+def fraud_counts():
+    """{bid: liczba usuniętych głosów} – publicznie widać tylko liczby, nigdy kto."""
+    out = {}
+    for x in _fraud_log(): out[x["bid"]] = out.get(x["bid"], 0) + x["n"]
+    return out
+
+def remove_fraud_votes(bid, accounts, reason, ip=""):
+    """JEDYNA ingerencja admina w wynik: usunięcie głosów z UDOWODNIONYCH fałszywych/zduplikowanych kont, z powodem w dzienniku audytu.
+    Wynik zawsze przeliczany z pozostałych ważnych głosów (więcej ważnych głosów wygrywa, równo = remis). Ręcznego ustawiania zwycięzcy nie ma."""
+    import security
+    reason = str(reason or "").strip()[:200]
+    if len(reason) < FRAUD_MIN_REASON: raise ValueError("Podaj konkretny powód (min. 10 znaków) – trafi do dziennika audytu.")
+    keys = []
+    for a in accounts or []:
+        a = str(a).strip()
+        if not a: continue
+        if not a.startswith("u:"):
+            try:
+                import accounts as AC
+                k = social._norm(a); u = next((x.get("uid") or uu for uu, x in AC._accts().items() if social._norm(x.get("name") or "") == k), None)
+            except Exception: u = None
+            if not u: raise ValueError("Nie znaleziono konta: " + a[:30])
+            a = "u:" + u
+        keys.append(a)
+    if not keys: raise ValueError("Wskaż konta, których głosy usuwasz.")
+    with _lock:
+        st = _state(); b = _find(st, bid); n = 0
+        if b:   # bitwa trwa
+            for k in keys:
+                if b["votes"].pop(k, None) is not None: n += 1
+            store.put("bt_state", st)
+        else:   # bitwa zakończona: przeliczenie z archiwum głosów
+            AV = store.get("bt_votes_arch", {}) or {}; V = AV.get(bid)
+            if V is None: raise ValueError("Brak archiwum głosów tej bitwy.")
+            for k in keys:
+                if V.pop(k, None) is not None: n += 1
+            AV[bid] = V; store.put("bt_votes_arch", AV)
+            X = excluded(); va = sum(1 for k, x in V.items() if x == "a" and k not in X); vb = sum(1 for k, x in V.items() if x == "b" and k not in X)
+            R = _results()
+            for r in R:
+                if r.get("bid") == bid:
+                    r["va"], r["vb"] = va, vb; r["win"] = None if va == vb else ("a" if va > vb else "b")
+            store.put("bt_results", R)
+            for h in st.get("hist", []):
+                if h["id"] == bid and h.get("reason") == "end":
+                    h["va"], h["vb"] = va, vb; h["winner"] = None if va == vb else ("a" if va > vb else "b")
+            ch = st.get("champ") or {}
+            if ch.get("bid") == bid:
+                w = None if va == vb else ("a" if va > vb else "b")
+                if not w: st["champ"] = None
+                else: ch.update(c=ch[w], winner=w, va=va, vb=vb, votes=max(va, vb), pct=round(max(va, vb) * 100 / (va + vb)))
+            store.put("bt_state", st)
+        L = _fraud_log(); L.append({"t": int(time.time()), "bid": bid, "n": n, "reason": reason}); store.put("bt_fraud_log", L[-2000:])
+    security.audit("battle_fraud_votes", ip, f"bid={bid} removed={n} reason={reason}")
+    return {"ok": True, "removed": n, "bid": bid}
+
+def popular(n=8):
+    """🔥 Najpopularniejsze agentki: prawdziwe zaangażowanie (polubienia, komentarze, głosy w bitwach) po filtrze antybotowym.
+    Tylko agentki z wynikiem > 0 – bez wypełniaczy i bez zmyślonych liczb."""
+    V = social._votes(); X = antibot.excluded(); out = []
+    for r in _eligible():
+        if r["score"] <= 0: continue
+        tg = "agent:" + ("luna-" + social.LUNA_GAL[0] if r["id"] == "luna" else "bt-" + r["id"])
+        likes = sum(social.counts(t, None, V, X)["up"] for t in (LUNA_TARGETS if r["id"] == "luna" else [tg]))
+        out.append({"id": r["id"], "name": r["name"], "img": r["img"], "official": r.get("official", False), "partner": r.get("partner", False),
+                    "likes": likes, "wins": r.get("wins", 0), "votes": r.get("votes", 0), "pos": r.get("pos")})
+        if len(out) >= n: break
+    return out
