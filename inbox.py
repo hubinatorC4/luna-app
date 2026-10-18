@@ -375,7 +375,7 @@ def dm_list(uid, p, since=0):
         if f["unread"].get(k): f["unread"].pop(k, None); _save_fr(uid, f)
     seen = d.get("rd", {}).get(other, 0) if (pa["receipts"] and pb["receipts"]) else None
     out = [dict({"id": m["id"], "mine": m["f"] == uid, "text": m["x"], "t": m["t"]},
-                **({"photo": True, "hold": bool(m.get("hold")), "w": m.get("w"), "h": m.get("h")} if m.get("img") else {}))
+                **({"photo": True, "hold": bool(m.get("hold")), "auto": bool(m.get("ar")), "w": m.get("w"), "h": m.get("h")} if m.get("img") else {}))
            for m in M if m["id"] > since and m["id"] not in hid and not m.get("rm")]
     return {"items": out, "last": last, "seen": seen, "peer": person(other), "receipts": pa["receipts"] and pb["receipts"]}
 
@@ -439,6 +439,8 @@ def dm_photo(uid, p, data_url, plan, admin=False, partner=False, ack=False):
     blk = set(store.get("dm_ph_block", []) or [])
     hr = hashlib.sha256(raw).hexdigest()
     if hr in blk: raise PermissionError(PH_MSG["blocked_img"])
+    import nsfw_filter
+    verdict = nsfw_filter.enforce(raw, "dm")   # jawna nagość → Blocked (400, nic nie zapisujemy); granica/niepewność → "review" (wstrzymane do moderatora)
     out = imgsafe.reencode_webp(raw, max_px=px, max_in=PH_MAX_IN)
     ho = hashlib.sha256(out).hexdigest()
     if ho in blk: raise PermissionError(PH_MSG["blocked_img"])
@@ -455,7 +457,7 @@ def dm_photo(uid, p, data_url, plan, admin=False, partner=False, ack=False):
     store.put("dmimg:" + iid, {"k": k, "b": _b64.b64encode(out).decode(), "hr": hr, "ho": ho, "t": int(time.time())})
     with _lock:
         d = _dm(k); M = d.setdefault("m", []); mid = (M[-1]["id"] + 1) if M else 1
-        M.append({"id": mid, "f": uid, "x": "", "img": iid, "w": w, "h": h, "t": int(time.time())})
+        M.append({"id": mid, "f": uid, "x": "", "img": iid, "w": w, "h": h, "t": int(time.time()), **({"hold": 1, "ar": 1} if verdict != "ok" else {})})
         if len(M) > MAX_DM:
             for old in M[:-MAX_DM]:
                 if old.get("img"): store.put("dmimg:" + old["img"], {})
@@ -467,9 +469,14 @@ def dm_photo(uid, p, data_url, plan, admin=False, partner=False, ack=False):
         fm = _fr(uid); fm.setdefault("last", {})[k] = lastv; _save_fr(uid, fm)
         u = store.get("dmpu:" + uid, {}) or {}
         store.put("dmpu:" + uid, {"d": _day(), "n": (int(u.get("n", 0)) if u.get("d") == _day() else 0) + 1})
+        if verdict != "ok":   # automatyczny filtr niepewny → kolejka moderatora (odbiorca nic nie widzi do decyzji)
+            R = store.get("dm_reports", []) or []
+            R.append({"id": secrets.token_hex(5), "t": int(time.time()), "by": uid, "who": uid, "pair": k, "mid": mid, "copy": "[zdjęcie]", "img": iid,
+                      "reason": "Automatyczny filtr: do sprawdzenia", "st": "open", "auto": 1})
+            store.put("dm_reports", R[-500:])
     if notify.push_enabled() and prefs(other)["push"] and int(fo["unread"][k]) == 1:
         threading.Thread(target=notify.send_push, args=("manual", "📷 " + person(uid)["nick"], "Nowe zdjęcie na czacie Luny", "/znajomi.html"), kwargs={"tag": "dm", "uid": other}, daemon=True).start()
-    return mid
+    return mid, verdict
 
 def dm_img(uid, p, mid):
     """Bajty zdjęcia – tylko dla dwóch osób rozmowy; zgłoszone (hold) i usunięte nie są wydawane."""
@@ -525,7 +532,7 @@ def dm_report(uid, p, mid, reason=""):
 
 def admin_reports():
     A = accounts._accts()
-    return [{"id": r["id"], "t": r["t"], "reporter": person(r["by"], A)["nick"], "reported": person(r["who"], A)["nick"], "kind": "message" if r.get("mid") else "account",
+    return [{"id": r["id"], "t": r["t"], "reporter": "🤖 filtr automatyczny" if r.get("auto") else person(r["by"], A)["nick"], "auto": bool(r.get("auto")), "reported": person(r["who"], A)["nick"], "kind": "message" if r.get("mid") else "account",
              "message": r.get("copy"), "reason": r.get("reason"), "status": r["st"], "photo": bool(r.get("img")),
              "img_url": f"/api/admin/inbox/img?id={r['id']}" if r.get("img") and r["st"] == "open" else None} for r in reversed(store.get("dm_reports", []) or [])][:200]
 
@@ -733,10 +740,11 @@ def handle_post(h, u, data):
             return h._json({"ok": True, "id": mid, **dm_list(uid, data.get("pid"), int(data.get("since") or 0))})
         if p == "/api/dm/photo":
             pl, adm, pt = PLAN_OF(h, uid)
-            try: mid = dm_photo(uid, data.get("pid"), data.get("image"), pl, adm, pt, data.get("ack") is True)
+            try: mid, verdict = dm_photo(uid, data.get("pid"), data.get("image"), pl, adm, pt, data.get("ack") is True)
             except LookupError: return h._json({"error": "ack", "need_ack": True}, 409)
             except OverflowError as e: return h._json({"error": str(e), "limit": True, **ph_status(uid, pl, adm, pt)}, 429)
-            return h._json({"ok": True, "id": mid, "photo": ph_status(uid, pl, adm, pt), **dm_list(uid, data.get("pid"), int(data.get("since") or 0))})
+            import nsfw_filter
+            return h._json({"ok": True, "id": mid, **({"review": nsfw_filter.review_message()} if verdict != "ok" else {}), "photo": ph_status(uid, pl, adm, pt), **dm_list(uid, data.get("pid"), int(data.get("since") or 0))})
         if p == "/api/dm/report":
             if not livechat.rate_ok("dmr:" + uid, 5, 40): return h._json({"error": "Za dużo zgłoszeń."}, 429)
             dm_report(uid, data.get("pid"), data.get("mid"), data.get("reason")); return h._json({"ok": True})

@@ -182,7 +182,7 @@ function draw(d){
 function photoBubble(li, m){
   li.classList.add('ib-phb-msg');
   const t = `<time datetime="${new Date(m.t * 1000).toISOString()}">${esc(clock(m.t))}</time>`;
-  if (m.hold){ li.innerHTML = `<span class="ib-tx ib-hold">${esc(T.ph_hold)}</span>${t}`; return; }
+  if (m.hold){ li.innerHTML = `<span class="ib-tx ib-hold">${esc(m.auto ? T.ph_check : T.ph_hold)}</span>${t}`; return; }
   const src = L('/api/dm/img?pid=' + encodeURIComponent(chat.pid) + '&mid=' + m.id);
   const wh = m.w && m.h ? ` width="${m.w}" height="${m.h}"` : '';
   li.innerHTML = `<figure class="ib-ph${m.mine ? '' : ' blur'}"><img src="${src}" alt="${esc(m.mine ? T.ph_mine : T.ph_alt)}" loading="lazy" decoding="async"${wh}>
@@ -205,7 +205,7 @@ async function sendPhoto(f, ack){
   if (f.size > 10 * 1024 * 1024) return toast(T.ph_big);
   if (!chat.ack && !ack){ if (!confirm(T.ph_rules)) return; ack = true; }
   const b = $('#phBtn'); b.disabled = true; toast(T.ph_sending);
-  try { const d = await api('/api/dm/photo', {pid: chat.pid, image: await readURL(f), since: chat.last, ack: !!ack}); chat.ack = true; draw(d); phQuota(d.photo); }
+  try { const d = await api('/api/dm/photo', {pid: chat.pid, image: await readURL(f), since: chat.last, ack: !!ack}); chat.ack = true; draw(d); phQuota(d.photo); if (d.review) toast(d.review); }
   catch(e){ if (e.status === 409 && e.data && e.data.need_ack){ chat.ack = false; b.disabled = false; return sendPhoto(f); }
     toast(e.message); if (e.data && e.data.limit != null) phQuota(e.data); }
   if (b) b.disabled = false;
