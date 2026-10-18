@@ -62,6 +62,8 @@ def _today():
 def eff_status(i):
     """Pozycja zaplanowana z datą premiery (release_date) staje się dostępna automatycznie od tego dnia (czas polski)."""
     if i.get("status") == "planned" and i.get("release_date") and i["release_date"] <= _today(): return "released"
+    # Kolekcja v2 zatwierdzona (19.10): strój bez daty premiery wchodzi do sprzedaży, gdy ma prawdziwe zdjęcie.
+    if i.get("status") == "planned" and not i.get("release_date") and i.get("image"): return "released"
     return i.get("status")
 
 def tier_plan(t): return "darmowy" if t == "free" else t

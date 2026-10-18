@@ -84,3 +84,5 @@ body.xmas .countdown .cd span{border-color:#c9a24a;box-shadow:0 0 12px rgba(255,
 #nowosci{grid-column:1/-1;height:0;display:block}
 .item .pwrap{position:relative}
 .item .phsoon{position:absolute;left:10px;bottom:10px;background:rgba(15,10,20,.82);color:#fff;font-size:.82rem;font-weight:700;padding:5px 10px;border-radius:999px}
+.itemsmore{text-align:center;padding:18px;color:#a99;min-height:20px}
+.swatches .sw:disabled{cursor:not-allowed}

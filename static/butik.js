@@ -38,23 +38,37 @@ if (location.hash === '#cennik') document.querySelector('[data-tab=price]').clic
 function render(){
   if (!B) return; const t = T(); const en = document.documentElement.lang !== 'pl';
   const L = document.documentElement.lang; const X = BX[L] || BX.pl;
-  const all = [...B.items.filter(i => i.upcoming), ...B.items.filter(i => !i.upcoming)]; let firstSoon = true;
+  const all = [...B.items.filter(i => !i.upcoming), ...B.items.filter(i => i.upcoming)]; let firstSoon = true;
   const present = CHIPS.filter(c => all.some(i => chipOf(i) === c[0]));
   $('#chips').innerHTML = present.length > 1 ? `<button type="button" class="chip${!CHIP ? ' on' : ''}" data-chip="">${esc(X.all)}</button>` + present.map(c => `<button type="button" class="chip${CHIP === c[0] ? ' on' : ''}" data-chip="${c[0]}">${esc((c[L === 'pl' ? 1 : 2] || {})[L] || c[1])}</button>`).join('') : '';
   $('#chips').querySelectorAll('[data-chip]').forEach(b => b.onclick = () => { CHIP = b.dataset.chip; render(); });
   const its = all.filter(i => !CHIP || chipOf(i) === CHIP);
-  $('#items').innerHTML = its.map(i => { const v = (i.variants || []).filter(x => x.hex); const nm = en ? (i.name_en || i.name) : i.name;
+  const icard = i => { const v = (i.variants || []).filter(x => x.hex); const nm = en ? (i.name_en || i.name) : i.name;
     const real = i.image || (v.find(x => x.image) || {}).image; const img = real || (i.upcoming ? '/wall/official/butik_swieta.webp' : '/avatar-512.jpg');
-    const sw = v.length ? `<div class="swatches" role="radiogroup" aria-label="${esc(X.color)}">${v.map((x, n) => `<button type="button" role="radio" aria-checked="${n === 0}" class="sw${n === 0 ? ' on' : ''}${x.image ? '' : ' noimg'}" style="--c:${esc(x.hex)}" data-img="${esc(x.image || '')}" data-name="${esc(L === 'pl' ? x.color_name_pl : x.color_name_en)}" aria-label="${esc(L === 'pl' ? x.color_name_pl : x.color_name_en)}" title="${esc((L === 'pl' ? x.color_name_pl : x.color_name_en) + (x.image ? '' : ' · ' + X.nophoto))}"></button>`).join('')}</div><small class="swname">${esc(X.color)}: <b>${esc(L === 'pl' ? v[0].color_name_pl : v[0].color_name_en)}</b></small>${v.length > 1 ? `<div class="allcol">🎨 ${esc(X.allcol)}</div>` : ''}` : '';
+    const sw = v.length ? `<div class="swatches" role="radiogroup" aria-label="${esc(X.color)}">${v.map((x, n) => `<button type="button" role="radio" aria-checked="${n === 0}" class="sw${n === 0 ? ' on' : ''}${x.image ? '' : ' noimg'}"${x.image || n === 0 ? '' : ' disabled'} style="--c:${esc(x.hex)}" data-img="${esc(x.image || '')}" data-name="${esc(L === 'pl' ? x.color_name_pl : x.color_name_en)}" aria-label="${esc(L === 'pl' ? x.color_name_pl : x.color_name_en)}" title="${esc((L === 'pl' ? x.color_name_pl : x.color_name_en) + (x.image ? '' : ' · ' + X.nophoto))}"></button>`).join('')}</div><small class="swname">${esc(X.color)}: <b>${esc(L === 'pl' ? v[0].color_name_pl : v[0].color_name_en)}</b></small>${v.length > 1 ? `<div class="allcol">🎨 ${esc(X.allcol)}</div>` : ''}` : '';
     return `<div class="item${i.upcoming ? ' upcoming' : ''}" id="${esc(i.id)}" data-track="item:${esc(i.id)}"${i.upcoming && firstSoon && !(firstSoon = false) ? ' data-soon="1"' : ''}><div class="pwrap"><img class="pimg" src="${esc(img)}" alt="${esc(nm)}" loading="lazy" width="800" height="600">${real ? '' : `<span class="phsoon">📷 ${esc(X.nophoto)}</span>`}</div><div class="b"><b class="pname">${esc(nm)}</b><br><small>${esc(t[LN[i.line]])} · ${esc(i.collection)}</small>${i.upcoming ? '<br>' + soon(i) : ''}${i.price ? `<div class="bprice">${money(i.price)}</div><small class="bvat">${esc(t.vat)}</small>` : ''}${sw}
     <div class="wallpage bsoc"><div class="acts"><span data-votes="item:${esc(i.id)}"></span><button type="button" class="act share" data-share="${esc(location.origin + '/butik.html#' + i.id)}" data-text="${esc(nm)}">↗</button></div>
-    <details><summary>💬</summary><div data-comments="item:${esc(i.id)}" data-rating="1"></div></details></div></div></div>`; }).join('');
+    <details class="lazycm"><summary>💬</summary><div data-lazycm="item:${esc(i.id)}" data-rating="1"></div></details></div></div></div>`; };
+  /* Kolekcja v2 ma setki strojów: renderujemy partiami po 24 (przewijanie doładowuje kolejne), komentarze ładujemy dopiero po otwarciu 💬. */
+  const hid0 = decodeURIComponent(location.hash.slice(1)); const at = its.findIndex(i => i.id === hid0);
+  let shown = Math.max(24, at + 1);
+  $('#items').innerHTML = its.slice(0, shown).map(icard).join('');
+  if (render.io) render.io.disconnect();
+  const sent = $('#itemsMore') || (() => { const d = document.createElement('div'); d.id = 'itemsMore'; d.className = 'itemsmore'; $('#items').after(d); return d; })();
+  const bindAll = () => {
+    $('#items').querySelectorAll('.swatches').forEach(g => g.onclick = e => { const b = e.target.closest('.sw'); if (!b || b.disabled) return; g.querySelectorAll('.sw').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); });
+      const it = g.closest('.item'); it.querySelector('.swname b').textContent = b.dataset.name; if (b.dataset.img){ const im = it.querySelector('.pimg'); im.style.opacity = .3; setTimeout(() => { im.src = b.dataset.img; im.style.opacity = 1; }, 150); } });
+    $('#items').querySelectorAll('details.lazycm:not([data-b])').forEach(d => { d.dataset.b = 1; d.addEventListener('toggle', () => { const c = d.querySelector('[data-lazycm]'); if (d.open && c && !c.dataset.comments){ c.dataset.comments = c.dataset.lazycm; window.LunaSocial && window.LunaSocial.auto(); } }); });
+    if (window.LunaSocial && window.LunaSocial.observe) window.LunaSocial.observe($('#items'));
+    if (window.LunaSocial) window.LunaSocial.auto();
+  };
+  sent.textContent = shown < its.length ? '…' : '';
+  render.more = () => { if (shown >= its.length) return; const n = its.slice(shown, shown + 24); shown += n.length; $('#items').insertAdjacentHTML('beforeend', n.map(icard).join('')); bindAll(); sent.textContent = shown < its.length ? '…' : ''; };
+  render.io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) render.more(); }, {rootMargin: '900px'}); render.io.observe(sent);
+  render.bindAll = bindAll;
   const sn = document.querySelector('[data-soon]'); if (sn && !document.getElementById('nowosci')) sn.insertAdjacentHTML('beforebegin', '<span id="nowosci"></span>');
-  $('#items').querySelectorAll('.swatches').forEach(g => g.onclick = e => { const b = e.target.closest('.sw'); if (!b) return; g.querySelectorAll('.sw').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); });
-    const it = g.closest('.item'); it.querySelector('.swname b').textContent = b.dataset.name; if (b.dataset.img){ const im = it.querySelector('.pimg'); im.style.opacity = .3; setTimeout(() => { im.src = b.dataset.img; im.style.opacity = 1; }, 150); } });
-  if (window.LunaSocial && window.LunaSocial.observe) window.LunaSocial.observe($('#items'));
+  bindAll();
   const hid = decodeURIComponent(location.hash.slice(1)); if (hid && hid !== 'nowosci' && hid !== 'cennik' && !render.jumpedItem && document.getElementById(hid)){ render.jumpedItem = 1; setTimeout(() => document.getElementById(hid).scrollIntoView({block: 'center'}), 300); }
-  if (window.LunaSocial) window.LunaSocial.auto();
   if (location.hash === '#nowosci' && !render.jumped && $('#nowosci')){ render.jumped = 1; setTimeout(() => $('#nowosci').scrollIntoView({block: 'center'}), 300); }
   $('#preview').hidden = !B.preview;
   const show = B.prices_visible;
