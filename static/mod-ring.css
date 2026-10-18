@@ -22,3 +22,19 @@
 .luna-ann-x{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:inherit;font-size:18px;cursor:pointer}
 .mod-tab{white-space:nowrap}
 .mod-tab-pill{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;background:linear-gradient(135deg,#0A2BFF,#1E5BFF);color:#fff!important;font-weight:800;font-size:13px;text-decoration:none;box-shadow:0 0 10px rgba(61,123,255,.5)}
+/* 💗 Modelka Luny – różowa ramka (zastrzeżona: tylko rola nadana przez moderatora) */
+.mdl-ring{box-shadow:0 0 0 2px #0b0705,0 0 0 4px #FF3D9A,0 0 0 6px rgba(255,179,217,.55),0 0 14px rgba(255,61,154,.45)!important;border-radius:50%}
+.mdl-badge{display:inline-flex;align-items:center;font-size:.72em;font-weight:800;line-height:1.5;padding:0 8px;border-radius:999px;background:rgba(255,61,154,.14);color:#ffb3d9;border:1px solid rgba(255,61,154,.5);vertical-align:middle;margin-left:4px;white-space:nowrap}
+.mdl-ring.fr-podwojna{box-shadow:0 0 0 2px #0b0705,0 0 0 4px var(--lk-ac,#FF3D9A),0 0 0 7px #0b0705,0 0 0 9px var(--lk-ac,#FF3D9A)!important}
+.mdl-ring.fr-perlowa{box-shadow:0 0 0 2px #0b0705,0 0 0 5px #F3E9F0,0 0 12px rgba(255,255,255,.45)!important}
+.mdl-ring.fr-satyna{box-shadow:0 0 0 3px var(--lk-ac,#FF3D9A),0 0 22px 2px var(--lk-ac,#FF3D9A)!important}
+.lk-card{margin:10px 0 14px;padding:14px;border-radius:22px;border:1px solid rgba(255,61,154,.35);background:rgba(255,61,154,.06)}
+.lk-card h2{margin:0 0 4px;font-size:18px}.lk-card .lk-h{font-size:13px;opacity:.8;margin:0 0 10px}
+.lk-grid{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.lk-opt{border:2px solid transparent;border-radius:999px;padding:6px 12px;cursor:pointer;background:rgba(255,255,255,.06);color:inherit;font:inherit;font-size:13px}
+.lk-opt[aria-pressed=true]{border-color:#FF3D9A}
+.lk-sw{display:inline-block;width:16px;height:16px;border-radius:50%;vertical-align:-3px;margin-right:6px;border:1px solid rgba(255,255,255,.4)}
+.lk-prev{border-radius:20px;padding:16px;display:flex;gap:12px;align-items:center;margin:8px 0}
+.lk-prev .ava-p{width:56px;height:56px;border-radius:50%;background:#333;display:grid;place-items:center;font-weight:900}
+.lk-prev b{font-size:20px}.lk-prev .lk-btn{margin-left:auto;border-radius:999px;padding:6px 14px;font-weight:800;border:0}
+.lk-msg{font-size:13px;min-height:1.2em}

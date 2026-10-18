@@ -1412,7 +1412,7 @@ class H(SimpleHTTPRequestHandler):
             if not uid: return self._json({**base, "login": True})
             pid, rr = profiles.mine(uid)
             hw = any(x.get("author") == "u:" + uid and x.get("status") != "deleted" for x in social._posts())
-            return self._json({**base, "mod": moderator.is_admin_uid(uid), "uref": uid[:8], "tier": nicktier.of_uid(uid), "profile": userprof.get(uid), "settings": userprof.settings(uid), "agent": {"id": pid, "own": (rr or {}).get("own", "")} if rr else None,
+            return self._json({**base, "mod": moderator.is_admin_uid(uid), "model": moderator.is_model_uid(uid), "look": moderator.look_public(uid), "uref": uid[:8], "tier": nicktier.of_uid(uid), "profile": userprof.get(uid), "settings": userprof.settings(uid), "agent": {"id": pid, "own": (rr or {}).get("own", "")} if rr else None,
                                "completion": userprof.completion(uid, hw, bool(rr))})
         if u.path == "/api/sceneries":
             pl, _uid = self._plan(); pl = self._gen_plan(pl, _uid); lg = (parse_qs(u.query).get("lang") or ["pl"])[0]

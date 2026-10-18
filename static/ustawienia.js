@@ -69,8 +69,8 @@ function draw(){
   const tier = P.tier ? ` nk-${P.tier}` : '';
   $('#stApp').removeAttribute('aria-busy'); $('#stApp').innerHTML = `
   <section class="st-head" id="stHead">
-    ${P.mod ? '<span class="mod-av st-av" style="--s:72px" data-video="1" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="72" height="72"></span>' : `<img class="st-av" src="${esc(avatarURL())}" alt="" width="72" height="72">`}
-    <div class="st-who"><div class="st-nick nk${tier}">${esc(pr.nick || '—')}${P.mod ? ' <span class="mod-badge">🛡️ Moderator</span>' : ''}</div>
+    ${P.mod ? '<span class="mod-av st-av" style="--s:72px" data-video="1" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="72" height="72"></span>' : `<img class="st-av${P.model ? ' mdl-ring' : ''}" src="${esc(avatarURL())}" alt="" width="72" height="72">`}
+    <div class="st-who"><div class="st-nick nk${tier}">${esc(pr.nick || '—')}${P.mod ? ' <span class="mod-badge">🛡️ Moderator</span>' : ''}${P.model ? ' <span class="mdl-badge">💗 Modelka Luny</span>' : ''}</div>
 ${identLine(pr)}
       <span class="st-plan ${esc(P.plan)}">${esc(P.plan_name)}</span>${P.partner ? ' <span class="st-tag pt-mark">💖</span>' : ''}
       <div class="st-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${c.pct}" aria-label="${esc(F('compl', {p: c.pct}))}"><i style="width:${c.pct}%"></i></div>

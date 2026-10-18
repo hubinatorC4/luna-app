@@ -87,7 +87,7 @@ def create_post(d, uid, vid, acct_nick=None):
         try:
             import userprof; acct_nick = userprof.nick_of(uid) or None  # zalogowany: zawsze nick z profilu (anonimowo)
         except Exception: acct_nick = None
-    nick = acct_nick or nick_ok(d.get("nick"))
+    nick = acct_nick or _mod_nick(uid) or nick_ok(d.get("nick"))
     img_id = None; img_kind = None
     if d.get("image") and d.get("img_kind") == "user":
         url = user_photo_wall(d.get("image"), d.get("user_decl"), uid)
@@ -176,7 +176,7 @@ def public_post(p, voter, V, C, mine_ak, lang="pl", T=None):
     X = antibot.excluded()
     cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
     return {"views": stats.post_views(p["id"], T), "id": p["id"], "nick": p["nick"], "tier": "" if p.get("official") else nicktier.of_author(p["author"]), "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "img_kind": p.get("img_kind") or ("ai" if p.get("img") else None), "agent": p.get("agent"),
-            "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved", "mod": _is_mod(p["author"])}
+            "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved", "mod": _is_mod(p["author"]), "model": _is_model(p["author"])}
 
 def _off_hidden(): return set(store.get("official_hidden", []) or [])
 def _pinned(): return list(store.get("wall_pinned", []) or [])
@@ -250,7 +250,11 @@ def add_comment(d, uid, vid, acct_nick=None):
     target = str(d.get("target", ""))
     if not TARGET_RE.fullmatch(target): raise ValueError("bad target")
     if target.startswith("post:") and not get_post(target[5:]): raise ValueError("Ten wpis nie istnieje.")
-    text = check_text(d.get("text"), MAX_CMT); nick = acct_nick or nick_ok(d.get("nick"))
+    if not acct_nick and uid:
+        try:
+            import userprof; acct_nick = userprof.nick_of(uid) or None  # zalogowany: nick z profilu (jak we wpisach)
+        except Exception: acct_nick = None
+    text = check_text(d.get("text"), MAX_CMT); nick = acct_nick or _mod_nick(uid) or nick_ok(d.get("nick"))
     parent = str(d.get("parent") or "")[:12] or None
     C = _cmts()
     if parent:
@@ -275,6 +279,15 @@ def _is_mod(ak):
     try:
         import moderator; return moderator.author_is_admin(ak)
     except Exception: return False
+def _mod_nick(uid):
+    """Moderator zawsze występuje pod swoim zarezerwowanym nickiem (nikt inny nie może go użyć)."""
+    try:
+        import moderator; return moderator.admin_nick() if uid and moderator.is_admin_uid(uid) else ""
+    except Exception: return ""
+def _is_model(ak):
+    try:
+        import moderator; return str(ak).startswith("u:") and moderator.is_model_uid(str(ak)[2:])
+    except Exception: return False
 def _mod_ak():
     try:
         import moderator; u = moderator.admin_uid(); return ("u:" + u) if u else ""
@@ -282,7 +295,7 @@ def _mod_ak():
 
 def list_comments(target, uid, vid):
     voter = author_key(uid, vid); V = _votes(); X = antibot.excluded(); MA = _mod_ak()
-    out = [{"mod": bool(MA) and c["author"] == MA, "mod_liked": bool(MA) and V.get("cmt:" + c["id"], {}).get(MA) == 1, "id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "partner": _partner(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
+    out = [{"model": _is_model(c["author"]), "mod": bool(MA) and c["author"] == MA, "mod_liked": bool(MA) and V.get("cmt:" + c["id"], {}).get(MA) == 1, "id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "partner": _partner(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
             "votes": counts("cmt:" + c["id"], voter, V, X), "pending": c["status"] != "approved", "mine": c["author"] == voter}
            for c in _cmts() if c["target"] == target and (_cm_ok(c, X) or (c["author"] == voter and c["status"] in ("approved", "pending")))]
     rs = [c["rating"] for c in out if c.get("rating") and not c["pending"]]

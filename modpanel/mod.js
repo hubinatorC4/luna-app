@@ -142,15 +142,25 @@ async function users(q){
   <label class="mp-l">Powód (do Skrzynki użytkownika)<input class="mp-in" id="uR" maxlength="300"></label>
   <div>${d.items.map(u => `<div class="mp-item" data-uid="${esc(u.uid)}"><span class="th" aria-hidden="true" style="font-size:30px">${u.admin ? '🛡️' : '👤'}</span>
    <div><div class="k">${esc(u.nick || '(bez nicku)')} ${u.admin ? '<span class="mod-badge">🛡️ Moderator</span>' : ''}</div>
-   <p><span class="mp-chip">${esc(u.plan)}${u.until ? ' do ' + when(u.until) : ''}</span>${u.partner ? '<span class="mp-chip">💖 współpracująca</span>' : ''}<span class="mp-chip ${u.standing.strikes ? 'bad' : ''}">strike ${u.standing.strikes}/${u.standing.max}</span>${u.standing.banned ? '<span class="mp-chip bad">⛔ ban</span>' : ''}${u.standing.block_until ? `<span class="mp-chip bad">⏸️ do ${when(u.standing.block_until)}</span>` : ''}${u.standing.warns ? `<span class="mp-chip">ostrzeżeń ${u.standing.warns}</span>` : ''}</p>
+   <p><span class="mp-chip">${esc(u.plan)}${u.until ? ' do ' + when(u.until) : ''}</span>${u.partner ? '<span class="mp-chip">💖 współpracująca</span>' : ''}${u.model ? '<span class="mp-chip" style="border-color:#FF3D9A">💗 Modelka Luny</span>' : ''}<span class="mp-chip ${u.standing.strikes ? 'bad' : ''}">strike ${u.standing.strikes}/${u.standing.max}</span>${u.standing.banned ? '<span class="mp-chip bad">⛔ ban</span>' : ''}${u.standing.block_until ? `<span class="mp-chip bad">⏸️ do ${when(u.standing.block_until)}</span>` : ''}${u.standing.warns ? `<span class="mp-chip">ostrzeżeń ${u.standing.warns}</span>` : ''}</p>
    <div class="m">od ${when(u.created)}</div></div>
    ${u.admin ? '' : `<div class="acts"><button type="button" class="mp-btn" data-a="warn">⚠️ Ostrzeż</button><button type="button" class="mp-btn bad" data-a="strike">🟥 Strike</button><button type="button" class="mp-btn bad" data-a="temp_block">⏸️ Blokada 7 dni</button>
    ${u.standing.banned || u.standing.block_until ? '<button type="button" class="mp-btn ok" data-a="unban">🔓 Odblokuj</button>' : '<button type="button" class="mp-btn bad" data-a="ban">⛔ Ban</button>'}${u.standing.strikes ? '<button type="button" class="mp-btn" data-a="unstrike">↩️ Cofnij strike</button>' : ''}
+   ${u.model ? '<button type="button" class="mp-btn bad" data-a="model_off">💔 Odbierz „Modelka Luny”</button>' : '<button type="button" class="mp-btn" data-model="1">💗 Nadaj „Modelka Luny”…</button>'}
    <button type="button" class="mp-btn" data-a="${u.partner ? 'partner_off' : 'partner_on'}">${u.partner ? '💔 Odbierz współpracę' : '💖 Nadaj „współpracującą”'}</button>
    <select class="mp-in" data-plan style="width:auto"><option value="">Plan testowy…</option><option value="premium">Premium 30 dni</option><option value="pro">Pro 30 dni</option><option value="none">Zdejmij nadany plan</option></select></div>`}</div>`).join('') || '<p class="mp-hint">Nikogo nie znaleziono.</p>'}</div>`);
   const go = () => users($('#uQ').value.trim()); $('#uGo').onclick = go; $('#uQ').onkeydown = e => { if (e.key === 'Enter') go(); };
   const run = async (uid, body, label) => { try { await act('/api/mod/user', Object.assign({uid, reason: $('#uR').value}, body)); toast(label || 'Gotowe ✅'); users($('#uQ').value.trim()); } catch (e){ toast('⚠️ ' + e.message); } };
-  s.querySelectorAll('[data-uid] [data-a]').forEach(b => b.onclick = () => { const a = b.dataset.a; if (['ban', 'strike', 'temp_block'].includes(a) && !confirm(`Na pewno: ${b.textContent}?`)) return; run(b.closest('[data-uid]').dataset.uid, {action: a, days: 7}); });
+  s.querySelectorAll('[data-uid] [data-a]').forEach(b => b.onclick = () => { const a = b.dataset.a; if (['ban', 'strike', 'temp_block', 'model_off'].includes(a) && !confirm(`Na pewno: ${b.textContent}?`)) return; run(b.closest('[data-uid]').dataset.uid, {action: a, days: 7}); });
+  s.querySelectorAll('[data-model]').forEach(b => b.onclick = () => {
+    const box = b.closest('.mp-item'); if (box.querySelector('.mdl-form')) return;
+    box.insertAdjacentHTML('beforeend', `<div class="mdl-form mp-card" style="grid-column:1/-1;margin:6px 0 0"><b>💗 Nadanie roli „Modelka Luny” – wszystkie trzy warunki:</b>
+      <label class="mp-l"><input type="checkbox" data-c="adult"> Potwierdzone 18+</label><label class="mp-l"><input type="checkbox" data-c="identity"> Tożsamość sprawdzona przeze mnie (zapisujemy tylko „tak”, datę i „Moderator” – bez dokumentu)</label>
+      <label class="mp-l"><input type="checkbox" data-c="agreement"> Umowa współpracy (casting/umowa) potwierdzona</label><button type="button" class="mp-btn primary" data-go="1">Nadaj rolę</button></div>`);
+    box.querySelector('[data-go]').onclick = () => { const c = k => box.querySelector(`[data-c=${k}]`).checked;
+      if (!(c('adult') && c('identity') && c('agreement'))) return toast('Zaznacz wszystkie trzy warunki 💗');
+      run(box.dataset.uid, {action: 'model_on', adult: true, identity: true, agreement: true}, 'Nadano „Modelka Luny” 💗'); };
+  });
   s.querySelectorAll('[data-plan]').forEach(sl => sl.onchange = () => { if (sl.value) run(sl.closest('[data-uid]').dataset.uid, {action: 'plan', plan: sl.value, months: 1}, 'Plan zmieniony ✅'); });
 }
 /* treści */

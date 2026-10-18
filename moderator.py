@@ -496,7 +496,7 @@ def users(q=""):
         if k and k not in login_key(nick): continue
         pl = accounts.plan(u)
         out.append({"uid": u["uid"], "nick": nick, "plan": pl["plan"], "until": pl["until"], "source": pl["source"], "created": u.get("created", 0),
-                    "admin": u.get("role") == "admin", "partner": partners.is_partner(u["uid"]), "standing": standing(u["uid"]),
+                    "admin": u.get("role") == "admin", "partner": partners.is_partner(u["uid"]), "model": is_model_user(u), "adult": bool(u.get("adult_confirmed_at") or u.get("adult")), "standing": standing(u["uid"]),
                     "override": bool((u.get("pass") or {}).get("by") == "moderator-override")})
         if len(out) >= 60: break
     return out
@@ -510,6 +510,8 @@ def user_act(h, d):
     reason = re.sub(r"[<>\x00-\x1f]", "", str(d.get("reason") or ""))[:300]
     if act in ("warn", "strike", "temp_block", "ban", "unban", "unstrike"):
         st = sanction(uid, act, int(d.get("days") or 7), reason); notify_user(uid, act, reason); return {"standing": st}
+    if act in ("model_on", "model_off"):
+        return model_set(uid, act == "model_on", d.get("adult") is True, d.get("identity") is True, d.get("agreement") is True)
     if act in ("partner_on", "partner_off"):
         partners.admin_set(uid, act == "partner_on", True, None, "Moderator"); return {"partner": act == "partner_on"}
     if act == "plan":
@@ -604,9 +606,17 @@ def handle_get(h, u):
         b = open(os.path.join(PANEL_DIR, fn), encoding="utf-8").read().replace("__P__", pref)
         if fn == "index.html": b = b.replace("__MODE__", "app" if sub == "/app" else "web")
         return _send(h, 200, ct, b.encode())
-    if not p.startswith("/api/mod/"): return None
+    if not p.startswith("/api/mod/") and p != "/api/me/look": return None
     if p == "/api/mod/public":
         S = switches(); return h._json({"features": S["features"], "announcement": announcement_cached()})
+    if p == "/api/me/look":
+        a = h._acct()
+        if not a: return h._json({"login": True, "model": False})
+        uid = a[0]["uid"]
+        if not is_model_user(a[0]): return h._json({"model": False})
+        out = {"model": True, "presets": look_presets(), "look": look_get(uid), "view": look_public(uid)}
+        if (parse_qs(u.query).get("suggest") or [""])[0] == "1": out["suggest"] = look_suggest(uid)
+        return h._json(out)
     if p == "/api/mod/state":
         return h._json(state(h))
     if p == "/api/mod/setup.svg":
@@ -652,6 +662,14 @@ def _rate(key, n, per):
 CRITICAL = ("switches", "broadcast")
 def handle_post(h, u, data):
     p = u.path
+    if p == "/api/me/look":
+        a = h._acct()
+        if not a: return h._json({"error": "Zaloguj się.", "login": True}, 401)
+        if not h._csrf_ok(a[1]): return h._json({"error": "Odśwież stronę (CSRF)."}, 403)
+        if not _rate("look:" + a[0]["uid"], 30, 60): return h._json({"error": "Za szybko – lustro też potrzebuje chwili 💄"}, 429)
+        try: return h._json({"ok": True, "view": look_set(a[0]["uid"], data)})
+        except PermissionError as e: return h._json({"error": str(e)}, 403)
+        except ValueError as e: return h._json({"error": str(e)}, 400)
     if not p.startswith("/api/mod/"): return None
     ip = h._ip()
     if not _rate("m:" + ip, 90, 60): return h._json({"error": "Za szybko – odczekaj chwilę."}, 429)
@@ -688,7 +706,7 @@ def handle_post(h, u, data):
         device_forget(h, bool(data.get("all")), c["uid"]); _sess.pop(c["tok"], None); audit(h, "lock", "wszystkie urządzenia" if data.get("all") else "to urządzenie")
         return h._json({"ok": True})
     act = p.rsplit("/", 1)[-1]
-    crit = act in CRITICAL or (act in ("queue", "user") and data.get("action") in ("ban", "temp_block"))
+    crit = act in CRITICAL or (act in ("queue", "user") and data.get("action") in ("ban", "temp_block", "model_on", "model_off"))
     if crit:
         if not _rate("mc:" + c["uid"], 20, 600): return h._json({"error": "Za dużo akcji krytycznych – odczekaj chwilę."}, 429)
         if not _reauth(c, data): return h._json({"error": "Potwierdź kodem 2FA.", "reauth": True}, 403)
@@ -721,3 +739,95 @@ def handle_post(h, u, data):
     except KeyError: return h._json({"error": "Nie znaleziono."}, 404)
     except (ValueError, PermissionError) as e: return h._json({"error": str(e)}, 400)
     return h._json({"error": "not found"}, 404)
+
+# ---------- 💗 Modelka Luny (rola nadawana TYLKO przez moderatora) + Wygląd profilu ----------
+def is_model_user(u): return bool(u and (u.get("model") or {}).get("on"))
+def is_model_uid(uid): return is_model_user(_accts().get(uid)) if uid else False
+def model_set(uid, on, adult=False, identity=False, agreement=False):
+    """Nadanie wymaga: potwierdzonych 18+, tożsamości (tylko flaga tak/nie + data + kto) i umowy współpracy. Dokumentów nie przechowujemy."""
+    import accounts
+    with accounts._lock:
+        A = accounts._accts(); u = A.get(uid)
+        if not u: raise KeyError(uid)
+        if u.get("role") == "admin": raise ValueError("Moderator nie potrzebuje tej roli 😉")
+        if on:
+            if not (adult and identity and agreement): raise ValueError("Zaznacz wszystkie trzy: 18+, tożsamość i umowa współpracy.")
+            now = int(time.time())
+            u["model"] = {"on": True, "adult": True, "identity": True, "identity_at": now, "agreement": True, "at": now, "by": "Moderator"}
+        else:
+            m = u.get("model") or {}; u["model"] = {"on": False, "revoked_at": int(time.time()), "by": "Moderator", "was": bool(m.get("on"))}
+        store.put("accounts", A)
+    return {"model": bool(on)}
+
+def _lum(hx):
+    hx = hx.lstrip("#"); c = [int(hx[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    c = [x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+def contrast(a, b):
+    la, lb = sorted((_lum(a), _lum(b)), reverse=True); return (la + 0.05) / (lb + 0.05)
+# 10 palet (akcent) – kolory zastrzeżone (elektryczny niebieski moderatora #0A2BFF–#3D7BFF, różowy ramki modelki) są wykluczone
+PALETTES = {"roza": ("Pudrowy róż", "#F7A1C4"), "wino": ("Wino", "#E0407A"), "zloto": ("Szampańskie złoto", "#E8C27A"), "miedz": ("Miedź", "#E07A30"),
+            "szmaragd": ("Szmaragd", "#2EBD85"), "mieta": ("Mięta", "#7FE0C2"), "lawenda": ("Lawenda", "#B79CFF"), "sliwka": ("Śliwka", "#B86ADB"),
+            "turkus": ("Turkus", "#26C6DA"), "perla": ("Perła", "#EDE6DD")}
+BGS = {"noc": ("Noc", ["#0B0705"]), "grafit": ("Grafit", ["#16161A"]), "bordo": ("Bordo nocą", ["#2A0A14"]), "las": ("Leśna noc", ["#0A1F17"]),
+       "zmierzch": ("Zmierzch", ["#1B0F2E", "#3A1430"]), "aksamit": ("Aksamit", ["#140A1E", "#2B0F2B"]), "ocean": ("Głębia oceanu", ["#04161F", "#0B2E3A"]),
+       "brzask": ("Brzask", ["#2B1408", "#4A1F12"])}
+FONTS = {"nunito": ("Nunito", "Nunito,system-ui,sans-serif"), "playfair": ("Playfair Display", "\"Playfair Display\",Georgia,serif"),
+         "georgia": ("Georgia", "Georgia,\"Times New Roman\",serif"), "trebuchet": ("Trebuchet", "\"Trebuchet MS\",Tahoma,sans-serif"),
+         "verdana": ("Verdana", "Verdana,Geneva,sans-serif"), "system": ("Systemowa", "system-ui,-apple-system,\"Segoe UI\",Roboto,sans-serif")}
+FRAMES = {"modelka": "Różowa ramka modelki (domyślna)", "podwojna": "Podwójna", "perlowa": "Perłowa", "satyna": "Satynowa poświata"}
+LOOK_DEF = {"palette": "roza", "bg": "noc", "font": "playfair", "frame": "modelka"}
+def _text_for(bg):
+    best = max(("#FFFFFF", "#F6E9DA", "#111111"), key=lambda t: min(contrast(t, c) for c in bg)); return best
+def look_presets():
+    out = {"palettes": [], "bgs": [], "fonts": [{"id": k, "name": v[0], "css": v[1]} for k, v in FONTS.items()], "frames": [{"id": k, "name": v} for k, v in FRAMES.items()]}
+    for k, (n, c) in PALETTES.items(): out["palettes"].append({"id": k, "name": n, "color": c})
+    for k, (n, cs) in BGS.items(): out["bgs"].append({"id": k, "name": n, "colors": cs, "text": _text_for(cs)})
+    return out
+def look_ok(lk):
+    """WCAG AA: tekst ≥ 4,5:1 na każdym kolorze tła; akcent (przyciski, nick) ≥ 3:1 na tle."""
+    cs = BGS[lk["bg"]][1]; tx = _text_for(cs); ac = PALETTES[lk["palette"]][1]
+    return min(contrast(tx, c) for c in cs) >= 4.5 and min(contrast(ac, c) for c in cs) >= 3.0
+def look_get(uid):
+    import userprof
+    r = (userprof._P().get(uid) or {}).get("look") or {}
+    lk = {k: (r.get(k) if r.get(k) in D else LOOK_DEF[k]) for k, D in (("palette", PALETTES), ("bg", BGS), ("font", FONTS), ("frame", FRAMES))}
+    return lk
+def look_public(uid):
+    """Wygląd do wyświetlenia – tylko dla zweryfikowanych modelek; reszta ma standardowy wygląd."""
+    if not is_model_uid(uid): return None
+    lk = look_get(uid); cs = BGS[lk["bg"]][1]
+    return {**lk, "accent": PALETTES[lk["palette"]][1], "bgc": cs, "text": _text_for(cs), "font_css": FONTS[lk["font"]][1]}
+def look_set(uid, d):
+    if not is_model_uid(uid): raise PermissionError("Wygląd profilu to przywilej zweryfikowanych Modelek Luny 💗")
+    lk = look_get(uid)
+    for k, D in (("palette", PALETTES), ("bg", BGS), ("font", FONTS), ("frame", FRAMES)):
+        v = d.get(k)
+        if v is not None:
+            if v not in D: raise ValueError("Tego wariantu nie ma w katalogu – wybierz z listy.")
+            lk[k] = v
+    if not look_ok(lk): raise ValueError("Za słaby kontrast – tekst byłby nieczytelny. Wybierz inne tło albo kolor.")
+    import userprof
+    with userprof._lock:
+        P = userprof._P(); r = P.get(uid) or {}; r["look"] = lk; P[uid] = r; store.put("user_profiles", P)
+    return look_public(uid)
+def look_suggest(uid):
+    """„Dopasuj do agentki”: dominujący kolor zdjęcia agentki → najbliższa paleta z katalogu."""
+    import profiles, base64, colorsys
+    pid, _r = profiles.mine(uid)
+    im = profiles._imgs().get(pid) if pid else None
+    if not im: return None
+    try:
+        from PIL import Image
+        img = Image.open(io.BytesIO(base64.b64decode(im["b"]))).convert("RGB").resize((64, 64))
+        q = img.quantize(colors=6); pal = q.getpalette()[:18]; counts = sorted(q.getcolors(), reverse=True)
+        best = None
+        for n, idx in counts:
+            r, g, b = pal[idx * 3:idx * 3 + 3]; h, l, s = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
+            if 0.15 < l < 0.9 and s > 0.2: best = (h, l, s); break
+        if not best: return "perla"
+        def dist(hx):
+            hx = hx.lstrip("#"); h2, l2, s2 = colorsys.rgb_to_hls(*[int(hx[i:i + 2], 16) / 255 for i in (0, 2, 4)])
+            dh = min(abs(best[0] - h2), 1 - abs(best[0] - h2)); return dh * 3 + abs(best[1] - l2) + abs(best[2] - s2) * .5
+        return min(PALETTES, key=lambda k: dist(PALETTES[k][1]))
+    except Exception: return None
