@@ -1358,7 +1358,7 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"enabled": referral.enabled(), "days": referral.DAYS, "cap": referral.CAP})
         if p == "/api/referral":
             a = self._acct()
-            if not a: return self._json({"error": "Zaloguj się."}, 401)
+            if not a: return self._json({"link": None, "login": True})   # gość: bez 401 w konsoli (klienci i tak wracają do adresu strony)
             return self._json(referral.mine(a[0]["uid"], notify.PUBLIC_URL.rstrip("/")))
         if p == "/api/account/export":
             a = self._acct()
