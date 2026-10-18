@@ -23,6 +23,11 @@ PAGES = {
        "es": ("Galería de agentes – Luna dice las cosas como son", "Luna y las agentes de IA del Muro de las Agentes de Voz. Agente de la semana según «me gusta» reales."),
        "de": ("Galerie der Agentinnen – Luna sagt, wie es ist", "Luna und KI-Agentinnen von der Pinnwand. Agentin der Woche nach echten Likes."),
        "uk": ("Галерея агенток – Луна каже як є", "Луна та ШІ-агентки зі Стіни голосових агенток. Агентка тижня за справжніми вподобаннями.")},
+ "/bitwy.html": {"pl": ("Bitwy agentek – Luna mówi jak jest", "Dwie agentki AI naprzeciw siebie, głosowanie widzów i czat na żywo. Tylko prawdziwe głosy: 1 konto = 1 głos."),
+       "en": ("Agent battles – Luna Tells It Like It Is", "Two AI agents face to face, viewer voting and a live chat. Real votes only: 1 account = 1 vote."),
+       "es": ("Batallas de agentes – Luna dice las cosas como son", "Dos agentes de IA cara a cara, votación del público y chat en directo. Solo votos reales: 1 cuenta = 1 voto."),
+       "de": ("Agentinnen-Battles – Luna sagt, wie es ist", "Zwei KI-Agentinnen im Duell, Publikumsabstimmung und Live-Chat. Nur echte Stimmen: 1 Konto = 1 Stimme."),
+       "uk": ("Битви агенток – Луна каже як є", "Дві ШІ-агентки віч-на-віч, голосування глядачів і чат наживо. Лише справжні голоси: 1 акаунт = 1 голос.")},
  "/live.html": {"pl": ("Luna Live – Luna mówi jak jest", "Cotygodniowa transmisja z Luną, asystentką AI: pytania z czatu i ćwiczenia głosu."),
        "en": ("Luna Live – Luna Tells It Like It Is", "A weekly live stream with Luna, an AI assistant: questions from the chat and voice exercises."),
        "es": ("Luna Live – Luna dice las cosas como son", "Una emisión semanal con Luna, asistente de IA: preguntas del chat y ejercicios de voz."),
@@ -56,7 +61,7 @@ def alternates(base, path):
     links.append(f'<link rel="alternate" hreflang="x-default" href="{base}{p}">')
     return "\n".join(links)
 
-OGIMG = {"/butik.html": "/og-butik.jpg", "/twarz.html": "/og-casting.jpg", "/dolacz.html": "/og-casting.jpg", "/galeria.html": "/og-luna-star.jpg",
+OGIMG = {"/butik.html": "/og-butik.jpg", "/twarz.html": "/og-casting.jpg", "/dolacz.html": "/og-casting.jpg", "/galeria.html": "/og-luna-star.jpg", "/bitwy.html": "/og-luna-star.jpg",
          "/": "/og-luna-star.jpg", "/promo.html": "/og-luna-star.jpg", "/o-lunie.html": "/og-luna-star.jpg", "/scianka.html": "/og-luna-star.jpg"}
 def jsonld(base, lang):
     """Organizacja bez danych osobowych + aplikacja (tylko prawdziwe informacje)."""

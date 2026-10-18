@@ -3,8 +3,8 @@ Wpis z „<” – zamiana fragmentu HTML; wpis z „~” – zamiana podciągu;
 Pliki JS z listy JS dostają ?lang=xx i podmianę napisów (strony publiczne i aplikacja /app)."""
 import json, os, re
 D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "i18n")
-PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "/regulamin.html": ["app_fix", "regulamin_v143", "regulamin_v140", "regulamin", "common"],
-         "/privacy.html": ["privacy_v140", "privacy", "common", "app_fix"], "/o-lunie.html": ["app_fix", "olunie", "common"], "/galeria.html": ["common"],
+PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "/regulamin.html": ["app_fix", "regulamin_bitwy", "regulamin_v143", "regulamin_v140", "regulamin", "common"],
+         "/privacy.html": ["privacy_v140", "privacy", "common", "app_fix"], "/o-lunie.html": ["app_fix", "olunie", "common"], "/galeria.html": ["common"], "/bitwy.html": ["common"],
          "/index.html": ["app_index"],
          **{x: ["common"] for x in ("/scianka.html", "/butik.html", "/testerzy.html", "/dolacz.html", "/twarz.html", "/wesprzyj.html", "/problemy.html")}}
 JS = {"portal.js": ["js_portal", "js_fix"], "legal.js": "js_fix", "live.js": "js_live", "testers.js": "js_testers", "push.js": "js_push",

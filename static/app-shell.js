@@ -28,6 +28,7 @@ function route(href){
   let p = u.pathname.replace(/\/$/, '') || '/';
   if (p === '/' && /[?&](source=(twa|pwa)|platnosc=)/.test(u.search)) p = '/app';
   if (/^\/[a-z0-9-]{2,30}$/.test(p) && p !== '/app') p += '.html';  /* czyste adresy: /butik → /butik.html */
+  if ((p === '/app' || p === '/index.html') && u.hash === '#konto'){ openAccount(); return true; }
   if (p === '/app' || p === '/index.html'){ show('luna'); if (u.hash === '#live') frameOf('luna', '#live'); return true; }
   if (p === '/' || p === '/promo.html'){ if (/^#(plany|cennik|plans)$/.test(u.hash)) show('plans'); else show('feed'); return true; }
   if (p === '/butik.html'){ show('butik'); if (u.hash) frameOf('butik', u.hash); return true; }
@@ -235,13 +236,16 @@ function openAccount(){
 }
 
 /* ---------- Więcej: Jak korzystać, pomoc i kontakt, linki ---------- */
+const BT = {pl: ['⚔️ Bitwy agentek', 'Dwie agentki AI, Twój głos, czat na żywo'], en: ['⚔️ Agent battles', 'Two AI agents, your vote, live chat'], es: ['⚔️ Batallas de agentes', 'Dos agentes de IA, tu voto, chat en directo'],
+  de: ['⚔️ Agentinnen-Battles', 'Zwei KI-Agentinnen, deine Stimme, Live-Chat'], uk: ['⚔️ Битви агенток', 'Дві ШІ-агентки, ваш голос, чат наживо']}[lang] || ['⚔️ Bitwy agentek', ''];
 function renderMore(){
   const host = $('#p-more'); host.dataset.ready = '1';
   host.innerHTML = `<div class="wrapc">
     <h1 class="t">${esc(T.more_h)}</h1>
     <ul class="menu"><li><button type="button" data-chat><span>${esc(T.help_h)}<small>${esc(T.help_s)}</small></span></button></li>
       <li><a href="/problemy.html" data-page>${esc(T.problems)}</a></li>
-      <li><a href="/twarz.html#castForm" data-page><span>${esc(T.cast)}<small>${esc(T.cast_s)}</small></span></a></li></ul>
+      <li><a href="/twarz.html#castForm" data-page><span>${esc(T.cast)}<small>${esc(T.cast_s)}</small></span></a></li>
+      <li><a href="/bitwy.html" data-page><span>${esc(BT[0])}<small>${esc(BT[1])}</small></span></a></li></ul>
     <h2 class="t" id="howH" style="font-size:22px">${esc(T.how_h)}</h2>
     ${T.how.map(([h, p]) => `<details class="more"><summary>${esc(h)}</summary><p>${esc(p)}</p></details>`).join('')}
     <ul class="menu"><li><button type="button" id="replay">${esc(T.replay)}</button></li></ul>

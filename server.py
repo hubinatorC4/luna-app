@@ -19,7 +19,7 @@ import knowledge
 import api_i18n
 import textutil
 import catalog, base64, training
-import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
+import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles
 from datetime import datetime, timedelta
 try:
     from zoneinfo import ZoneInfo
@@ -680,7 +680,7 @@ class H(SimpleHTTPRequestHandler):
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         p = urlparse(self.path).path
-        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post") else 64 * 1024
+        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post", "/api/battles/enter") else 64 * 1024
         if n > lim: raise ValueError("too large")
         return textutil.fix_surrogates(json.loads(self.rfile.read(n) or b"{}")) if n else {}
 
@@ -823,6 +823,44 @@ class H(SimpleHTTPRequestHandler):
                         except ValueError: pass
                     antibot.forget(ak)
             return self._json({"ok": True, "suspects": antibot.admin_list()})
+        if p.startswith(("/api/battles/", "/api/admin/battles")):
+            if data.get("website"): return self._json({"ok": True})  # honeypot
+            uid, dev = self._who(); a = self._acct()
+            try:
+                if p == "/api/admin/battles":
+                    if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+                    return self._json(battles.admin_action(data))
+                if p == "/api/battles/chat/report":
+                    if not livechat.rate_ok("btr:" + ip, 5, 60): return self._json({"error": "Za dużo zgłoszeń."}, 429)
+                    battles.chat_report(uid, dev, str(data.get("bid", "")), int(data.get("mid") or 0)); return self._json({"ok": True})
+                if not a: return self._json({"error": "Zaloguj się – 1 konto = 1 głos.", "login": True}, 401)
+                if not self._csrf_ok(a[1]): return self._json({"error": "Nieprawidłowy token CSRF – odśwież stronę."}, 403)
+                ua = self.headers.get("User-Agent", "")
+                if p == "/api/battles/vote":
+                    if not livechat.rate_ok("btv:" + ip, 10, 300): return self._json({"error": "Za szybko."}, 429)
+                    antibot.on_vote("u:" + uid, ip, ua)
+                    return self._json(battles.vote(uid, dev, str(data.get("bid", "")), data.get("side")))
+                if p == "/api/battles/chat":
+                    if not (livechat.rate_ok("btc:" + ip, 6, 400) and livechat.rate_ok("btc:" + uid, 4, 300)): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
+                    m, L = battles.chat_post(uid, a[0].get("name") or "", str(data.get("bid", "")), data.get("text"))
+                    try: antibot.on_comment(m["ak"], ip, ua, m["text"], m["nick"], L[:-1])
+                    except Exception as e: sys.stderr.write("antibot bt %s\n" % type(e).__name__)
+                    return self._json({"ok": True, **battles.chat_list(str(data.get("bid", "")), uid, int(data.get("since") or 0))})
+                if p == "/api/battles/enter":
+                    pl, _ = self._plan()
+                    if not plans.has(pl, battles.ENTER_PLAN):
+                        return self._json({"error": "plan_required", "required": battles.ENTER_PLAN, "price": CFG["pricing"]["plans"]["premium"]["pln"]}, 402)
+                    if not livechat.rate_ok("bte:" + uid, 2, 6): return self._json({"error": "Za szybko."}, 429)
+                    e = battles.enter(uid, data)
+                    antibot.on_write("u:" + uid, ip, ua, e["name"])
+                    try: _mod_push("Bitwy agentek: nowe zgłoszenie do akceptacji", e["name"])
+                    except Exception: pass
+                    return self._json({"ok": True, "pending": True, "id": e["id"]})
+                if p == "/api/battles/withdraw":
+                    battles.withdraw(uid); return self._json({"ok": True})
+            except PermissionError as e: return self._json({"error": str(e)}, 403)
+            except (ValueError, KeyError, TypeError) as e: return self._json({"error": str(e) if isinstance(e, ValueError) else "not found"}, 400)
+            return self._json({"error": "not found"}, 404)
         if p.startswith(("/api/wall/", "/api/comments", "/api/vote", "/api/report", "/api/admin/social")):
             if p.startswith(("/api/wall/", "/api/comments")) and not CFG["features"]["wall"] and p.startswith("/api/wall/"): return self._json({"error": "wkrótce"}, 404)
             if data.get("website"): return self._json({"ok": True})  # honeypot
@@ -963,6 +1001,22 @@ class H(SimpleHTTPRequestHandler):
             except Exception: d["popular"] = []
             d["payments"] = {"web": payments.enabled(), "mode": payments.mode() if adm else None, "methods": ["BLIK", "karta / card"] + (["Przelewy24"] if payments.P24 else [])}
             return self._json(d)
+        if p.startswith(("/api/battles", "/api/admin/battles")):
+            uid, dev = self._who(); q = parse_qs(u.query)
+            if p.startswith("/api/admin/battles"):
+                if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+                if p.startswith("/api/admin/battles/img/"): return self._dataurl(battles.entry_img(p.rsplit("/", 1)[-1], admin=True))
+                return self._json(battles.admin_list())
+            if p == "/api/battles":
+                d = battles.public(uid, dev)
+                pl, _ = self._plan(); d["my_plan"] = pl; d["logged_in"] = bool(uid); d["can_enter"] = plans.has(pl, battles.ENTER_PLAN)
+                d["price"] = CFG["pricing"]["plans"]["premium"]["pln"] if CFG["pricing"]["show"] else None
+                return self._json(d)
+            if p.startswith("/api/battles/img/"): return self._dataurl(battles.entry_img(p.rsplit("/", 1)[-1], uid))
+            if p == "/api/battles/chat":
+                s = (q.get("since") or ["0"])[0]
+                return self._json(battles.chat_list((q.get("bid") or [""])[0][:12], uid, int(s) if s.isdigit() else 0))
+            return self._json({"error": "not found"}, 404)
         if p.startswith(("/api/wall", "/api/comments", "/api/admin/social", "/api/admin/wall/img/")):
             q = parse_qs(u.query)
             if p.startswith("/api/admin/"):
@@ -1054,7 +1108,7 @@ class H(SimpleHTTPRequestHandler):
         return None
     def do_GET(self):
         u = urlparse(self.path)
-        if u.path.startswith(("/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/referral", "/api/gallery", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
+        if u.path.startswith(("/api/battles", "/api/admin/battles", "/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/referral", "/api/gallery", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
             r = self._get_account(u)
             if r is not None: return r
         if u.path == "/api/age/status":

@@ -287,4 +287,6 @@ if ('serviceWorker' in navigator){
     setInterval(check, 30 * 60 * 1000); document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
   }).catch(() => {});
 }
+/* /app#konto – otwiera Ustawienia na sekcji konta (np. z Bitew agentek: „Zaloguj się, aby głosować”) */
+if (location.hash === '#konto') setTimeout(() => { const b = document.getElementById('settingsBtn'); if (b) b.click(); const a = document.getElementById('acctSection'); if (a) a.scrollIntoView({block: 'start'}); }, 700);
 })();
