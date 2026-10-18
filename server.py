@@ -18,7 +18,7 @@ FFMPEG = _ffmpeg()
 import knowledge
 import api_i18n
 import textutil
-import catalog, base64, training, profiles, nicktier, partners, agentwall, quality, userprof
+import catalog, base64, training, profiles, nicktier, partners, agentwall, quality, userprof, agentvideo, battle_categories
 import promo_share
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox
 from datetime import datetime, timedelta
@@ -28,7 +28,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.6.4"
+VERSION = "1.6.5"
 STATIC_CACHE = re.compile(r"\.(webp|avif|jpe?g|png|ico|svg|woff2)$")
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -611,6 +611,17 @@ def _grant_and_notify(uid, plan, months, by):
     try: inbox.on_plan(uid, plans.NAMES.get(plan, plan), ps["until"])
     except Exception as e: print("inbox plan", repr(e)[:120], file=sys.stderr)
     return ps
+def _purge_deleted():
+    """Po 30 dniach od prośby o usunięcie: trwałe usunięcie wszystkich danych konta (RODO art. 17)."""
+    for uid in userprof.due_deletions():
+        try: referral.forget(uid)
+        except Exception: pass
+        try: accounts.delete(uid, None, check=False)
+        except ValueError: pass
+        profiles.delete_owner(uid); agentvideo.delete_owner(uid); social.purge_author("u:" + uid); antibot.forget("u:" + uid)
+        try: battles.set_privacy(uid, False)
+        except Exception: pass
+        userprof.delete(uid)
 
 def _bg_loop():
     n = 0
@@ -621,6 +632,9 @@ def _bg_loop():
         if n % 60 == 30:
             try: inbox.battle_tick()
             except Exception as e: print("inbox battles", repr(e)[:200], file=sys.stderr)
+        if n % 3600 == 30:
+            try: _purge_deleted()
+            except Exception as e: print("purge error", repr(e)[:200], file=sys.stderr)
         if n % 60 == 0:
             try: run_reminders()
             except Exception as e: print("reminder error", repr(e)[:200], file=sys.stderr)
@@ -728,6 +742,13 @@ class H(SimpleHTTPRequestHandler):
         return {"plan": pl, "name": plans.NAMES[pl], "free": fr, "until": until, "source": ap.get("source") if until else None,
                 "days_left": round((until - time.time()) / 86400, 1) if until else None, "chat_seconds_left": None if left is None else int(left),
                 "payments": "wkrótce", "logged_in": bool(uid)}
+    def _gen_plan(self, pl, uid):
+        """Plan dla Generatora agentek: „Agentka współpracująca” (nadana ręcznie przez admina) dostaje limity Pro / Ultra
+        (60 s, 2160 px, wszystkie scenerie) niezależnie od planu właściciela – flaga po stronie serwera."""
+        try:
+            if uid and partners.is_partner(uid): return "pro"
+        except Exception: pass
+        return pl
     def _owner_plan(self, uid):
         u = accounts._accts().get(uid)
         return accounts.plan(u)["plan"] if u else "darmowy"
@@ -779,7 +800,7 @@ class H(SimpleHTTPRequestHandler):
             try: inbox.on_login(uid, self.headers.get("User-Agent", ""))
             except Exception as e: sys.stderr.write("inbox login %s\n" % type(e).__name__)
             return self._json({"ok": True, "csrf": csrf, "user": accounts.public(accounts._accts()[uid])})
-        if p in ("/api/account/logout", "/api/account/delete", "/api/account/link-tester", "/api/account/declare"):
+        if p in ("/api/account/logout", "/api/account/delete", "/api/account/link-tester", "/api/account/declare", "/api/account/delete-request", "/api/account/delete-cancel", "/api/me/settings"):
             a = self._acct()
             if not a: return self._json({"error": "Zaloguj się."}, 401)
             usr, csrf = a
@@ -797,6 +818,16 @@ class H(SimpleHTTPRequestHandler):
                 except ValueError as e: return self._json({"error": str(e)}, 400)
                 social.anonymise_author("u:" + usr["uid"]); antibot.forget("u:" + usr["uid"])
                 self._set_sid("", 0); return self._json({"ok": True})
+            if p == "/api/account/delete-request":
+                if not livechat.rate_ok("dr:" + ip, 5, 30): return self._json({"error": "Za dużo prób."}, 429)
+                try: at = userprof.request_delete(usr["uid"], data.get("nick"), usr.get("name", ""))
+                except ValueError as e: return self._json({"error": str(e)}, 400)
+                return self._json({"ok": True, "delete_at": at})
+            if p == "/api/account/delete-cancel":
+                return self._json({"ok": userprof.cancel_delete(usr["uid"])})
+            if p == "/api/me/settings":
+                try: return self._json({"ok": True, **userprof.save_settings(usr["uid"], data)})
+                except ValueError as e: return self._json({"error": str(e)}, 400)
             if p == "/api/account/link-tester":
                 try: return self._json({"ok": True, "user": accounts.public(accounts.link_tester(usr["uid"], data.get("code")))})
                 except ValueError as e: return self._json({"error": str(e)}, 400)
@@ -1239,15 +1270,56 @@ class H(SimpleHTTPRequestHandler):
             return self._json(agentwall.page((q.get("filter") or ["all"])[0], int(off) if off.isdigit() else 0, 8, uid, dev, lg))
         if u.path == "/api/agent/profile": return self._profile_get(u)
         if u.path == "/api/me/profile":
-            pl, uid = self._plan(); c = quality.caps(pl)
-            base = {"plan": pl, "plan_name": plans.NAMES[pl], "caps": c, "video_levels": [v for v in quality.VIDEO_LEVELS if v <= c["video"]],
+            pl, uid = self._plan(); gp = self._gen_plan(pl, uid); c = quality.caps(pl); gc = quality.caps(gp)
+            c = dict(c, gen=gc["gen"], gen_px=gc["gen_px"])
+            base = {"plan": pl, "plan_name": plans.NAMES[pl], "gen_plan": gp, "partner": gp != pl, "caps": c, "video_levels": [v for v in quality.VIDEO_LEVELS if v <= c["video"]],
                     "gen": {"limit": c["gen"], "used": quality.gen_used(uid) if uid else 0, "px": c["gen_px"],
-                            "bases": [{"id": k, "plan": v, "ok": plans.has(pl, v)} for k, v in profiles.LUNA_PHOTOS.items()]}, "presets": list(userprof.PRESETS)}
+                            "bases": [{"id": k, "plan": v, "ok": plans.has(gp, v)} for k, v in profiles.LUNA_PHOTOS.items()]}, "presets": list(userprof.PRESETS)}
             if not uid: return self._json({**base, "login": True})
             pid, rr = profiles.mine(uid)
             hw = any(x.get("author") == "u:" + uid and x.get("status") != "deleted" for x in social._posts())
-            return self._json({**base, "profile": userprof.get(uid), "agent": {"id": pid, "own": (rr or {}).get("own", "")} if rr else None,
+            return self._json({**base, "uref": uid[:8], "tier": nicktier.of_uid(uid), "profile": userprof.get(uid), "settings": userprof.settings(uid), "agent": {"id": pid, "own": (rr or {}).get("own", "")} if rr else None,
                                "completion": userprof.completion(uid, hw, bool(rr))})
+        if u.path == "/api/inbox/unread":
+            try: import inbox  # noqa – właściwy endpoint dostarcza moduł Skrzynki (osobny worker)
+            except ImportError: return self._json({"unread": 0, "available": False})
+        if u.path == "/api/sceneries":
+            pl, _uid = self._plan(); pl = self._gen_plan(pl, _uid); lg = (parse_qs(u.query).get("lang") or ["pl"])[0]
+            return self._json({"items": battle_categories.public(lg if lg in social.LANGS else "pl", pl), "custom": plans.has(pl, "pro"),
+                               "basic_from_data": bool((store.get("scenery_basic", {}) or {}).get("from_data"))})
+        if u.path == "/api/agent/videos":
+            pl, uid = self._plan(); pl = self._gen_plan(pl, uid); L = agentvideo.limits(pl)
+            return self._json({"items": agentvideo.mine(uid) if uid else [], "limits": L, "engine": agentvideo.engine(), "login": not uid})
+        if u.path == "/api/admin/videos":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            return self._json({"items": agentvideo.admin_list()})
+        m = re.fullmatch(r"/api/agent/video/([0-9a-f]{12})\.(mp4|jpg)", u.path)
+        if m:
+            pl, uid = self._plan(); fp, err = agentvideo.file_for(m.group(1), m.group(2), uid, pl)
+            if err: return self._json(err, 402)
+            if not fp: return self._json({"error": "not found"}, 404)
+            size = os.path.getsize(fp); rg = re.fullmatch(r"bytes=(\d*)-(\d*)", self.headers.get("Range", "") or "")
+            a, b = 0, size - 1
+            if rg and (rg.group(1) or rg.group(2)):
+                a = int(rg.group(1)) if rg.group(1) else max(0, size - int(rg.group(2))); b = min(size - 1, int(rg.group(2))) if rg.group(1) and rg.group(2) else size - 1
+                self.send_response(206); self.send_header("Content-Range", f"bytes {a}-{b}/{size}")
+            else: self.send_response(200)
+            self.send_header("Content-Type", "video/mp4" if m.group(2) == "mp4" else "image/jpeg"); self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Content-Length", str(b - a + 1)); self.send_header("Cache-Control", "private, max-age=600"); self.end_headers()
+            with open(fp, "rb") as f:
+                f.seek(a); left = b - a + 1
+                while left > 0:
+                    ch = f.read(min(65536, left))
+                    if not ch: break
+                    self.wfile.write(ch); left -= len(ch)
+            return
+        if u.path == "/api/me/posts":
+            _pl, uid = self._plan()
+            if not uid: return self._json({"login": True, "items": []})
+            P = [x for x in social._posts() if x.get("author") == "u:" + uid and x.get("status") != "deleted"][-60:][::-1]
+            return self._json({"items": [{"id": x["id"], "text": x["text"][:140], "t": x["t"], "pending": x["status"] != "approved",
+                                          "img": ("/api/wall/img/" + x["img"] + "?w=480") if x.get("img") and x["status"] == "approved" else None,
+                                          "img_kind": x.get("img_kind") or ("ai" if x.get("img") else None)} for x in P]})
         if u.path == "/api/user/profile":
             _pl, uid = self._plan()
             return self._json(userprof.public_view((parse_qs(u.query).get("nick") or [""])[0][:30], uid))
@@ -1419,6 +1491,14 @@ class H(SimpleHTTPRequestHandler):
             if os.path.isfile(os.path.realpath(fp)) and os.path.realpath(fp).startswith(os.path.realpath(STATIC)):
                 lang = parse_qs(u.query).get("lang", [""])[0]
                 lang = lang if lang in seo.LANGS else ""
+                if not lang:
+                    # pierwsze wyświetlenie bez migania: wybór z konta → ciasteczko (ręczny wybór flagi) → Accept-Language → pl
+                    try:
+                        a = self._acct(); lang = userprof.lang_of(a[0]["uid"]) if a else ""
+                    except Exception: lang = ""
+                    lang = lang or seo.map_lang(self._cookie("luna_lang")) or seo.accept_lang(self.headers.get("Accept-Language"))
+                    if lang == "pl": lang = ""
+                    self._vary_lang = True
                 doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, lang, notify.PUBLIC_URL.rstrip("/"))
                 doc = i18n_pages.legal_note(i18n_pages.apply(doc, u.path, lang), u.path, lang)
                 pid = parse_qs(u.query).get("post", [""])[0]
@@ -1451,7 +1531,7 @@ class H(SimpleHTTPRequestHandler):
                 b = doc.encode()
                 self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
                 if NOIDX: self.send_header("X-Robots-Tag", "noindex, follow")
-                self.send_header("Content-Language", lang or "pl"); self.send_header("Vary", "Accept-Language"); self.end_headers(); self.wfile.write(b); return
+                self.send_header("Content-Language", lang or "pl"); self.send_header("Vary", "Accept-Language, Cookie"); self.end_headers(); self.wfile.write(b); return
         if u.path.endswith(".js") and os.path.basename(u.path) in i18n_pages.JS and u.path.count("/") == 1:
             lg = parse_qs(u.query).get("lang", [""])[0]
             if lg in seo.LANGS and lg != "pl":
@@ -1481,6 +1561,28 @@ class H(SimpleHTTPRequestHandler):
         if u.path.startswith(("/api/inbox", "/api/friends", "/api/dm", "/api/admin/inbox")):
             r = inbox.handle_post(self, u, data)  # Skrzynka, Znajomi, czat 1:1 (inbox.py)
             if r is not None: return r
+        if u.path in ("/api/agent/video", "/api/agent/video/delete"):
+            # Generator filmów agentki: Premium 30 s/720p, Pro / Ultra 60 s/1080p, twardy limit 60 s; tylko sama agentka
+            pl, uid = self._plan()
+            if not uid: return self._json({"error": "Zaloguj się.", "login": True}, 401)
+            if not livechat.rate_ok("vid:" + uid, 10, 300): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
+            try:
+                if u.path.endswith("/delete"): agentvideo.delete(uid, str(data.get("id", ""))); return self._json({"ok": True})
+                r, err = agentvideo.submit(uid, self._gen_plan(pl, uid), data)
+                if err: return self._json(err, 402)
+                return self._json({"ok": True, **r})
+            except PermissionError as e: return self._json({"error": str(e)}, 429)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+        if u.path == "/api/admin/videos":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try: agentvideo.admin_action(str(data.get("id", "")), data.get("action"))
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True, "items": agentvideo.admin_list()})
+        if u.path == "/api/me/lang":
+            _pl, uid = self._plan()
+            if not uid: return self._json({"ok": True, "saved": False})
+            try: userprof.set_lang(uid, str(data.get("lang", ""))); return self._json({"ok": True, "saved": True})
+            except ValueError as e: return self._json({"error": str(e)}, 400)
         if u.path in ("/api/me/profile", "/api/me/avatar", "/api/agent/generate"):
             # Mój panel: anonimowy profil użytkownika (nick) + Generator agentek (402 z nazwą planu)
             pl, uid = self._plan()
@@ -1488,7 +1590,7 @@ class H(SimpleHTTPRequestHandler):
             if not livechat.rate_ok("me:" + uid, 30, 600): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
             try:
                 if u.path == "/api/agent/generate":
-                    r, err = profiles.generate(uid, pl, str(data.get("base", "")), str(data.get("crop", "portret")))
+                    r, err = profiles.generate(uid, self._gen_plan(pl, uid), str(data.get("base", "")), str(data.get("crop", "portret")))
                     if err: return self._json(err, 402)
                     return self._json({"ok": True, **r})
                 if u.path == "/api/me/avatar":

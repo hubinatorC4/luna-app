@@ -115,7 +115,7 @@ function acctUI(){
       <label>Hasło<input name="password" type="password" required minlength="10" maxlength="128" autocomplete="current-password"></label>
       <div class="up" hidden>
         <p class="hint">Hasło: min. 10 znaków, małe i wielkie litery oraz cyfra.</p>
-        <label>Imię (opcjonalnie)<input name="name" maxlength="30" autocomplete="given-name"></label>
+        <label>Nick * (widoczny publicznie, bez imienia i nazwiska)<input name="name" required minlength="2" maxlength="24" autocomplete="nickname"></label>
         <label>Data urodzenia *<input name="dob" type="date" max="${new Date().toISOString().slice(0, 10)}"></label>
         <label class="consent"><input type="checkbox" name="adult"> <span>${ADULT} *</span></label>
         <label class="consent"><input type="checkbox" name="terms"> <span>Akceptuję <a href="/regulamin.html" target="_blank">regulamin</a> i <a href="/privacy.html" target="_blank">informację o prywatności</a>. *</span></label>
@@ -172,6 +172,10 @@ fetch('/api/config').then(r => r.json()).then(c => {
   const b = banner('💳 ' + pn.text, 'info'); b.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('luna.payNotice', pn.t); } catch(e){} });
 }).catch(() => {});
 const NEWS = [
+  ['⚙️ Mój panel', 'Profil, plan i jakość, Twoje treści, powiadomienia i prywatność w jednym miejscu – z wyszukiwarką i krótkim przewodnikiem. Tylko nick, bez imienia i nazwiska.'],
+  ['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 2160 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.'],
+  ['📷 Twoje zdjęcia na wallu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.'],
+  ['🌍 Twój język od razu', 'Luna rozpoznaje język urządzenia już przy pierwszym wyświetleniu; wybrana flaga zawsze wygrywa i jest zapamiętana.'],
   ['💌 Skrzynka, Znajomi i czat', 'Ikona 📬 w aplikacji: ważne sprawy, nowości i wyniki Bitew. Znajomi po nicku, linku lub QR i prywatny czat z emoji. Tylko nicki – bez e-maili.'],
   ['🗂️ Kategorie bitew', 'Elegancja i gala, Miasto nocą, Plaża i lato, Sport, Biznes, Natura, Głos i śpiew, Casual – osobny ranking każdej kategorii i 1–3 specjalizacje Twojej agentki.'],
   ['💗 Kibicuj swojej ulubionej', 'Jako widz wybierz „Moją ulubioną” agentkę i – jeśli chcesz – dostawaj wyniki jej bitew. Własna agentka do walki: od Premium.'],
@@ -197,8 +201,8 @@ window.LunaNews = () => {
   if (!d){ d = document.createElement('dialog'); d.id = 'newsDlg'; d.className = 'news';
     d.innerHTML = '<h2>Co nowego w wersji 1.6.4</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
     document.body.appendChild(d); }
-  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.4'); } catch(e){}
+  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.5'); } catch(e){}
 };
-try { if (localStorage.getItem('luna.seenVer') !== '1.6.4' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
+try { if (localStorage.getItem('luna.seenVer') !== '1.6.5' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-news]')){ e.preventDefault(); window.LunaNews(); } });
 })();

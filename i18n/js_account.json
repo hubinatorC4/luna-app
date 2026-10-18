@@ -97,8 +97,8 @@
 "Password: at least 10 characters, lower- and upper-case letters and a digit."
 ],
 [
-"<label>Imię (opcjonalnie)<input",
-"<label>Name (optional)<input"
+"<label>Nick * (widoczny publicznie, bez imienia i nazwiska)<input",
+"<label>Nickname * (shown publicly, no first or last name)<input"
 ],
 [
 "<label>Data urodzenia *<input",
@@ -179,6 +179,22 @@
 [
 "['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.']",
 "['🫧 Battles that don’t get in the way', 'They open only when you tap in; X, ESC or swiping down closes them. Minimise to a small bar with time and score. In settings: Show battles, Intro animation and an optional result notification.']"
+],
+[
+"['⚙️ Mój panel', 'Profil, plan i jakość, Twoje treści, powiadomienia i prywatność w jednym miejscu – z wyszukiwarką i krótkim przewodnikiem. Tylko nick, bez imienia i nazwiska.']",
+"['⚙️ My panel', 'Profile, plan and quality, your content, notifications and privacy in one place – with search and a short guided tour. Nickname only, no real name.']"
+],
+[
+"['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 2160 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.']",
+"['🎬 Agent generator', 'Premium: 1280 px images and videos up to 30 s in 720p. Pro / Ultra: up to 2160 px, videos up to 60 s in 1080p, all sceneries. Always with an “AI” label.']"
+],
+[
+"['📷 Twoje zdjęcia na wallu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.']",
+"['📷 Your photos on the wall', 'Add your own photos (854 px, no EXIF/GPS, after moderation) labelled “User photo”.']"
+],
+[
+"['🌍 Twój język od razu', 'Luna rozpoznaje język urządzenia już przy pierwszym wyświetleniu; wybrana flaga zawsze wygrywa i jest zapamiętana.']",
+"['🌍 Your language right away', 'Luna detects your device language on the very first view; the flag you pick always wins and is remembered.']"
 ],
 [
 "['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.']",
@@ -335,8 +351,8 @@
 "Contraseña: mínimo 10 caracteres, minúsculas, mayúsculas y un número."
 ],
 [
-"<label>Imię (opcjonalnie)<input",
-"<label>Nombre (opcional)<input"
+"<label>Nick * (widoczny publicznie, bez imienia i nazwiska)<input",
+"<label>Apodo * (público, sin nombre ni apellidos)<input"
 ],
 [
 "<label>Data urodzenia *<input",
@@ -417,6 +433,22 @@
 [
 "['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.']",
 "['🫧 Batallas que no molestan', 'Se abren solo al tocar; X, ESC o deslizar hacia abajo las cierra. Minimiza a una barra pequeña con tiempo y resultado. En ajustes: Mostrar batallas, Animación de intro y aviso opcional del resultado.']"
+],
+[
+"['⚙️ Mój panel', 'Profil, plan i jakość, Twoje treści, powiadomienia i prywatność w jednym miejscu – z wyszukiwarką i krótkim przewodnikiem. Tylko nick, bez imienia i nazwiska.']",
+"['⚙️ Mi panel', 'Perfil, plan y calidad, tu contenido, notificaciones y privacidad en un solo lugar, con buscador y una breve guía. Solo apodo, sin nombre real.']"
+],
+[
+"['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 2160 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.']",
+"['🎬 Generador de agentes', 'Premium: imágenes de 1280 px y vídeos de hasta 30 s en 720p. Pro / Ultra: hasta 2160 px, vídeos de hasta 60 s en 1080p, todos los escenarios. Siempre con la marca «AI».']"
+],
+[
+"['📷 Twoje zdjęcia na wallu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.']",
+"['📷 Tus fotos en el muro', 'Añade tus propias fotos (854 px, sin EXIF/GPS, tras moderación) con la etiqueta «Foto de usuario».']"
+],
+[
+"['🌍 Twój język od razu', 'Luna rozpoznaje język urządzenia już przy pierwszym wyświetleniu; wybrana flaga zawsze wygrywa i jest zapamiętana.']",
+"['🌍 Tu idioma desde el principio', 'Luna detecta el idioma del dispositivo desde la primera vista; la bandera que elijas siempre manda y se recuerda.']"
 ],
 [
 "['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.']",
@@ -573,8 +605,8 @@
 "Passwort: mind. 10 Zeichen, Klein- und Großbuchstaben sowie eine Ziffer."
 ],
 [
-"<label>Imię (opcjonalnie)<input",
-"<label>Vorname (optional)<input"
+"<label>Nick * (widoczny publicznie, bez imienia i nazwiska)<input",
+"<label>Nickname * (öffentlich sichtbar, ohne Vor- und Nachnamen)<input"
 ],
 [
 "<label>Data urodzenia *<input",
@@ -655,6 +687,22 @@
 [
 "['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.']",
 "['🫧 Battles, die nicht stören', 'Sie öffnen sich nur per Tippen; X, ESC oder Wischen nach unten schließt sie. Minimieren zu einer kleinen Leiste mit Zeit und Stand. In den Einstellungen: Battles anzeigen, Intro-Animation und optionale Ergebnis-Benachrichtigung.']"
+],
+[
+"['⚙️ Mój panel', 'Profil, plan i jakość, Twoje treści, powiadomienia i prywatność w jednym miejscu – z wyszukiwarką i krótkim przewodnikiem. Tylko nick, bez imienia i nazwiska.']",
+"['⚙️ Mein Bereich', 'Profil, Plan und Qualität, deine Inhalte, Benachrichtigungen und Datenschutz an einem Ort – mit Suche und kurzem Rundgang. Nur Nickname, kein Klarname.']"
+],
+[
+"['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 2160 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.']",
+"['🎬 Agentinnen-Generator', 'Premium: Bilder mit 1280 px und Videos bis 30 s in 720p. Pro / Ultra: bis 2160 px, Videos bis 60 s in 1080p, alle Kulissen. Immer mit „AI“-Zeichen.']"
+],
+[
+"['📷 Twoje zdjęcia na wallu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.']",
+"['📷 Deine Fotos auf der Wand', 'Füge eigene Fotos hinzu (854 px, ohne EXIF/GPS, nach Moderation), gekennzeichnet als „Nutzerfoto“.']"
+],
+[
+"['🌍 Twój język od razu', 'Luna rozpoznaje język urządzenia już przy pierwszym wyświetleniu; wybrana flaga zawsze wygrywa i jest zapamiętana.']",
+"['🌍 Sofort deine Sprache', 'Luna erkennt die Gerätesprache schon beim ersten Aufruf; die gewählte Flagge hat immer Vorrang und wird gespeichert.']"
 ],
 [
 "['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.']",
@@ -811,8 +859,8 @@
 "Пароль: щонайменше 10 символів, малі й великі літери та цифра."
 ],
 [
-"<label>Imię (opcjonalnie)<input",
-"<label>Ім’я (необов’язково)<input"
+"<label>Nick * (widoczny publicznie, bez imienia i nazwiska)<input",
+"<label>Нікнейм * (видно публічно, без імені та прізвища)<input"
 ],
 [
 "<label>Data urodzenia *<input",
@@ -893,6 +941,22 @@
 [
 "['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.']",
 "['🫧 Битви, що не заважають', 'Відкриваються лише після дотику; X, ESC або свайп униз закриває. Згортання в малу панель із часом і рахунком. У налаштуваннях: Показувати битви, Анімація інтро й необов’язкове сповіщення про результат.']"
+],
+[
+"['⚙️ Mój panel', 'Profil, plan i jakość, Twoje treści, powiadomienia i prywatność w jednym miejscu – z wyszukiwarką i krótkim przewodnikiem. Tylko nick, bez imienia i nazwiska.']",
+"['⚙️ Моя панель', 'Профіль, план і якість, ваш вміст, сповіщення й конфіденційність в одному місці — з пошуком і коротким путівником. Лише нікнейм, без справжнього імені.']"
+],
+[
+"['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 2160 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.']",
+"['🎬 Генератор агенток', 'Premium: зображення 1280 px і відео до 30 с у 720p. Pro / Ultra: до 2160 px, відео до 60 с у 1080p, усі декорації. Завжди з позначкою «AI».']"
+],
+[
+"['📷 Twoje zdjęcia na wallu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.']",
+"['📷 Ваші фото на стіні', 'Додавайте власні фото (854 px, без EXIF/GPS, після модерації) з позначкою «Фото користувача».']"
+],
+[
+"['🌍 Twój język od razu', 'Luna rozpoznaje język urządzenia już przy pierwszym wyświetleniu; wybrana flaga zawsze wygrywa i jest zapamiętana.']",
+"['🌍 Ваша мова одразу', 'Luna визначає мову пристрою вже під час першого відкриття; обраний прапорець завжди має перевагу й запам’ятовується.']"
 ],
 [
 "['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.']",

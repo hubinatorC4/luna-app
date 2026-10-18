@@ -77,6 +77,10 @@ def create_post(d, uid, vid, acct_nick=None):
     if banned(ak): raise PermissionError("Twoje konto ma zablokowaną możliwość publikowania.")
     if not uid and d.get("adult") is not True: raise ValueError("Potwierdź, że masz ukończone 18 lat.")
     text = check_text(d.get("text"), MAX_POST)
+    if not acct_nick and uid:
+        try:
+            import userprof; acct_nick = userprof.nick_of(uid) or None  # zalogowany: zawsze nick z profilu (anonimowo)
+        except Exception: acct_nick = None
     nick = acct_nick or nick_ok(d.get("nick"))
     img_id = None; img_kind = None
     if d.get("image") and d.get("img_kind") == "user":

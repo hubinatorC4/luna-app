@@ -5,12 +5,13 @@ const L = [['pl', '🇵🇱', 'Polski'], ['en', '🇬🇧', 'English'], ['es', '
 const APP = location.pathname === '/app' || location.pathname === '/index.html' || document.documentElement.hasAttribute('data-app');
 const q = new URLSearchParams(location.search).get('lang');
 let saved = null; try { saved = localStorage.getItem('luna.lang'); } catch(e){}
-if (q && L.some(x => x[0] === q)){ try { localStorage.setItem('luna.lang', q); } catch(e){} }
-else if (APP){ /* aplikacja: język w Ustawieniach (pełne tłumaczenie UI – v1.4) */ }
-else if (!saved){ const nav = (navigator.language || 'pl').slice(0, 2).toLowerCase(); const pick = L.some(x => x[0] === nav) ? nav : 'pl'; try { localStorage.setItem('luna.lang', pick); } catch(e){}
-  if (pick !== 'pl' && !location.pathname.startsWith('/api')){ const u = new URL(location.href); u.searchParams.set('lang', pick); location.replace(u); return; } }
-else if (saved && saved !== 'pl' && !q){ const u = new URL(location.href); u.searchParams.set('lang', saved); location.replace(u); return; }
-const cur = q || saved || 'pl';
+const MAPL = c => { c = String(c || '').toLowerCase().split(/[-_]/)[0]; return L.some(x => x[0] === c) ? c : ({ru: 'en', be: 'en'})[c] || ''; };
+const SRV = (document.documentElement.lang || 'pl').slice(0, 2);  // język wyrenderowany przez serwer (konto → ciasteczko → Accept-Language)
+if (q && L.some(x => x[0] === q)){ /* ?lang=xx w adresie – bez nadpisywania zapisanego wyboru (zapis tylko po kliknięciu flagi) */ }
+else if (APP){ /* aplikacja: język ustala app-shell.js */ }
+else { const want = MAPL(saved) || (navigator.languages || [navigator.language]).map(MAPL).find(Boolean) || 'pl';
+  if (want !== SRV && !location.pathname.startsWith('/api')){ const u = new URL(location.href); u.searchParams.set('lang', want); location.replace(u); return; } }
+const cur = q || MAPL(saved) || SRV || 'pl';
 const NAV = {
  en: {'/promo.html': 'Tips', '/butik.html': 'Boutique', '/scianka.html': 'Wall', '/galeria.html': 'Agents gallery', '/live.html': 'Luna Live', '/testerzy.html': 'Testers', '/dolacz.html': 'Join the project', '/twarz.html': 'AI Face', '/wesprzyj.html': 'Support Luna', '/regulamin.html': 'Terms', '/privacy.html': 'Privacy', '/problemy.html': 'Help', '/app': 'App', '/app#live': 'Chat with the creator'},
  es: {'/promo.html': 'Consejos', '/butik.html': 'Boutique', '/scianka.html': 'Muro', '/galeria.html': 'Galería de agentes', '/live.html': 'Luna Live', '/testerzy.html': 'Testers', '/dolacz.html': 'Únete al proyecto', '/twarz.html': 'Rostro IA', '/wesprzyj.html': 'Apoya a Luna', '/regulamin.html': 'Condiciones', '/privacy.html': 'Privacidad', '/problemy.html': 'Ayuda', '/app': 'App', '/app#live': 'Chat con el creador'},
@@ -27,7 +28,7 @@ function mount(){
   const host = document.querySelector('header .bar .acts') || document.querySelector('header .bar') || document.querySelector('header.top') || document.querySelector('header');
   const s = document.createElement('select'); s.className = 'lswitch'; s.setAttribute('aria-label', 'Język / Language');
   L.forEach(([c, f, n]) => { const o = document.createElement('option'); o.value = c; o.textContent = `${f} ${n}`; if (c === cur) o.selected = true; s.appendChild(o); });
-  s.onchange = () => { try { localStorage.setItem('luna.lang', s.value); } catch(e){} const u = new URL(location.href); u.searchParams.set('lang', s.value); location.href = u; };
+  s.onchange = () => { try { localStorage.setItem('luna.lang', s.value); } catch(e){} document.cookie = 'luna_lang=' + s.value + ';path=/;max-age=31536000;samesite=lax'; try { fetch('/api/me/lang', {method: 'POST', credentials: 'same-origin', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({lang: s.value})}).catch(() => {}); } catch(e){} const u = new URL(location.href); u.searchParams.set('lang', s.value); location.href = u; };
   if (host) host.prepend(s); else { s.classList.add('floating'); document.body.appendChild(s); }
   document.querySelectorAll('.langtabs').forEach(t => t.hidden = true);
   document.querySelectorAll('a[href^="/"]').forEach(a => { if (cur === 'pl' || /^\/(api|music|uploads)\//.test(a.getAttribute('href'))) return; try { const u = new URL(a.href); if (u.origin === location.origin && /\.html$|\/$/.test(u.pathname) && !u.searchParams.get('lang')){ u.searchParams.set('lang', cur); a.href = u.pathname + u.search + u.hash; } } catch(e){} });

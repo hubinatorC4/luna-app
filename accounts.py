@@ -46,6 +46,10 @@ def signup(d, base_url=""):
     validate_pw(pw)
     decl = age.check(d)  # Underage → grzeczna odmowa, nic nie zapisujemy
     if d.get("terms") is not True: raise ValueError("Zaakceptuj regulamin i informację o prywatności.")
+    import userprof, social
+    nick = social.nick_ok(d.get("nick") or name)  # tylko nick (bez imienia i nazwiska); wymagany, unikalny, moderowany
+    if any(userprof._key(v.get("nick", "")) == userprof._key(nick) for v in userprof._P().values()): raise ValueError("Ten nick jest już zajęty – wybierz inny.")
+    name = nick
     pwh = hash_pw(pw)
     with _lock:
         a = _accts()
@@ -54,6 +58,8 @@ def signup(d, base_url=""):
         a[uid] = {"uid": uid, "email": email, "pw": pwh, "name": name, "created": int(time.time()), "verified": False,
                   "vtok": _h(vt), "tester": "", "fails": 0, "lock": 0, "terms_at": int(time.time()), **decl}
         store.put("accounts", a)
+    try: userprof.set_nick(uid, nick)
+    except ValueError: pass
     sent = False
     if notify.email_enabled() and base_url:
         link = f"{base_url}/api/account/verify?token={vt}"

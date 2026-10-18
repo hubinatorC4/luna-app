@@ -3,9 +3,11 @@
 (() => {
 const LS = ['pl', 'en', 'es', 'de', 'uk'];
 const qs = new URLSearchParams(location.search);
-let lang = qs.get('lang') || (() => { try { return localStorage.getItem('luna.lang'); } catch(e){ return null; } })() || (navigator.language || 'pl').slice(0, 2).toLowerCase();
-if (!LS.includes(lang)) lang = 'pl';
-try { localStorage.setItem('luna.lang', lang); } catch(e){}
+// Język: ?lang → zapisany wybór (localStorage/ciasteczko; konto ustawia ciasteczko) → język systemu (navigator.languages; Android/TWA = locale systemu) → pl. ru/be → en.
+const mapL = c => { c = String(c || '').toLowerCase().split(/[-_]/)[0]; return LS.includes(c) ? c : ({ru: 'en', be: 'en'})[c] || ''; };
+const ck = (document.cookie.match(/(?:^|; )luna_lang=([a-z]{2})/) || [])[1];
+let lang = mapL(qs.get('lang')) || mapL((() => { try { return localStorage.getItem('luna.lang'); } catch(e){ return null; } })()) || mapL(ck) ||
+  (navigator.languages || [navigator.language]).map(mapL).find(Boolean) || 'pl';
 const T = Object.assign({}, window.LUNA_APP_T.pl, window.LUNA_APP_T[lang]);
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));

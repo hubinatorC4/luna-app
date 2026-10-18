@@ -350,6 +350,11 @@ def set_nick(uid, n):
     if any(x["uid"] != uid and (nick_of(x) or "").lower() == n.lower() for x in accounts._accts().values()): raise ValueError("Ten nick jest już zajęty – wybierz inny.")
     with accounts._lock:
         a = accounts._accts(); a[uid]["name"] = n; store.put("accounts", a)
+    try:
+        import userprof
+        with userprof._lock:
+            P = userprof._P(); r = P.get(uid) or {}; r["nick"] = n; P[uid] = r; store.put("user_profiles", P)  # jeden nick z Mój panel
+    except Exception: pass
     _pidc["t"] = 0; return n
 
 # ---------- czat 1:1 ----------

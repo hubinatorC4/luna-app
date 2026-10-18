@@ -1,6 +1,20 @@
 """Wielojęzyczność stron: ?lang=xx, <html lang>, przetłumaczone <title>/description/OG, hreflang + x-default, sitemap.xml, robots.txt."""
 import html, json, os, re
 LANGS = ("pl", "en", "es", "de", "uk")
+ALIAS = {"ru": "en", "be": "en"}   # rosyjski/białoruski → angielski (decyzja właściciela); pozostałe nieobsługiwane → pl
+def map_lang(code):
+    c = str(code or "").strip().lower().replace("_", "-").split("-")[0]
+    return c if c in LANGS else ALIAS.get(c, "")
+def accept_lang(header):
+    """Accept-Language → pierwszy obsługiwany język wg wag q (en-GB → en, es-MX → es, ru → en); brak → "pl"."""
+    best = []
+    for i, part in enumerate(str(header or "").split(",")[:20]):
+        tag, _, q = part.strip().partition(";q=")
+        try: w = float(q) if q else 1.0
+        except ValueError: w = 0.0
+        m = map_lang(tag)
+        if m and w > 0: best.append((-w, i, m))
+    return sorted(best)[0][2] if best else "pl"
 OGL = {"pl": "pl_PL", "en": "en_GB", "es": "es_ES", "de": "de_DE", "uk": "uk_UA"}
 PAGES = {
  "/o-lunie.html": {"pl": ("O Lunie – trenerka głosu AI | Luna mówi jak jest", "Luna to asystentka AI i trenerka głosu: rozmowa głosowa, 45 lekcji, barwa głosu, tryb hologram i własna asystentka. Bez reklam."),

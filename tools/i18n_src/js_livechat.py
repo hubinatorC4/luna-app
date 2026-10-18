@@ -3,6 +3,6 @@ E = [
 ["'Zespół Luny'", "'Luna Team'", "'Equipo de Luna'", "'Luna-Team'", "'Команда Луни'"],
 ["'Piszesz jako: '", "'Writing as: '", "'Escribes como: '", "'Du schreibst als: '", "'Ви пишете як: '"],
 ["'Gość'", "'Guest'", "'Invitado'", "'Gast'", "'Гість'"],
-["' (imię i zdjęcie zmienisz w Ustawieniach → Twój profil).'", "' (change your name and picture in Settings → Your profile).'", "' (cambia tu nombre e imagen en Ajustes → Tu perfil).'", "' (Name und Bild änderst du unter Einstellungen → Dein Profil).'", "' (ім’я та зображення змініть у Налаштуваннях → Ваш профіль).'"],
+["' (nick i awatar zmienisz w Ustawieniach → Twój profil).'", "' (change your nickname and avatar in Settings → Your profile).'", "' (cambia tu apodo y avatar en Ajustes → Tu perfil).'", "' (Nickname und Avatar änderst du unter Einstellungen → Dein Profil).'", "' (нікнейм та аватар змініть у Налаштуваннях → Ваш профіль).'"],
 ["'Wiadomość jest pusta.'", "'The message is empty.'", "'El mensaje está vacío.'", "'Die Nachricht ist leer.'", "'Повідомлення порожнє.'"],
 ]

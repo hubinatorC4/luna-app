@@ -140,9 +140,9 @@ def generate(uid, plan, base, crop="portret"):
     """Generator agentek: obraz AI złożony z istniejących ujęć AI Luny (strój/poza dozwolone w planie), wyjście wg planu:
     Premium 1280 px, Pro / Ultra 1920 px (najwyższa rozdzielczość źródła – bez powiększania). Dzienny limit. Zawsze oznaczony jako AI."""
     import quality, os, subprocess, tempfile
-    if not plans.has(plan, "premium"): return None, quality.lock("premium")
+    if not plans.has(plan, "premium"): return None, quality.lock("premium", "gen")
     if base not in LUNA_PHOTOS: raise ValueError("Wybierz strój lub pozę z listy.")
-    if not plans.has(plan, LUNA_PHOTOS[base]): return None, quality.lock(LUNA_PHOTOS[base])
+    if not plans.has(plan, LUNA_PHOTOS[base]): return None, dict(quality.lock(LUNA_PHOTOS[base], "gen"), message=f"Ta poza/strój jest w planie {plans.NAMES[LUNA_PHOTOS[base]]}.")
     if crop not in GEN_CROPS: crop = "portret"
     pid, r = mine(uid)
     if not r: raise ValueError("Najpierw zapisz profil (imię agentki).")
@@ -157,6 +157,8 @@ def generate(uid, plan, base, crop="portret"):
         rr = subprocess.run([imgsafe._ff(), "-v", "error", "-y", "-i", src, "-map_metadata", "-1", "-frames:v", "1", "-vf", vf, "-q:v", "2", dst], capture_output=True, timeout=30)
         if rr.returncode or not os.path.exists(dst): raise ValueError("Nie udało się wygenerować obrazu.")
         out = open(dst, "rb").read()
+        pr = subprocess.run([imgsafe._ff(), "-i", dst], capture_output=True, timeout=10).stderr.decode()
+        mm = re.search(r", (\d{2,5})x(\d{2,5})", pr); real = max(int(mm.group(1)), int(mm.group(2))) if mm else px
     h = hashlib.sha1(out).hexdigest()[:10]
     with _lock:
         I = _imgs(); I[pid] = {"b": base64.b64encode(out).decode(), "ext": "jpg", "h": h, "t": int(time.time()), "gen": base, "ai": True}; store.put("agent_profile_img", I)
@@ -164,7 +166,7 @@ def generate(uid, plan, base, crop="portret"):
         x["own"] = h; x["photos"] = [("own:" + h) if p == "own:" + old else p for p in x["photos"]]
         if x.get("pinned") == "own:" + old: x["pinned"] = "own:" + h
         P[pid] = x; store.put("agent_profiles", P)
-    return {"h": h, "url": _photo_url("own:" + h, pid), "ref": "own:" + h, "px": px, "used": n, "limit": lim, "ai": True}, None
+    return {"h": h, "url": _photo_url("own:" + h, pid), "ref": "own:" + h, "px": real, "cap_px": px, "used": n, "limit": lim, "ai": True}, None
 
 def own_img(pid):
     r = _P().get(pid)

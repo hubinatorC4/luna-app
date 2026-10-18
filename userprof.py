@@ -16,12 +16,17 @@ def _key(n): return re.sub(r"\s+", "", social._norm(n))
 
 def get(uid):
     r = _P().get(uid) or {}
-    return {"nick": r.get("nick", ""), "bio": r.get("bio", ""), "interests": r.get("interests", []), "links": r.get("links", []),
+    return {"nick": r.get("nick", "") or nick_of(uid), "bio": r.get("bio", ""), "interests": r.get("interests", []), "links": r.get("links", []),
             "avatar": r.get("avatar", ""), "public": bool(r.get("public")), "hide_rank": hidden_in_rank(uid),
             "show_bio": bool(r.get("show_bio", True)), "show_interests": bool(r.get("show_interests", True)), "show_links": bool(r.get("show_links", False)),
             "tour_done": bool(r.get("tour_done"))}
 
-def nick_of(uid): return (_P().get(uid) or {}).get("nick", "")
+def nick_of(uid):
+    n = (_P().get(uid) or {}).get("nick", "")
+    if n: return n
+    try:
+        import accounts; return ((accounts._accts().get(uid) or {}).get("name") or "").strip()  # ten sam nick co w Skrzynce/Znajomych
+    except Exception: return ""
 def hidden_in_rank(uid):
     import battles; return uid in battles._priv()  # jedno źródło prawdy z rankingiem Bitew (bt_priv)
 
@@ -32,7 +37,12 @@ def set_nick(uid, n):
     with _lock:
         P = _P()
         if any(_key(v.get("nick", "")) == k for u, v in P.items() if u != uid): raise ValueError("Ten nick jest już zajęty – wybierz inny.")
+        import accounts
+        if any(x.get("uid") != uid and _key(x.get("name") or "") == k for x in accounts._accts().values()): raise ValueError("Ten nick jest już zajęty – wybierz inny.")
         r = P.get(uid) or {}; r["nick"] = n; P[uid] = r; store.put("user_profiles", P)
+    with accounts._lock:  # jeden nick w całej aplikacji (Skrzynka, Znajomi, rankingi)
+        A = accounts._accts()
+        if uid in A: A[uid]["name"] = n; store.put("accounts", A)
     return n
 
 def save(uid, d):
@@ -57,6 +67,7 @@ def save(uid, d):
             r["links"] = L
         if "hide_rank" in d:
             import battles; battles.set_privacy(uid, d.get("hide_rank") is True)
+        if d.get("lang") in ("pl", "en", "es", "de", "uk"): r["lang"] = d["lang"]
         for k in ("public", "show_bio", "show_interests", "show_links", "tour_done"):
             if k in d: r[k] = d.get(k) is True
         if "avatar" in d and str(d["avatar"]).startswith("preset:"):
@@ -129,3 +140,55 @@ def delete(uid):
     with _lock:
         P = _P(); P.pop(uid, None); store.put("user_profiles", P)
         A = _A(); A.pop(uid, None); store.put("user_avatars", A)
+
+# ---------- ustawienia: powiadomienia, zaproszenia, zablokowani ----------
+NOTIF_TYPES = ("battles", "friends", "messages", "updates")
+INVITE = ("all", "friends_of_friends", "nobody")
+def settings(uid):
+    r = _P().get(uid) or {}
+    n = r.get("notif") or {}
+    return {"notif": {k: bool(n.get(k, k in ("battles", "messages"))) for k in NOTIF_TYPES}, "invite": r.get("invite", "all"),
+            "blocked": [{"nick": x} for x in (r.get("blocked") or [])], "delete_at": r.get("delete_at", 0)}
+def notif_on(uid, kind): return settings(uid)["notif"].get(kind, False)
+def save_settings(uid, d):
+    with _lock:
+        P = _P(); r = P.get(uid) or {}
+        if isinstance(d.get("notif"), dict):
+            n = r.get("notif") or {}; n.update({k: d["notif"][k] is True for k in NOTIF_TYPES if k in d["notif"]}); r["notif"] = n
+        if d.get("invite") in INVITE: r["invite"] = d["invite"]
+        if "block" in d or "unblock" in d:
+            B = list(r.get("blocked") or [])
+            if d.get("block"):
+                b = social.nick_ok(d["block"])
+                if b not in B: B.append(b)
+            if d.get("unblock"): B = [x for x in B if x != d["unblock"]]
+            r["blocked"] = B[:200]
+        P[uid] = r; store.put("user_profiles", P)
+    return settings(uid)
+
+# ---------- usunięcie konta: 2 kroki (wpisz nick) → 30 dni na przywrócenie → trwałe usunięcie ----------
+GRACE = 30 * 86400
+def request_delete(uid, typed, acct_name=""):
+    nk = nick_of(uid) or acct_name
+    if not nk or _key(typed or "") != _key(nk): raise ValueError("Wpisz dokładnie swój nick, aby potwierdzić.")
+    with _lock:
+        P = _P(); r = P.get(uid) or {}; r["delete_at"] = int(time.time()) + GRACE; r["public_before_delete"] = bool(r.get("public")); r["public"] = False
+        P[uid] = r; store.put("user_profiles", P)
+    return r["delete_at"]
+def cancel_delete(uid):
+    with _lock:
+        P = _P(); r = P.get(uid) or {}
+        if not r.get("delete_at"): return False
+        r.pop("delete_at", None); r["public"] = bool(r.pop("public_before_delete", False)); P[uid] = r; store.put("user_profiles", P)
+    return True
+def due_deletions(now=None):
+    now = now or time.time()
+    return [u for u, r in _P().items() if r.get("delete_at") and r["delete_at"] <= now]
+
+def lang_of(uid):
+    l = (_P().get(uid) or {}).get("lang", "")
+    return l if l in ("pl", "en", "es", "de", "uk") else ""
+def set_lang(uid, l):
+    if l not in ("pl", "en", "es", "de", "uk"): raise ValueError("Nieznany język.")
+    with _lock:
+        P = _P(); r = P.get(uid) or {}; r["lang"] = l; P[uid] = r; store.put("user_profiles", P)

@@ -235,3 +235,32 @@ for (var k in X) if (T[k]){ var t = T[k], x = X[k];
   if (t.cmp) t.cmp = t.cmp.concat(x.cmp);
   if (t.links) t.links = x.links.concat(t.links); }
 })(window.LUNA_APP_T);
+/* v1.6.3: Mój panel, jakość mediów i Generator agentek według planu (egzekwowane na serwerze) */
+(function(T){
+var X = {
+ pl: {pr: ['Generator agentek: obrazy 1280 px (20 dziennie)', 'Filmy z Twoją agentką do 30 s, 720p (5 dziennie)', 'Zgłaszanie agentki do Bitew, 6 podstawowych scenerii', 'Oglądanie do 720p'],
+  po: ['Generator agentek: obrazy do 2160 px (60 dziennie)', 'Filmy z Twoją agentką do 60 s, 1080p (15 dziennie)', 'Wszystkie scenerie i własny opis scenerii (moderowany)', 'Oglądanie do 1080p'],
+  cmp: [['Kibicujesz, głosujesz i czatujesz w bitwach', 1, 1, 1], ['Własne zdjęcia na wall (854 px, po moderacji)', 1, 1, 1], ['Zgłoszenie własnej agentki do Bitew', 0, 1, 1], ['Generator agentek: obrazy', 0, '1280 px', '2160 px'], ['Filmy agentki', 0, '30 s · 720p', '60 s · 1080p'], ['Scenerie', 0, '6 podstawowych', 'wszystkie + własne'], ['Jakość oglądania', '480p', '720p', '1080p']],
+  links: [['/ustawienia.html', '⚙️ Mój panel']]},
+ en: {pr: ['Agent generator: 1280 px images (20 a day)', 'Videos of your agent up to 30 s, 720p (5 a day)', 'Enter your agent in Battles, 6 basic sceneries', 'Watch in up to 720p'],
+  po: ['Agent generator: images up to 2160 px (60 a day)', 'Videos of your agent up to 60 s, 1080p (15 a day)', 'All sceneries plus custom scenery prompts (moderated)', 'Watch in up to 1080p'],
+  cmp: [['Cheer, vote and chat in battles', 1, 1, 1], ['Your own photos on the wall (854 px, moderated)', 1, 1, 1], ['Enter your own agent in Battles', 0, 1, 1], ['Agent generator: images', 0, '1280 px', '2160 px'], ['Agent videos', 0, '30 s · 720p', '60 s · 1080p'], ['Sceneries', 0, '6 basic', 'all + custom'], ['Viewing quality', '480p', '720p', '1080p']],
+  links: [['/ustawienia.html', '⚙️ My panel']]},
+ es: {pr: ['Generador de agentes: imágenes de 1280 px (20 al día)', 'Vídeos de tu agente de hasta 30 s, 720p (5 al día)', 'Inscribir a tu agente en Batallas, 6 escenarios básicos', 'Ver hasta en 720p'],
+  po: ['Generador de agentes: imágenes de hasta 2160 px (60 al día)', 'Vídeos de tu agente de hasta 60 s, 1080p (15 al día)', 'Todos los escenarios y escenario personalizado (moderado)', 'Ver hasta en 1080p'],
+  cmp: [['Animas, votas y chateas en las batallas', 1, 1, 1], ['Tus fotos en el muro (854 px, moderadas)', 1, 1, 1], ['Inscribir a tu agente en Batallas', 0, 1, 1], ['Generador de agentes: imágenes', 0, '1280 px', '2160 px'], ['Vídeos de la agente', 0, '30 s · 720p', '60 s · 1080p'], ['Escenarios', 0, '6 básicos', 'todos + propios'], ['Calidad de visualización', '480p', '720p', '1080p']],
+  links: [['/ustawienia.html', '⚙️ Mi panel']]},
+ de: {pr: ['Agentinnen-Generator: Bilder mit 1280 px (20 pro Tag)', 'Videos deiner Agentin bis 30 s, 720p (5 pro Tag)', 'Agentin bei Battles anmelden, 6 Basis-Kulissen', 'Ansehen bis 720p'],
+  po: ['Agentinnen-Generator: Bilder bis 2160 px (60 pro Tag)', 'Videos deiner Agentin bis 60 s, 1080p (15 pro Tag)', 'Alle Kulissen und eigene Kulisse (moderiert)', 'Ansehen bis 1080p'],
+  cmp: [['Anfeuern, abstimmen und chatten in Battles', 1, 1, 1], ['Eigene Fotos auf der Wand (854 px, moderiert)', 1, 1, 1], ['Eigene Agentin bei Battles anmelden', 0, 1, 1], ['Agentinnen-Generator: Bilder', 0, '1280 px', '2160 px'], ['Videos der Agentin', 0, '30 s · 720p', '60 s · 1080p'], ['Kulissen', 0, '6 Basis', 'alle + eigene'], ['Wiedergabequalität', '480p', '720p', '1080p']],
+  links: [['/ustawienia.html', '⚙️ Mein Bereich']]},
+ uk: {pr: ['Генератор агенток: зображення 1280 px (20 на день)', 'Відео з вашою агенткою до 30 с, 720p (5 на день)', 'Заявка агентки на Битви, 6 базових декорацій', 'Перегляд до 720p'],
+  po: ['Генератор агенток: зображення до 2160 px (60 на день)', 'Відео з вашою агенткою до 60 с, 1080p (15 на день)', 'Усі декорації та власний опис декорації (модерується)', 'Перегляд до 1080p'],
+  cmp: [['Вболіваєте, голосуєте й спілкуєтеся в битвах', 1, 1, 1], ['Власні фото на стіні (854 px, після модерації)', 1, 1, 1], ['Заявка власної агентки на Битви', 0, 1, 1], ['Генератор агенток: зображення', 0, '1280 px', '2160 px'], ['Відео агентки', 0, '30 с · 720p', '60 с · 1080p'], ['Декорації', 0, '6 базових', 'усі + власні'], ['Якість перегляду', '480p', '720p', '1080p']],
+  links: [['/ustawienia.html', '⚙️ Моя панель']]}
+};
+for (var k in X) if (T[k]){ var t = T[k], x = X[k];
+  if (t.feat){ if (t.feat.premium) t.feat.premium = t.feat.premium.concat(x.pr); if (t.feat.pro) t.feat.pro = t.feat.pro.concat(x.po); }
+  if (t.cmp) t.cmp = t.cmp.concat(x.cmp);
+  if (t.links) t.links = x.links.concat(t.links); }
+})(window.LUNA_APP_T);

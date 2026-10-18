@@ -34,7 +34,7 @@ function renderLive(){
   const me = window.UserAvatarSrc ? window.UserAvatarSrc() : '';
   msgs.forEach(m => row(L, m, m.from === 'visitor', m.from === 'visitor' ? me : MOD_AV, m.from === 'visitor' ? (m.name || 'Ty') : 'Zespół Luny'));
   L.scrollTop = L.scrollHeight;
-  $('#liveWho').textContent = 'Piszesz jako: ' + (userName() || 'Gość') + ' (imię i zdjęcie zmienisz w Ustawieniach → Twój profil).';
+  $('#liveWho').textContent = 'Piszesz jako: ' + (userName() || 'Gość') + ' (nick i awatar zmienisz w Ustawieniach → Twój profil).';
 }
 function badge(el, n){ el.hidden = !n; el.textContent = n > 9 ? '9+' : String(n || ''); }
 async function poll(){

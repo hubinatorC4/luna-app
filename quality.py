@@ -8,11 +8,11 @@ import store, plans, imgsafe
 CAPS = {"darmowy": {"img": 854, "video": 480, "gen": 0, "gen_px": 0},
         "podstawowa": {"img": 854, "video": 480, "gen": 0, "gen_px": 0},
         "premium": {"img": 1280, "video": 720, "gen": 20, "gen_px": 1280},
-        "pro": {"img": 1920, "video": 1080, "gen": 60, "gen_px": 1920}}
+        "pro": {"img": 2160, "video": 1080, "gen": 60, "gen_px": 2160}}  # źródła ujęć AI mają 1920 px – bez powiększania wychodzi 1920
 USER_PHOTO_PX = 854          # zdjęcia użytkownika na wallu: zawsze maks. 854 px
 VIDEO_LEVELS = (480, 720, 1080)
 NEED_FOR_VIDEO = {480: "darmowy", 720: "premium", 1080: "pro"}
-WIDTHS = (480, 854, 1280, 1920)
+WIDTHS = (480, 854, 1280, 1920, 2160)
 
 def caps(plan): return dict(CAPS.get(plan, CAPS["darmowy"]))
 
@@ -21,9 +21,11 @@ def need_for_img(w):
         if w <= CAPS[p]["img"]: return p
     return "pro"
 
-def lock(need):
-    return {"error": "plan_required", "need": need, "plan_name": plans.NAMES[need],
-            "message": f"Ta jakość jest dostępna od planu {plans.NAMES[need]}."}
+PRICE = {"premium": "59,99 zł", "pro": "99,99 zł"}
+def lock(need, what="quality"):
+    m = {"quality": f"Ta jakość jest dostępna od planu {plans.NAMES[need]}.",
+         "gen": f"🔒 Generator agentek od {plans.NAMES[need]} · od {PRICE.get(need, '')}"}[what]
+    return {"error": "plan_required", "need": need, "plan_name": plans.NAMES[need], "price": PRICE.get(need), "message": m}
 
 def check_video(plan, q):
     """None gdy wolno, inaczej treść odpowiedzi 402."""
