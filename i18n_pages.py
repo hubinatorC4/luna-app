@@ -7,7 +7,7 @@ PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "
          "/privacy.html": ["privacy_inbox", "privacy_v140", "privacy", "common", "app_fix"], "/o-lunie.html": ["app_fix", "olunie", "common"], "/galeria.html": ["common"], "/bitwy.html": ["common"], "/ranking.html": ["common"],
          "/index.html": ["app_index"],
          **{x: ["common"] for x in ("/scianka.html", "/butik.html", "/testerzy.html", "/dolacz.html", "/twarz.html", "/wesprzyj.html", "/problemy.html", "/agentka.html", "/agentki.html", "/skrzynka.html", "/znajomi.html", "/ustawienia.html")}}
-PAGES.update({"/zaufanie.html": ["common"], "/zgloszenie.html": ["common"], "/zespol.html": ["common"]})
+PAGES.update({"/zaufanie.html": ["common"], "/zgloszenie.html": ["common"], "/zespol.html": ["common"], "/zasady-bitew.html": ["common"]})
 for _k in PAGES: PAGES[_k] = ["trust"] + PAGES[_k]   # link „Bezpieczeństwo i anonimowość” w stopce i karta na stronie/w aplikacji
 PAGES["/regulamin.html"] = ["regulamin_v170"] + PAGES["/regulamin.html"]; PAGES["/privacy.html"] = ["privacy_v170"] + PAGES["/privacy.html"]
 JS = {"portal.js": ["js_portal", "js_fix"], "legal.js": "js_fix", "live.js": "js_live", "testers.js": "js_testers", "push.js": "js_push",
