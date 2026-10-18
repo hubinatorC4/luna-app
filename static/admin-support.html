@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0a">
+<title>Pomoc na żywo – panel moderatora · Luna</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="/panel.css?v=1.4.8">
+<link rel="stylesheet" href="/admin-support.css?v=1.6.6">
+</head>
+<body>
+<header class="ph"><b>💬 Pomoc na żywo · moderator</b><span class="hint">Użytkownicy widzą Cię jako „Zespół Luny · Moderator” – nigdy Twoje dane.</span><a class="plink" href="/panel.html">← Panel</a><button type="button" id="logout" hidden>Wyloguj</button></header>
+<main>
+<section id="login" class="card" hidden>
+  <h1>Zaloguj się</h1>
+  <p class="hint">Wpisz kod producenta. Kod nie jest zapisywany ani logowany; sesja wygasa po 30 minutach.</p>
+  <form id="lf"><input type="password" id="pass" autocomplete="current-password" aria-label="Kod producenta" placeholder="Kod producenta" required><button type="submit">Zaloguj</button></form>
+  <p class="err" id="lerr" role="alert"></p>
+</section>
+<section id="app" hidden>
+  <div class="card avail">
+    <label class="sw"><input type="checkbox" id="avail"> <span><b>Jestem dostępny/-a na czacie</b><br><small class="hint">Gdy włączone i ta karta jest otwarta, użytkownicy mogą pisać z Tobą na żywo. Po zamknięciu karty po ok. minucie widzą „Moderator jest teraz offline – zostaw wiadomość”.</small></span></label>
+    <span id="onl" class="pillst">offline</span>
+  </div>
+  <div class="cols">
+    <section class="card"><h2>🟢 Rozmowy na żywo <span id="liveN" class="hint"></span></h2><div id="live" class="list"></div>
+      <div id="conv" hidden><div class="ch"><b id="cWho"></b><span><button type="button" id="cClose">Zakończ</button> <button type="button" id="cDel" class="danger">Usuń</button></span></div>
+        <details id="cCtxW"><summary>Rozmowa z Asystentem AI (za zgodą użytkownika)</summary><pre id="cCtx"></pre></details>
+        <div id="cLog" class="clog" aria-live="polite"></div>
+        <form id="cf"><input id="cIn" maxlength="1000" placeholder="Odpowiedz jako Zespół Luny · Moderator" aria-label="Odpowiedź"><button type="submit">Wyślij</button></form><p class="err" id="cErr"></p></div>
+    </section>
+    <section class="card"><h2>✉️ Zgłoszenia „Napisz do moderatora” <span id="tkN" class="hint"></span></h2>
+      <div class="bar"><select id="fSt" aria-label="Status"><option value="">Wszystkie statusy</option><option>nowe</option><option>w trakcie</option><option>rozwiązane</option></select>
+        <select id="fCat" aria-label="Kategoria"><option value="">Wszystkie kategorie</option></select><input id="fQ" placeholder="Szukaj (nr, tytuł, opis)" aria-label="Szukaj"></div>
+      <div id="tks" class="list"></div>
+    </section>
+  </div>
+</section>
+</main>
+<script src="/admin-support.js?v=1.6.6"></script>
+</body>
+</html>

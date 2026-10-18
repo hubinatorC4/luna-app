@@ -21,7 +21,7 @@ import textutil
 import catalog, base64, training, profiles, nicktier, partners, agentwall, quality, userprof, agentvideo, battle_categories
 import promo_share
 import forms18_routes
-import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox
+import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox, support
 from datetime import datetime, timedelta
 try:
     from zoneinfo import ZoneInfo
@@ -304,6 +304,8 @@ def _admin_hash():
         pass
     return None
 inbox.TOKEN_OK = lambda t: token_ok(t)  # Skrzynka: panel moderatora
+support.TOKEN_OK = lambda t: token_ok(t)  # Pomoc na żywo: widok /admin-support.html
+support.MOD_PUSH = lambda a, b: _mod_push(a, b)
 def admin_enabled(): return bool(_admin_hash() or admin_code())
 QUOTES = "\"'„”“«»‚‘’`"
 def strip_code(msg):
@@ -779,7 +781,7 @@ class H(SimpleHTTPRequestHandler):
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         p = urlparse(self.path).path
-        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own", "/api/me/avatar", "/api/forms/casting") else 64 * 1024
+        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/support/ticket", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own", "/api/me/avatar", "/api/forms/casting") else 64 * 1024
         if n > lim: raise ValueError("too large")
         return textutil.fix_surrogates(json.loads(self.rfile.read(n) or b"{}")) if n else {}
 
@@ -1335,6 +1337,9 @@ class H(SimpleHTTPRequestHandler):
         return None
     def do_GET(self):
         u = urlparse(self.path)
+        if u.path.startswith(("/api/support/", "/api/admin/support")):
+            r = support.handle_get(self, u)  # Pomoc na żywo + Napisz do moderatora (support.py)
+            if r is not None: return r
         if u.path.startswith(("/api/inbox", "/api/friends", "/api/dm", "/api/admin/inbox")):
             r = inbox.handle_get(self, u)  # Skrzynka, Znajomi, czat 1:1 (inbox.py)
             if r is not None: return r
@@ -1618,9 +1623,9 @@ class H(SimpleHTTPRequestHandler):
                 doc = promo_share.inject(doc, u.path, parse_qs(u.query), lang, notify.PUBLIC_URL.rstrip("/"), self._pid_plan)
                 if u.path in ("/index.html", "/agentka.html", "/bitwy.html") and "owner-line.js" not in doc:   # 👑 linia własności agentki
                     doc = doc.replace("</body>", '<script src="/owner-line.js?v=1.0" defer></script>\n</body>', 1)
-                if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
+                if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
                     doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
-                NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
+                NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html", "/admin-support.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
                 if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
                 doc = doc.replace("</head>", '<script src="/sec-client.js"></script>\n</head>', 1)
                 b = doc.encode()
@@ -1657,6 +1662,9 @@ class H(SimpleHTTPRequestHandler):
         if not isinstance(data, dict): return self._json({"error": "bad json"}, 400)
         r = self._post_account(u, data)
         if r is not None: return r
+        if u.path.startswith(("/api/support/", "/api/admin/support")):
+            r = support.handle_post(self, u, data)  # Pomoc na żywo + Napisz do moderatora (support.py) – pomoc działa zawsze, także przed potwierdzeniem 18+
+            if r is not None: return r
         if u.path.startswith(("/api/forms/", "/api/admin/forms", "/api/account/confirm-adult")):
             r = forms18_routes.post(self, u, data, token_ok, casting_state()["open"], notify.PUBLIC_URL.rstrip("/"))
             if r is not None: return r

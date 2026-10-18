@@ -241,11 +241,14 @@ function openAccount(){
 const BT = {pl: ['⚔️ Bitwy agentek', 'Dwie agentki AI, Twój głos, czat na żywo'], en: ['⚔️ Agent battles', 'Two AI agents, your vote, live chat'], es: ['⚔️ Batallas de agentes', 'Dos agentes de IA, tu voto, chat en directo'],
   de: ['⚔️ Agentinnen-Battles', 'Zwei KI-Agentinnen, deine Stimme, Live-Chat'], uk: ['⚔️ Битви агенток', 'Дві ШІ-агентки, ваш голос, чат наживо']}[lang] || ['⚔️ Bitwy agentek', ''];
 const RK = {pl: ['🏆 Ranking bitew', 'Ligi, punkty i Top użytkowników'], en: ['🏆 Battle ranking', 'Leagues, points and top users'], es: ['🏆 Ranking de batallas', 'Ligas, puntos y top usuarios'], de: ['🏆 Battle-Ranking', 'Ligen, Punkte und Top-Nutzer'], uk: ['🏆 Рейтинг битв', 'Ліги, бали й топ користувачів']}[lang] || ['🏆 Ranking bitew', 'Ligi, punkty i Top użytkowników'];
+const SUP = {pl: ['🛟 Pomoc na żywo', 'Asystent AI od ręki, moderator albo „Napisz do moderatora”'], en: ['🛟 Live help', 'Instant AI assistant, a moderator or “Write to a moderator”'], es: ['🛟 Ayuda en directo', 'Asistente IA al instante, un moderador o «Escribir a un moderador»'],
+  de: ['🛟 Live-Hilfe', 'KI-Assistent sofort, Moderation oder „Der Moderation schreiben“'], uk: ['🛟 Допомога наживо', 'ШІ-асистент одразу, модератор або «Написати модератору»']}[lang] || ['🛟 Pomoc na żywo', ''];
 function renderMore(){
   const host = $('#p-more'); host.dataset.ready = '1';
   host.innerHTML = `<div class="wrapc">
     <h1 class="t">${esc(T.more_h)}</h1>
     <ul class="menu"><li><button type="button" data-chat><span>${esc(T.help_h)}<small>${esc(T.help_s)}</small></span></button></li>
+      <li><button type="button" data-support="chat"><span>${esc(SUP[0])}<small>${esc(SUP[1])}</small></span></button></li>
       <li><a href="/problemy.html" data-page>${esc(T.problems)}</a></li>
       <li><a href="/twarz.html#castForm" data-page><span>${esc(T.cast)}<small>${esc(T.cast_s)}</small></span></a></li>
       <li data-bt><a href="/bitwy.html"><span>${esc(BT[0])}<small>${esc(BT[1])}</small></span></a></li>

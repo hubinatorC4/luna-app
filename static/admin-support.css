@@ -1,0 +1,14 @@
+.plink{color:#9fe3b8;margin-left:auto;margin-right:10px;text-decoration:none}
+.avail{display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
+.sw{display:flex;gap:10px;align-items:flex-start;cursor:pointer}.sw input{width:22px;height:22px;margin-top:2px;accent-color:#2ecc71}
+.pillst{padding:6px 14px;border-radius:999px;background:#2a2f2c;color:#bbb;font-weight:700}.pillst.on{background:#1f5d3a;color:#aef5c9}
+.cols{display:grid;grid-template-columns:1fr 1.3fr;gap:16px;margin-top:16px}@media (max-width:900px){.cols{grid-template-columns:1fr}}
+.list{display:flex;flex-direction:column;gap:8px}.it{background:#161d19;border:1px solid #26332b;border-radius:18px;padding:10px 12px;cursor:pointer;text-align:left;color:#eee;width:100%;font:inherit}
+.it.new{border-color:#2ecc71}.it small{color:#9fb5a8}.it .u{float:right;background:#2ecc71;color:#06120b;border-radius:999px;padding:0 8px;font-weight:800}
+.ch{display:flex;justify-content:space-between;align-items:center;margin:10px 0}.clog{max-height:380px;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:8px;background:#0c100e;border-radius:16px}
+.m{max-width:85%;padding:8px 12px;border-radius:16px;white-space:pre-wrap;word-wrap:break-word;font-size:14px}.m.me{background:#1b251f;align-self:flex-start}.m.mod{background:#2ecc71;color:#06120b;align-self:flex-end}.m.system{align-self:center;color:#9fb5a8;font-size:12px}
+#cf{display:flex;gap:8px;margin-top:8px}#cf input{flex:1}pre{white-space:pre-wrap;font-size:12.5px;color:#cfe;background:#0c100e;padding:8px;border-radius:12px}
+.tk{background:#161d19;border:1px solid #26332b;border-radius:18px;padding:12px}.tk.nowe{border-color:#2ecc71}.tk h3{margin:0 0 4px;font-size:16px}.tk .meta{color:#9fb5a8;font-size:12.5px}
+.tk .desc{white-space:pre-wrap;margin:8px 0;font-size:14px}.tk textarea{width:100%;box-sizing:border-box;min-height:70px}.tk .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.tk .thr{margin:6px 0;padding:8px 10px;background:#1f2a24;border-radius:12px;white-space:pre-wrap;font-size:13.5px}.tk img{max-width:100%;border-radius:12px;margin-top:6px}
+.danger{background:#5a1f1f!important;color:#ffd0d0!important}.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.bar input{flex:1;min-width:140px}

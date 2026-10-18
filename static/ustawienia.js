@@ -33,7 +33,7 @@ const ROWS = [
   ['g_soc', [['friends', '🤝', 'r_friends', '', 'link:' + FRIENDS], ['inbox', '✉️', 'r_inbox', '', 'link:' + INBOX], ['battles', '⚔️', 'r_battles', 'h_battles', 'link:/bitwy.html']]],
   ['g_not', [['n_battles', '🏆', 'n_battles', '', 'ntoggle'], ['n_friends', '🤝', 'n_friends', '', 'ntoggle'], ['n_messages', '💬', 'n_messages', '', 'ntoggle'], ['n_updates', '🆕', 'n_updates', '', 'ntoggle']]],
   ['g_priv', [['hide', '🙈', 'r_hide', '', 'toggle'], ['invite', '📨', 'r_invite'], ['blocked', '⛔', 'r_blocked', '', 'link:' + PRIV], ['export', '⬇️', 'r_export', '', 'link:/api/account/export']]],
-  ['g_more', [['lang', '🌍', 'r_lang'], ['help', '🛟', 'r_help', '', 'link:/problemy.html'], ['terms', '📜', 'r_terms', '', 'link:/regulamin.html'], ['logout', '🚪', 'r_logout']]],
+  ['g_more', [['lang', '🌍', 'r_lang'], ['help', '🛟', 'r_help', '', 'link:/problemy.html'], ['modmsg', '💬', 'r_mod', 'h_mod', 'link:/ustawienia.html?pomoc=formularz'], ['terms', '📜', 'r_terms', '', 'link:/regulamin.html'], ['logout', '🚪', 'r_logout']]],
   ['', [['del', '🗑️', 'r_del', '', 'danger']]],
 ];
 function rowHTML([id, ic, k, h, kind]){
