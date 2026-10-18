@@ -301,7 +301,7 @@ background:linear-gradient(180deg,#fff 20%,var(--gold));-webkit-background-clip:
 .rc-slot{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:26px;background:rgba(255,190,120,.12);border:2px solid rgba(255,190,120,.4)}
 .rc-slot.q{border-style:dashed;color:#ffc27a;font-weight:800}
 .rc-vs b{font-size:1.2rem;color:#ffc27a;letter-spacing:.08em}
-@media (max-width:720px){.recruit-pin{grid-template-columns:1fr}.rc-urgent h2{font-size:1.35rem}}
+@media (max-width:720px){.recruit-pin{grid-template-columns:minmax(0,1fr)}.recruit-pin>div,.recruit-pin>div>*{min-width:0;max-width:100%;overflow-wrap:anywhere}.rc-urgent h2{font-size:1.35rem}}
 .post.pinned{border-color:rgba(255,190,120,.55)}.post .pinb{float:right;font-size:1.1rem}
 /* v1.5.1 – kontrast (WCAG AA) */
 .wallpage .report{color:#d6c3ad}
