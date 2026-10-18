@@ -25,12 +25,13 @@ body{padding-bottom:24px!important;font-size:17px}body.site{padding-top:0!import
 function route(href){
   let u; try { u = new URL(href, location.origin); } catch(e){ return false; }
   if (u.origin !== location.origin) return false;
-  const p = u.pathname;
-  if (p === '/' || p === '/index.html'){ show('luna'); if (u.hash === '#live') frameOf('luna', '#live'); return true; }
+  let p = u.pathname.replace(/\/$/, '') || '/';
+  if (p === '/' && /[?&](source=(twa|pwa)|platnosc=)/.test(u.search)) p = '/app';
+  if (/^\/[a-z0-9-]{2,30}$/.test(p) && p !== '/app') p += '.html';  /* czyste adresy: /butik → /butik.html */
+  if (p === '/app' || p === '/index.html'){ show('luna'); if (u.hash === '#live') frameOf('luna', '#live'); return true; }
+  if (p === '/' || p === '/promo.html'){ if (/^#(plany|cennik|plans)$/.test(u.hash)) show('plans'); else show('feed'); return true; }
   if (p === '/butik.html'){ show('butik'); if (u.hash) frameOf('butik', u.hash); return true; }
   if (p === '/scianka.html' && !u.searchParams.get('post')){ show('feed'); return true; }
-  if (p === '/promo.html' && /^#(plany|cennik|plans)$/.test(u.hash)){ show('plans'); return true; }
-  if (p === '/promo.html' && !u.hash){ show('feed'); return true; }
   if (p === '/app.html'){ const t = (u.hash || '').slice(1); if (TABS.includes(t)) show(t); return true; }
   if (/\.html$/.test(p) && !p.startsWith('/api/')){ openPage(p + u.search + u.hash); return true; }
   return false;
@@ -43,7 +44,7 @@ function prep(fr, tab){
     const w = fr.contentWindow, f0 = w.fetch.bind(w);
     w.fetch = async (u, o) => { const r = await f0(u, o); if (String(u).includes('/api/pay/checkout') && r.ok){ const d = await r.clone().json().catch(() => ({})); if (d.url){ location.assign(d.url); return new Promise(() => {}); } } return r; };
   } catch(e){}
-  const isLuna = ['/', '/index.html', '/live.html'].includes(fr.contentWindow.location.pathname);
+  const isLuna = ['/app', '/app/', '/index.html', '/live.html'].includes(fr.contentWindow.location.pathname);
   const st = d.createElement('style'); st.textContent = FRAME_CSS + (isLuna ? '' : SITE_CSS); (d.head || d.documentElement).appendChild(st);
   d.addEventListener('click', e => {
     const a = e.target.closest && e.target.closest('a[href]'); if (!a || e.defaultPrevented || a.target === '_blank' || a.hasAttribute('download')) return;
@@ -222,7 +223,7 @@ function renderMore(){
       <li><a href="/regulamin.html" data-page>📄 ${esc(T.terms)}</a></li><li><a href="/privacy.html" data-page>🔒 ${esc(T.privacy)}</a></li></ul>
     <p class="small" style="text-align:center">${esc(T.foot)}</p></div>`;
   host.querySelectorAll('a[data-page]').forEach(a => a.onclick = e => { e.preventDefault(); openPage(a.getAttribute('href')); });
-  host.querySelector('[data-chat]').onclick = () => route('/#live');
+  host.querySelector('[data-chat]').onclick = () => route('/app#live');
   $('#replay').onclick = () => { show('feed'); onboarding(); };
 }
 
