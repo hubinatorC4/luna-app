@@ -16,8 +16,9 @@ function toast(t){ let el = $('#ibToast'); if (!el){ el = document.createElement
 async function api(u, body){
   const o = {credentials: 'same-origin', headers: {}};
   if (body){ o.method = 'POST'; o.headers['Content-Type'] = 'application/json'; o.headers['X-CSRF-Token'] = csrf; o.body = JSON.stringify(body); }
+  try { const at = sessionStorage.getItem('luna.admin'); if (at) o.headers['X-Admin-Token'] = at; } catch(e){}
   const r = await fetch(L(u), o); const d = await r.json().catch(() => ({}));
-  if (!r.ok){ const e = new Error(d.error || T.err); e.status = r.status; throw e; }
+  if (!r.ok){ const e = new Error(d.error || T.err); e.status = r.status; e.data = d; throw e; }
   return d;
 }
 const fmtT = t => { const s = Date.now() / 1000 - t; const rtf = new Intl.RelativeTimeFormat(lang, {numeric: 'auto'});
@@ -141,8 +142,8 @@ async function openChat(pid){
   const box = $('#ibChat'); chat = {pid, last: 0, timer: null, opener: document.activeElement};
   box.hidden = false; document.body.classList.add('ib-chatting');
   box.innerHTML = `<header class="ib-ch"><button type="button" class="ib-back" id="chatBack" aria-label="${esc(T.back)}">‹</button><span id="chatPeer" class="ib-peer"></span></header>
-    <p class="ib-note">🔒 ${esc(T.chat_note)}</p><ol class="ib-msgs" id="chatLog" role="log" aria-live="polite" aria-relevant="additions"></ol><p class="ib-seen" id="chatSeen" hidden></p>
-    <form class="ib-say" id="chatForm"><label class="sr" for="chatInput">${esc(T.chat_ph)}</label><textarea id="chatInput" data-emoji rows="1" maxlength="1000" placeholder="${esc(T.chat_ph)}" autocomplete="off"></textarea><button class="ib-send" aria-label="${esc(T.send)}">➤</button></form>`;
+    <p class="ib-note">🔒 ${esc(T.chat_note)}</p><p class="ib-note ib-phq" id="phQuota" hidden></p><ol class="ib-msgs" id="chatLog" role="log" aria-live="polite" aria-relevant="additions"></ol><p class="ib-seen" id="chatSeen" hidden></p>
+    <form class="ib-say" id="chatForm"><button type="button" class="ib-phb" id="phBtn" aria-label="${esc(T.ph_btn)}" title="${esc(T.ph_btn)}">📷</button><input type="file" id="phFile" accept="image/jpeg,image/png,image/webp" hidden><label class="sr" for="chatInput">${esc(T.chat_ph)}</label><textarea id="chatInput" data-emoji rows="1" maxlength="1000" placeholder="${esc(T.chat_ph)}" autocomplete="off"></textarea><button class="ib-send" aria-label="${esc(T.send)}">➤</button></form>`;
   $('#chatBack').onclick = closeChat;
   box.onkeydown = e => { if (e.key === 'Escape' && !document.getElementById('emjPanel')?.matches(':not([hidden])')) closeChat(); };
   const inp = $('#chatInput');
@@ -153,6 +154,9 @@ async function openChat(pid){
     try { const d = await api('/api/dm', {pid, text: t, since: chat.last}); inp.value = ''; inp.style.height = ''; draw(d); } catch(er){ toast(er.message); }
     btn.disabled = false; inp.focus(); };
   if (window.LunaEmoji && LunaEmoji.attach) try { LunaEmoji.attach(inp); } catch(e){}
+  $('#phBtn').onclick = () => $('#phFile').click();
+  $('#phFile').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) sendPhoto(f); };
+  phQuota();
   location.hash = 'c=' + pid;
   await poll(true); inp.focus();
 }
@@ -164,6 +168,7 @@ function draw(d){
   if (d.items.length){ const e = log.querySelector('.ib-empty'); if (e) e.remove(); }
   d.items.forEach(m => { if (log.querySelector(`[data-mid="${m.id}"]`)) return;
     const li = document.createElement('li'); li.className = 'ib-bub ' + (m.mine ? 'me' : 'them'); li.dataset.mid = m.id;
+    if (m.photo){ photoBubble(li, m); log.appendChild(li); return; }
     li.innerHTML = `<span class="ib-tx">${esc(m.text)}</span><time datetime="${new Date(m.t * 1000).toISOString()}">${esc(clock(m.t))}</time>${m.mine ? '' : `<button type="button" class="ib-rep" aria-label="${esc(T.report_msg)}" title="${esc(T.report_msg)}">⚑</button>`}`;
     const r = li.querySelector('.ib-rep'); if (r) r.onclick = async () => { if (!confirm(T.q_report_msg)) return;
       try { await api('/api/dm/report', {pid: chat.pid, mid: m.id}); li.remove(); toast(T.reported); } catch(e){ toast(e.message); } };
@@ -172,6 +177,38 @@ function draw(d){
   const mine = [...log.querySelectorAll('.ib-bub.me')].pop(), s = $('#chatSeen');
   s.hidden = !(d.receipts && mine && d.seen >= +mine.dataset.mid); s.textContent = '✓✓ ' + T.seen;
   if (d.items.length) log.scrollTop = log.scrollHeight;
+}
+/* ---------- zdjęcia w czacie (v1.6.7): rozmyte u odbiorcy do stuknięcia, Zgłoś / Zablokuj, limity planu na serwerze ---------- */
+function photoBubble(li, m){
+  li.classList.add('ib-phb-msg');
+  const t = `<time datetime="${new Date(m.t * 1000).toISOString()}">${esc(clock(m.t))}</time>`;
+  if (m.hold){ li.innerHTML = `<span class="ib-tx ib-hold">${esc(T.ph_hold)}</span>${t}`; return; }
+  const src = L('/api/dm/img?pid=' + encodeURIComponent(chat.pid) + '&mid=' + m.id);
+  const wh = m.w && m.h ? ` width="${m.w}" height="${m.h}"` : '';
+  li.innerHTML = `<figure class="ib-ph${m.mine ? '' : ' blur'}"><img src="${src}" alt="${esc(m.mine ? T.ph_mine : T.ph_alt)}" loading="lazy" decoding="async"${wh}>
+    ${m.mine ? '' : `<button type="button" class="ib-phshow"><span>👁️ ${esc(T.ph_show)}</span><small>${esc(T.ph_hint)}</small></button>`}</figure>
+    ${m.mine ? '' : `<div class="ib-phact"><button type="button" class="ib-btn" data-a="report">⚑ ${esc(T.ph_report)}</button><button type="button" class="ib-btn danger" data-a="block">⛔ ${esc(T.ph_block)}</button></div>`}${t}`;
+  const sh = li.querySelector('.ib-phshow'); if (sh) sh.onclick = () => { li.querySelector('.ib-ph').classList.remove('blur'); sh.remove(); };
+  const rp = li.querySelector('[data-a=report]'); if (rp) rp.onclick = async () => { if (!confirm(T.q_ph_report)) return;
+    try { await api('/api/dm/report', {pid: chat.pid, mid: m.id}); li.remove(); toast(T.reported); } catch(e){ toast(e.message); } };
+  const bl = li.querySelector('[data-a=block]'); if (bl) bl.onclick = async () => { const p = chat.pid; if (!confirm(T.q_block)) return;
+    try { await api('/api/friends/act', {pid: p, action: 'block'}); toast(T.blocked_ok); closeChat(); } catch(e){ toast(e.message); } };
+}
+async function phQuota(st){
+  try { st = st || await api('/api/dm/photo/status'); const q = $('#phQuota'); if (!q) return;
+    q.textContent = st.limit == null ? T.ph_unl : T.ph_left.replace('{u}', st.used).replace('{l}', st.limit).replace('{px}', st.px); q.hidden = false; chat && (chat.ack = st.ack); } catch(e){}
+}
+const readURL = f => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = no; r.readAsDataURL(f); });
+async function sendPhoto(f, ack){
+  if (!chat) return;
+  if (!/^image\/(jpeg|png|webp)$/.test(f.type)) return toast(T.ph_type);
+  if (f.size > 10 * 1024 * 1024) return toast(T.ph_big);
+  if (!chat.ack && !ack){ if (!confirm(T.ph_rules)) return; ack = true; }
+  const b = $('#phBtn'); b.disabled = true; toast(T.ph_sending);
+  try { const d = await api('/api/dm/photo', {pid: chat.pid, image: await readURL(f), since: chat.last, ack: !!ack}); chat.ack = true; draw(d); phQuota(d.photo); }
+  catch(e){ if (e.status === 409 && e.data && e.data.need_ack){ chat.ack = false; b.disabled = false; return sendPhoto(f); }
+    toast(e.message); if (e.data && e.data.limit != null) phQuota(e.data); }
+  if (b) b.disabled = false;
 }
 async function poll(first){
   if (!chat) return; clearTimeout(chat.timer);

@@ -12,7 +12,7 @@ async function api(path, body){
   const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error || r.status); return d;
 }
 function show(){ const on = !!tok(); $('#login').hidden = on; $('#app').hidden = !on; $('#logout').hidden = !on; clearInterval(pingT); clearInterval(loadT);
-  if (on){ $('#avail').checked = sessionStorage.getItem('luna.sup.avail') !== '0'; ping(); load(); pingT = setInterval(ping, 20000); loadT = setInterval(load, 8000); } }
+  if (on){ $('#avail').checked = sessionStorage.getItem('luna.sup.avail') !== '0'; ping(); load(); pingT = setInterval(ping, 20000); loadT = setInterval(load, 8000); setTimeout(dmReports, 300); } }
 $('#lf').onsubmit = async e => { e.preventDefault(); $('#lerr').textContent = '';
   try { const r = await fetch('/api/admin/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({passphrase: $('#pass').value})}); const d = await r.json();
     $('#pass').value = ''; if (!r.ok) throw new Error(d.error || r.status); sessionStorage.setItem('luna.admin', d.admin_token); show(); } catch(x){ $('#lerr').textContent = '⚠️ ' + x.message; } };
@@ -57,5 +57,22 @@ function renderTickets(){ const L = $('#tks'); L.textContent = ''; $('#tkN').tex
     sel.onchange = async () => { try { await api('/api/admin/support/ticket', {id: t.id, status: sel.value}); msg.textContent = '✅ Status zmieniony'; } catch(e){ msg.textContent = '⚠️ ' + e.message; } };
     row.append(sel, send, msg); c.appendChild(row); L.appendChild(c); }); }
 ['#fSt', '#fCat'].forEach(s => $(s).onchange = () => { lastHash = ''; load(); }); let qT; $('#fQ').oninput = () => { clearTimeout(qT); qT = setTimeout(() => { lastHash = ''; load(); }, 300); };
+/* ---------- zgłoszenia z czatu 1:1 (wiadomości i zdjęcia) ---------- */
+async function dmReports(){ try { const d = await api('/api/admin/inbox'); const L = $('#dmr'); const open = d.reports.filter(r => r.status === 'open');
+    $('#dmN').textContent = `(${open.length} otwartych)`; L.textContent = '';
+    if (!d.reports.length){ L.appendChild(el('p', 'hint', 'Brak zgłoszeń – w czacie panuje sielanka 🌿')); return; }
+    d.reports.slice(0, 60).forEach(r => { const c = el('article', 'tk ' + (r.status === 'open' ? 'nowe' : ''));
+      c.appendChild(el('h3', '', `${r.photo ? '📷 Zdjęcie' : r.kind === 'message' ? '💬 Wiadomość' : '👤 Konto'} · ${r.reported} (zgłasza: ${r.reporter})`));
+      c.appendChild(el('div', 'meta', `${when(r.t)} · status: ${({open: 'otwarte', remove: 'usunięte', dismiss: 'odrzucone', ban: 'ban'})[r.status] || r.status}${r.reason ? ' · powód: ' + r.reason : ''}`));
+      if (r.message && !r.photo) c.appendChild(el('div', 'desc', r.message));
+      if (r.img_url){ const i = el('img'); i.alt = 'Zgłoszone zdjęcie'; i.style.maxWidth = '320px'; fetch(r.img_url, {headers: {'X-Admin-Token': tok()}}).then(x => x.ok ? x.blob() : null).then(b => { if (b) i.src = URL.createObjectURL(b); }); c.appendChild(i); }
+      if (r.status === 'open'){ const row = el('div', 'row');
+        [['remove', r.photo ? 'Usuń zdjęcie' : 'Usuń wiadomość'], ['dismiss', 'Odrzuć zgłoszenie (przywróć)'], ['ban', 'Zbanuj autora']].forEach(([a, t]) => { if (a === 'remove' && r.kind !== 'message') return;
+          const b = el('button', a === 'ban' ? 'danger' : '', t); b.type = 'button'; b.onclick = async () => { if (a === 'ban' && !confirm('Zbanować ' + r.reported + ' na czatach?')) return;
+            try { await api('/api/admin/inbox/report', {id: r.id, action: a}); dmReports(); } catch(e){ alert(e.message); } }; row.appendChild(b); });
+        c.appendChild(row); }
+      L.appendChild(c); });
+  } catch(e){} }
+setInterval(() => { if (tok()) dmReports(); }, 30000);
 show();
 })();

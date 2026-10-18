@@ -305,6 +305,14 @@ def _admin_hash():
         pass
     return None
 inbox.TOKEN_OK = lambda t: token_ok(t)  # Skrzynka: panel moderatora
+def _dm_plan(h, uid):
+    """Plan do limitów zdjęć w czacie: (plan konta, moderator?, agentka współpracująca?)."""
+    adm = token_ok(h.headers.get("X-Admin-Token"))
+    u = accounts._accts().get(uid) or {}
+    try: pt = partners.is_partner(uid)
+    except Exception: pt = False
+    return (accounts.plan(u)["plan"] if u else "podstawowa"), adm, pt
+inbox.PLAN_OF = _dm_plan
 support.TOKEN_OK = lambda t: token_ok(t)  # Pomoc na żywo: widok /admin-support.html
 support.MOD_PUSH = lambda a, b: _mod_push(a, b)
 def admin_enabled(): return bool(_admin_hash() or admin_code())
@@ -782,7 +790,7 @@ class H(SimpleHTTPRequestHandler):
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         p = urlparse(self.path).path
-        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/support/ticket", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own", "/api/me/avatar", "/api/forms/casting") else 64 * 1024
+        lim = 14 * 1024 * 1024 if p == "/api/dm/photo" else 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/support/ticket", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own", "/api/me/avatar", "/api/forms/casting") else 64 * 1024
         if n > lim: raise ValueError("too large")
         return textutil.fix_surrogates(json.loads(self.rfile.read(n) or b"{}")) if n else {}
 

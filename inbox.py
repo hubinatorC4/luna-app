@@ -374,7 +374,9 @@ def dm_list(uid, p, since=0):
         f = _fr(uid)
         if f["unread"].get(k): f["unread"].pop(k, None); _save_fr(uid, f)
     seen = d.get("rd", {}).get(other, 0) if (pa["receipts"] and pb["receipts"]) else None
-    out = [{"id": m["id"], "mine": m["f"] == uid, "text": m["x"], "t": m["t"]} for m in M if m["id"] > since and m["id"] not in hid and not m.get("rm")]
+    out = [dict({"id": m["id"], "mine": m["f"] == uid, "text": m["x"], "t": m["t"]},
+                **({"photo": True, "hold": bool(m.get("hold")), "w": m.get("w"), "h": m.get("h")} if m.get("img") else {}))
+           for m in M if m["id"] > since and m["id"] not in hid and not m.get("rm")]
     return {"items": out, "last": last, "seen": seen, "peer": person(other), "receipts": pa["receipts"] and pb["receipts"]}
 
 def dm_send(uid, p, text):
@@ -396,18 +398,123 @@ def dm_send(uid, p, text):
         threading.Thread(target=notify.send_push, args=("manual", "💬 " + person(uid)["nick"], "Nowa wiadomość na czacie Luny", "/znajomi.html"), kwargs={"tag": "dm", "uid": other}, daemon=True).start()
     return mid
 
+# ---------- zdjęcia w czacie 1:1 (v1.6.7) ----------
+# Limity dzienne na serwerze: Podstawowa 5/854 px, Premium 30/1280 px, Pro / Ultra i agentki współpracujące 100/1920 px, moderator bez limitu.
+PH_CAPS = {"darmowy": (5, 854), "podstawowa": (5, 854), "premium": (30, 1280), "pro": (100, 1920)}
+PH_MAX_IN = 10 * 1024 * 1024
+PH_MSG = {"limit": "Dzisiejszy limit zdjęć ({n}) wyczerpany – nawet Luna robi przerwę między sesjami 📸 Wróć jutro{up}.",
+          "up_premium": " albo przejdź na Premium (30 zdjęć dziennie)", "up_pro": " albo przejdź na Pro / Ultra (100 zdjęć dziennie)",
+          "fast": "Wolniej, paparazzi! 📷 Odczekaj chwilę przed kolejnym zdjęciem.", "blocked_img": "To zdjęcie zostało wcześniej usunięte przez moderatora i nie może zostać wysłane ponownie."}
+def ph_caps(plan, admin=False, partner=False):
+    if admin: return None, 1920
+    if partner: return PH_CAPS["pro"]
+    return PH_CAPS.get(plan, PH_CAPS["podstawowa"])
+def _day(): return time.strftime("%Y-%m-%d", time.gmtime())
+def ph_used(uid):
+    u = store.get("dmpu:" + uid, {}) or {}
+    return int(u.get("n", 0)) if u.get("d") == _day() else 0
+def ph_status(uid, plan, admin=False, partner=False):
+    lim, px = ph_caps(plan, admin, partner)
+    return {"limit": lim, "px": px, "used": ph_used(uid), "ack": bool(_fr(uid).get("ph_ack")), "max_mb": PH_MAX_IN // (1024 * 1024)}
+
+def dm_photo(uid, p, data_url, plan, admin=False, partner=False, ack=False):
+    import base64 as _b64, quality, imgsafe
+    other = uid_of(p); _need_friend(uid, other)
+    if social.banned("u:" + uid): raise PermissionError("Nie możesz pisać na czacie.")
+    if uid in _fr(other)["blocked"] or other in _fr(uid)["blocked"]: raise PermissionError("Nie możesz pisać do tej osoby.")
+    f = _fr(uid)
+    if not f.get("ph_ack"):
+        if not ack: raise LookupError("ack")   # zasada „bez nagości” – potwierdzenie przy pierwszym zdjęciu
+        with _lock: f = _fr(uid); f["ph_ack"] = int(time.time()); _save_fr(uid, f)
+    m = re.fullmatch(r"data:image/(png|jpeg|jpg|webp);base64,([A-Za-z0-9+/=]+)", str(data_url or ""))
+    if not m: raise ValueError("Dozwolone są tylko zdjęcia JPG, PNG lub WEBP.")
+    raw = _b64.b64decode(m.group(2))
+    if len(raw) > PH_MAX_IN: raise ValueError("Zdjęcie jest za duże (maks. 10 MB).")
+    if not imgsafe.kind(raw): raise ValueError("Dozwolone są tylko zdjęcia JPG, PNG lub WEBP.")
+    lim, px = ph_caps(plan, admin, partner)
+    if lim is not None and ph_used(uid) >= lim:
+        up = "" if plan == "pro" or partner else (PH_MSG["up_pro"] if plan == "premium" else PH_MSG["up_premium"])
+        raise OverflowError(PH_MSG["limit"].format(n=lim, up=up))
+    if not admin and not livechat.rate_ok("dmph:" + uid, 6, 2000): raise OverflowError(PH_MSG["fast"])
+    blk = set(store.get("dm_ph_block", []) or [])
+    hr = hashlib.sha256(raw).hexdigest()
+    if hr in blk: raise PermissionError(PH_MSG["blocked_img"])
+    out = imgsafe.reencode_webp(raw, max_px=px, max_in=PH_MAX_IN)
+    ho = hashlib.sha256(out).hexdigest()
+    if ho in blk: raise PermissionError(PH_MSG["blocked_img"])
+    try: quality.user_photo_mark(raw); quality.user_photo_mark(out)   # odcisk: nigdy jako twarz agentki
+    except Exception: pass
+    w = h = None
+    try:
+        import struct
+        if out[12:16] == b"VP8X": w = 1 + int.from_bytes(out[24:27], "little"); h = 1 + int.from_bytes(out[27:30], "little")
+        elif out[12:16] == b"VP8 ": w, h = struct.unpack("<HH", out[26:30]); w &= 0x3fff; h &= 0x3fff
+        elif out[12:16] == b"VP8L": b = int.from_bytes(out[21:25], "little"); w = (b & 0x3fff) + 1; h = ((b >> 14) & 0x3fff) + 1
+    except Exception: pass
+    iid = secrets.token_hex(8); k = _pair(uid, other)
+    store.put("dmimg:" + iid, {"k": k, "b": _b64.b64encode(out).decode(), "hr": hr, "ho": ho, "t": int(time.time())})
+    with _lock:
+        d = _dm(k); M = d.setdefault("m", []); mid = (M[-1]["id"] + 1) if M else 1
+        M.append({"id": mid, "f": uid, "x": "", "img": iid, "w": w, "h": h, "t": int(time.time())})
+        if len(M) > MAX_DM:
+            for old in M[:-MAX_DM]:
+                if old.get("img"): store.put("dmimg:" + old["img"], {})
+        d["m"] = M[-MAX_DM:]
+        d.setdefault("rd", {})[uid] = mid; store.put("dm:" + k, d)
+        fo = _fr(other); fo["unread"][k] = int(fo["unread"].get(k, 0)) + 1
+        lastv = {"t": int(time.time()), "x": "📷"}
+        fo.setdefault("last", {})[k] = lastv; _save_fr(other, fo)
+        fm = _fr(uid); fm.setdefault("last", {})[k] = lastv; _save_fr(uid, fm)
+        u = store.get("dmpu:" + uid, {}) or {}
+        store.put("dmpu:" + uid, {"d": _day(), "n": (int(u.get("n", 0)) if u.get("d") == _day() else 0) + 1})
+    if notify.push_enabled() and prefs(other)["push"] and int(fo["unread"][k]) == 1:
+        threading.Thread(target=notify.send_push, args=("manual", "📷 " + person(uid)["nick"], "Nowe zdjęcie na czacie Luny", "/znajomi.html"), kwargs={"tag": "dm", "uid": other}, daemon=True).start()
+    return mid
+
+def dm_img(uid, p, mid):
+    """Bajty zdjęcia – tylko dla dwóch osób rozmowy; zgłoszone (hold) i usunięte nie są wydawane."""
+    import base64 as _b64
+    other = uid_of(p)
+    if not other: raise KeyError("not found")
+    k = _pair(uid, other); d = _dm(k)
+    m = next((x for x in d.get("m", []) if x["id"] == int(mid) and x.get("img")), None)
+    if not m or m.get("rm") or m.get("hold") or int(mid) in set(d.get("hid", {}).get(uid, [])): raise KeyError("not found")
+    if uid in _fr(other)["blocked"] or other in _fr(uid)["blocked"]: raise PermissionError("blocked")
+    im = store.get("dmimg:" + m["img"], {}) or {}
+    if not im.get("b"): raise KeyError("not found")
+    return _b64.b64decode(im["b"])
+
+def admin_report_img(rid):
+    import base64 as _b64
+    r = next((x for x in (store.get("dm_reports", []) or []) if x["id"] == rid and x.get("img")), None)
+    if not r: raise KeyError("not found")
+    im = store.get("dmimg:" + r["img"], {}) or {}
+    if not im.get("b"): raise KeyError("not found")
+    return _b64.b64decode(im["b"])
+
+def _ph_remove(iid, block=False):
+    im = store.get("dmimg:" + iid, {}) or {}
+    if block and im:
+        B = store.get("dm_ph_block", []) or []
+        for h_ in (im.get("hr"), im.get("ho")):
+            if h_ and h_ not in B: B.append(h_)
+        store.put("dm_ph_block", B[-5000:])
+    store.put("dmimg:" + iid, {})
+
 def _report(uid, other, mid, reason):
-    copy = None; k = _pair(uid, other)
+    copy = None; img = None; k = _pair(uid, other)
     if mid is not None:
         with _lock:
             d = _dm(k); m = next((m for m in d.get("m", []) if m["id"] == int(mid) and m["f"] == other), None)
             if not m: raise KeyError("not found")
-            copy = m["x"]; h = d.setdefault("hid", {}).setdefault(uid, [])
+            copy = m["x"] if not m.get("img") else "[zdjęcie]"; img = m.get("img")
+            if img: m["hold"] = 1   # zgłoszone zdjęcie znika u obu stron do decyzji moderatora
+            h = d.setdefault("hid", {}).setdefault(uid, [])
             if m["id"] not in h: h.append(m["id"]); d["hid"][uid] = h[-200:]
             store.put("dm:" + k, d)
     R = store.get("dm_reports", []) or []
     if any(r["by"] == uid and r["who"] == other and r.get("mid") == mid and r["st"] == "open" for r in R): return
-    R.append({"id": secrets.token_hex(5), "t": int(time.time()), "by": uid, "who": other, "pair": k, "mid": mid, "copy": copy,
+    R.append({"id": secrets.token_hex(5), "t": int(time.time()), "by": uid, "who": other, "pair": k, "mid": mid, "copy": copy, "img": img,
               "reason": re.sub(r"[<>\x00-\x1f]", "", str(reason or ""))[:200], "st": "open"})
     store.put("dm_reports", R[-500:])
 
@@ -419,7 +526,8 @@ def dm_report(uid, p, mid, reason=""):
 def admin_reports():
     A = accounts._accts()
     return [{"id": r["id"], "t": r["t"], "reporter": person(r["by"], A)["nick"], "reported": person(r["who"], A)["nick"], "kind": "message" if r.get("mid") else "account",
-             "message": r.get("copy"), "reason": r.get("reason"), "status": r["st"]} for r in reversed(store.get("dm_reports", []) or [])][:200]
+             "message": r.get("copy"), "reason": r.get("reason"), "status": r["st"], "photo": bool(r.get("img")),
+             "img_url": f"/api/admin/inbox/img?id={r['id']}" if r.get("img") and r["st"] == "open" else None} for r in reversed(store.get("dm_reports", []) or [])][:200]
 
 def admin_report_act(rid, action):
     with _lock:
@@ -429,6 +537,12 @@ def admin_report_act(rid, action):
             d = _dm(r["pair"])
             for m in d.get("m", []):
                 if m["id"] == r["mid"]: m["rm"] = 1; m["x"] = ""
+            store.put("dm:" + r["pair"], d)
+            if r.get("img"): _ph_remove(r["img"], block=True)
+        elif action == "dismiss" and r.get("img"):
+            d = _dm(r["pair"])
+            for m in d.get("m", []):
+                if m["id"] == r["mid"]: m.pop("hold", None)
             store.put("dm:" + r["pair"], d)
         elif action == "ban":
             B = social._bans(); B.add("u:" + r["who"]); store.put("social_bans", sorted(B))
@@ -490,7 +604,7 @@ def export(uid):
     conv = []
     for o in list(f["friends"]) + list(f["blocked"]):
         d = _dm(_pair(uid, o))
-        if d.get("m"): conv.append({"with": person(o, A)["nick"], "my_messages": [{"t": m["t"], "text": m["x"]} for m in d["m"] if m["f"] == uid]})
+        if d.get("m"): conv.append({"with": person(o, A)["nick"], "my_messages": [{"t": m["t"], "text": m["x"] or ("[zdjęcie]" if m.get("img") else "")} for m in d["m"] if m["f"] == uid]})
     return {"inbox": [{"t": m["t"], "cat": m["cat"], "title": _render(m, "pl")[0], "body": _render(m, "pl")[1]} for m in M],
             "friends": [person(x, A)["nick"] for x in f["friends"]], "friend_requests_sent": [person(x, A)["nick"] for x in f["out"]],
             "blocked": [person(x, A)["nick"] for x in f["blocked"]], "settings": prefs(uid), "chats": conv,
@@ -504,6 +618,8 @@ def delete_user(uid):
             fo = _fr(o)
             for k in ("friends", "in", "out", "blocked"): fo[k].pop(uid, None)
             fo["unread"].pop(_pair(uid, o), None); (fo.get("last") or {}).pop(_pair(uid, o), None); _save_fr(o, fo)
+            for m in _dm(_pair(uid, o)).get("m", []):
+                if m.get("img"): store.put("dmimg:" + m["img"], {})
             store.put("dm:" + _pair(uid, o), {})
         I = store.get("fr_inv", {}) or {}
         if f.get("inv") in I: I.pop(f["inv"]); store.put("fr_inv", I)
@@ -524,6 +640,7 @@ def qr_svg(url):
 
 # ---------- HTTP ----------
 TOKEN_OK = lambda t: False  # serwer podstawia weryfikację tokenu moderatora
+PLAN_OF = lambda h, uid: ("podstawowa", False, False)  # serwer podstawia: (plan, moderator?, agentka współpracująca?)
 def _lang(h, u):
     import api_i18n
     return api_i18n.req_lang(u.query, h.headers) or "pl"
@@ -531,6 +648,12 @@ def _lang(h, u):
 def handle_get(h, u):
     from urllib.parse import parse_qs
     p = u.path; q = parse_qs(u.query)
+    if p == "/api/admin/inbox/img":
+        if not TOKEN_OK(h.headers.get("X-Admin-Token")): return h._json({"error": "unauthorized"}, 401)
+        try: b = admin_report_img((q.get("id") or [""])[0][:12])
+        except KeyError: return h._json({"error": "not found"}, 404)
+        h.send_response(200); h.send_header("Content-Type", "image/webp"); h.send_header("Content-Length", str(len(b)))
+        h.send_header("Cache-Control", "private, no-store"); h.end_headers(); h.wfile.write(b); return True
     if p == "/api/admin/inbox":
         if not TOKEN_OK(h.headers.get("X-Admin-Token")): return h._json({"error": "unauthorized"}, 401)
         return h._json({"broadcasts": admin_broadcasts(), "reports": admin_reports(), "segments": SEGMENTS, "categories": CATS})
@@ -559,6 +682,14 @@ def handle_get(h, u):
         if not svg: return h._json({"error": "QR niedostępny"}, 404)
         h.send_response(200); h.send_header("Content-Type", "image/svg+xml"); h.send_header("Content-Length", str(len(svg)))
         h.send_header("Cache-Control", "private, no-store"); h.end_headers(); h.wfile.write(svg); return True
+    if p == "/api/dm/img":
+        try: b = dm_img(uid, (q.get("pid") or [""])[0], int((q.get("mid") or ["0"])[0] or 0))
+        except (KeyError, ValueError, PermissionError): return h._json({"error": "not found"}, 404)
+        h.send_response(200); h.send_header("Content-Type", "image/webp"); h.send_header("Content-Length", str(len(b)))
+        h.send_header("Cache-Control", "private, no-store"); h.send_header("X-Content-Type-Options", "nosniff"); h.end_headers(); h.wfile.write(b); return True
+    if p == "/api/dm/photo/status":
+        pl, adm, pt = PLAN_OF(h, uid)
+        return h._json(ph_status(uid, pl, adm, pt))
     if p == "/api/dm":
         s = (q.get("since") or ["0"])[0]
         try: return h._json(dm_list(uid, (q.get("pid") or [""])[0], int(s) if s.isdigit() else 0))
@@ -600,6 +731,12 @@ def handle_post(h, u, data):
         if p == "/api/dm":
             mid = dm_send(uid, data.get("pid"), data.get("text"))
             return h._json({"ok": True, "id": mid, **dm_list(uid, data.get("pid"), int(data.get("since") or 0))})
+        if p == "/api/dm/photo":
+            pl, adm, pt = PLAN_OF(h, uid)
+            try: mid = dm_photo(uid, data.get("pid"), data.get("image"), pl, adm, pt, data.get("ack") is True)
+            except LookupError: return h._json({"error": "ack", "need_ack": True}, 409)
+            except OverflowError as e: return h._json({"error": str(e), "limit": True, **ph_status(uid, pl, adm, pt)}, 429)
+            return h._json({"ok": True, "id": mid, "photo": ph_status(uid, pl, adm, pt), **dm_list(uid, data.get("pid"), int(data.get("since") or 0))})
         if p == "/api/dm/report":
             if not livechat.rate_ok("dmr:" + uid, 5, 40): return h._json({"error": "Za dużo zgłoszeń."}, 429)
             dm_report(uid, data.get("pid"), data.get("mid"), data.get("reason")); return h._json({"ok": True})
