@@ -227,7 +227,8 @@ def _cranks(base=None):
     """{id agentki: {kategoria: miejsce}} we wszystkich kategoriach jej specjalizacji."""
     base = base if base is not None else _agent_rows(); M = {}
     for c in BC.CAT_IDS:
-        for r in cat_rows(c, base): M.setdefault(r["id"], {})[c] = r["cpos"]
+        for r in cat_rows(c, base):
+            if r["played"]: M.setdefault(r["id"], {})[c] = r["cpos"]   # miejsce tylko po rozegranej bitwie w tej kategorii (bez „#1” z samego zera)
     return M
 
 def _badge_map():
@@ -311,7 +312,7 @@ def _pick_scene(cat, a, b, n):
 def _new(st, a, b, now, lg=None, cat=None, feat=False):
     h = duration_h(); n = st.get("n", 0); st["n"] = n + 1
     cat = cat if cat in BC.CAT else _common_cat(a, b)
-    cr = {r["id"]: r["cpos"] for r in cat_rows(cat)}
+    cr = {r["id"]: r["cpos"] for r in cat_rows(cat) if r["played"]}
     a, b = dict(a, crank=cr.get(a["id"])), dict(b, crank=cr.get(b["id"]))
     return {"id": secrets.token_hex(5), "a": _pub_c(a), "b": _pub_c(b), "scene": _pick_scene(cat, a, b, n), "lg": lg, "cat": cat, "feat": feat,
             "start": now, "end": now + h * 3600, "hours": h, "votes": {}, "devs": {}}
