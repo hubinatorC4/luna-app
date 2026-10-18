@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0705">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Luna">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+<title>Luna – trenerka głosu</title>
+</head>
+<body>
+<div class="bg" style="background-image:url(luna_portrait.jpg)"></div>
+<header class="top">
+  <div class="brand">
+    <img src="avatar_round.png" alt="" class="mini">
+    <div><h1>Luna</h1><small id="status">Twoja trenerka głosu</small></div>
+  </div>
+  <div class="actions">
+    <label class="wake" title="Nasłuchiwanie słowa „Luna”">
+      <input type="checkbox" id="wakeToggle"><span class="sw"></span><span class="lbl">Nasłuchiwanie</span>
+    </label>
+    <button id="settingsBtn" class="icon" aria-label="Ustawienia">⚙</button>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="ring" id="ring">
+    <img src="avatar_round.png" alt="Luna" id="avatar">
+  </div>
+  <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
+</section>
+
+<main id="chat" aria-live="polite"></main>
+
+<form id="composer" autocomplete="off">
+  <button type="button" id="micBtn" class="mic" aria-label="Mów do Luny">🎙</button>
+  <input id="input" placeholder="Zapytaj Lunę o głos…" enterkeyhint="send">
+  <button type="submit" class="send" aria-label="Wyślij">➤</button>
+</form>
+
+<dialog id="settings">
+  <form method="dialog">
+    <h2>Ustawienia głosu</h2>
+    <label>Głos
+      <select id="voiceSel"></select>
+    </label>
+    <label class="row"><input type="checkbox" id="spanishChk"> Hiszpańskie wstawki (hola, cariño, mi amor) czytane po hiszpańsku</label>
+    <label>Wysokość głosu: <b id="pitchVal"></b>
+      <input type="range" id="pitch" min="-6" max="0" step="0.1">
+    </label>
+    <label>Głośność: <b id="volVal"></b>
+      <input type="range" id="volume" min="-36" max="-16" step="1">
+    </label>
+    <label class="row"><input type="checkbox" id="autoSpeak"> Czytaj odpowiedzi na głos</label>
+    <div class="btns">
+      <button type="button" id="testVoice">▶ Posłuchaj próbki</button>
+      <button type="button" id="resetBtn" class="ghost">Przywróć domyślne</button>
+      <button value="ok" class="primary">Gotowe</button>
+    </div>
+    <p class="hint">Nasłuchiwanie słowa „Luna” działa, gdy ta strona jest otwarta i ma dostęp do mikrofonu (najlepiej w Chrome).</p>
+  </form>
+</dialog>
+<audio id="player" preload="auto"></audio>
+<script src="app.js"></script>
+</body>
+</html>
