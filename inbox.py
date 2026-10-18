@@ -109,7 +109,7 @@ def person(uid, A=None):
     n = nick_of(u) or ("Luna·" + pid(uid)[:4])
     try: pr = partners.is_partner(uid)
     except Exception: pr = False
-    return {"pid": pid(uid), "nick": n, "tier": nicktier.of_uid(uid), "partner": bool(pr), "ini": n[:1].upper(), "ident": _ident(uid)}
+    return {"pid": pid(uid), "nick": n, "tier": nicktier.of_uid(uid), "partner": bool(pr), "ini": n[:1].upper(), "ident": _ident(uid), "mod": u.get("role") == "admin"}
 
 # ---------- magazyn ----------
 def _ib(uid): return store.get("ib:" + uid, {}) or {}

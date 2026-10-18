@@ -25,8 +25,9 @@ const fmtT = t => { const s = Date.now() / 1000 - t; const rtf = new Intl.Relati
   if (s < 60) return T.ago_now; if (s < 3600) return rtf.format(-Math.round(s / 60), 'minute'); if (s < 86400) return rtf.format(-Math.round(s / 3600), 'hour');
   if (s < 7 * 86400) return rtf.format(-Math.round(s / 86400), 'day'); return new Date(t * 1000).toLocaleDateString(lang); };
 const clock = t => new Date(t * 1000).toLocaleTimeString(lang, {hour: '2-digit', minute: '2-digit'});
-const nk = p => `<span class="nk${p.tier ? ' nk-' + p.tier : ''}">${esc(p.nick)}</span>${p.partner ? ` <span class="ib-pt" title="${esc(T.partner)}" aria-label="${esc(T.partner)}">💖</span>` : ''}`;
-const av = p => `<span class="ib-av${p.partner ? ' partner' : ''}${p.tier ? ' t-' + p.tier : ''}${p.pr && p.pr.on ? ' on' : ''}" aria-hidden="true">${esc(p.ini || '?')}</span>`;
+const MODB = p => p.mod ? ' <span class="mod-badge">🛡️ Moderator</span>' : '';
+const nk = p => `<span class="nk${p.tier ? ' nk-' + p.tier : ''}">${esc(p.nick)}</span>${MODB(p)}${p.partner ? ` <span class="ib-pt" title="${esc(T.partner)}" aria-label="${esc(T.partner)}">💖</span>` : ''}`;
+const av = p => p.mod ? ((S) => `<span class="mod-av" style="--s:${S}px" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="${S}" height="${S}" decoding="async"></span>`)(40) : `<span class="ib-av${p.partner ? ' partner' : ''}${p.tier ? ' t-' + p.tier : ''}${p.pr && p.pr.on ? ' on' : ''}" aria-hidden="true">${esc(p.ini || '?')}</span>`;
 // status online (serwer zwraca pr tylko gdy osoba na to pozwala): {on:true} albo {min:X} ≤ 60
 const prTxt = p => !p.pr ? '' : p.pr.on ? T.online : T.ago.replace('{n}', p.pr.min);
 const idHtml = p => { const d = p.ident || {}, x = [];

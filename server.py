@@ -24,6 +24,7 @@ import promo_share
 import forms18_routes
 import nsfw_filter
 import reports_routes, reports, team
+import moderator
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox, support
 from datetime import datetime, timedelta
 try:
@@ -317,7 +318,7 @@ def _dm_plan(h, uid):
 inbox.PLAN_OF = _dm_plan
 support.TOKEN_OK = lambda t: token_ok(t)  # Pomoc na żywo: widok /admin-support.html
 support.MOD_PUSH = lambda a, b: _mod_push(a, b)
-def admin_enabled(): return bool(_admin_hash() or admin_code())
+def admin_enabled(): return bool(_admin_hash() or admin_code() or moderator.configured())
 QUOTES = "\"'„”“«»‚‘’`"
 def strip_code(msg):
     m = msg.strip()
@@ -370,6 +371,14 @@ def check_code(ip, msg):
         for t in [t for t, e in _tokens.items() if e < now]: _tokens.pop(t, None)
         tok = secrets.token_urlsafe(32); _tokens[tok] = now + ADMIN_TTL
         return tok
+def _mint_token():
+    now = time.time()
+    with _adm_lock:
+        for t in [t for t, e in _tokens.items() if e < now]: _tokens.pop(t, None)
+        tok = secrets.token_urlsafe(32); _tokens[tok] = now + ADMIN_TTL
+    return tok
+moderator.MINT = _mint_token          # Panel moderatora: token po zalogowaniu kontem admin + 2FA na urządzeniu
+moderator.TOTP_ENV = lambda: admin_totp_secret()
 def token_ok(tok):
     if not tok or not admin_enabled(): return False
     with _adm_lock:
@@ -737,8 +746,8 @@ class H(SimpleHTTPRequestHandler):
         pth = urlparse(self.path).path
         for k, v in security.HEADERS.items():
             if k == "Content-Security-Policy":
-                v = security.csp(antibot.turnstile_on(), "'none'" if pth in ("/panel.html", "/panel") or pth.startswith("/api/") else "'self'")
-            if k == "X-Frame-Options" and (pth in ("/panel.html", "/panel") or pth.startswith("/api/")): v = "DENY"
+                v = security.csp(antibot.turnstile_on(), "'none'" if pth in ("/panel.html", "/panel") or pth.startswith("/api/") or pth.startswith(moderator.panel_prefix()) else "'self'")
+            if k == "X-Frame-Options" and (pth in ("/panel.html", "/panel") or pth.startswith("/api/") or pth.startswith(moderator.panel_prefix())): v = "DENY"
             self.send_header(k, v)
         if pth.endswith(".apk"):
             self.send_header("Content-Disposition", 'attachment; filename="' + os.path.basename(pth) + '"')
@@ -1360,6 +1369,11 @@ class H(SimpleHTTPRequestHandler):
         return None
     def do_GET(self):
         u = urlparse(self.path)
+        if moderator.gate(self, "GET"): return      # tryb serwisowy (Strona / Aplikacja / Cały system) – panel i logowanie działają zawsze
+        if re.search(r"(?:^|&)source=(?:twa|pwa)(?:&|$)", u.query or "") and self._cookie("luna_app") != "1":
+            self._cookies = getattr(self, "_cookies", []) + ["luna_app=1; Path=/; HttpOnly; Secure; SameSite=Lax"]   # rozpoznanie aplikacji (TWA/PWA) po stronie serwera
+        r = moderator.handle_get(self, u)              # Panel moderatora: nieodgadywalna ścieżka + /api/mod/*
+        if r is not None: return r
         if u.path.startswith(("/api/support/", "/api/admin/support")):
             r = support.handle_get(self, u)  # Pomoc na żywo + Napisz do moderatora (support.py)
             if r is not None: return r
@@ -1398,7 +1412,7 @@ class H(SimpleHTTPRequestHandler):
             if not uid: return self._json({**base, "login": True})
             pid, rr = profiles.mine(uid)
             hw = any(x.get("author") == "u:" + uid and x.get("status") != "deleted" for x in social._posts())
-            return self._json({**base, "uref": uid[:8], "tier": nicktier.of_uid(uid), "profile": userprof.get(uid), "settings": userprof.settings(uid), "agent": {"id": pid, "own": (rr or {}).get("own", "")} if rr else None,
+            return self._json({**base, "mod": moderator.is_admin_uid(uid), "uref": uid[:8], "tier": nicktier.of_uid(uid), "profile": userprof.get(uid), "settings": userprof.settings(uid), "agent": {"id": pid, "own": (rr or {}).get("own", "")} if rr else None,
                                "completion": userprof.completion(uid, hw, bool(rr))})
         if u.path == "/api/sceneries":
             pl, _uid = self._plan(); pl = self._gen_plan(pl, _uid); lg = (parse_qs(u.query).get("lang") or ["pl"])[0]
@@ -1684,6 +1698,7 @@ class H(SimpleHTTPRequestHandler):
                     doc = doc.replace("</body>", '<script src="/report.js?v=1.0" defer></script>\n<script src="/standing.js?v=1.0" defer></script>\n</body>', 1)
                 if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
                     doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
+                doc = moderator.inject(doc, self, u.path)   # ogłoszenie + (tylko dla konta admin) link „🛡️ Panel moderatora”
                 NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html", "/admin-support.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
                 if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
                 doc = doc.replace("</head>", '<script src="/sec-client.js"></script>\n</head>', 1)
@@ -1715,12 +1730,15 @@ class H(SimpleHTTPRequestHandler):
         if not security.origin_ok(self.headers): return self._json({"error": "Niedozwolone źródło żądania."}, 403)
         try: nsfw_filter.set_lang(api_i18n.req_lang(u.query, self.headers) or "pl")  # język komunikatów filtra zdjęć
         except Exception: pass
+        if moderator.gate(self, "POST"): return
         try: data = self._body()
         except ValueError as e:
             if str(e) == "too large": return self._json({"error": "Za duże żądanie."}, 413)
             return self._json({"error": "bad json"}, 400)
         except Exception: return self._json({"error": "bad json"}, 400)
         if not isinstance(data, dict): return self._json({"error": "bad json"}, 400)
+        r = moderator.handle_post(self, u, data)
+        if r is not None: return r
         if u.path.startswith(("/api/support/", "/api/admin/support")):
             r = support.handle_post(self, u, data)  # Pomoc na żywo + Napisz do moderatora (support.py) – pomoc działa zawsze, także przed potwierdzeniem 18+
             if r is not None: return r
@@ -2046,6 +2064,8 @@ class H(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(os.getenv("PORT", sys.argv[1] if len(sys.argv) > 1 else 8765))
     print(f"Luna działa na http://0.0.0.0:{port}")
+    try: moderator.ensure_admin()   # konto właściciela (LUNA_ADMIN_NICK + LUNA_ADMIN_PASSWORD_HASH) z rolą admin
+    except Exception as e: print("ensure_admin", repr(e)[:200], file=sys.stderr)
     try: userprof.seed_moderator()
     except Exception as e: sys.stderr.write("seed_moderator %s\n" % type(e).__name__)
     threading.Thread(target=_bg_loop, daemon=True).start()

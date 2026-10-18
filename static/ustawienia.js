@@ -69,13 +69,13 @@ function draw(){
   const tier = P.tier ? ` nk-${P.tier}` : '';
   $('#stApp').removeAttribute('aria-busy'); $('#stApp').innerHTML = `
   <section class="st-head" id="stHead">
-    <img class="st-av" src="${esc(avatarURL())}" alt="" width="72" height="72">
-    <div class="st-who"><div class="st-nick nk${tier}">${esc(pr.nick || '—')}</div>
+    ${P.mod ? '<span class="mod-av st-av" style="--s:72px" data-video="1" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="72" height="72"></span>' : `<img class="st-av" src="${esc(avatarURL())}" alt="" width="72" height="72">`}
+    <div class="st-who"><div class="st-nick nk${tier}">${esc(pr.nick || '—')}${P.mod ? ' <span class="mod-badge">🛡️ Moderator</span>' : ''}</div>
 ${identLine(pr)}
-            <span class="st-plan ${esc(P.plan)}">${esc(P.plan_name)}</span>${P.partner ? ' <span class="st-tag pt-mark">💖</span>' : ''}
+      <span class="st-plan ${esc(P.plan)}">${esc(P.plan_name)}</span>${P.partner ? ' <span class="st-tag pt-mark">💖</span>' : ''}
       <div class="st-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${c.pct}" aria-label="${esc(F('compl', {p: c.pct}))}"><i style="width:${c.pct}%"></i></div>
       <div class="st-bl">${esc(F('compl', {p: c.pct}))} · ${esc(T('compl_h'))}</div>
-      <button type="button" class="st-btn st-tourb" id="stTourB">🌙 ${esc(T('tour'))}</button>
+      <button type="button" class="st-btn st-tourb" id="stTourB">🌙 ${esc(T('tour'))}</button>${P.mod ? ' <button type="button" class="st-btn mod-share" id="stPolecam">📣 Polecam</button>' : ''}
     </div>
   </section>
   <input type="search" class="st-search" id="stQ" placeholder="${esc(T('search'))}" aria-label="${esc(T('search'))}">
@@ -89,6 +89,13 @@ ${identLine(pr)}
     $('#stNores').hidden = any;
   };
   $$('.st-row').forEach(r => r.addEventListener('click', e => onRow(r, e)));
+  const pb = $('#stPolecam'); if (pb) pb.onclick = () => {   /* „Polecam” – udostępnij stronę (share-kit.js, gdy jest; inaczej Web Share / kopiuj link) */
+    const o = {path: '/', camp: 'polecam', key: 'page:polecam', title: 'Luna mówi jak jest', text: 'Polecam Lunę – trenerkę głosu AI i Bitwy agentek. Wpadnij! ⚡'};
+    if (window.LunaShare) return window.LunaShare.share(o);
+    const url = location.origin + '/?utm_source=profile&utm_medium=share&utm_campaign=polecam';
+    if (navigator.share) navigator.share({title: o.title, text: o.text, url}).catch(() => {});
+    else navigator.clipboard && navigator.clipboard.writeText(url).then(() => toast('Link skopiowany ✓', '📣'));
+  };
   $('#stTourB').onclick = () => tour(0);
   unread();
   if (pr.nick && !pr.tour_done && !sessionStorage.getItem('st.tour')) setTimeout(() => tour(0), 500);

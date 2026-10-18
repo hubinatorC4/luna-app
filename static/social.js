@@ -70,9 +70,10 @@ const X2 = {pl: {more: 'Pokaż wcześniejsze komentarze', ph: 'Napisz komentarz�
 const nickShow = n => n === 'Usunięty użytkownik' ? X2.del : n;
 function clock(ts){ const d = new Date(ts * 1000), now = new Date(); const hm = d.toLocaleTimeString(lang === 'uk' ? 'uk-UA' : lang, {hour: '2-digit', minute: '2-digit'});
   return d.toDateString() === now.toDateString() ? hm : d.toLocaleDateString(lang === 'uk' ? 'uk-UA' : lang, {day: 'numeric', month: 'short'}) + ' · ' + hm; }
+const modAv = S => `<span class="mod-av" style="--s:${S}px" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="${S}" height="${S}" decoding="async"></span>`;
 function cmtHTML(c, target, replies){
   const stars = c.rating ? ' ' + '★'.repeat(c.rating) + '☆'.repeat(5 - c.rating) : ''; const nk = nickShow(c.nick);
-  return `<div class="cmt chat${c.mine ? ' mine' : ''}${c.pending ? ' pend' : ''}" data-cid="${esc(c.id)}">${ava(nk, 34)}<div class="cbody"><div class="bubble"><b class="nick nk${c.tier ? ' nk-' + c.tier : ''}">${esc(nk)}</b>${c.partner ? '<span class="pt-mark" aria-label="💖">💖</span>' : ''}${c.pending ? ` <span class="pend">⏳ ${T.waiting}</span>` : ''}<span class="stars" aria-label="${c.rating || ''}/5">${stars}</span><p>${esc(c.text)}</p></div>
+  return `<div class="cmt chat${c.mine ? ' mine' : ''}${c.pending ? ' pend' : ''}${c.mod_liked ? ' mod-liked' : ''}" data-cid="${esc(c.id)}">${c.mod ? modAv(34) : ava(nk, 34)}<div class="cbody"><div class="bubble">${c.mod_liked ? '<span class="mod-like-tag">❤️ Polubione przez moderatora</span>' : ''}<b class="nick nk${c.tier ? ' nk-' + c.tier : ''}">${esc(nk)}</b>${c.mod ? ' <span class="mod-badge">🛡️ Moderator</span>' : ''}${c.partner ? '<span class="pt-mark" aria-label="💖">💖</span>' : ''}${c.pending ? ` <span class="pend">⏳ ${T.waiting}</span>` : ''}<span class="stars" aria-label="${c.rating || ''}/5">${stars}</span><p>${esc(c.text)}</p></div>
   <div class="cmeta"><time datetime="${new Date(c.t * 1000).toISOString()}" title="${esc(new Date(c.t * 1000).toLocaleString(lang))}">${clock(c.t)}</time>${c.pending ? '' : `<button type="button" data-vote="1" data-target="cmt:${esc(c.id)}" class="${c.votes.mine === 1 ? 'on' : ''}" aria-label="👍">👍 <em>${c.votes.up}</em></button><button type="button" data-vote="-1" data-target="cmt:${esc(c.id)}" class="${c.votes.mine === -1 ? 'on' : ''}" aria-label="👎">👎 <em>${c.votes.down}</em></button><button type="button" data-replyto="${esc(c.id)}">${T.reply}</button><button type="button" data-report="cmt:${esc(c.id)}">${T.report}</button>`}</div>
   ${replies && replies.length ? `<div class="replies">${replies.map(r => `<div class="reply">${cmtHTML(r, target, null)}</div>`).join('')}</div>` : ''}</div></div>`;
 }
@@ -84,10 +85,12 @@ async function comments(el, target, opts){
   let d; try { d = await api('/api/comments?target=' + encodeURIComponent(target)); } catch(e){ el.innerHTML = `<p class="cmsg err">${esc(e.message)}</p>`; return; }
   const top = d.items.filter(c => !c.parent), rep = id => d.items.filter(c => c.parent === id);
   const avg = d.rating ? `<p class="cmsg">${T.avg}: <b>${String(d.rating).replace('.', lang === 'en' ? '.' : ',')}</b> / 5 (${d.nratings})</p>` : '';
-  const hiddenN = el.dataset.all ? 0 : Math.max(0, top.length - SHOW);
-  const shown = top.slice(hiddenN);
-  el.innerHTML = avg + (hiddenN ? `<button type="button" class="cmore" data-cmore>💬 ${X2.more} (${hiddenN})</button>` : '') +
-    `<div class="clist">${shown.length ? shown.map(c => cmtHTML(c, target, rep(c.id))).join('') : `<p class="cmsg">${T.none}</p>`}</div>` + formHTML(opts.rating, null);
+  const rest = top.filter(c => !c.mod_liked);
+  const hiddenN = el.dataset.all ? 0 : Math.max(0, rest.length - SHOW);
+  const best = top.filter(c => c.mod_liked);   /* „Najlepsze komentarze”: ręcznie polubione przez moderatora */
+  const shown = rest.slice(hiddenN);
+  el.innerHTML = avg + (best.length ? `<div class="mod-best"><p class="mod-best-h">⭐ Najlepsze komentarze</p>${best.map(c => cmtHTML(c, target, rep(c.id))).join('')}</div>` : '') + (hiddenN ? `<button type="button" class="cmore" data-cmore>💬 ${X2.more} (${hiddenN})</button>` : '') +
+    `<div class="clist">${shown.length ? shown.map(c => cmtHTML(c, target, rep(c.id))).join('') : (best.length ? '' : `<p class="cmsg">${T.none}</p>`)}</div>` + formHTML(opts.rating, null);
   const mc = el.querySelector('[data-cmore]'); if (mc) mc.onclick = () => { el.dataset.all = 1; comments(el, target, opts); };
   bindForm(el.querySelector('.cform'), el, target, null, opts);
   el.querySelectorAll('[data-replyto]').forEach(b => b.onclick = () => {

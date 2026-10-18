@@ -39,6 +39,10 @@ def nick_ok(n):
     if len(n) < 2: raise ValueError("Podaj nick (min. 2 znaki).")
     if (set(re.findall(r"\w+", _norm(n))) | set(re.findall(r"\w+", _norm(textutil.strip_emoji(n))))) & _BADSET: raise ValueError("Wybierz inny nick.")
     if re.search(r"\b(luna|moderator|admin)\b", _norm(n)): raise ValueError("Ten nick jest zarezerwowany.")
+    try:
+        import moderator
+        if moderator.reserved(n): raise ValueError("Ten nick jest zarezerwowany.")
+    except ImportError: pass
     return n
 
 def author_key(uid, vid):
@@ -97,7 +101,7 @@ def create_post(d, uid, vid, acct_nick=None):
             I = store.get("wall_img", {}) or {}; I[img_id] = url
             store.put("wall_img", dict(list(I.items())[-400:]))
     agent = re.sub(r"[^\w\-]", "", str(d.get("agent", "")))[:40] or None
-    auto = _trusted(ak) and img_kind != "user" and not nsfw_hold  # zdjęcia użytkownika i obrazy „na granicy” filtra – zawsze moderacja
+    auto = (_trusted(ak) and img_kind != "user" and not nsfw_hold) or _is_mod(ak)  # zdjęcia użytkownika i obrazy „na granicy” filtra – zawsze moderacja; moderator bez kolejki
     lang = d.get("lang") if d.get("lang") in LANGS else "pl"
     p = {"id": secrets.token_hex(6), "lang": lang, "variants": {}, "official": False, "author": ak, "uid": uid or "", "nick": nick, "text": text, "img": img_id, "img_kind": img_kind, "agent": agent,
          "t": int(time.time()), "edited": 0, "status": "approved" if auto else "pending", "ever_approved": auto, "reports": 0}
@@ -172,7 +176,7 @@ def public_post(p, voter, V, C, mine_ak, lang="pl", T=None):
     X = antibot.excluded()
     cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
     return {"views": stats.post_views(p["id"], T), "id": p["id"], "nick": p["nick"], "tier": "" if p.get("official") else nicktier.of_author(p["author"]), "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "img_kind": p.get("img_kind") or ("ai" if p.get("img") else None), "agent": p.get("agent"),
-            "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved"}
+            "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved", "mod": _is_mod(p["author"])}
 
 def _off_hidden(): return set(store.get("official_hidden", []) or [])
 def _pinned(): return list(store.get("wall_pinned", []) or [])
@@ -256,7 +260,7 @@ def add_comment(d, uid, vid, acct_nick=None):
     rating = d.get("rating")
     rating = int(rating) if target.startswith("item:") and str(rating).isdigit() and 1 <= int(rating) <= 5 else None
     c = {"id": secrets.token_hex(6), "target": target, "parent": parent, "author": ak, "uid": uid or "", "nick": nick, "text": text,
-         "rating": rating, "t": int(time.time()), "status": "pending", "reports": 0}
+         "rating": rating, "t": int(time.time()), "status": "approved" if _is_mod(ak) else "pending", "reports": 0}
     with _lock:
         C = _cmts(); C.append(c); store.put("comments", C[-8000:])
     return c
@@ -267,9 +271,18 @@ def _partner(ak):
         return partners.is_partner(ak[2:]) if str(ak).startswith("u:") else False
     except Exception: return False
 
+def _is_mod(ak):
+    try:
+        import moderator; return moderator.author_is_admin(ak)
+    except Exception: return False
+def _mod_ak():
+    try:
+        import moderator; u = moderator.admin_uid(); return ("u:" + u) if u else ""
+    except Exception: return ""
+
 def list_comments(target, uid, vid):
-    voter = author_key(uid, vid); V = _votes(); X = antibot.excluded()
-    out = [{"id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "partner": _partner(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
+    voter = author_key(uid, vid); V = _votes(); X = antibot.excluded(); MA = _mod_ak()
+    out = [{"mod": bool(MA) and c["author"] == MA, "mod_liked": bool(MA) and V.get("cmt:" + c["id"], {}).get(MA) == 1, "id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "partner": _partner(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
             "votes": counts("cmt:" + c["id"], voter, V, X), "pending": c["status"] != "approved", "mine": c["author"] == voter}
            for c in _cmts() if c["target"] == target and (_cm_ok(c, X) or (c["author"] == voter and c["status"] in ("approved", "pending")))]
     rs = [c["rating"] for c in out if c.get("rating") and not c["pending"]]

@@ -86,18 +86,28 @@ def verify(tok):
 class TotpRequired(Exception):
     """Hasło poprawne, ale konto ma włączone 2FA – potrzebny 6-cyfrowy kod z aplikacji."""
 
+def _find_login(a, ident):
+    """E-mail – albo (tylko konto moderatora) nick, np. „Hubinator❤️” (także bez selektora wariantu)."""
+    u = _by_email(a, ident)
+    if u: return u
+    try:
+        import moderator
+        m = moderator.find_admin_by_login(ident)
+        return a.get(m["uid"]) if m else None
+    except Exception: return None
+
 def login(email, pw, totp=None):
     """Zwraca uid lub rzuca ValueError/PermissionError (blokada)/TotpRequired (2FA)."""
     email = str(email or "").strip()[:254]; now = time.time()
     with _lock:
-        a = _accts(); u = _by_email(a, email)
+        a = _accts(); u = _find_login(a, email)
         if u and u.get("lock", 0) > now: raise PermissionError(f"Za dużo nieudanych prób. Konto zablokowane na {LOCK_MIN} minut.")
     ok = bool(u) and isinstance(pw, str) and len(pw) <= 128 and check_pw(u["pw"], pw)
     if not u: hash_pw("dummy-password-1A")  # wyrównanie czasu odpowiedzi
     with _lock:
-        a = _accts(); u2 = _by_email(a, email)
+        a = _accts(); u2 = _find_login(a, email)
         if not ok:
-            if u2:
+            if u2 and u2.get("role") != "admin":   # konto moderatora: bez blokady konta (ochrona przed złośliwym zablokowaniem) – limity per IP w serwerze
                 u2["fails"] = u2.get("fails", 0) + 1
                 if u2["fails"] >= MAX_FAILS: u2["lock"] = int(now + LOCK_MIN * 60); u2["fails"] = 0
                 store.put("accounts", a)
@@ -174,6 +184,7 @@ def plan(u):
     """Najwyższy aktywny dostęp: miesięczny karnet (30 dni, bez odnawiania) albo Premium testera."""
     # Cennik v2: plan Podstawowa jest darmowy dla każdego konta; płatne są tylko Premium i Pro (30 dni, bez odnawiania).
     now = time.time(); best = {"plan": "podstawowa", "until": 0, "ring": None, "source": "account"}
+    if u.get("role") == "admin": return {"plan": "pro", "until": 0, "ring": None, "source": "admin"}   # moderator: pełne możliwości Pro / Ultra
     ps = u.get("pass") or {}
     if ps.get("until", 0) > now and ps.get("plan") in RANK: best = {"plan": ps["plan"], "until": ps["until"], "ring": None, "source": "pass"}
     st = testers.status(u.get("tester")) if u.get("tester") else {}

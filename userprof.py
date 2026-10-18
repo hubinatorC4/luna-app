@@ -75,7 +75,9 @@ def hidden_in_rank(uid):
     import battles; return uid in battles._priv()  # jedno źródło prawdy z rankingiem Bitew (bt_priv)
 
 def set_nick(uid, n):
-    n = social.nick_ok(n)
+    import moderator
+    if moderator.is_admin_uid(uid) and moderator.login_key(n) == moderator.login_key(moderator.admin_nick()): n = moderator.admin_nick()   # zarezerwowany nick właściciela
+    else: n = social.nick_ok(n)
     if len(n) > 24: n = n[:24]
     k = _key(n)
     with _lock:
@@ -192,7 +194,9 @@ def public_view(nick, viewer_uid=None):
             g = get(uid)
             av = g["avatar"]
             if av.startswith("up:") and not avatar_img(uid, viewer_uid): av = ""
-            return {"nick": g["nick"], "avatar": av, "uref": uid[:8] if av.startswith("up:") else "",
+            import moderator
+            if moderator.is_admin_uid(uid): av = "mod:mustang"   # moderator: animowany mustang w niebieskiej ramce (flaga tylko z serwera)
+            return {"mod": moderator.is_admin_uid(uid), "nick": g["nick"], "avatar": av, "uref": uid[:8] if av.startswith("up:") else "",
                     "bio": g["bio"] if g["show_bio"] else "", "interests": g["interests"] if g["show_interests"] else [],
                     "links": g["links"] if g["show_links"] else [], "mine": viewer_uid == uid, "pr": _pr(viewer_uid, uid), "ident": ident(uid, g)}
     return {"missing": True}
