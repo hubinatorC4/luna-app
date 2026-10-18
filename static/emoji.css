@@ -1,0 +1,19 @@
+/* Luna – wybór emoji (emoji.js) */
+.emj-wrap{position:relative;display:inline-flex;align-items:stretch;min-width:0;max-width:100%;vertical-align:middle}
+.emj-wrap>input{flex:1 1 auto;min-width:0;margin-top:0!important;margin-bottom:0!important}
+.emj-wrap>input,.emj-wrap>textarea{width:100%;box-sizing:border-box;padding-right:46px!important}
+.emj-btn{position:absolute;right:5px;top:0;bottom:0;margin:auto 0!important;width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;font-size:20px!important;line-height:1!important;display:inline-flex!important;align-items:center;justify-content:center;cursor:pointer;opacity:.85;color:inherit}
+.emj-ta .emj-btn{top:auto;bottom:6px;margin:0!important}
+.emj-btn:hover,.emj-btn[aria-expanded=true]{opacity:1;background:rgba(255,255,255,.08)!important}
+.emj-btn:focus-visible,.emj-e:focus-visible,.emj-x:focus-visible{outline:2px solid #2ee66b;outline-offset:2px}
+.emj-panel{position:fixed;z-index:2147483000;box-sizing:border-box;padding:12px 12px 8px;border-radius:22px;background:#1b1714;border:1px solid rgba(255,207,138,.25);box-shadow:0 18px 50px rgba(0,0,0,.55);color:#f7efe6;max-height:min(360px,70vh);overflow-y:auto;font-family:inherit}
+.emj-panel[hidden]{display:none}
+.emj-h{font-size:12.5px;font-weight:800;color:#ffcf8a;margin:4px 4px 4px;letter-spacing:.02em}
+.emj-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;margin-bottom:6px}
+.emj-e{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;height:36px;border-radius:12px;font-size:22px;line-height:1;cursor:pointer}
+.emj-e:hover,.emj-e:focus{background:rgba(255,255,255,.1)}
+.emj-x{all:unset;position:absolute;top:6px;right:8px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#d8c9b8;cursor:pointer}
+.emj-x:hover{background:rgba(255,255,255,.1)}
+.emj-full{animation:emjShake .3s}
+@keyframes emjShake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@media (prefers-reduced-motion:reduce){.emj-full{animation:none}}

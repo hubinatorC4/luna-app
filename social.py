@@ -3,7 +3,7 @@
 Wszystkie komentarze są moderowane przed publikacją; wpisy na Ściance od zaufanych autorów (3+ zatwierdzone) publikują się od razu.
 Liczniki są wyłącznie prawdziwe – nic nie jest „zasiewane”."""
 import base64, hashlib, re, secrets, threading, time, unicodedata
-import store, imgsafe, avatars, official, antibot, stats
+import store, imgsafe, avatars, official, antibot, stats, textutil
 PRICING = lambda: {}  # ustawiane przez serwer (cennik z CFG)
 
 _lock = threading.Lock()
@@ -29,7 +29,7 @@ def check_text(t, maxlen):
     t = re.sub(r"[\x00-\x08\x0b-\x1f\x7f]", "", str(t or "")).strip()
     if not t: raise ValueError("Napisz coś. 🙂")
     if len(t) > maxlen: raise ValueError(f"Za długo – maksymalnie {maxlen} znaków.")
-    words = set(re.findall(r"\w+", _norm(t)))
+    words = set(re.findall(r"\w+", _norm(t))) | set(re.findall(r"\w+", _norm(textutil.strip_emoji(t))))  # emoji wstawione w środek słowa nie omijają filtra
     if words & _BADSET: raise ValueError("Ups, ten tekst zawiera słowa, których tu nie używamy. Spróbuj życzliwiej. 💚")
     if SPAM_RE.search(t) or len(re.findall(r"https?://", t)) > 2 or re.search(r"(.)\1{9,}", t): raise ValueError("To wygląda na spam – popraw tekst, proszę.")
     return t
@@ -37,7 +37,7 @@ def check_text(t, maxlen):
 def nick_ok(n):
     n = re.sub(r"[<>\x00-\x1f]", "", str(n or "")).strip()[:MAX_NICK]
     if len(n) < 2: raise ValueError("Podaj nick (min. 2 znaki).")
-    if set(re.findall(r"\w+", _norm(n))) & _BADSET: raise ValueError("Wybierz inny nick.")
+    if (set(re.findall(r"\w+", _norm(n))) | set(re.findall(r"\w+", _norm(textutil.strip_emoji(n))))) & _BADSET: raise ValueError("Wybierz inny nick.")
     if re.search(r"\b(luna|moderator|admin)\b", _norm(n)): raise ValueError("Ten nick jest zarezerwowany.")
     return n
 

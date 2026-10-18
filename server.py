@@ -17,6 +17,7 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import api_i18n
+import textutil
 import catalog, base64, training
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
 from datetime import datetime, timedelta
@@ -26,7 +27,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.5.7"
+VERSION = "1.5.8"
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
@@ -417,7 +418,7 @@ def tts(text, voice, pitch_st, lufs, spanish, rate=-8, warmth=4.5, hz=0, rasp=0,
     lufs = max(-36.0, min(-16.0, float(lufs)))
     hz = int(max(-30, min(10, float(hz))))
     rasp = max(0.0, min(10.0, float(rasp))); breath = max(0.0, min(10.0, float(breath))); lisp = bool(lisp)
-    text = text.strip()[:1200]
+    text = re.sub(r"\s{2,}", " ", textutil.strip_emoji(text)).strip()[:1200]  # emoji nie są czytane na głos
     key = hashlib.sha1(json.dumps([text, voice, round(pitch_st, 2), round(lufs, 1), bool(spanish), rate, round(warmth, 1), hz, round(rasp, 1), round(breath, 1), lisp, 5]).encode()).hexdigest()
     out = os.path.join(CACHE, key + ".mp3")
     if os.path.exists(out) and os.path.getsize(out) > 1000:
@@ -681,7 +682,7 @@ class H(SimpleHTTPRequestHandler):
         p = urlparse(self.path).path
         lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post") else 64 * 1024
         if n > lim: raise ValueError("too large")
-        return json.loads(self.rfile.read(n) or b"{}") if n else {}
+        return textutil.fix_surrogates(json.loads(self.rfile.read(n) or b"{}")) if n else {}
 
     def _plan(self):
         if token_ok(self.headers.get("X-Admin-Token")): return "pro", None
