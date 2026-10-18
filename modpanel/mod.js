@@ -82,19 +82,36 @@ function unlockView(){
 }
 $('#mpLock').onclick = async () => { if (!confirm('Zablokować panel na tym urządzeniu? Następne wejście poprosi o kod 2FA.')) return; try { await req('/api/mod/lock', {}); } catch (e) {} TOK = ''; boot(); };
 /* ---------- panel ---------- */
-const TABS = [['home', '⚡', 'Przełączniki'], ['konta', '📈', 'Konta i baza'], ['queue', '🧹', 'Kolejka'], ['users', '👥', 'Użytkownicy'], ['content', '🖼️', 'Treści'], ['shop', '🛍️', 'Butik'], ['msg', '📣', 'Komunikaty'], ['support', '💬', 'Wsparcie'], ['audit', '📜', 'Dziennik']];
+const TABS = [['home', '⚡', 'Przełączniki'], ['konta', '📈', 'Konta i baza'], ['queue', '🧹', 'Kolejka'], ['users', '👥', 'Użytkownicy'], ['content', '🖼️', 'Treści'], ['shop', '🛍️', 'Butik'], ['msg', '📣', 'Komunikaty'], ['support', '💬', 'Wsparcie'], ['nsfw', '🛡️', 'Filtr nagości'], ['audit', '📜', 'Dziennik']];
 const MTABS = [['queue', '💬', 'Czat'], ['users', '👥', 'Użytkownicy'], ['shop', '🛍️', 'Butik'], ['support', '🛟', 'Wsparcie']];   /* moderator: minimalne uprawnienia */
 function app(){
   main.className = 'mp-main'; main.innerHTML = '';   // bez resztek ekranu logowania / kodu 2FA
   if (MODE === 'web') main.prepend(tabs);
-  const list = !FULL ? MTABS : MODE === 'app' ? TABS.filter(t => ['home', 'konta', 'queue', 'users', 'content', 'msg'].includes(t[0])) : TABS;
+  const list = !FULL ? MTABS : MODE === 'app' ? TABS.filter(t => ['home', 'konta', 'queue', 'users', 'content', 'msg', 'nsfw'].includes(t[0])) : TABS;
   tabs.innerHTML = list.map(([k, i, l]) => `<button type="button" data-t="${k}"><span class="i" aria-hidden="true">${i}</span><span>${l}</span>${k === 'queue' ? '<span class="n" id="qN" hidden></span>' : ''}</button>`).join('');
   tabs.hidden = false; tabs.querySelectorAll('button').forEach(b => b.onclick = () => show(b.dataset.t)); show(TAB);
 }
 function sec(html){ main.querySelectorAll('.mp-sec').forEach(s => s.remove()); main.insertAdjacentHTML('beforeend', `<section class="mp-sec">${html}</section>`); return main.querySelector('.mp-sec'); }
 async function show(t){
   TAB = t; tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-current', b.dataset.t === t));
-  try { await ({home, konta, queue, users, content, shop, msg, support, audit})[t](); } catch (e){ sec(`<p class="mp-hint">⚠️ ${esc(e.message)}</p>`); }
+  try { await ({home, konta, queue, users, content, shop, msg, support, nsfw, audit})[t](); } catch (e){ sec(`<p class="mp-hint">⚠️ ${esc(e.message)}</p>`); }
+}
+/* 🛡️ filtr nagości (t479u) – obowiązuje wszystkich, także admina; tu tylko podgląd i lista skrótów (bez obrazów) */
+async function nsfw(){
+  const d = await req('/api/mod/nsfw'); const F = d.filter || {};
+  const days = Object.entries(d.days || {}).reverse().slice(0, 14);
+  const s = sec(`<h2>🛡️ Filtr nagości</h2>
+  <p class="mp-hint">Każde zdjęcie (awatary, ścianka, czat, bitwy, zgłoszenia, generator, Twoje wgrania) przechodzi przez tę samą bramkę: format → animacje → skróty odrzuconych → 2 modele (NudeNet + MobileNet) + udział skóry → ponowne kodowanie bez metadanych. Błąd filtra = odrzucenie. Nie ma wyłącznika – także dla admina. Żaden filtr nie jest w 100% skuteczny, dlatego „na granicy” trafia do Kolejki.</p>
+  <div class="mp-stat"><div><b>${F.ok ? '✅' : '⛔'}</b><small>filtr ${F.ok ? 'działa' : 'niedostępny – zdjęcia odrzucane'}</small></div><div><b>${d.hashes}</b><small>skrótów na liście blokad</small></div></div>
+  <h3>📊 Ostatnie dni (prawdziwe liczby)</h3><div class="mp-card"><table class="mp-t"><tr><th>Dzień</th><th>✅ ok</th><th>🟡 do moderatora</th><th>⛔ odrzucone</th><th>#️⃣ skrót</th><th>⚠️ błąd</th></tr>
+  ${days.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${v.ok || 0}</td><td>${v.review || 0}</td><td>${v.block || 0}</td><td>${v.hash_block || 0}</td><td>${v.error || 0}</td></tr>`).join('') || '<tr><td colspan="6">Brak danych – nikt jeszcze nic nie wgrał.</td></tr>'}</table></div>
+  <h3>#️⃣ Lista skrótów percepcyjnych</h3><div class="mp-card"><p class="mp-hint">Dodawane automatycznie (odrzucone przez filtr i usunięte w Kolejce). Ten sam obraz po przeskalowaniu/kompresji nie wróci. Obrazów nie przechowujemy.</p>
+    <div class="mp-row"><input class="mp-in" id="nhH" maxlength="16" placeholder="16 znaków 0-9a-f"><input class="mp-in" id="nhN" maxlength="60" placeholder="notatka (opcjonalnie)"><button class="mp-btn" id="nhAdd" type="button">Dodaj</button></div>
+    <ul class="mp-list">${(d.hash_list || []).slice(0, 50).map(e => `<li><code>${esc(e.h)}</code> · ${esc(e.src)} · ${when(e.t)} ${esc(e.note || '')} <button class="mp-btn sm bad" data-rm="${esc(e.h)}" type="button">usuń</button></li>`).join('') || '<li>Pusto.</li>'}</ul></div>
+  <h3>🟡 Wstrzymane bez kolejki (np. mały awatar czatu, Twoje wgrania)</h3><div class="mp-card"><ul class="mp-list">${(d.held || []).slice(0, 30).map(x => `<li>${when(x.t)} · ${esc(x.ctx)} · ${esc(x.reason)} · <code>${esc(x.h)}</code></li>`).join('') || '<li>Pusto.</li>'}</ul></div>
+  <h3>📜 Ostatnie blokady (dziennik)</h3><div class="mp-card"><ul class="mp-list">${(d.text_blocks || []).slice(0, 40).map(x => `<li>${when(x.t)} · ${esc(x.action)} · ${esc(x.detail)}</li>`).join('') || '<li>Pusto.</li>'}</ul></div>`);
+  s.querySelector('#nhAdd').onclick = async () => { try { await act('/api/mod/nsfw/hash', {action: 'add', h: s.querySelector('#nhH').value, note: s.querySelector('#nhN').value}); toast('Dodano 💚'); nsfw(); } catch (e){ toast('⚠️ ' + e.message); } };
+  s.querySelectorAll('[data-rm]').forEach(b => b.onclick = async () => { if (!confirm('Usunąć skrót z listy blokad?')) return; try { await act('/api/mod/nsfw/hash', {action: 'remove', h: b.dataset.rm}); toast('Usunięto'); nsfw(); } catch (e){ toast('⚠️ ' + e.message); } });
 }
 /* przełączniki + statystyki */
 async function home(){

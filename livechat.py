@@ -45,8 +45,8 @@ def clean_text(s, n):
     return s.strip()[:n]
 
 def clean_avatar(a):
-    import imgsafe
-    return imgsafe.safe_avatar_dataurl(a, MAX_AVATAR)
+    import upload_gate
+    return upload_gate.small_avatar_dataurl(a, MAX_AVATAR)   # pełna bramka (nagość, format, skróty) – „na granicy” = domyślny awatar
 
 def rate_ok(key, per_min, per_day):
     now = time.time()

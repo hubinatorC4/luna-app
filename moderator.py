@@ -424,7 +424,7 @@ def queue(full=True):
         except Exception: pass
     SA = social.admin_list()
     for p in SA["posts"]:
-        Q.append({"src": "post", "id": p["id"], "kind": "Wpis na ścianie" + (" · zgłoszony" if p.get("reports") else " · czeka"), "text": p.get("text", "")[:300],
+        Q.append({"src": "post", "id": p["id"], "kind": "Wpis na ścianie" + (" · zgłoszony" if p.get("reports") else " · czeka") + (" · ⚠️ filtr: na granicy" if p.get("nsfw_review") else ""), "text": p.get("text", "")[:300],
                   "img": p.get("img_url"), "t": p["t"], "uid": _uid_ak(p.get("author")), "ak": p.get("author"), "who": p.get("nick", ""), "n": p.get("reports", 0),
                   "acts": ["approve", "remove", "warn", "strike", "temp_block", "ban"]})
     for c in SA["comments"]:
@@ -433,13 +433,13 @@ def queue(full=True):
                   "acts": ["approve", "remove", "warn", "strike", "temp_block", "ban"]})
     for a in avatars.admin_list():
         uid = a.get("uid", "")
-        Q.append({"src": "avatar", "id": a.get("id", ""), "kind": "Awatar" + (" · zgłoszony" if a.get("kind") == "report" else " · nowy"), "text": a.get("reason", "") or "",
+        Q.append({"src": "avatar", "id": a.get("id", ""), "kind": "Awatar" + (" · zgłoszony" if a.get("kind") == "report" else " · nowy") + (" · ⚠️ filtr: na granicy" if a.get("nsfw_review") else ""), "text": a.get("reason", "") or "",
                   "img": a.get("img") or a.get("url"), "t": a.get("t", 0), "uid": "", "short": uid, "who": a.get("nick") or uid, "acts": ["approve", "remove", "ban"]})
     try:
         B = battles.admin_list()
         for e in B["entries"]:
             if e["status"] == "pending" or e.get("reports"):
-                Q.append({"src": "battle", "id": e["id"], "kind": "Agentka do bitwy" + (" · zgłoszona" if e.get("reports") else " · czeka"), "text": e.get("name", ""),
+                Q.append({"src": "battle", "id": e["id"], "kind": "Agentka do bitwy" + (" · zgłoszona" if e.get("reports") else " · czeka") + (" · ⚠️ filtr: na granicy" if e.get("nsfw_review") else ""), "text": e.get("name", ""),
                           "img": e.get("img"), "t": e.get("t", 0), "uid": e.get("uid", ""), "who": e.get("name", ""), "acts": ["approve", "remove", "warn", "strike", "ban"]})
         for m in B["chat_flagged"]:
             if not m.get("hidden"):
@@ -485,6 +485,18 @@ def queue_act(h, d, full=True):
     reason = re.sub(r"[<>\x00-\x1f]", "", str(d.get("reason") or ""))[:300]
     days = max(1, min(90, int(d.get("days") or 7)))
     uid = ""
+    if act in ("remove", "strike", "ban", "temp_block") and src in ("post", "avatar", "battle"):
+        try:   # usunięty obraz → skrót percepcyjny na listę blokad (bez zapisywania obrazu)
+            import upload_gate
+            if src == "post":
+                x = next((i for i in social._posts() if i["id"] == id_), None)
+                b = (store.get("wall_img", {}) or {}).get((x or {}).get("img") or "")
+            elif src == "battle": b = (store.get("bt_img", {}) or {}).get(id_)
+            else:
+                b = ((store.get("user_avatars", {}) or {}).get(userprof.uid_by_short(str(d.get("short", ""))[:8]) or "") or {}).get("b") if id_.startswith("ua-") else None
+                b = b or ((store.get("avatar_mod", {}) or {}).get(id_) or {}).get("thumb")
+            if b: upload_gate.hash_stored(b, src)
+        except Exception: pass
     if src == "case":
         r = _rp()
         if not r: raise ValueError("Moduł zgłoszeń niedostępny.")
@@ -762,6 +774,12 @@ def handle_get(h, u):
     if p == "/api/mod/users": return h._json({"items": users(g("q")[:30])})
     if p == "/api/mod/content": return h._json({"items": content(g("q")[:40])})
     if p == "/api/mod/audit": return h._json({"items": list(reversed((store.get("mod_audit", []) or [])[-300:]))})
+    if p == "/api/mod/nsfw":   # 🛡️ Filtr nagości: stan modeli, dzienne liczniki, wstrzymane (tylko skróty), lista skrótów – tylko admin
+        if not c["full"]: return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)
+        import upload_gate
+        st = upload_gate.stats(); st["hash_list"] = [{k: e.get(k) for k in ("h", "t", "src", "note")} for e in (store.get("nsfw_hash_block", []) or [])[-200:][::-1]]
+        st["text_blocks"] = [x for x in security.audit_list(300) if str(x.get("action", "")).startswith(("nsfw_", "text_"))][:100]
+        return h._json(st)
     if p == "/api/mod/broadcasts":
         import inbox; return h._json({"items": inbox.admin_broadcasts()[:30]})
     return h._json({"error": "not found"}, 404)
@@ -832,6 +850,7 @@ def handle_post(h, u, data):
     if p == "/api/mod/lock":
         device_forget(h, bool(data.get("all")), c["uid"]); _sess.pop(c["tok"], None); audit(h, "lock", "wszystkie urządzenia" if data.get("all") else "to urządzenie")
         return h._json({"ok": True})
+    if p == "/api/mod/nsfw/hash" and not c["full"]: return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)
     if p == "/api/mod/backup/now":
         if not c["full"]: return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)
         if not _rate("bk:" + c["uid"], 5, 3600): return h._json({"error": "Za dużo kopii – odczekaj chwilę."}, 429)
@@ -872,6 +891,12 @@ def handle_post(h, u, data):
             r = support_act(data)
             if data.get("action") != "conv": audit(h, "support " + str(data.get("kind")) + " " + str(data.get("action") or ("reply" if data.get("reply") or data.get("text") else data.get("status") or "")), str(data.get("id"))[:24])
             return h._json(r)
+        if p == "/api/mod/nsfw/hash":   # admin dodaje/usuwa skrót percepcyjny (16 hex) – bez wgrywania obrazu
+            import upload_gate
+            hx = str(data.get("h") or "").strip().lower()[:16]
+            if data.get("action") == "remove": upload_gate.remove_hash(hx)
+            else: upload_gate.add_hash(hx, "admin", data.get("note") or "")
+            audit(h, "nsfw_hash " + ("remove" if data.get("action") == "remove" else "add"), hx); return h._json({"ok": True})
         if p == "/api/mod/announce":
             a = {"on": bool(data.get("on")), "title": re.sub(r"[<>\x00-\x1f]", "", str(data.get("title") or "Co nowego"))[:60],
                  "text": re.sub(r"[<>\x00-\x1f]", "", str(data.get("text") or ""))[:400], "t": int(time.time())}

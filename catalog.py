@@ -169,11 +169,11 @@ def save_upload(name, raw):
         if len(raw) > 4 * 1024 * 1024: raise ValueError("Plik większy niż 4 MB")
         if not (sig.startswith(b"\xff\xd8") or sig.startswith(b"\x89PNG") or (sig[:4] == b"RIFF" and sig[8:12] == b"WEBP")):
             raise ValueError("To nie jest prawidłowy obraz")
-    import secrets, imgsafe
+    import secrets, upload_gate
     os.makedirs(UPLOADS, exist_ok=True)
-    if ext != ".mp3":
-        raw, out_ext = imgsafe.reencode(raw, max_px=2048, quality=3)  # ponowne kodowanie, bez EXIF
-        ext = "." + out_ext
+    if ext != ".mp3":   # filtr nagości obowiązuje też admina; „na granicy” = wybierz inne zdjęcie (nie ma kolejki dla plików publicznych)
+        g = upload_gate.image(raw, "admin_upload", max_px=2048, max_in=4 * 1024 * 1024, quality=3, review="hold")
+        raw, ext = g.bytes, "." + g.ext
     fn = secrets.token_hex(8) + (".jpg" if ext == ".jpeg" else ext)
     with open(os.path.join(UPLOADS, fn), "wb") as f: f.write(raw)
     import store, base64

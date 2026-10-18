@@ -153,11 +153,11 @@ def set_avatar_upload(uid, plan, data_url):
     if not m: raise ValueError("Dozwolone są tylko obrazy JPG, PNG lub WEBP.")
     raw = base64.b64decode(m.group(2))
     if len(raw) > 5 * 1024 * 1024: raise ValueError("Plik jest za duży (maks. 5 MB).")
-    import nsfw_filter
-    nsfw = nsfw_filter.enforce(raw, "user_avatar")  # jawna nagość → Blocked; status i tak „pending” do decyzji moderatora
+    import upload_gate
     px = min(quality.caps(plan)["img"], 1024)  # awatar: limit planu (854 / 1024), wyświetlany w 2x/3x
-    out, ext = imgsafe.reencode(raw, max_px=px, max_in=5 * 1024 * 1024, quality=4)
-    thumb, _ = imgsafe.reencode(out, max_px=64, quality=6)
+    g = upload_gate.image(raw, "user_avatar", max_px=px, max_in=5 * 1024 * 1024, quality=4)  # nagość → Blocked; status i tak „pending” do decyzji moderatora
+    nsfw, out, ext = g.verdict, g.bytes, g.ext
+    thumb, _ = upload_gate.derived(out, max_px=64, quality=6)
     h = hashlib.sha1(out).hexdigest()[:12]
     with _lock:
         A = _A(); A[uid] = {"b": base64.b64encode(out).decode(), "ext": ext, "h": h, "status": "pending", "t": int(time.time())}; store.put("user_avatars", A)

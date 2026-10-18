@@ -32,6 +32,8 @@ def check_text(t, maxlen):
     words = set(re.findall(r"\w+", _norm(t))) | set(re.findall(r"\w+", _norm(textutil.strip_emoji(t))))  # emoji wstawione w środek słowa nie omijają filtra
     if words & _BADSET: raise ValueError("Ups, ten tekst zawiera słowa, których tu nie używamy. Spróbuj życzliwiej. 💚")
     if SPAM_RE.search(t) or len(re.findall(r"https?://", t)) > 2 or re.search(r"(.)\1{9,}", t): raise ValueError("To wygląda na spam – popraw tekst, proszę.")
+    import textsafe
+    textsafe.check_text(t, "text")   # treści seksualne i „nieletni + seks” w 5 językach (wpisy, komentarze, czaty, bio, opisy)
     return t
 
 def nick_ok(n):
@@ -39,6 +41,9 @@ def nick_ok(n):
     if len(n) < 2: raise ValueError("Podaj nick (min. 2 znaki).")
     if (set(re.findall(r"\w+", _norm(n))) | set(re.findall(r"\w+", _norm(textutil.strip_emoji(n))))) & _BADSET: raise ValueError("Wybierz inny nick.")
     if re.search(r"\b(luna|moderator|admin)\b", _norm(n)): raise ValueError("Ten nick jest zarezerwowany.")
+    import textsafe
+    try: textsafe.check_prompt(n, "nick")   # nick: ostrzej (bez seksu, skąpych strojów i nieletnich)
+    except textsafe.Refused: raise ValueError("Wybierz inny nick.")
     try:
         import moderator
         if moderator.reserved(n): raise ValueError("Ten nick jest zarezerwowany.")
@@ -101,10 +106,10 @@ def create_post(d, uid, vid, acct_nick=None):
             I = store.get("wall_img", {}) or {}; I[img_id] = url
             store.put("wall_img", dict(list(I.items())[-400:]))
     agent = re.sub(r"[^\w\-]", "", str(d.get("agent", "")))[:40] or None
-    auto = (_trusted(ak) and img_kind != "user" and not nsfw_hold) or _is_mod(ak)  # zdjęcia użytkownika i obrazy „na granicy” filtra – zawsze moderacja; moderator bez kolejki
+    auto = ((_trusted(ak) and img_kind != "user") or _is_mod(ak)) and not nsfw_hold  # zdjęcia użytkownika i obrazy „na granicy” filtra – zawsze moderacja (także moderatora/admina)
     lang = d.get("lang") if d.get("lang") in LANGS else "pl"
     p = {"id": secrets.token_hex(6), "lang": lang, "variants": {}, "official": False, "author": ak, "uid": uid or "", "nick": nick, "text": text, "img": img_id, "img_kind": img_kind, "agent": agent,
-         "t": int(time.time()), "edited": 0, "status": "approved" if auto else "pending", "ever_approved": auto, "reports": 0}
+         "t": int(time.time()), "edited": 0, "status": "approved" if auto else "pending", "ever_approved": auto, "reports": 0, **({"nsfw_review": True} if nsfw_hold else {})}
     with _lock:
         P = _posts(); P.append(p); store.put("wall_posts", P[-3000:])
     return p
@@ -119,9 +124,9 @@ def avatars_check_wall(data_url, declared):
     info = avatars.inspect(raw)
     if info["camera"] and not info["ai_markers"]:
         raise PermissionError("Ten plik wygląda na zdjęcie z aparatu lub telefonu. Na Ściance publikujemy tylko obrazy wygenerowane przez AI.")
-    import nsfw_filter
-    info["nsfw"] = nsfw_filter.enforce(raw, "wall_ai")  # jawna nagość → Blocked (400); granica → "review" (tylko moderator)
-    out, ext = imgsafe.reencode(raw, max_px=1920, max_in=5 * 1024 * 1024, quality=3)  # wydawane dalej według planu oglądającego
+    import upload_gate
+    g = upload_gate.image(raw, "wall_ai", max_px=1920, max_in=5 * 1024 * 1024, quality=3)  # nagość → Blocked (400); granica → "review" (tylko moderator)
+    info["nsfw"], out, ext = g.verdict, g.bytes, g.ext  # wydawane dalej według planu oglądającego
     return f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode(), info
 
 USER_DECL = ("own", "no_nudity", "no_minors", "consent", "no_brands")
@@ -135,9 +140,9 @@ def user_photo_wall(data_url, decl, uid):
     if not m: raise ValueError("Dozwolone są tylko obrazy JPG, PNG lub WEBP.")
     raw = base64.b64decode(m.group(2))
     if len(raw) > 5 * 1024 * 1024: raise ValueError("Plik jest za duży (maks. 5 MB).")
-    import nsfw_filter
-    nsfw_filter.enforce(raw, "wall_user")  # zdjęcia użytkownika i tak zawsze czekają na moderatora
-    out, ext = imgsafe.reencode(raw, max_px=quality.USER_PHOTO_PX, max_in=5 * 1024 * 1024, quality=4)  # bez EXIF/GPS
+    import upload_gate
+    g = upload_gate.image(raw, "wall_user", max_px=quality.USER_PHOTO_PX, max_in=5 * 1024 * 1024, quality=4)  # zdjęcia użytkownika i tak zawsze czekają na moderatora
+    out, ext = g.bytes, g.ext  # bez EXIF/GPS
     quality.user_photo_mark(raw); quality.user_photo_mark(out)  # nigdy jako twarz agentki
     return f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
 

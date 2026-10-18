@@ -76,11 +76,11 @@ def check_upload(data_url, declared, vid="", name=""):
     if info["camera"] and not info["ai_markers"]:
         raise PermissionError("Ten plik wygląda na zdjęcie z aparatu lub telefonu (" + ", ".join(info["camera"]) +
                               "). Awatarem może być tylko obraz wygenerowany przez AI albo gotowa ikona – wybierz awatar z galerii lub wygeneruj go w aplikacji.")
-    import nsfw_filter
-    nsfw = nsfw_filter.enforce(raw, "avatar")  # jawna nagość → Blocked
-    out, ext = imgsafe.reencode(raw, max_px=256, max_in=5 * 1024 * 1024, quality=4)
+    import nsfw_filter, upload_gate
+    g = upload_gate.image(raw, "avatar", max_px=256, max_in=5 * 1024 * 1024, quality=4)  # wszystkie warstwy; nagość → Blocked
+    nsfw, out, ext = g.verdict, g.bytes, g.ext
     url = f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
-    thumb, _ = imgsafe.reencode(out, max_px=64, quality=6)
+    thumb, _ = upload_gate.derived(out, max_px=64, quality=6)
     rec = {"id": hashlib.sha1(out, usedforsecurity=False).hexdigest()[:16], "vid": str(vid)[:32], "uid": str(vid)[:8], "name": str(name)[:30], "t": int(time.time()),
            "thumb": "data:image/jpeg;base64," + base64.b64encode(thumb).decode(), "ai_markers": info["ai_markers"], "kind": "upload", "reports": 0}
     if nsfw != "ok": rec["nsfw_review"] = True
@@ -92,7 +92,8 @@ def check_upload(data_url, declared, vid="", name=""):
 
 def report(uid, name, avatar, reason=""):
     if not re.fullmatch(r"[0-9a-f]{8}", str(uid or "")): raise ValueError("bad id")
-    thumb = imgsafe.safe_avatar_dataurl(avatar) if avatar else ""
+    import upload_gate
+    thumb = upload_gate.small_avatar_dataurl(avatar) if avatar else ""   # moderator nie zobaczy miniatury, którą filtr odrzuca
     rid = "r" + uid
     with _lock:
         u = store.get("avatar_mod", {}) or {}

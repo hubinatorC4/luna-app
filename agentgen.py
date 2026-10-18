@@ -108,9 +108,35 @@ X_LEN = 60
 POP_MIN = 30                        # od ilu anonimowych wyborów w polu ranking „Najpopularniejsze” zastępuje kolejność redakcyjną
 
 EN_PROMPT = {"hair": "{} hair", "eyes": "{} eyes", "style": "{} style", "outfit": "wearing a modest {}"}
-SAFE = ("original fictional adult woman (clearly over 21, never childlike), fully clothed modest outfit (style, not nudity), friendly portrait, soft studio light, no logos or brands, "
-        "does not resemble any real person, clearly an AI character")
-NEG = "nudity, lingerie, swimwear, cleavage, see-through, sexual, suggestive pose, minor, child, teen, childlike face, logo, brand, celebrity, real person, text, watermark"
+SAFE = ("original fictional adult woman (clearly over 21, never childlike), fully clothed modest outfit covering shoulders to knees (style, not nudity), "
+        "non-suggestive friendly pose, friendly portrait, soft studio light, no logos or brands, does not resemble any real person, clearly an AI character")
+# Stały negatywny prompt (t479u) – dodawany ZAWSZE przez serwer, użytkownik nie ma na niego wpływu.
+NEG = ("nudity, nude, naked, topless, nipples, genitals, explicit, nsfw, porn, sexual, erotic, sexy, seductive, suggestive pose, provocative, "
+       "lingerie, underwear, bra, panties, swimwear, bikini, cleavage, low-cut, see-through, sheer, transparent clothing, wet clothes, bare skin, "
+       "bare chest, bare midriff, short skirt, fetish, latex, bdsm, minor, child, teen, teenager, schoolgirl, childlike face, young-looking, loli, "
+       "logo, brand, celebrity, real person, lookalike, text, watermark")
+# Najostrzejsze ustawienia bezpieczeństwa dostawcy AI – wysyłane ZAWSZE (bez przełącznika, także dla admina). Adapter dostawcy mapuje je
+# na jego parametry (np. safety_tolerance=0 FLUX/BFL, enable_safety_checker=true fal/Replicate, moderation="auto" OpenAI, safe_mode=true).
+# Uwaga: działają tylko u dostawcy, który je obsługuje – i tak każdy wynik przechodzi przez nasz filtr (upload_gate) przed pokazaniem.
+PROVIDER_SAFETY = {"safety_level": "strictest", "safe_mode": True, "nsfw": False, "safety_tolerance": 0, "enable_safety_checker": True,
+                   "disable_safety_checker": False, "moderation": "auto", "content_filter": "strict", "allow_adult": False, "person_generation": "allow_adult"}
+
+def safe_body(prompt_text, extra):
+    """Treść żądania do dostawcy: sprawdzony prompt + stały negatywny prompt + najostrzejsze ustawienia bezpieczeństwa (nie do nadpisania)."""
+    import textsafe
+    p = str(prompt_text or "")
+    if SAFE not in p: p = p + ", " + SAFE
+    textsafe.check_prompt(p.replace(SAFE, ""), "gen_final")   # ostatnia kontrola tuż przed wysłaniem (gdyby szkic ominął walidację)
+    body = dict(extra); body.update({"prompt": p, "negative": NEG, "negative_prompt": NEG}); body.update(PROVIDER_SAFETY)
+    return body
+
+def _flagged(r, i):
+    """Czy dostawca sam oznaczył i-ty wynik jako NSFW (has_nsfw_concepts / nsfw_content_detected / flagged / content_filter)."""
+    for k in ("has_nsfw_concepts", "nsfw_content_detected", "nsfw", "flagged"):
+        v = r.get(k)
+        if isinstance(v, list) and i < len(v) and v[i]: return True
+        if v is True: return True
+    return False
 # czarna lista opisu: treści seksualne, nieletni, marki, „jak <prawdziwa osoba>”
 BLOCK = re.compile(r"(sex|seks|nag[aio]|nud|erot|porn|bielizn|lingerie|bikini|strip|topless|cycki|biust|boob|nsfw|fetysz|fetish|"
                    r"dziec|dziewczynk|nastolat|nieletn|teen|child|kid|loli|schoolgirl|uczennic|minor|"
@@ -137,6 +163,8 @@ def clean_desc(t, n=None):
     t = re.sub(r"[<>\x00-\x1f\x7f]", "", str(t or "")).strip()[:n]
     if not t: return ""
     if BLOCK.search(t): raise ValueError("Opis zawiera niedozwolone słowa (treści seksualne, nieletni, marki albo prawdziwe osoby). Opisz charakter i styl agentki. 💚")
+    import textsafe
+    textsafe.check_prompt(t, "gen_desc")   # 5 języków: seks, skąpe stroje, nieletni, wiek < 21 – odmowa przed generacją
     if FULLNAME.search(t): raise ValueError("Bez imion i nazwisk prawdziwych osób – agentka ma być oryginalna. 😉")
     social.check_text(t, n)
     return t
@@ -205,6 +233,8 @@ def _draft_in(d, plan="premium"):
     nm = re.sub(r"[<>\x00-\x1f]", "", str(d.get("name") or "")).strip()[:NAME_LEN]
     if nm:
         if re.fullmatch(r"\W*luna\W*", nm.lower()) or FULLNAME.search(nm) or BLOCK.search(nm): raise ValueError("Wybierz inne imię agentki.")
+        import textsafe
+        textsafe.check_prompt(nm, "gen_name")
         social.check_text(nm, NAME_LEN)
     out["name"] = nm
     return out
@@ -237,7 +267,7 @@ def submit(uid, plan, d):
     cur = current(uid)
     if cur and cur["status"] in ("waiting", "generating", "checking"): raise ValueError("Poprzednie zadanie jeszcze trwa. 🙂")
     j = {"id": secrets.token_hex(6), "uid": uid, "kind": "img", "t": int(time.time()), "plan": plan, "px": quality.caps(plan)["gen_px"],
-         "draft": dr, "prompt": prompt(dr), "status": "waiting", "variants": [], "picked": [], "approved": [], "note": ""}
+         "draft": dr, "prompt": safe_body(prompt(dr), {})["prompt"], "status": "waiting", "variants": [], "picked": [], "approved": [], "note": ""}
     with _lock: J = _J(); J[j["id"]] = j; _put(J)
     try: _count(dr)
     except Exception: pass
@@ -268,22 +298,36 @@ def _run(jid):
     _upd(jid, status="generating")
     try:
         if j["kind"] == "img":
-            r = _call(os.getenv("LUNA_IMAGE_API_URL"), os.getenv("LUNA_IMAGE_API_KEY"), {"prompt": j["prompt"], "negative": NEG, "n": N_IMG, "max_px": j["px"]})
-            vs = []
-            for b in (r.get("images") or [])[:N_IMG]:
-                out, ext = imgsafe.reencode(base64.b64decode(b), max_px=j["px"], max_in=20 * 1024 * 1024, quality=2)
+            r = _call(os.getenv("LUNA_IMAGE_API_URL"), os.getenv("LUNA_IMAGE_API_KEY"), safe_body(j["prompt"], {"n": N_IMG, "max_px": j["px"]}))
+            vs = []; drop = 0
+            import upload_gate
+            for i, b in enumerate((r.get("images") or [])[:N_IMG]):
+                if _flagged(r, i): drop += 1; continue   # dostawca sam oznaczył wynik
+                try:   # skan WYNIKU przed pokazaniem komukolwiek (także autorce): nagość lub „na granicy” = wariant usunięty
+                    g = upload_gate.image(base64.b64decode(b), "agent_gen", max_px=j["px"], max_in=20 * 1024 * 1024, quality=2, review="block")
+                except Exception: drop += 1; continue
+                out, ext = g.bytes, g.ext
                 if quality.is_user_photo(out): continue   # odcisk: zdjęcie z walla nigdy nie zostaje twarzą agentki
                 vid = secrets.token_hex(6); store.put("agimg:" + vid, {"b": base64.b64encode(out).decode(), "ext": ext, "uid": j["uid"], "ai": True})
                 vs.append(vid)
         else:
             face = store.get("agimg:" + j["face"], {}) or {}
-            r = _call(os.getenv("LUNA_VIDEO_API_URL"), os.getenv("LUNA_VIDEO_API_KEY"), {"prompt": j["prompt"], "negative": NEG, "image": face.get("b", ""), "n": N_VID,
-                                                                                         "seconds": j["secs"], "height": j["h"]}, timeout=600)
-            import agentvideo
-            os.makedirs(agentvideo.VDIR, exist_ok=True); vs = []
-            for b in (r.get("videos") or [])[:N_VID]:
-                vid = secrets.token_hex(6); open(os.path.join(agentvideo.VDIR, "g_" + vid + ".mp4"), "wb").write(base64.b64decode(b)); vs.append(vid)
-        _upd(jid, status="variants" if vs else "failed", variants=vs, note="" if vs else "empty")
+            r = _call(os.getenv("LUNA_VIDEO_API_URL"), os.getenv("LUNA_VIDEO_API_KEY"), safe_body(j["prompt"], {"image": face.get("b", ""), "n": N_VID,
+                                                                                         "seconds": j["secs"], "height": j["h"]}), timeout=600)
+            import agentvideo, upload_gate
+            os.makedirs(agentvideo.VDIR, exist_ok=True); vs = []; drop = 0
+            for i, b in enumerate((r.get("videos") or [])[:N_VID]):
+                if _flagged(r, i): drop += 1; continue
+                vid = secrets.token_hex(6); p = os.path.join(agentvideo.VDIR, "g_" + vid + ".mp4"); open(p, "wb").write(base64.b64decode(b))
+                try:   # każda próbka klatek (1/s, do 24) przez filtr nagości; „na granicy” też odpada
+                    if upload_gate.video_file(p, "agent_vid") != "ok": raise ValueError("review")
+                except Exception:
+                    drop += 1
+                    try: os.remove(p)
+                    except Exception: pass
+                    continue
+                vs.append(vid)
+        _upd(jid, status="variants" if vs else "failed", variants=vs, note="" if vs else ("nsfw" if drop else "empty"))
     except Exception as e:
         _upd(jid, status="waiting", note="retry")   # błąd dostawcy: zostaje w kolejce
 
@@ -305,15 +349,16 @@ def pick(uid, jid, ids):
     return view(j2)
 
 def _nsfw(j, v):
-    """nsfw_filter (moduł zespołu bezpieczeństwa). Brak modułu lub błąd = „zamknięte”: decyzję podejmuje moderator (None)."""
+    """Drugi skan przy wyborze (pierwszy był zaraz po generacji). Nagość, „na granicy”, błąd filtra = wariant odrzucony (fail-closed).
+    Nawet „ok” i tak trafia do moderatora (None)."""
     try:
-        import nsfw_filter
-        if j["kind"] != "img": return None    # wideo: filtr klatkowy nie jest jeszcze dostępny → moderator
+        import upload_gate, agentvideo
+        if j["kind"] != "img":
+            return None if upload_gate.video_file(os.path.join(agentvideo.VDIR, "g_" + v + ".mp4"), "agent_vid_pick") == "ok" else False
         raw = base64.b64decode((store.get("agimg:" + v) or {})["b"])
-        try: nsfw_filter.enforce(raw, "agent_gen")   # ok | review; jawna nagość → Blocked (fail-closed → review)
-        except nsfw_filter.Blocked: return False
-        return None   # nawet „ok” i tak trafia do moderatora
-    except Exception: return None
+        upload_gate.image(raw, "agent_gen_pick", max_px=4096, max_in=20 * 1024 * 1024, review="block")
+        return None
+    except Exception: return False
 
 def _drop(j, v):
     if j["kind"] == "img": store.put("agimg:" + v, None)

@@ -119,9 +119,10 @@ def save_own(uid, plan, data_url, declared):
     except Exception: _raw0 = b""
     if _raw0 and quality.is_user_photo(_raw0):
         raise PermissionError("To zdjęcie zostało dodane jako „Zdjęcie użytkownika” – nie może być twarzą agentki AI.")
-    url, info = avatars.check_upload(data_url, declared, "prof-" + pid, r["name"])  # kontrola + wpis do kolejki moderacji awatarów
-    raw = base64.b64decode(re.sub(r"^data:image/\w+;base64,", "", data_url))
-    out, ext = imgsafe.reencode(raw, max_px=768, max_in=5 * 1024 * 1024, quality=4)  # bez metadanych
+    url, info = avatars.check_upload(data_url, declared, "prof-" + pid, r["name"])  # pełna bramka (upload_gate) + kolejka moderacji awatarów
+    import upload_gate
+    g = upload_gate.image(data_url, "agent_own", max_px=768, max_in=5 * 1024 * 1024, quality=4, review="hold")  # ten sam plik, większy rozmiar
+    out, ext = g.bytes, g.ext
     h = hashlib.sha1(out, usedforsecurity=False).hexdigest()[:10]
     with _lock:
         I = _imgs(); I[pid] = {"b": base64.b64encode(out).decode(), "ext": ext, "h": h, "t": int(time.time())}; store.put("agent_profile_img", I)
@@ -158,6 +159,8 @@ def generate(uid, plan, base, crop="portret"):
         rr = subprocess.run([imgsafe._ff(), "-v", "error", "-y", "-i", src, "-map_metadata", "-1", "-frames:v", "1", "-vf", vf, "-q:v", "2", dst], capture_output=True, timeout=30)
         if rr.returncode or not os.path.exists(dst): raise ValueError("Nie udało się wygenerować obrazu.")
         out = open(dst, "rb").read()
+        import upload_gate   # wynik generatora też przez bramkę (źródło: ubrane ujęcia Luny; blokada = brak obrazu)
+        out = upload_gate.image(out, "luna_gen", max_px=px, max_in=20 * 1024 * 1024, quality=2).bytes
         pr = subprocess.run([imgsafe._ff(), "-i", dst], capture_output=True, timeout=10).stderr.decode()
         mm = re.search(r", (\d{2,5})x(\d{2,5})", pr); real = max(int(mm.group(1)), int(mm.group(2))) if mm else px
     h = hashlib.sha1(out).hexdigest()[:10]
@@ -280,9 +283,9 @@ def admin_real_photo(pid, data_url, agreement):
         P = _P(); r = P.get(pid)
         if not r: raise ValueError("Nie ma takiej agentki.")
         if not partners.is_partner(r["uid"]): raise PermissionError("Najpierw nadaj status współpracy (partnerka / casting).")
-    m = re.fullmatch(r"data:image/(png|jpeg|webp);base64,(.+)", str(data_url or ""), re.S)
-    if not m: raise ValueError("Wgraj JPG, PNG lub WEBP.")
-    out, ext = imgsafe.reencode(base64.b64decode(m.group(2)), max_px=1920, max_in=12 * 1024 * 1024, quality=2)
+    import upload_gate   # filtr nagości obowiązuje też ścieżkę admina; „na granicy” = odmowa (Held), bez publikacji
+    g = upload_gate.image(data_url, "admin_real", max_px=1920, max_in=12 * 1024 * 1024, quality=2, review="hold")
+    out, ext = g.bytes, g.ext
     h = hashlib.sha1(out).hexdigest()[:10]
     with _lock:
         I = _imgs(); I[pid] = {"b": base64.b64encode(out).decode(), "ext": ext, "h": h, "t": int(time.time()), "ai": False, "real_person": True}; store.put("agent_profile_img", I)

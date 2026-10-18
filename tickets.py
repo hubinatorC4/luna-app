@@ -27,9 +27,9 @@ def submit(d):
         if not m: raise ValueError("Zrzut ekranu musi być obrazem (JPG, PNG lub WEBP).")
         raw = base64.b64decode(m.group(2))
         if len(raw) > 5 * 1024 * 1024: raise ValueError("Zrzut ekranu jest za duży (maks. 5 MB).")
-        import nsfw_filter
-        nsfw_filter.enforce(raw, "ticket")  # zrzut widzi tylko obsługa, ale jawnej nagości też nie przyjmujemy
-        out, ext = imgsafe.reencode(raw, max_px=1600, max_in=5 * 1024 * 1024, quality=4)
+        import upload_gate
+        g = upload_gate.image(raw, "ticket", max_px=1600, max_in=5 * 1024 * 1024, quality=4)  # zrzut widzi tylko obsługa, ale nagości nie przyjmujemy
+        out, ext = g.bytes, g.ext
         shot = f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
     key = secrets.token_urlsafe(10)
     with _lock:
@@ -125,11 +125,11 @@ def submit_support(d, uid="", gate=None):
         if not m: raise ValueError("shot_type")
         raw = base64.b64decode(m.group(2))
         if len(raw) > 5 * 1024 * 1024: raise ValueError("shot_size")
-        import nsfw_filter
-        try: nsfw_filter.enforce(raw, "support")  # jak w pozostałych uploadach: jawna nagość odrzucona
+        import nsfw_filter, upload_gate
+        try: g = upload_gate.image(raw, "support", max_px=1600, max_in=5 * 1024 * 1024, quality=4)  # jak w pozostałych uploadach
         except nsfw_filter.Blocked: raise ValueError("shot_nsfw")
-        try: out, ext = imgsafe.reencode(raw, max_px=1600, max_in=5 * 1024 * 1024, quality=4)
         except Exception: raise ValueError("shot_type")
+        out, ext = g.bytes, g.ext
         shot = f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
     if gate and not gate(): raise OverflowError("rate")   # limit liczony tylko dla poprawnych zgłoszeń
     key = secrets.token_urlsafe(10)

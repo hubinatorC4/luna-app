@@ -1680,7 +1680,8 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/health":
             st = store.status()
             return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled(), "version": VERSION,
-                               "storage": st["backend"], "persistent": st["persistent"], **({"db_ok": store.ping()} if st["persistent"] else {})})
+                               "storage": st["backend"], "persistent": st["persistent"], **({"db_ok": store.ping()} if st["persistent"] else {}),
+                               "photo_filter": nsfw_filter.status()["ok"]})   # filtr nagości gotowy (oba modele); False = zdjęcia są odrzucane (fail-closed)
         if u.path in ("/sitemap.xml", "/robots.txt"):
             base = notify.PUBLIC_URL.rstrip("/")
             b = (seo.sitemap(base) if u.path.endswith(".xml") else seo.robots(base)).encode()
@@ -1789,6 +1790,10 @@ class H(SimpleHTTPRequestHandler):
             except Exception as e: sys.stderr.write("paddle webhook error %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
             return self._json({"ok": True, "result": res})
         if not security.origin_ok(self.headers): return self._json({"error": "Niedozwolone źródło żądania."}, 403)
+        _ip0 = self._ip()   # ochrona przed zalewem (t479u): wszystkie zapisy z jednego IP + osobno duże żądania ze zdjęciami (skan kosztuje CPU)
+        if not livechat.rate_ok("post:" + _ip0, 240, 20000): return self._json({"error": "Za dużo żądań – odczekaj chwilę."}, 429)
+        if int(self.headers.get("Content-Length") or 0) > 64 * 1024 and not (livechat.rate_ok("upl:" + _ip0, 12, 300) and livechat.rate_ok("upl:*", 120, 6000)):
+            return self._json({"error": "Za dużo zdjęć naraz – odczekaj chwilę."}, 429)
         try: nsfw_filter.set_lang(api_i18n.req_lang(u.query, self.headers) or "pl")  # język komunikatów filtra zdjęć
         except Exception: pass
         if moderator.gate(self, "POST"): return
@@ -2143,6 +2148,7 @@ if __name__ == "__main__":
     except Exception as e: sys.stderr.write("dob_purge %s\n" % type(e).__name__)
     threading.Thread(target=_bg_loop, daemon=True).start()
     threading.Thread(target=_announce_update, daemon=True).start()
+    threading.Thread(target=lambda: sys.stderr.write("nsfw selftest %s\n" % nsfw_filter.selftest()), daemon=True).start()   # rozgrzewka filtra zdjęć
     try: inbox.announce_version(VERSION, INBOX_NEWS.get(VERSION))  # „Co nowego” trafia też do Skrzynki (kategoria Aktualizacje)
     except Exception as e: print("inbox news", repr(e)[:200], file=sys.stderr)
     ThreadingHTTPServer(("0.0.0.0", port), H).serve_forever()

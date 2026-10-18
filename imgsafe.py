@@ -1,4 +1,5 @@
-"""Bezpieczne obrazy: sprawdzenie sygnatury, limit rozmiaru, ponowne kodowanie przez ffmpeg (usuwa EXIF/metadane)."""
+"""Niski poziom: sygnatura, ponowne kodowanie przez ffmpeg (usuwa EXIF/metadane). NIE wołaj reencode*() na obrazach od użytkowników –
+tylko przez upload_gate.image() (filtr nagości). tests/test_upload_gate.py pilnuje listy wyjątków (pochodne już sprawdzonych obrazów)."""
 import base64, hashlib, os, re, subprocess, tempfile, threading
 
 def _ff():
@@ -27,26 +28,10 @@ def reencode(raw, max_px=1024, max_in=4 * 1024 * 1024, quality=4):
         if r.returncode or not os.path.exists(dst): raise ValueError("Nie udało się przetworzyć obrazu.")
         return open(dst, "rb").read(), out_ext
 
-_cache, _lock = {}, threading.Lock()
 def safe_avatar_dataurl(a, max_bytes=24 * 1024):
-    """Awatar jako data URL → ponownie zakodowany 96 px JPEG bez metadanych (z pamięcią podręczną)."""
-    m = re.fullmatch(r"data:image/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)", str(a or ""))
-    if not m: return ""
-    try: raw = base64.b64decode(m.group(2), validate=True)
-    except Exception: return ""
-    if len(raw) > max_bytes: return ""
-    h = hashlib.sha1(raw, usedforsecurity=False).hexdigest()
-    with _lock:
-        if h in _cache: return _cache[h]
-    try:
-        out, ext = reencode(raw, max_px=96, max_in=max_bytes, quality=5)
-        url = f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
-    except Exception:
-        url = ""
-    with _lock:
-        if len(_cache) > 2000: _cache.clear()
-        _cache[h] = url
-    return url
+    """Zgodność wsteczna: mały awatar idzie przez pełną bramkę (upload_gate – filtr nagości, format, skróty). Nie omija filtra."""
+    import upload_gate
+    return upload_gate.small_avatar_dataurl(a, max_bytes)
 
 def reencode_webp(raw, max_px=1280, max_in=10 * 1024 * 1024, quality=80):
     """Zdjęcia z czatu: WebP bez metadanych (EXIF/GPS), maks. max_px na dłuższym boku. Rzuca ValueError."""

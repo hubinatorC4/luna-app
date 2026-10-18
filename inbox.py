@@ -466,9 +466,9 @@ def dm_photo(uid, p, data_url, plan, admin=False, partner=False, ack=False):
     blk = set(store.get("dm_ph_block", []) or [])
     hr = hashlib.sha256(raw).hexdigest()
     if hr in blk: raise PermissionError(PH_MSG["blocked_img"])
-    import nsfw_filter
-    verdict = nsfw_filter.enforce(raw, "dm")   # jawna nagość → Blocked (400, nic nie zapisujemy); granica/niepewność → "review" (wstrzymane do moderatora)
-    out = imgsafe.reencode_webp(raw, max_px=px, max_in=PH_MAX_IN)
+    import upload_gate
+    g = upload_gate.image(raw, "dm", max_px=px, max_in=PH_MAX_IN, fmt="webp")   # nagość → Blocked (400, nic nie zapisujemy); granica/niepewność → "review" (wstrzymane do moderatora)
+    verdict, out = g.verdict, g.bytes
     ho = hashlib.sha256(out).hexdigest()
     if ho in blk: raise PermissionError(PH_MSG["blocked_img"])
     try: quality.user_photo_mark(raw); quality.user_photo_mark(out)   # odcisk: nigdy jako twarz agentki
