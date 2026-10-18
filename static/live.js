@@ -1,4 +1,4 @@
-/* Luna Live – pokój transmisji: stan, odliczanie, czat, synchroniczne odtwarzanie głosu Luny, panel moderatora. */
+/* Luna Live – pokój transmisji: stan, odliczanie, czat, synchroniczne odtwarzanie głosu Luny, panel admina. */
 (() => {
 const $ = s => document.querySelector(s);
 const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };

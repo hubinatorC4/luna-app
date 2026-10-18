@@ -1,7 +1,11 @@
-/* Panel moderatora – wspólny dla strony (__MODE__=web) i aplikacji (app). Tożsamość: „Zespół Luny · Moderator”.
+/* Panel admina – wspólny dla strony (__MODE__=web) i aplikacji (app). Tożsamość: „Zespół Luny · Moderator”.
    Bezpieczeństwo: konto z rolą admin (serwer) + 2FA na urządzenie (30 dni) + token w pamięci karty + CSRF + ponowny kod 2FA przy akcjach krytycznych. */
 (() => {
 const P = '__P__', MODE = document.documentElement.dataset.mode;
+// Nazwa panelu w 5 językach (reszta panelu po polsku – narzędzie właściciela)
+const LG = (() => { try { return (localStorage.getItem('luna.lang') || (document.cookie.match(/luna_lang=(\w\w)/) || [])[1] || navigator.language || 'pl').slice(0, 2); } catch (e) { return 'pl'; } })();
+const PNAME = {pl: 'Panel admina', en: 'Admin panel', es: 'Panel de admin', de: 'Admin-Panel', uk: 'Панель адміна'}[LG] || 'Panel admina';
+document.title = PNAME + ' · Luna'; { const b = document.querySelector('.mp-brand b'); if (b) b.textContent = PNAME; }
 const $ = s => document.querySelector(s), main = $('#mpMain'), tabs = $('#mpTabs');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 const when = t => t ? new Date(t * 1000).toLocaleString('pl-PL', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'}) : '—';
@@ -33,7 +37,7 @@ async function boot(){
   let st; try { st = await req('/api/mod/state'); } catch (e){ main.innerHTML = `<p class="mp-hint">⚠️ ${esc(e.message)}</p>`; return; }
   try { const me = await fetch('/api/account/me', {credentials: 'same-origin'}).then(r => r.json()); ACSRF = me.csrf || ''; } catch (e) {}
   if (st.stage === 'login') return loginView();
-  if (st.stage === 'denied') { main.innerHTML = '<div class="mp-card mp-auth"><h2>Tu wstęp ma tylko moderator 🛡️</h2><p class="mp-hint">To konto nie ma uprawnień. Wróć na <a href="/">stronę główną</a>.</p></div>'; return; }
+  if (st.stage === 'denied') { main.innerHTML = '<div class="mp-card mp-auth"><h2>Tu wstęp ma tylko admin 🛡️</h2><p class="mp-hint">To konto nie ma uprawnień. Wróć na <a href="/">stronę główną</a>.</p></div>'; return; }
   if (st.stage === 'setup') return setupView(st);
   if (st.stage === 'unlock') return unlockView();
   TOK = st.token; CSRF = st.csrf; $('#mpWho').textContent = st.name; $('#mpLock').hidden = false;
@@ -41,7 +45,7 @@ async function boot(){
   app();
 }
 function loginView(){
-  main.innerHTML = `<div class="mp-card mp-auth"><h2>Zaloguj się</h2><p class="mp-hint">Zwykłe logowanie: nick moderatora (albo e-mail) i hasło. Potem kod 2FA.</p>
+  main.innerHTML = `<div class="mp-card mp-auth"><h2>Zaloguj się</h2><p class="mp-hint">Zwykłe logowanie: nick admina (albo e-mail) i hasło. Potem kod 2FA.</p>
   <label class="mp-l">Nick lub e-mail<input class="mp-in" id="lgU" autocomplete="username" maxlength="254"></label>
   <label class="mp-l">Hasło<input class="mp-in" id="lgP" type="password" autocomplete="current-password" maxlength="128"></label>
   <label class="mp-l" id="lgTw" hidden>Kod 2FA konta<input class="mp-in" id="lgT" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></label>
@@ -56,7 +60,7 @@ function loginView(){
 }
 function setupView(st){
   main.innerHTML = `<div class="mp-card mp-auth"><h2>🔐 Pierwsze wejście: włącz 2FA</h2>
-  <p>Panel moderatora wymaga drugiego składnika. Zeskanuj kod QR w aplikacji uwierzytelniającej (Google Authenticator, Aegis, 2FAS, Microsoft Authenticator) i wpisz 6 cyfr.</p>
+  <p>Panel admina wymaga drugiego składnika. Zeskanuj kod QR w aplikacji uwierzytelniającej (Google Authenticator, Aegis, 2FAS, Microsoft Authenticator) i wpisz 6 cyfr.</p>
   ${st.persistent ? '' : '<p class="mp-banner warn">Uwaga: serwer nie ma jeszcze bazy danych (DATABASE_URL). Po restarcie konfiguracja 2FA zniknie i trzeba ją powtórzyć – albo poproś o wpisanie klucza jako LUNA_ADMIN_TOTP_SECRET na Renderze.</p>'}
   <div id="suBox"><button class="mp-btn primary" id="suGo" type="button">Pokaż kod QR (tylko raz)</button></div><p class="mp-hint" id="suE" role="alert"></p></div>`;
   $('#suGo').onclick = async () => {
@@ -77,7 +81,7 @@ $('#mpLock').onclick = async () => { if (!confirm('Zablokować panel na tym urz�
 /* ---------- panel ---------- */
 const TABS = [['home', '⚡', 'Przełączniki'], ['queue', '🧹', 'Kolejka'], ['users', '👥', 'Użytkownicy'], ['content', '🖼️', 'Treści'], ['msg', '📣', 'Komunikaty'], ['support', '💬', 'Wsparcie'], ['audit', '📜', 'Dziennik']];
 function app(){
-  main.className = 'mp-main';
+  main.className = 'mp-main'; main.innerHTML = '';   // bez resztek ekranu logowania / kodu 2FA
   if (MODE === 'web') main.prepend(tabs);
   const list = MODE === 'app' ? TABS.filter(t => ['home', 'queue', 'users', 'content', 'msg'].includes(t[0])) : TABS;
   tabs.innerHTML = list.map(([k, i, l]) => `<button type="button" data-t="${k}"><span class="i" aria-hidden="true">${i}</span><span>${l}</span>${k === 'queue' ? '<span class="n" id="qN" hidden></span>' : ''}</button>`).join('');

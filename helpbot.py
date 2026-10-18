@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Pomoc Luny · bot AI – odpowiedzi z edytowalnej bazy FAQ (panel moderatora). Z LLM (jeśli skonfigurowany) wyłącznie na podstawie FAQ,
+"""Pomoc Luny · bot AI – odpowiedzi z edytowalnej bazy FAQ (panel admina). Z LLM (jeśli skonfigurowany) wyłącznie na podstawie FAQ,
 inaczej dopasowanie słów kluczowych. Nie wymyśla cen ani zasad, nie prosi o hasła, kody BLIK ani numery kart."""
 import json, os, re, threading, time, unicodedata, urllib.request
 import store

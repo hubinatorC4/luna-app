@@ -1,4 +1,4 @@
-"""Panel moderatora (strona + aplikacja) – konto właściciela z rolą admin, 2FA (TOTP) na urządzenie, przełączniki systemu
+"""Panel admina (strona + aplikacja) – konto właściciela z rolą admin, 2FA (TOTP) na urządzenie, przełączniki systemu
 (tryb serwisowy 503 + Retry-After), przełączniki funkcji, wspólna kolejka moderacji, użytkownicy, treści, komunikaty,
 prawdziwe statystyki i dziennik audytu. Tożsamość publiczna zawsze: „Moderator” / „Zespół Luny” – nigdy prawdziwe dane."""
 import hashlib, hmac, html, io, json, os, re, secrets, threading, time, unicodedata
@@ -46,7 +46,20 @@ def _accts():
 def admin_uid():
     if not configured(): return ""
     return next((u["uid"] for u in _accts().values() if u.get("role") == "admin"), "")
-def is_admin_user(u): return bool(u and u.get("role") == "admin" and configured())
+# Role (elastycznie pod przyszły lżejszy „Panel moderatora” dla osób mianowanych przez admina – jeszcze NIEaktywne):
+# admin = właściciel, pełna władza; moderator = przyszła rola z wąskim zestawem uprawnień. Dziś panel wpuszcza tylko admina.
+ROLE_PERMS = {
+    "admin": {"*"},
+    "moderator": {"queue", "chat", "users.basic", "shop", "support"},   # szkic – do zatwierdzenia przez właściciela
+}
+ACTIVE_ROLES = ("admin",)   # dopisz "moderator", gdy właściciel zatwierdzi specyfikację
+def role_of(u): return (u or {}).get("role") or ""
+def can(u, perm):
+    r = role_of(u)
+    if r not in ACTIVE_ROLES or r not in ROLE_PERMS: return False
+    if r == "admin" and not configured(): return False
+    P = ROLE_PERMS[r]; return "*" in P or perm in P
+def is_admin_user(u): return bool(u and role_of(u) == "admin" and configured())
 def is_admin_uid(uid): return bool(uid) and uid == admin_uid()
 def author_is_admin(ak): return bool(ak) and str(ak).startswith("u:") and is_admin_uid(str(ak)[2:])
 
@@ -506,7 +519,7 @@ def user_act(h, d):
     uid = str(d.get("uid", ""))[:16]; act = str(d.get("action", ""))
     u = _accts().get(uid)
     if not u: raise KeyError(uid)
-    if u.get("role") == "admin": raise ValueError("Konta moderatora nie da się tu zmieniać.")
+    if u.get("role") == "admin": raise ValueError("Konta admina nie da się tu zmieniać.")
     reason = re.sub(r"[<>\x00-\x1f]", "", str(d.get("reason") or ""))[:300]
     if act in ("warn", "strike", "temp_block", "ban", "unban", "unstrike"):
         st = sanction(uid, act, int(d.get("days") or 7), reason); notify_user(uid, act, reason); return {"standing": st}
@@ -570,7 +583,7 @@ def announcement_cached():
     return _ann_cache["v"]
 
 def inject(doc, h, path):
-    """Wstrzykuje ogłoszenie (dla wszystkich) i link „🛡️ Panel moderatora” (tylko gdy serwer rozpozna konto admin)."""
+    """Wstrzykuje ogłoszenie (dla wszystkich) i link „🛡️ Panel admina” (tylko gdy serwer rozpozna konto admin)."""
     a = announcement_cached()
     add = '<link rel="stylesheet" href="/mod-ring.css?v=1.0">\n<script src="/mod-ring.js?v=1.0" defer></script>\n'
     if a["on"] and a["text"]:
@@ -749,7 +762,7 @@ def model_set(uid, on, adult=False, identity=False, agreement=False):
     with accounts._lock:
         A = accounts._accts(); u = A.get(uid)
         if not u: raise KeyError(uid)
-        if u.get("role") == "admin": raise ValueError("Moderator nie potrzebuje tej roli 😉")
+        if u.get("role") == "admin": raise ValueError("Admin nie potrzebuje tej roli 😉")
         if on:
             if not (adult and identity and agreement): raise ValueError("Zaznacz wszystkie trzy: 18+, tożsamość i umowa współpracy.")
             now = int(time.time())

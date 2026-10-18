@@ -1,4 +1,4 @@
-/* Panel moderatora: Ścianka (wpisy), Komentarze, zgłoszenia, blokady. */
+/* Panel admina: Ścianka (wpisy), Komentarze, zgłoszenia, blokady. */
 (() => {
 const $ = s => document.querySelector(s);
 const tok = () => sessionStorage.getItem('luna.admin') || '';

@@ -307,7 +307,7 @@ def _admin_hash():
     except Exception:
         pass
     return None
-inbox.TOKEN_OK = lambda t: token_ok(t)  # Skrzynka: panel moderatora
+inbox.TOKEN_OK = lambda t: token_ok(t)  # Skrzynka: panel admina
 def _dm_plan(h, uid):
     """Plan do limitów zdjęć w czacie: (plan konta, moderator?, agentka współpracująca?)."""
     adm = token_ok(h.headers.get("X-Admin-Token"))
@@ -377,7 +377,7 @@ def _mint_token():
         for t in [t for t, e in _tokens.items() if e < now]: _tokens.pop(t, None)
         tok = secrets.token_urlsafe(32); _tokens[tok] = now + ADMIN_TTL
     return tok
-moderator.MINT = _mint_token          # Panel moderatora: token po zalogowaniu kontem admin + 2FA na urządzeniu
+moderator.MINT = _mint_token          # Panel admina: token po zalogowaniu kontem admin + 2FA na urządzeniu
 moderator.TOTP_ENV = lambda: admin_totp_secret()
 def token_ok(tok):
     if not tok or not admin_enabled(): return False
@@ -1372,7 +1372,7 @@ class H(SimpleHTTPRequestHandler):
         if moderator.gate(self, "GET"): return      # tryb serwisowy (Strona / Aplikacja / Cały system) – panel i logowanie działają zawsze
         if re.search(r"(?:^|&)source=(?:twa|pwa)(?:&|$)", u.query or "") and self._cookie("luna_app") != "1":
             self._cookies = getattr(self, "_cookies", []) + ["luna_app=1; Path=/; HttpOnly; Secure; SameSite=Lax"]   # rozpoznanie aplikacji (TWA/PWA) po stronie serwera
-        r = moderator.handle_get(self, u)              # Panel moderatora: nieodgadywalna ścieżka + /api/mod/*
+        r = moderator.handle_get(self, u)              # Panel admina: nieodgadywalna ścieżka + /api/mod/*
         if r is not None: return r
         if u.path.startswith(("/api/support/", "/api/admin/support")):
             r = support.handle_get(self, u)  # Pomoc na żywo + Napisz do moderatora (support.py)
@@ -1698,7 +1698,7 @@ class H(SimpleHTTPRequestHandler):
                     doc = doc.replace("</body>", '<script src="/report.js?v=1.0" defer></script>\n<script src="/standing.js?v=1.0" defer></script>\n</body>', 1)
                 if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
                     doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
-                doc = moderator.inject(doc, self, u.path)   # ogłoszenie + (tylko dla konta admin) link „🛡️ Panel moderatora”
+                doc = moderator.inject(doc, self, u.path)   # ogłoszenie + (tylko dla konta admin) link „🛡️ Panel admina”
                 NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html", "/admin-support.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
                 if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
                 doc = doc.replace("</head>", '<script src="/sec-client.js"></script>\n</head>', 1)
