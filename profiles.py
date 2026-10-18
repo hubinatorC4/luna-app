@@ -135,13 +135,22 @@ def own_img(pid):
     if not r or r.get("hidden") or r["uid"][:8] in avatars.blocked_uids(): return None
     i = _imgs().get(pid); return i if i and i["h"] == r.get("own") else None
 
-def battle_stats(pid):
-    """Statystyki bitew – dopiero gdy moduł bitew istnieje i ma prawdziwe dane."""
+def battle_stats(pid, uid=None):
+    """Prawdziwe statystyki z Bitew agentek (wygrane i historia). None, gdy brak danych – wtedy profil ich nie pokazuje."""
     try:
         import battles
-        f = getattr(battles, "profile_stats", None)
-        s = f(pid) if f else None
-        return s if s and (s.get("wins") or s.get("history")) else None
+        if pid == "luna": eid, wins = "luna", (battles._cfg().get("luna") or {}).get("wins", 0)
+        else:
+            e = battles.my_entry(uid) if uid else None
+            if not e or e.get("status") != "approved": return None
+            eid, wins = e["id"], e.get("wins", 0)
+        hist = []
+        for b in battles._state().get("hist", []):
+            if b.get("reason") != "end" or eid not in (b["a"]["id"], b["b"]["id"]): continue
+            me, op = ("a", "b") if b["a"]["id"] == eid else ("b", "a")
+            hist.append({"opp": b[op]["name"], "mine": b["v" + me], "theirs": b["v" + op], "end": b["end"],
+                         "result": "win" if b.get("winner") == me else "draw" if not b.get("winner") else "loss"})
+        return {"wins": wins, "history": hist[:20]} if (wins or hist) else None
     except Exception: return None
 
 def view(pid, lang="pl", viewer=None, owner_uid=None, owner_plan=None):
@@ -151,7 +160,7 @@ def view(pid, lang="pl", viewer=None, owner_uid=None, owner_plan=None):
         L = LUNA[lg]; t = target("luna"); c = social.counts(t, viewer)
         return {"id": "luna", "official": True, "ai": True, "name": "Luna", "bio": L["bio"], "tags": L["tags"], "exercise": L["exercise"],
                 "photos": [{"ref": "l:" + n, "url": f"/catalog/luna/{n}.jpg"} for n in LUNA_ORDER], "pinned": "l:pose_prosto",
-                "likes": c["up"], "liked": c["mine"] == 1, "target": t, "public": True, "battles": battle_stats("luna"), "tier": "official"}
+                "likes": c["up"], "liked": c["mine"] == 1, "target": t, "public": True, "battles": battle_stats("luna"), "tier": ""}
     if not PID_RE.fullmatch(str(pid or "")): return None
     r = _P().get(pid)
     if not r or r.get("hidden"): return None
@@ -166,7 +175,7 @@ def view(pid, lang="pl", viewer=None, owner_uid=None, owner_plan=None):
     return {"id": pid, "official": False, "ai": True, "name": r["name"], "bio": r["bio"] if plans.has(pl, "premium") else "", "tags": r["tags"],
             "exercise": r["exercise"], "photos": [{"ref": p, "url": _photo_url(p, pid)} for p in ph], "pinned": pin,
             "likes": c["up"], "liked": c["mine"] == 1, "target": t, "public": bool(r.get("public")), "mine": is_owner,
-            "battles": battle_stats(pid), "tier": pl if pl in ("premium", "pro") else "plain"}
+            "battles": battle_stats(pid, r["uid"]), "tier": pl if pl in ("premium", "pro") else "plain"}
 
 def public_ids():
     return [k for k, v in _P().items() if v.get("public") and not v.get("hidden")]

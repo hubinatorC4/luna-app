@@ -9,7 +9,7 @@ Zasady uczciwości (nie do wyłączenia):
 - bitwa trwa od 24 h do 7 dni (czas ustalany przy tworzeniu, pilnowany po stronie serwera), głosowanie zamyka się samo, zwycięzca jest ogłaszany;
 - nagroda: odznaka 🏆 przy agentce i wyróżnienie „Zwyciężczyni” na karcie Bitew przez 24 h. Bez nagród pieniężnych."""
 import hashlib, re, secrets, threading, time
-import store, social, antibot, notify
+import store, social, antibot, notify, nicktier
 
 _lock = threading.Lock()
 MIN_H, MAX_H, DEF_H = 24, 168, 72
@@ -219,7 +219,7 @@ def _chat(): return store.get("bt_chat", {}) or {}
 def chat_list(bid, uid=None, since=0):
     X = excluded(); me = "u:" + uid if uid else None
     L = _chat().get(bid, [])
-    items = [{"id": m["id"], "nick": m["nick"], "text": m["text"], "t": m["t"], "mine": m["ak"] == me}
+    items = [{"id": m["id"], "nick": m["nick"], "tier": nicktier.of_author(m["ak"]), "text": m["text"], "t": m["t"], "mine": m["ak"] == me}
              for m in L if m["id"] > since and ((not m.get("hidden") and m["ak"] not in X) or m["ak"] == me)]
     return {"items": items[-80:], "last": L[-1]["id"] if L else 0}
 

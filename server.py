@@ -718,7 +718,7 @@ class H(SimpleHTTPRequestHandler):
         pl, puid = self._plan()
         v = profiles.view(pid, lang, viewer, puid, pl if r and r["uid"] == puid else (self._owner_plan(r["uid"]) if r else None))
         if not v: return self._json({"private": True, "error": "Ten profil jest prywatny albo nie istnieje."})
-        return self._json(dict(v, battles_page=os.path.isfile(os.path.join(STATIC, "bitwy.html"))))
+        return self._json(dict(v, battles_page=os.path.isfile(os.path.join(STATIC, "bitwy.html")) and bool(CFG["features"].get("battles", True))))
     def _ring(self, data):
         a = self._acct()
         if a:

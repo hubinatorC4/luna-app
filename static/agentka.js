@@ -30,7 +30,7 @@ function draw(){
       ${battlesOn ? `<a class="pill ghost" href="/bitwy.html?agent=${encodeURIComponent(V.id)}${lq() ? '&' + lq() : ''}">${esc(T.battles)}</a>` : ''}
       ${V.official ? '' : `<button type="button" class="pill ghost" id="phRep">${esc(T.report)}</button>`}</div>
     <p class="ph-msg small" id="phMsg" role="status"></p>
-    ${V.battles && V.battles.history && V.battles.history.length ? `<details class="card"><summary>${esc(T.hist)}</summary><ul>${V.battles.history.slice(0, 20).map(b => `<li>${esc(b.text || '')}</li>`).join('')}</ul></details>` : ''}
+    ${V.battles && V.battles.history && V.battles.history.length ? `<details class="card"><summary>${esc(T.hist)}</summary><ul class="ph-hist">${V.battles.history.slice(0, 20).map(b => `<li>${b.result === 'win' ? '🏆' : b.result === 'draw' ? '🤝' : '•'} ${esc(V.name)} ${b.mine} : ${b.theirs} ${esc(b.opp)} · ${new Date(b.end * 1000).toLocaleDateString(lang())}</li>`).join('')}</ul></details>` : ''}
     ${ph.length ? `<div class="ph-grid">${ph.map(p => `<img src="${esc(p.url)}" alt="${esc(V.name)} – AI" loading="lazy" width="240" height="300"${p.ref === V.pinned ? ' class="pin"' : ''}>`).join('')}</div>` : ''}
     <p class="small ph-note">🤖 ${esc(T.ainote)}</p>
     <p class="ph-links"><a href="/agentka.html?id=${V.official ? 'me' : 'luna'}${lq() ? '&' + lq() : ''}">${esc(V.official ? T.mine_link : T.luna_link)}</a></p>`;
