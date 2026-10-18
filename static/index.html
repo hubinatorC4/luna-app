@@ -49,12 +49,27 @@
       <select id="voiceSel"></select>
     </label>
     <label class="row"><input type="checkbox" id="spanishChk"> Hiszpańskie wstawki (hola, cariño, mi amor) czytane po hiszpańsku</label>
-    <label>Wysokość głosu: <b id="pitchVal"></b>
-      <input type="range" id="pitch" min="-6" max="0" step="0.1">
-    </label>
-    <label>Głośność: <b id="volVal"></b>
-      <input type="range" id="volume" min="-36" max="-16" step="1">
-    </label>
+    <fieldset class="timbre">
+      <legend>Barwa głosu</legend>
+      <div class="presets" id="presets">
+        <button type="button" data-p="niska">Niska i ciepła</button>
+        <button type="button" data-p="szept">Szept</button>
+        <button type="button" data-p="jasna">Jaśniejsza</button>
+        <button type="button" data-p="gleboka">Głęboka</button>
+      </div>
+      <label>Wysokość: <b id="pitchVal"></b>
+        <input type="range" id="pitch" min="-6" max="2" step="0.1">
+      </label>
+      <label>Tempo: <b id="rateVal"></b>
+        <input type="range" id="rate" min="-40" max="30" step="1">
+      </label>
+      <label>Ciepło (bas): <b id="warmVal"></b>
+        <input type="range" id="warmth" min="0" max="10" step="0.5">
+      </label>
+      <label>Głośność: <b id="volVal"></b>
+        <input type="range" id="volume" min="-36" max="-16" step="1">
+      </label>
+    </fieldset>
     <label class="row"><input type="checkbox" id="autoSpeak"> Czytaj odpowiedzi na głos</label>
     <div class="btns">
       <button type="button" id="testVoice">▶ Posłuchaj próbki</button>

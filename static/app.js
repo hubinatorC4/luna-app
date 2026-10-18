@@ -1,7 +1,13 @@
 (() => {
 const $ = s => document.querySelector(s);
 const chat = $('#chat'), input = $('#input'), player = $('#player'), statusEl = $('#status');
-const DEF = {voice:'pl-PL-ZofiaNeural', pitch:-2.6, volume:-27, spanish:true, autoSpeak:true, wake:false};
+const PRESETS = {
+  niska:{pitch:-2.6, rate:-8, warmth:4.5, volume:-27},
+  szept:{pitch:-1.5, rate:-18, warmth:2, volume:-33},
+  jasna:{pitch:0.5, rate:-4, warmth:1.5, volume:-24},
+  gleboka:{pitch:-4.8, rate:-14, warmth:8, volume:-26}
+};
+const DEF = {voice:'pl-PL-ZofiaNeural', pitch:-2.6, rate:-8, warmth:4.5, volume:-27, preset:'niska', spanish:true, autoSpeak:true, wake:false};
 let S = Object.assign({}, DEF, JSON.parse(localStorage.getItem('luna.settings') || '{}'));
 const save = () => localStorage.setItem('luna.settings', JSON.stringify(S));
 let history = JSON.parse(sessionStorage.getItem('luna.history') || '[]');
@@ -18,7 +24,7 @@ function addMsg(text, who){
 /* ---------- Głos ---------- */
 function setSpeaking(on){ speaking = on; document.body.classList.toggle('speaking', on); if(on) setStatus('Luna mówi…'); else setStatus(wakeOn ? 'Nasłuchuję słowa „Luna”…' : 'Twoja trenerka głosu'); }
 function ttsUrl(text){
-  const p = new URLSearchParams({text, voice:S.voice, pitch:S.pitch, volume:S.volume, spanish:S.spanish?1:0});
+  const p = new URLSearchParams({text, voice:S.voice, pitch:S.pitch, rate:S.rate, warmth:S.warmth, volume:S.volume, spanish:S.spanish?1:0});
   return '/api/tts?' + p.toString();
 }
 function fallbackSpeak(text){
@@ -129,11 +135,14 @@ wakeToggle.onchange = () => setWake(wakeToggle.checked);
 if (S.wake){ document.addEventListener('pointerdown', () => setWake(true), {once:true}); setStatus('Dotknij ekranu, aby wznowić nasłuchiwanie'); }
 
 /* ---------- Ustawienia ---------- */
-const dlg = $('#settings'), voiceSel = $('#voiceSel'), pitch = $('#pitch'), vol = $('#volume');
+const dlg = $('#settings'), voiceSel = $('#voiceSel'), pitch = $('#pitch'), vol = $('#volume'), rate = $('#rate'), warmth = $('#warmth');
 function renderSettings(){
-  voiceSel.value = S.voice; pitch.value = S.pitch; vol.value = S.volume;
+  voiceSel.value = S.voice; pitch.value = S.pitch; vol.value = S.volume; rate.value = S.rate; warmth.value = S.warmth;
+  $('#rateVal').textContent = (S.rate > 0 ? '+' : '') + S.rate + '%';
+  $('#warmVal').textContent = Math.round(S.warmth * 10) + '%';
+  document.querySelectorAll('#presets button').forEach(b => b.classList.toggle('on', b.dataset.p === S.preset));
   $('#spanishChk').checked = S.spanish; $('#autoSpeak').checked = S.autoSpeak;
-  $('#pitchVal').textContent = (S.pitch == 0 ? '0' : S.pitch) + ' półt.'; 
+  $('#pitchVal').textContent = (S.pitch > 0 ? '+' : '') + S.pitch + ' półt.'; 
   $('#volVal').textContent = Math.round((S.volume + 36) / 20 * 100) + '%';
 }
 fetch('/api/voices').then(r => r.json()).then(d => {
@@ -142,8 +151,9 @@ fetch('/api/voices').then(r => r.json()).then(d => {
 }).catch(()=>{});
 $('#settingsBtn').onclick = () => { renderSettings(); dlg.showModal(); };
 voiceSel.onchange = () => { S.voice = voiceSel.value; save(); };
-pitch.oninput = () => { S.pitch = parseFloat(pitch.value); save(); renderSettings(); };
-vol.oninput = () => { S.volume = parseFloat(vol.value); save(); renderSettings(); };
+const slider = (el, k) => el.oninput = () => { S[k] = parseFloat(el.value); S.preset = ''; save(); renderSettings(); };
+slider(pitch, 'pitch'); slider(vol, 'volume'); slider(rate, 'rate'); slider(warmth, 'warmth');
+document.querySelectorAll('#presets button').forEach(b => b.onclick = () => { Object.assign(S, PRESETS[b.dataset.p], {preset:b.dataset.p}); save(); renderSettings(); $('#testVoice').click(); });
 $('#spanishChk').onchange = e => { S.spanish = e.target.checked; save(); };
 $('#autoSpeak').onchange = e => { S.autoSpeak = e.target.checked; save(); };
 $('#resetBtn').onclick = () => { const w = S.wake; S = Object.assign({}, DEF, {wake:w}); save(); renderSettings(); };

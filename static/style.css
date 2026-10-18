@@ -61,3 +61,10 @@ dialog select{background:#241810;color:var(--text);border:1px solid rgba(240,160
 .btns .primary{background:var(--amber);color:#1b0f06;border:none}
 .btns .ghost{background:none}
 .hint{font-size:12px;color:var(--muted);margin:12px 0 0}
+
+.timbre{border:1px solid rgba(240,160,64,.3);border-radius:14px;padding:6px 12px 2px;margin:12px 0}
+.timbre legend{color:var(--amber2);font-size:14px;padding:0 6px}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0 4px}
+.presets button{padding:8px;border-radius:10px;border:1px solid rgba(240,160,64,.4);background:#241810;color:var(--amber2);font-size:13px;cursor:pointer}
+.presets button.on{background:var(--amber);color:#1b0f06;border-color:var(--amber)}
+dialog{max-height:90dvh;overflow-y:auto}

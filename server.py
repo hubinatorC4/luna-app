@@ -94,28 +94,30 @@ def segments(text, voice, spanish):
         else: merged.append((t, v))
     return merged
 
-async def synth_all(segs, tmp):
+async def synth_all(segs, tmp, rate=-8):
     files = []
     async def one(i, t, v):
         f = os.path.join(tmp, f"s{i}.mp3")
-        await edge_tts.Communicate(t, v, rate="-8%").save(f)
+        await edge_tts.Communicate(t, v, rate=f"{int(rate):+d}%").save(f)
         return f
     files = await asyncio.gather(*(one(i, t, v) for i, (t, v) in enumerate(segs)))
     return files
 
-def tts(text, voice, pitch_st, lufs, spanish):
+def tts(text, voice, pitch_st, lufs, spanish, rate=-8, warmth=4.5):
     voice = voice if voice in VOICES else DEFAULT_VOICE
-    pitch_st = max(-6.0, min(0.0, float(pitch_st)))
+    pitch_st = max(-6.0, min(2.0, float(pitch_st)))
+    rate = int(max(-40, min(30, float(rate))))
+    warmth = max(0.0, min(10.0, float(warmth)))
     lufs = max(-36.0, min(-16.0, float(lufs)))
     text = text.strip()[:1200]
-    key = hashlib.sha1(json.dumps([text, voice, round(pitch_st, 2), round(lufs, 1), bool(spanish), 3]).encode()).hexdigest()
+    key = hashlib.sha1(json.dumps([text, voice, round(pitch_st, 2), round(lufs, 1), bool(spanish), rate, round(warmth, 1), 4]).encode()).hexdigest()
     out = os.path.join(CACHE, key + ".mp3")
     if os.path.exists(out) and os.path.getsize(out) > 1000:
         return out
     tmp = tempfile.mkdtemp(prefix="luna")
     try:
         segs = segments(text, voice, spanish)
-        files = asyncio.run(synth_all(segs, tmp))
+        files = asyncio.run(synth_all(segs, tmp, rate))
         f = 2 ** (pitch_st / 12.0)
         inputs, chain = [], ""
         for i, fl in enumerate(files):
@@ -124,7 +126,7 @@ def tts(text, voice, pitch_st, lufs, spanish):
         chain += "".join(f"[a{i}]" for i in range(len(files))) + f"concat=n={len(files)}:v=0:a=1[c];"
         chain += (f"[c]asetrate={24000*f:.1f},aresample=24000,atempo={1/f:.4f},"
                   "highpass=f=60,lowpass=f=11000,"
-                  "equalizer=f=150:t=q:w=1:g=3,equalizer=f=240:t=q:w=1:g=4.5,equalizer=f=3000:t=q:w=1.4:g=-2,"
+                  f"equalizer=f=150:t=q:w=1:g={warmth*2/3:.2f},equalizer=f=240:t=q:w=1:g={warmth:.2f},equalizer=f=3000:t=q:w=1.4:g={-warmth*0.45:.2f},"
                   "afftdn=nr=6:nf=-40,"
                   f"loudnorm=I={lufs}:TP=-6:LRA=7,alimiter=limit=0.5:level=disabled,aresample=44100[o]")
         subprocess.run([FFMPEG, "-y", "-v", "error", *inputs, "-filter_complex", chain, "-map", "[o]",
@@ -176,7 +178,8 @@ class H(SimpleHTTPRequestHandler):
         if not text: return self._json({"error": "empty text"}, 400)
         try:
             p = tts(text, q.get("voice", DEFAULT_VOICE), q.get("pitch", -2.6), q.get("volume", -27),
-                    str(q.get("spanish", "1")).lower() not in ("0", "false", "no"))
+                    str(q.get("spanish", "1")).lower() not in ("0", "false", "no"),
+                    q.get("rate", -8), q.get("warmth", 4.5))
         except Exception as e:
             print("TTS error:", repr(e), file=sys.stderr)
             return self._json({"error": "tts failed"}, 502)
