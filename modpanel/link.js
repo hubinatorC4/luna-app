@@ -1,9 +1,16 @@
-/* „🛡️ Panel admina” – ten skrypt serwer dołącza WYŁĄCZNIE do stron konta z rolą admin (inni go nie dostają: 404). */
+/* „🛡️ Panel admina” / „🛡️ Panel moderatora” – serwer dołącza ten skrypt WYŁĄCZNIE do stron kont z rolą admin lub moderator (inni: 404). */
 (() => {
 const P = '__P__';
 const app = (() => { try { return document.documentElement.classList.contains('twa') || sessionStorage.getItem('luna.twa') === '1' || (matchMedia && matchMedia('(display-mode: standalone)').matches); } catch (e) { return false; } })();
 const href = P + (app ? '/app' : '/');
-const TX = {
+const ROLE = '__ROLE__';   /* rola z serwera: admin albo moderator */
+const TX = ROLE === 'moderator' ? {
+  pl: ['Panel moderatora', 'Czat, użytkownicy, Butik i wsparcie – widoczne tylko dla ekipy'],
+  en: ['Moderator panel', 'Chat, users, shop and support – visible to the team only'],
+  es: ['Panel de moderación', 'Chat, usuarios, tienda y soporte – solo para el equipo'],
+  de: ['Moderations-Panel', 'Chat, Nutzer, Shop und Support – nur fürs Team sichtbar'],
+  uk: ['Панель модератора', 'Чат, користувачі, магазин і підтримка – бачить лише команда'],
+} : {
   pl: ['Panel admina', 'Przełączniki, kolejka, użytkownicy, komunikaty – widoczne tylko dla Ciebie'],
   en: ['Admin panel', 'Switches, queue, users, announcements – visible only to you'],
   es: ['Panel de admin', 'Interruptores, cola, usuarios, avisos – solo lo ves tú'],

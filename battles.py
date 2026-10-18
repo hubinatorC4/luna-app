@@ -413,6 +413,11 @@ def _mark_partners(out):
     for h in out.get("last", []): mk(h.get("a")); mk(h.get("b"))
     for o in out.get("others", []): mk(o.get("a")); mk(o.get("b"))
 
+def _staff_uid(uid):
+    try:
+        import moderator; return moderator.staff_of_uid(uid)
+    except Exception: return ""
+
 def _owner(eid):
     if eid == "luna": return None
     e = next((x for x in _entries() if x["id"] == eid), None); return e["uid"] if e else None
@@ -482,7 +487,7 @@ def users_board(period="all", uid=None, accts=None, plan_of=None, limit=100):
         try:
             import userprof; nick = social.nick_ok(userprof.nick_of(u) or a.get("name") or "")
         except ValueError: nick = ""
-        rows.append(dict(x, uid=u, nick=nick or ("Widz " + u[:4]), plan=nicktier.of_uid(u) or "podstawowa", league=league(tot.get(u, 0)),
+        rows.append(dict(x, uid=u, nick=nick or ("Widz " + u[:4]), plan=nicktier.of_uid(u) or "podstawowa", staff=_staff_uid(u), league=league(tot.get(u, 0)),
                          total_pts=tot.get(u, 0), agents=_agents_created(u), hidden=u in P))
     rows.sort(key=_rank_key)
     pub = []; me = None
@@ -613,7 +618,7 @@ def _chat(): return store.get("bt_chat", {}) or {}
 def chat_list(bid, uid=None, since=0):
     X = excluded(); me = "u:" + uid if uid else None
     L = _chat().get(bid, [])
-    items = [{"id": m["id"], "nick": m["nick"], "tier": nicktier.of_author(m["ak"]), "partner": partners.is_partner(m["ak"][2:] if m["ak"].startswith("u:") else ""), "text": m["text"], "t": m["t"], "mine": m["ak"] == me}
+    items = [{"id": m["id"], "nick": m["nick"], "tier": nicktier.of_author(m["ak"]), "staff": _staff_uid(m["ak"][2:] if m["ak"].startswith("u:") else ""), "partner": partners.is_partner(m["ak"][2:] if m["ak"].startswith("u:") else ""), "text": m["text"], "t": m["t"], "mine": m["ak"] == me}
              for m in L if m["id"] > since and ((not m.get("hidden") and m["ak"] not in X) or m["ak"] == me)]
     return {"items": items[-80:], "last": L[-1]["id"] if L else 0}
 

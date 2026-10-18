@@ -7,6 +7,8 @@ const B = window.LunaBt;
 const VW = {pl: ['głos', 'głosy', 'głosów'], en: ['vote', 'votes', 'votes'], es: ['voto', 'votos', 'votos'], de: ['Stimme', 'Stimmen', 'Stimmen'], uk: ['голос', 'голоси', 'голосів']};
 const vw = n => { const f = VW[L] || VW.pl; let c = 'other'; try { c = new Intl.PluralRules(L).select(n); } catch (e) {} return esc(c === 'one' ? f[0] : c === 'few' ? f[1] : f[2]); };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+window.LunaRB = window.LunaRB || (p => { const L = (document.documentElement.lang || 'pl').slice(0, 2), r = (p && p.staff) || (p && p.mod ? 'admin' : '');   /* odznaka roli z serwera: admin / moderator */
+  return r === 'admin' ? ` <span class="mod-badge">🛡️ ${L === 'uk' ? 'Адмін' : 'Admin'}</span>` : r === 'moderator' ? ` <span class="mdr-badge">🛡️ ${({es: 'Moderador', uk: 'Модератор'})[L] || 'Moderator'}</span>` : ''; });
 const lq = L === 'pl' ? '' : '?lang=' + L;
 const PT = {pl: 'Agentka współpracująca', en: 'Partner agent', es: 'Agente colaboradora', de: 'Partner-Agentin', uk: 'Агентка-партнерка'}[L] || 'Agentka współpracująca';
 const ptm = c => c && c.partner ? `<span class="pt-mark" title="${esc(PT)}" aria-label="${esc(PT)}">💖</span>` : '';
@@ -170,7 +172,7 @@ async function vote(e){
   busy = false;
 }
 /* ---------- czat ---------- */
-function msgHtml(m){ return `<div class="bt-m${m.mine ? ' mine' : ''}" data-id="${m.id}">${m.mine ? '' : `<button type="button" data-mrep="${m.id}" data-report="btchat:${esc((S.battle && S.battle.id) || '')}:${m.id}" aria-label="${esc(t.report)}">⚑</button>`}<b class="nk${m.tier ? ' nk-' + m.tier : ''}">${esc(m.nick)}</b>${m.partner ? ptm(m) : ''}${esc(m.text)}</div>`; }
+function msgHtml(m){ return `<div class="bt-m${m.mine ? ' mine' : ''}" data-id="${m.id}">${m.mine ? '' : `<button type="button" data-mrep="${m.id}" data-report="btchat:${esc((S.battle && S.battle.id) || '')}:${m.id}" aria-label="${esc(t.report)}">⚑</button>`}<b class="nk${m.tier ? ' nk-' + m.tier : ''}">${esc(m.nick)}</b>${window.LunaRB(m)}${m.partner ? ptm(m) : ''}${esc(m.text)}</div>`; }
 async function pollChat(){
   if (!S || S.state !== 'live' || document.hidden) return;
   try { const d = await api('/api/battles/chat?bid=' + S.battle.id + '&since=' + lastMsg); addMsgs(d.items); } catch(e){}

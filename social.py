@@ -176,7 +176,7 @@ def public_post(p, voter, V, C, mine_ak, lang="pl", T=None):
     X = antibot.excluded()
     cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
     return {"views": stats.post_views(p["id"], T), "id": p["id"], "nick": p["nick"], "tier": "" if p.get("official") else nicktier.of_author(p["author"]), "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "img_kind": p.get("img_kind") or ("ai" if p.get("img") else None), "agent": p.get("agent"),
-            "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved", "mod": _is_mod(p["author"]), "model": _is_model(p["author"])}
+            "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved", "mod": _is_mod(p["author"]), "staff": _staff(p["author"]), "model": _is_model(p["author"])}
 
 def _off_hidden(): return set(store.get("official_hidden", []) or [])
 def _pinned(): return list(store.get("wall_pinned", []) or [])
@@ -284,6 +284,10 @@ def _mod_nick(uid):
     try:
         import moderator; return moderator.admin_nick() if uid and moderator.is_admin_uid(uid) else ""
     except Exception: return ""
+def _staff(ak):
+    try:
+        import moderator; return moderator.staff_of_ak(ak)
+    except Exception: return ""
 def _is_model(ak):
     try:
         import moderator; return str(ak).startswith("u:") and moderator.is_model_uid(str(ak)[2:])
@@ -295,7 +299,7 @@ def _mod_ak():
 
 def list_comments(target, uid, vid):
     voter = author_key(uid, vid); V = _votes(); X = antibot.excluded(); MA = _mod_ak()
-    out = [{"model": _is_model(c["author"]), "mod": bool(MA) and c["author"] == MA, "mod_liked": bool(MA) and V.get("cmt:" + c["id"], {}).get(MA) == 1, "id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "partner": _partner(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
+    out = [{"model": _is_model(c["author"]), "staff": _staff(c["author"]), "mod": bool(MA) and c["author"] == MA, "mod_liked": bool(MA) and V.get("cmt:" + c["id"], {}).get(MA) == 1, "id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "partner": _partner(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
             "votes": counts("cmt:" + c["id"], voter, V, X), "pending": c["status"] != "approved", "mine": c["author"] == voter}
            for c in _cmts() if c["target"] == target and (_cm_ok(c, X) or (c["author"] == voter and c["status"] in ("approved", "pending")))]
     rs = [c["rating"] for c in out if c.get("rating") and not c["pending"]]

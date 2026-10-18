@@ -1,3 +1,5 @@
+window.LunaRB = window.LunaRB || (p => { const L = (document.documentElement.lang || 'pl').slice(0, 2), r = (p && p.staff) || (p && p.mod ? 'admin' : '');   /* odznaka roli z serwera: admin / moderator */
+  return r === 'admin' ? ` <span class="mod-badge">🛡️ ${L === 'uk' ? 'Адмін' : 'Admin'}</span>` : r === 'moderator' ? ` <span class="mdr-badge">🛡️ ${({es: 'Moderador', uk: 'Модератор'})[L] || 'Moderator'}</span>` : ''; });
 /* Ranking bitew: agentki (globalnie i w ligach), Top użytkowników (cały czas / miesiąc / tydzień), własna pozycja i postęp do kolejnej ligi.
    Tylko prawdziwe dane z serwera, tylko nicki (bez imion i e-maili), przełącznik prywatności. */
 (() => {
@@ -53,7 +55,7 @@ function rows(list, posOf){
 }
 function userRow(u, pinned){
   return `<tr class="${u.me ? 'me' : ''}${pinned ? ' pin' : ''}"><td class="rk-pos">${u.pos ? fmt(u.pos) : '–'}</td>
-    <td>${u.nick ? B.nick(u.nick, u.plan) : esc(t.you)}${u.me && u.nick ? ` <small>(${esc(t.you)})</small>` : ''}<br>${B.league(u.league)}</td>
+    <td>${u.nick ? B.nick(u.nick, u.plan) + window.LunaRB(u) : esc(t.you)}${u.me && u.nick ? ` <small>(${esc(t.you)})</small>` : ''}<br>${B.league(u.league)}</td>
     <td class="rk-ag">${B.agents(u.agents)}</td><td>${fmt(u.wins)}</td><td><b>${fmt(u.pts)}</b></td><td>${fmt(u.pct)}%</td></tr>`;
 }
 async function renderU(){

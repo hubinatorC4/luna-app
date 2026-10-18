@@ -7,6 +7,8 @@ const T = Object.assign({}, window.LUNA_IB_T.pl, window.LUNA_IB_T[lang]);
 T.cat_icon = window.LUNA_IB_T.pl.cat_icon;
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+window.LunaRB = window.LunaRB || (p => { const L = (document.documentElement.lang || 'pl').slice(0, 2), r = (p && p.staff) || (p && p.mod ? 'admin' : '');   /* odznaka roli z serwera: admin / moderator */
+  return r === 'admin' ? ` <span class="mod-badge">🛡️ ${L === 'uk' ? 'Адмін' : 'Admin'}</span>` : r === 'moderator' ? ` <span class="mdr-badge">🛡️ ${({es: 'Moderador', uk: 'Модератор'})[L] || 'Moderator'}</span>` : ''; });
 const L = p => p + (lang !== 'pl' ? (p.includes('?') ? '&' : '?') + 'lang=' + lang : '');
 let csrf = '', user = null, tab = document.body.dataset.tab || 'inbox', cat = '', box = 'inbox', FR = null, chat = null;
 const root = $('#ib');
@@ -25,9 +27,9 @@ const fmtT = t => { const s = Date.now() / 1000 - t; const rtf = new Intl.Relati
   if (s < 60) return T.ago_now; if (s < 3600) return rtf.format(-Math.round(s / 60), 'minute'); if (s < 86400) return rtf.format(-Math.round(s / 3600), 'hour');
   if (s < 7 * 86400) return rtf.format(-Math.round(s / 86400), 'day'); return new Date(t * 1000).toLocaleDateString(lang); };
 const clock = t => new Date(t * 1000).toLocaleTimeString(lang, {hour: '2-digit', minute: '2-digit'});
-const MODB = p => (p.mod ? ' <span class="mod-badge">🛡️ Moderator</span>' : '') + (p.model ? ' <span class="mdl-badge">💗 Modelka Luny</span>' : '');
+const MODB = p => window.LunaRB(p) + (p.model ? ' <span class="mdl-badge">💗 Modelka Luny</span>' : '');
 const nk = p => `<span class="nk${p.tier ? ' nk-' + p.tier : ''}">${esc(p.nick)}</span>${MODB(p)}${p.partner ? ` <span class="ib-pt" title="${esc(T.partner)}" aria-label="${esc(T.partner)}">💖</span>` : ''}`;
-const av = p => p.mod ? ((S) => `<span class="mod-av" style="--s:${S}px" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="${S}" height="${S}" decoding="async"></span>`)(40) : `<span class="ib-av${p.model ? ' mdl-ring' : ''}${p.partner ? ' partner' : ''}${p.tier ? ' t-' + p.tier : ''}${p.pr && p.pr.on ? ' on' : ''}" aria-hidden="true">${esc(p.ini || '?')}</span>`;
+const av = p => p.mod ? ((S) => `<span class="mod-av" style="--s:${S}px" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="${S}" height="${S}" decoding="async"></span>`)(40) : `<span class="ib-av${p.staff === 'moderator' ? ' mdr-ring' : p.model ? ' mdl-ring' : ''}${p.partner ? ' partner' : ''}${p.tier ? ' t-' + p.tier : ''}${p.pr && p.pr.on ? ' on' : ''}" aria-hidden="true">${esc(p.ini || '?')}</span>`;
 // status online (serwer zwraca pr tylko gdy osoba na to pozwala): {on:true} albo {min:X} ≤ 60
 const prTxt = p => !p.pr ? '' : p.pr.on ? T.online : T.ago.replace('{n}', p.pr.min);
 const idHtml = p => { const d = p.ident || {}, x = [];

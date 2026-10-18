@@ -58,6 +58,11 @@ def excluded():
         except Exception: ver_on = False
         # jak w Bitwach: konta bez potwierdzonego e-maila wyłączamy z liczenia tylko wtedy, gdy potwierdzanie e-maili naprawdę działa
         _cache["unver"] = _unverified() if ver_on else set(); _cache["t"] = time.time()
+        try:   # ekipa (admin + moderatorzy nadani przez admina) nigdy nie znika „w cieniu” – to konta zweryfikowane ręcznie
+            import accounts, moderator
+            st = {"u:" + u for u, x in accounts._accts().items() if moderator.staff_of(x)}
+            _cache["hidden"] -= st; _cache["unver"] -= st
+        except Exception: pass
     return _cache["hidden"] | _cache["unver"]
 def hidden(ak): excluded(); return ak in _cache["hidden"]
 def burst(kind, ak, n, secs):

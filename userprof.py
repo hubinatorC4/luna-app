@@ -199,7 +199,7 @@ def public_view(nick, viewer_uid=None):
             if av.startswith("up:") and not avatar_img(uid, viewer_uid): av = ""
             import moderator
             if moderator.is_admin_uid(uid): av = "mod:mustang"   # moderator: animowany mustang w niebieskiej ramce (flaga tylko z serwera)
-            return {"mod": moderator.is_admin_uid(uid), "model": moderator.is_model_uid(uid), "look": moderator.look_public(uid), "nick": g["nick"], "avatar": av, "uref": uid[:8] if av.startswith("up:") else "",
+            return {"mod": moderator.is_admin_uid(uid), "staff": moderator.staff_of_uid(uid), "model": moderator.is_model_uid(uid), "look": moderator.look_public(uid), "nick": g["nick"], "avatar": av, "uref": uid[:8] if av.startswith("up:") else "",
                     "bio": g["bio"] if g["show_bio"] else "", "interests": g["interests"] if g["show_interests"] else [],
                     "links": g["links"] if g["show_links"] else [], "mine": viewer_uid == uid, "pr": _pr(viewer_uid, uid), "ident": ident(uid, g)}
     return {"missing": True}

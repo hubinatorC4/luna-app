@@ -46,20 +46,32 @@ def _accts():
 def admin_uid():
     if not configured(): return ""
     return next((u["uid"] for u in _accts().values() if u.get("role") == "admin"), "")
-# Role (elastycznie pod przyszły lżejszy „Panel moderatora” dla osób mianowanych przez admina – jeszcze NIEaktywne):
-# admin = właściciel, pełna władza; moderator = przyszła rola z wąskim zestawem uprawnień. Dziś panel wpuszcza tylko admina.
+# Role: admin = właściciel (pełna władza); moderator = osoby mianowane przez admina w Panelu admina (2FA + dziennik).
+# Uprawnienia moderatora celowo minimalne (PANEL_ADMINA_WIDEO.md): czat (zgłoszenia z czatów), użytkownicy (ostrzeżenie, blokada czasowa),
+# sklep (Butik: ukryj/pokaż), wsparcie (tickety i Pomoc na żywo). Bez wyłączników, wideo, agentek, przychodów i nadawania ról.
 ROLE_PERMS = {
     "admin": {"*"},
-    "moderator": {"queue", "chat", "users.basic", "shop", "support"},   # szkic – do zatwierdzenia przez właściciela
+    "moderator": {"chat", "users", "shop", "support"},
 }
-ACTIVE_ROLES = ("admin",)   # dopisz "moderator", gdy właściciel zatwierdzi specyfikację
+ACTIVE_ROLES = ("admin", "moderator")
+MOD_USER_ACTS = ("warn", "temp_block")                       # moderator: tylko te sankcje
+MOD_QUEUE_SRC = ("btchat", "dm")                             # moderator: zgłoszenia z czatów
+MOD_QUEUE_ACTS = ("dismiss", "approve", "remove", "warn", "temp_block")
 def role_of(u): return (u or {}).get("role") or ""
-def can(u, perm):
+def is_moderator_user(u): return bool(u and role_of(u) == "moderator" and "moderator" in ACTIVE_ROLES)
+def perms(u):
     r = role_of(u)
-    if r not in ACTIVE_ROLES or r not in ROLE_PERMS: return False
-    if r == "admin" and not configured(): return False
-    P = ROLE_PERMS[r]; return "*" in P or perm in P
+    if r not in ACTIVE_ROLES or r not in ROLE_PERMS: return set()
+    if r == "admin" and not configured(): return set()
+    return set(ROLE_PERMS[r])
+def can(u, perm):
+    P = perms(u); return "*" in P or perm in P
+def is_full(u): return "*" in perms(u)
 def is_admin_user(u): return bool(u and role_of(u) == "admin" and configured())
+def is_staff_user(u): return is_admin_user(u) or is_moderator_user(u)
+def staff_of(u): return "admin" if is_admin_user(u) else ("moderator" if is_moderator_user(u) else "")
+def staff_of_uid(uid): return staff_of(_accts().get(uid)) if uid else ""
+def staff_of_ak(ak): return staff_of_uid(str(ak)[2:]) if str(ak or "").startswith("u:") else ""
 def is_admin_uid(uid): return bool(uid) and uid == admin_uid()
 def author_is_admin(ak): return bool(ak) and str(ak).startswith("u:") and is_admin_uid(str(ak)[2:])
 
@@ -245,29 +257,35 @@ def device_forget(h, all_=False, uid=""):
     h._cookies = getattr(h, "_cookies", []) + ["luna_mdev=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict"]
 
 def totp_secret(u):
-    e = TOTP_ENV() if TOTP_ENV else ""
+    e = (TOTP_ENV() if TOTP_ENV else "") if is_admin_user(u) else ""   # sekret z env tylko dla właściciela; moderatorzy mają własny
     return e or (u or {}).get("mod_totp", "")
 
 # ---------- sesje panelu: token (X-Admin-Token) + CSRF na token ----------
 _sess = {}   # token -> {"uid", "csrf", "exp", "reauth"}
-def _mint(uid):
-    tok = MINT(); now = time.time()
+def _mint(uid, full=True):
+    tok = MINT() if full else "mt_" + secrets.token_urlsafe(32); now = time.time()   # moderator NIE dostaje tokenu /api/admin/*
     with _lock:
         for k in [k for k, v in _sess.items() if v["exp"] < now]: _sess.pop(k, None)
-        _sess[tok] = {"uid": uid, "csrf": secrets.token_urlsafe(24), "exp": now + TOKEN_TTL, "reauth": 0}
+        _sess[tok] = {"uid": uid, "csrf": secrets.token_urlsafe(24), "exp": now + TOKEN_TTL, "reauth": 0, "full": full}
     return tok, _sess[tok]["csrf"]
 def _ctx(h):
     """Pełna autoryzacja akcji panelu: konto admin + zaufane urządzenie + token + CSRF."""
     a = h._acct()
-    if not a or not is_admin_user(a[0]): return None
+    if not a or not is_staff_user(a[0]): return None
     uid = a[0]["uid"]
     if not device_ok(h, uid): return None
     tok = h.headers.get("X-Admin-Token") or ""
     s = _sess.get(tok)
     if not s or s["uid"] != uid or s["exp"] < time.time(): return None
     if h.command == "POST" and not hmac.compare_digest(h.headers.get("X-CSRF-Token") or "", s["csrf"]): return None
+    if s.get("full") and not is_admin_user(a[0]): return None
     s["exp"] = time.time() + TOKEN_TTL
-    return {"uid": uid, "u": a[0], "tok": tok, "s": s}
+    return {"uid": uid, "u": a[0], "tok": tok, "s": s, "role": staff_of(a[0]), "full": is_full(a[0])}
+def drop_staff(uid):
+    """Odebranie roli: koniec sesji panelu i zaufanych urządzeń tej osoby."""
+    with _lock:
+        for k in [k for k, v in _sess.items() if v["uid"] == uid]: _sess.pop(k, None)
+        D = {k: v for k, v in (store.get("mod_devices", {}) or {}).items() if v.get("uid") != uid}; store.put("mod_devices", D)
 def _reauth(c, data):
     """Akcje krytyczne (wyłączniki, bany, masowe wiadomości) wymagają świeżego kodu 2FA (ważność 5 min)."""
     if time.time() - c["s"]["reauth"] < REAUTH_GRACE: return True
@@ -279,7 +297,12 @@ def _reauth(c, data):
 def audit(h, action, target="", detail=""):
     with _lock:
         L = store.get("mod_audit", []) or []
-        L.append({"t": int(time.time()), "who": "Moderator", "action": str(action)[:60], "target": str(target)[:80], "detail": security.redact(str(detail))[:240],
+        who = "Admin"
+        try:
+            a = h._acct() if h else None
+            if a and is_moderator_user(a[0]): who = "Moderator · " + (_nick(a[0]["uid"]) or "?")
+        except Exception: pass
+        L.append({"t": int(time.time()), "who": who, "action": str(action)[:60], "target": str(target)[:80], "detail": security.redact(str(detail))[:240],
                   "ip": security.ip_hash(h._ip()) if h else ""})
         store.put("mod_audit", L[-2000:])
     try: security.audit("mod " + str(action), h._ip() if h else "", str(target)[:60])
@@ -383,7 +406,13 @@ def _nick(uid):
         import userprof; return userprof.get(uid)["nick"] or "użytkownik"
     except Exception: return "użytkownik"
 def _uid_ak(ak): return ak[2:] if str(ak or "").startswith("u:") else ""
-def queue():
+def queue(full=True):
+    if not full:   # moderator: tylko zgłoszenia z czatów (czat bitew, czat prywatny, zgłoszenia 🚩 z czatów), okrojone akcje
+        out = []
+        for x in queue(True):
+            if x["src"] in MOD_QUEUE_SRC or (x["src"] == "case" and x.get("ctype") in MOD_QUEUE_SRC):
+                x = dict(x, acts=[a for a in x["acts"] if a in MOD_QUEUE_ACTS] or ["dismiss"]); out.append(x)
+        return out
     import social, avatars, battles, agentvideo, inbox
     Q = []
     r = _rp()
@@ -391,7 +420,7 @@ def queue():
         try:
             for c in r.admin_list("open")["items"]:
                 Q.append({"src": "case", "id": c["id"], "kind": "Zgłoszenie 🚩 · " + c["type"], "text": str(c.get("snap") or "")[:300], "t": c["u"],
-                          "uid": "", "who": c.get("owner_short") or "gość", "n": c["n"], "acts": ["dismiss", "remove", "warn", "temp_block", "ban"]})
+                          "uid": "", "who": c.get("owner_short") or "gość", "n": c["n"], "ctype": c["type"], "acts": ["dismiss", "remove", "warn", "temp_block", "ban"]})
         except Exception: pass
     SA = social.admin_list()
     for p in SA["posts"]:
@@ -447,9 +476,12 @@ def queue():
         x.pop("ak", None) if not x.get("uid") else None
     return sorted(Q, key=lambda x: -(x.get("t") or 0))
 
-def queue_act(h, d):
+def queue_act(h, d, full=True):
     import social, avatars, battles, agentvideo, inbox, userprof
     src, id_, act = str(d.get("src", "")), str(d.get("id", ""))[:80], str(d.get("action", ""))
+    if not full:
+        if act not in MOD_QUEUE_ACTS: raise PermissionError("Ta akcja jest tylko dla admina.")
+        if not any(x["src"] == src and str(x["id"]) == id_ for x in queue(False)): raise PermissionError("Moderator widzi tylko zgłoszenia z czatów.")
     reason = re.sub(r"[<>\x00-\x1f]", "", str(d.get("reason") or ""))[:300]
     days = max(1, min(90, int(d.get("days") or 7)))
     uid = ""
@@ -509,17 +541,37 @@ def users(q=""):
         if k and k not in login_key(nick): continue
         pl = accounts.plan(u)
         out.append({"uid": u["uid"], "nick": nick, "plan": pl["plan"], "until": pl["until"], "source": pl["source"], "created": u.get("created", 0),
-                    "admin": u.get("role") == "admin", "partner": partners.is_partner(u["uid"]), "model": is_model_user(u), "adult": bool(u.get("adult_confirmed_at") or u.get("adult")), "standing": standing(u["uid"]),
+                    "admin": u.get("role") == "admin", "staff": staff_of(u), "partner": partners.is_partner(u["uid"]), "model": is_model_user(u), "adult": bool(u.get("adult_confirmed_at") or u.get("adult")), "standing": standing(u["uid"]),
                     "override": bool((u.get("pass") or {}).get("by") == "moderator-override")})
         if len(out) >= 60: break
     return out
 
-def user_act(h, d):
+def user_act(h, d, full=True):
     import accounts, partners
     uid = str(d.get("uid", ""))[:16]; act = str(d.get("action", ""))
     u = _accts().get(uid)
     if not u: raise KeyError(uid)
     if u.get("role") == "admin": raise ValueError("Konta admina nie da się tu zmieniać.")
+    if not full:
+        if act not in MOD_USER_ACTS: raise PermissionError("Ta akcja jest tylko dla admina.")
+        if staff_of(u): raise PermissionError("Moderator nie nakłada sankcji na innych moderatorów.")
+    if act in ("staff_on", "staff_off"):   # rola moderatora (tylko admin; 2FA + dziennik)
+        with accounts._lock:
+            A = accounts._accts(); x = A[uid]
+            if act == "staff_on":
+                x["role"] = "moderator"; x["staff_at"] = int(time.time()); x["staff_by"] = "Admin"
+            else:
+                if x.get("role") == "moderator": x.pop("role", None)
+                x["staff_revoked_at"] = int(time.time()); x.pop("mod_totp", None); x.pop("mod_totp_pending", None)
+            store.put("accounts", A)
+        if act == "staff_off": drop_staff(uid)
+        try:
+            import inbox
+            inbox.deliver(uid, "important", title="🛡️ " + ("Masz rolę moderatora" if act == "staff_on" else "Rola moderatora odebrana"),
+                          body=("Witaj w ekipie! W Mój panel pojawił się „🛡️ Panel moderatora”. Przy pierwszym wejściu ustawisz 2FA. Z wielką mocą przychodzi… lista zgłoszeń 😉"
+                                if act == "staff_on" else "Dziękujemy za pomoc przy pilnowaniu Luny 💚") + "\n— " + MOD_NAME, link="/ustawienia.html")
+        except Exception: pass
+        return {"staff": staff_of(_accts()[uid])}
     reason = re.sub(r"[<>\x00-\x1f]", "", str(d.get("reason") or ""))[:300]
     if act in ("warn", "strike", "temp_block", "ban", "unban", "unstrike"):
         st = sanction(uid, act, int(d.get("days") or 7), reason); notify_user(uid, act, reason); return {"standing": st}
@@ -573,6 +625,49 @@ def content_act(h, d):
     else: raise ValueError("bad type")
     return {"ok": True}
 
+# ---------- 🛍️ Butik: ukryj / pokaż (admin + moderator) ----------
+def shop(q=""):
+    import butik
+    r = butik.admin_list({"q": q[:40], "limit": 60})
+    return [{"id": i["id"], "name": i.get("name", ""), "line": i.get("line", ""), "category": i.get("category", ""), "status": butik.eff_status(i),
+             "hidden": i.get("status") == "hidden", "image": i.get("image") or ""} for i in r["items"]]
+def shop_act(d):
+    import butik
+    id_, act = str(d.get("id", ""))[:60], d.get("action")
+    it = butik.item(id_)
+    if not it: raise KeyError(id_)
+    with _lock:
+        prev = store.get("mod_shop_prev", {}) or {}
+        if act == "hide":
+            if it.get("status") != "hidden": prev[id_] = it.get("status") or "released"
+            butik.update(id_, {"status": "hidden"})
+        elif act == "show":
+            butik.update(id_, {"status": prev.pop(id_, "released")})
+        else: raise ValueError("bad action")
+        store.put("mod_shop_prev", prev)
+    return {"ok": True, "status": butik.eff_status(butik.item(id_))}
+
+# ---------- 💬 Wsparcie: tickety + Pomoc na żywo (admin + moderator), bez e-maili i danych osobowych ----------
+def support_list():
+    import tickets, support
+    T = [{"id": t["id"], "category": t.get("category", ""), "title": str(t.get("title") or t.get("subject") or "")[:120], "text": str(t.get("description") or t.get("desc") or t.get("text") or t.get("message") or "")[:600],
+          "status": t.get("status", ""), "t": t.get("t") or t.get("created", 0), "reply": str(t.get("reply") or "")[:600]} for t in tickets.admin_list()["items"][:60]]
+    return {"tickets": T, "live": support.admin_list()[:40], "online": support.online()}
+def support_act(d):
+    import tickets, support
+    k = d.get("kind")
+    if k == "ticket":
+        f = {}
+        if d.get("status") in tickets.STATUSES: f["status"] = d["status"]
+        if str(d.get("reply") or "").strip(): f["reply"] = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", str(d["reply"]))[:3000]
+        t = tickets.update(str(d.get("id", ""))[:20], f); return {"ok": True, "status": t["status"]}
+    if k == "live":
+        sid = str(d.get("id", ""))[:40]
+        if d.get("action") == "close": support.admin_close(sid); return {"ok": True}
+        if d.get("action") == "conv": return {"ok": True, "conv": support.admin_conv(sid)}
+        support.admin_reply(sid, str(d.get("text") or "")); return {"ok": True}
+    raise ValueError("bad kind")
+
 # ---------- komunikat na stronie („Co nowego” / ogłoszenie) ----------
 def announcement():
     a = store.get("mod_announce", {}) or {}
@@ -585,14 +680,14 @@ def announcement_cached():
 def inject(doc, h, path):
     """Wstrzykuje ogłoszenie (dla wszystkich) i link „🛡️ Panel admina” (tylko gdy serwer rozpozna konto admin)."""
     a = announcement_cached()
-    add = '<link rel="stylesheet" href="/mod-ring.css?v=1.0">\n<script src="/mod-ring.js?v=1.0" defer></script>\n'
+    add = '<link rel="stylesheet" href="/mod-ring.css?v=1.1">\n<script src="/mod-ring.js?v=1.1" defer></script>\n'
     if a["on"] and a["text"]:
         add += (f'<div class="luna-ann" role="status" data-t="{a["t"]}"><b>📣 {html.escape(a["title"])}</b> <span>{html.escape(a["text"])}</span>'
                 '<button type="button" class="luna-ann-x" aria-label="Zamknij">×</button></div>\n')
     try:
         acc = h._acct()
-        if acc and is_admin_user(acc[0]):
-            add += f'<script src="{panel_prefix()}/link.js?v=1.0" defer></script>\n'
+        if acc and is_staff_user(acc[0]):
+            add += f'<script src="{panel_prefix()}/link.js?v=1.1" defer></script>\n'
     except Exception: pass
     return doc.replace("</body>", add + "</body>", 1)
 
@@ -609,8 +704,8 @@ def handle_get(h, u):
         sub = p[len(pref):] or "/"
         if sub == "/link.js":
             a = h._acct()
-            if not a or not is_admin_user(a[0]): return _send(h, 404, "text/plain; charset=utf-8", b"not found")
-            js = open(os.path.join(PANEL_DIR, "link.js"), encoding="utf-8").read().replace("__P__", pref)
+            if not a or not is_staff_user(a[0]): return _send(h, 404, "text/plain; charset=utf-8", b"not found")
+            js = open(os.path.join(PANEL_DIR, "link.js"), encoding="utf-8").read().replace("__P__", pref).replace("__ROLE__", staff_of(a[0]))
             return _send(h, 200, "text/javascript; charset=utf-8", js.encode())
         files = {"/": ("index.html", "text/html; charset=utf-8"), "/app": ("index.html", "text/html; charset=utf-8"),
                  "/mod.js": ("mod.js", "text/javascript; charset=utf-8"), "/mod.css": ("mod.css", "text/css; charset=utf-8")}
@@ -634,7 +729,7 @@ def handle_get(h, u):
         return h._json(state(h))
     if p == "/api/mod/setup.svg":
         a = h._acct()
-        if not a or not is_admin_user(a[0]) or not a[0].get("mod_totp_pending"): return _send(h, 404, "text/plain", b"not found")
+        if not a or not is_staff_user(a[0]) or not a[0].get("mod_totp_pending"): return _send(h, 404, "text/plain", b"not found")
         import segno
         u2 = security.totp_uri(a[0]["mod_totp_pending"], "Moderator", "Luna")
         b = io.BytesIO(); segno.make(u2, error="m").save(b, kind="svg", scale=6, border=2, dark="#0b0705", light="#ffffff", xmldecl=False)
@@ -642,10 +737,15 @@ def handle_get(h, u):
     c = _ctx(h)
     if not c: return h._json({"error": "unauthorized"}, 401)
     q = parse_qs(u.query); g = lambda k: (q.get(k) or [""])[0]
+    need = {"/api/mod/overview": "overview", "/api/mod/queue": "chat", "/api/mod/users": "users", "/api/mod/content": "content", "/api/mod/audit": "audit",
+            "/api/mod/broadcasts": "broadcast", "/api/mod/shop": "shop", "/api/mod/support": "support"}.get(p)
+    if need and not can(c["u"], need): return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)
+    if p == "/api/mod/shop": return h._json({"items": shop(g("q"))})
+    if p == "/api/mod/support": return h._json(support_list())
     if p == "/api/mod/overview":
         return h._json({"switches": switches(True), "features": FEATURES, "scopes": SCOPES, "stats": stats(), "announcement": announcement(),
                         "support": True, "persistent": store.status()["persistent"]})
-    if p == "/api/mod/queue": return h._json({"items": queue()})
+    if p == "/api/mod/queue": return h._json({"items": queue(c["full"])})
     if p == "/api/mod/users": return h._json({"items": users(g("q")[:30])})
     if p == "/api/mod/content": return h._json({"items": content(g("q")[:40])})
     if p == "/api/mod/audit": return h._json({"items": list(reversed((store.get("mod_audit", []) or [])[-300:]))})
@@ -658,11 +758,12 @@ def state(h):
     a = h._acct()
     if not a: return {"stage": "login"}
     u = a[0]
-    if not is_admin_user(u): return {"stage": "denied"}
+    if not is_staff_user(u): return {"stage": "denied"}
     if not totp_secret(u): return {"stage": "setup", "has_pending": bool(u.get("mod_totp_pending")), "persistent": store.status()["persistent"]}
     if not device_ok(h, u["uid"]): return {"stage": "unlock"}
-    tok, csrf = _mint(u["uid"])
-    return {"stage": "ok", "token": tok, "csrf": csrf, "name": MOD_NAME, "nick": admin_nick(), "prefix": panel_prefix(), "ttl": TOKEN_TTL}
+    full = is_full(u); tok, csrf = _mint(u["uid"], full)
+    return {"stage": "ok", "token": tok, "csrf": csrf, "name": MOD_NAME, "nick": admin_nick() if full else _nick(u["uid"]), "prefix": panel_prefix(), "ttl": TOKEN_TTL,
+            "role": staff_of(u), "perms": sorted(perms(u))}
 
 _rl = {}
 def _rate(key, n, per):
@@ -688,7 +789,7 @@ def handle_post(h, u, data):
     if not _rate("m:" + ip, 90, 60): return h._json({"error": "Za szybko – odczekaj chwilę."}, 429)
     if p in ("/api/mod/setup/start", "/api/mod/setup/confirm", "/api/mod/unlock"):
         a = h._acct()
-        if not a or not is_admin_user(a[0]): return h._json({"error": "unauthorized"}, 401)
+        if not a or not is_staff_user(a[0]): return h._json({"error": "unauthorized"}, 401)
         if not h._csrf_ok(a[1]): return h._json({"error": "Odśwież stronę (CSRF)."}, 403)
         if not _rate("m2fa:" + ip, 8, 300): return h._json({"error": "Za dużo prób – odczekaj 5 minut."}, 429)
         uid = a[0]["uid"]
@@ -719,7 +820,11 @@ def handle_post(h, u, data):
         device_forget(h, bool(data.get("all")), c["uid"]); _sess.pop(c["tok"], None); audit(h, "lock", "wszystkie urządzenia" if data.get("all") else "to urządzenie")
         return h._json({"ok": True})
     act = p.rsplit("/", 1)[-1]
-    crit = act in CRITICAL or (act in ("queue", "user") and data.get("action") in ("ban", "temp_block", "model_on", "model_off"))
+    need = {"switches": "switches", "queue": "chat", "user": "users", "content": "content", "announce": "announce", "broadcast": "broadcast", "shop": "shop", "support": "support"}.get(act)
+    if need and not can(c["u"], need): return h._json({"error": "Ta część jest tylko dla admina 🛡️"}, 403)
+    if not c["full"] and ((act == "user" and data.get("action") not in MOD_USER_ACTS) or (act == "queue" and data.get("action") not in MOD_QUEUE_ACTS)):
+        return h._json({"error": "Ta akcja jest tylko dla admina 🛡️"}, 403)
+    crit = act in CRITICAL or (act in ("queue", "user") and data.get("action") in ("ban", "temp_block", "model_on", "model_off", "staff_on", "staff_off"))
     if crit:
         if not _rate("mc:" + c["uid"], 20, 600): return h._json({"error": "Za dużo akcji krytycznych – odczekaj chwilę."}, 429)
         if not _reauth(c, data): return h._json({"error": "Potwierdź kodem 2FA.", "reauth": True}, 403)
@@ -736,11 +841,17 @@ def handle_post(h, u, data):
             _save_switches(S); audit(h, "switches", ", ".join([f"{k}={'ON' if S[k]['on'] else 'OFF'}" for k in SCOPES] + [f"{k}={'ON' if v else 'OFF'}" for k, v in S["features"].items()]))
             return h._json({"ok": True, "switches": S})
         if p == "/api/mod/queue":
-            r = queue_act(h, data); audit(h, "queue " + str(data.get("action")), str(data.get("src")) + ":" + str(data.get("id"))[:40], data.get("reason", "")); return h._json(r)
+            r = queue_act(h, data, c["full"]); audit(h, "queue " + str(data.get("action")), str(data.get("src")) + ":" + str(data.get("id"))[:40], data.get("reason", "")); return h._json(r)
         if p == "/api/mod/user":
-            r = user_act(h, data); audit(h, "user " + str(data.get("action")), "u:" + str(data.get("uid"))[:8], data.get("reason") or data.get("plan") or ""); return h._json({"ok": True, **r})
+            r = user_act(h, data, c["full"]); audit(h, "user " + str(data.get("action")), "u:" + str(data.get("uid"))[:8], data.get("reason") or data.get("plan") or ""); return h._json({"ok": True, **r})
         if p == "/api/mod/content":
             r = content_act(h, data); audit(h, "content " + str(data.get("action")), str(data.get("type")) + ":" + str(data.get("id"))[:20]); return h._json(r)
+        if p == "/api/mod/shop":
+            r = shop_act(data); audit(h, "shop " + str(data.get("action")), str(data.get("id"))[:40]); return h._json(r)
+        if p == "/api/mod/support":
+            r = support_act(data)
+            if data.get("action") != "conv": audit(h, "support " + str(data.get("kind")) + " " + str(data.get("action") or ("reply" if data.get("reply") or data.get("text") else data.get("status") or "")), str(data.get("id"))[:24])
+            return h._json(r)
         if p == "/api/mod/announce":
             a = {"on": bool(data.get("on")), "title": re.sub(r"[<>\x00-\x1f]", "", str(data.get("title") or "Co nowego"))[:60],
                  "text": re.sub(r"[<>\x00-\x1f]", "", str(data.get("text") or ""))[:400], "t": int(time.time())}

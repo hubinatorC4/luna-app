@@ -3,6 +3,8 @@
 (() => {
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = x => String(x ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+window.LunaRB = window.LunaRB || (p => { const L = (document.documentElement.lang || 'pl').slice(0, 2), r = (p && p.staff) || (p && p.mod ? 'admin' : '');   /* odznaka roli z serwera: admin / moderator */
+  return r === 'admin' ? ` <span class="mod-badge">🛡️ ${L === 'uk' ? 'Адмін' : 'Admin'}</span>` : r === 'moderator' ? ` <span class="mdr-badge">🛡️ ${({es: 'Moderador', uk: 'Модератор'})[L] || 'Moderator'}</span>` : ''; });
 const D = JSON.parse(document.getElementById('i18n').textContent);
 const lang = () => (document.documentElement.lang || 'pl').slice(0, 2);
 const T = k => (Object.assign({}, D.pl, D[lang()] || {}))[k] || k;
@@ -69,8 +71,8 @@ function draw(){
   const tier = P.tier ? ` nk-${P.tier}` : '';
   $('#stApp').removeAttribute('aria-busy'); $('#stApp').innerHTML = `
   <section class="st-head" id="stHead">
-    ${P.mod ? '<span class="mod-av st-av" style="--s:72px" data-video="1" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="72" height="72"></span>' : `<img class="st-av${P.model ? ' mdl-ring' : ''}" src="${esc(avatarURL())}" alt="" width="72" height="72">`}
-    <div class="st-who"><div class="st-nick nk${tier}">${esc(pr.nick || '—')}${P.mod ? ' <span class="mod-badge">🛡️ Moderator</span>' : ''}${P.model ? ' <span class="mdl-badge">💗 Modelka Luny</span>' : ''}</div>
+    ${P.mod ? '<span class="mod-av st-av" style="--s:72px" data-video="1" aria-hidden="true"><img src="/mod-av/mustang-512.webp" alt="" width="72" height="72"></span>' : `<img class="st-av${P.staff === 'moderator' ? ' mdr-ring' : P.model ? ' mdl-ring' : ''}" src="${esc(avatarURL())}" alt="" width="72" height="72">`}
+    <div class="st-who"><div class="st-nick nk${tier}">${esc(pr.nick || '—')}${window.LunaRB(P)}${P.model ? ' <span class="mdl-badge">💗 Modelka Luny</span>' : ''}</div>
 ${identLine(pr)}
       <span class="st-plan ${esc(P.plan)}">${esc(P.plan_name)}</span>${P.partner ? ' <span class="st-tag pt-mark">💖</span>' : ''}
       <div class="st-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${c.pct}" aria-label="${esc(F('compl', {p: c.pct}))}"><i style="width:${c.pct}%"></i></div>

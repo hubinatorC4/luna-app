@@ -3,13 +3,14 @@
 (() => {
 const P = '__P__', MODE = document.documentElement.dataset.mode;
 // Nazwa panelu w 5 językach (reszta panelu po polsku – narzędzie właściciela)
-const LG = (() => { try { return (localStorage.getItem('luna.lang') || (document.cookie.match(/luna_lang=(\w\w)/) || [])[1] || navigator.language || 'pl').slice(0, 2); } catch (e) { return 'pl'; } })();
+const LG = (() => { try { return (localStorage.getItem('luna.lang') || (document.cookie.match(/luna_lang=(\w\w)/) || [])[1] || 'pl').slice(0, 2); } catch (e) { return 'pl'; } })();
 const PNAME = {pl: 'Panel admina', en: 'Admin panel', es: 'Panel de admin', de: 'Admin-Panel', uk: 'Панель адміна'}[LG] || 'Panel admina';
 document.title = PNAME + ' · Luna'; { const b = document.querySelector('.mp-brand b'); if (b) b.textContent = PNAME; }
 const $ = s => document.querySelector(s), main = $('#mpMain'), tabs = $('#mpTabs');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 const when = t => t ? new Date(t * 1000).toLocaleString('pl-PL', {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'}) : '—';
-let TOK = '', CSRF = '', ACSRF = '', TAB = 'home', OV = null;
+let TOK = '', CSRF = '', ACSRF = '', TAB = 'home', OV = null, ROLE = 'admin', FULL = true;
+const MNAME = {pl: 'Panel moderatora', en: 'Moderator panel', es: 'Panel de moderación', de: 'Moderations-Panel', uk: 'Панель модератора'}[LG] || 'Panel moderatora';
 if (MODE === 'app') { $('#mpSwitch').href = P + '/'; $('#mpSwitch').textContent = '🖥️ Wersja na komputer'; }
 const toast = (m) => { const t = $('#mpToast'); t.textContent = m; t.hidden = false; clearTimeout(t._h); t._h = setTimeout(() => t.hidden = true, 3200); };
 async function req(path, body, extra){
@@ -41,7 +42,9 @@ async function boot(){
   if (st.stage === 'setup') return setupView(st);
   if (st.stage === 'unlock') return unlockView();
   TOK = st.token; CSRF = st.csrf; $('#mpWho').textContent = st.name; $('#mpLock').hidden = false;
-  try { sessionStorage.setItem('luna.admin', TOK); } catch (e) {}   /* widok Pomocy na żywo (/admin-support.html) korzysta z tego samego tokenu */
+  ROLE = st.role || 'admin'; FULL = ROLE === 'admin';
+  if (!FULL){ document.title = MNAME + ' · Luna'; const b = document.querySelector('.mp-brand b'); if (b) b.textContent = MNAME; $('#mpWho').textContent = (st.nick || '') + ' · Moderator'; if (TAB === 'home') TAB = 'queue'; }
+  if (FULL) { try { sessionStorage.setItem('luna.admin', TOK); } catch (e) {} }   /* tylko admin: widok /admin-support.html korzysta z tego tokenu */
   app();
 }
 function loginView(){
@@ -79,18 +82,19 @@ function unlockView(){
 }
 $('#mpLock').onclick = async () => { if (!confirm('Zablokować panel na tym urządzeniu? Następne wejście poprosi o kod 2FA.')) return; try { await req('/api/mod/lock', {}); } catch (e) {} TOK = ''; boot(); };
 /* ---------- panel ---------- */
-const TABS = [['home', '⚡', 'Przełączniki'], ['queue', '🧹', 'Kolejka'], ['users', '👥', 'Użytkownicy'], ['content', '🖼️', 'Treści'], ['msg', '📣', 'Komunikaty'], ['support', '💬', 'Wsparcie'], ['audit', '📜', 'Dziennik']];
+const TABS = [['home', '⚡', 'Przełączniki'], ['queue', '🧹', 'Kolejka'], ['users', '👥', 'Użytkownicy'], ['content', '🖼️', 'Treści'], ['shop', '🛍️', 'Butik'], ['msg', '📣', 'Komunikaty'], ['support', '💬', 'Wsparcie'], ['audit', '📜', 'Dziennik']];
+const MTABS = [['queue', '💬', 'Czat'], ['users', '👥', 'Użytkownicy'], ['shop', '🛍️', 'Butik'], ['support', '🛟', 'Wsparcie']];   /* moderator: minimalne uprawnienia */
 function app(){
   main.className = 'mp-main'; main.innerHTML = '';   // bez resztek ekranu logowania / kodu 2FA
   if (MODE === 'web') main.prepend(tabs);
-  const list = MODE === 'app' ? TABS.filter(t => ['home', 'queue', 'users', 'content', 'msg'].includes(t[0])) : TABS;
+  const list = !FULL ? MTABS : MODE === 'app' ? TABS.filter(t => ['home', 'queue', 'users', 'content', 'msg'].includes(t[0])) : TABS;
   tabs.innerHTML = list.map(([k, i, l]) => `<button type="button" data-t="${k}"><span class="i" aria-hidden="true">${i}</span><span>${l}</span>${k === 'queue' ? '<span class="n" id="qN" hidden></span>' : ''}</button>`).join('');
   tabs.hidden = false; tabs.querySelectorAll('button').forEach(b => b.onclick = () => show(b.dataset.t)); show(TAB);
 }
 function sec(html){ main.querySelectorAll('.mp-sec').forEach(s => s.remove()); main.insertAdjacentHTML('beforeend', `<section class="mp-sec">${html}</section>`); return main.querySelector('.mp-sec'); }
 async function show(t){
   TAB = t; tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-current', b.dataset.t === t));
-  try { await ({home, queue, users, content, msg, support, audit})[t](); } catch (e){ sec(`<p class="mp-hint">⚠️ ${esc(e.message)}</p>`); }
+  try { await ({home, queue, users, content, shop, msg, support, audit})[t](); } catch (e){ sec(`<p class="mp-hint">⚠️ ${esc(e.message)}</p>`); }
 }
 /* przełączniki + statystyki */
 async function home(){
@@ -127,7 +131,7 @@ async function home(){
 const ACT = {approve: ['✅ Zatwierdź', 'ok'], dismiss: ['👌 Odrzuć zgłoszenie', 'ok'], remove: ['🗑️ Usuń', 'bad'], warn: ['⚠️ Ostrzeż', ''], strike: ['🟥 Strike', 'bad'], temp_block: ['⏸️ Blokada 7 dni', 'bad'], ban: ['⛔ Ban', 'bad']};
 async function queue(){
   const d = await req('/api/mod/queue'); const qn = $('#qN'); if (qn){ qn.textContent = d.items.length; qn.hidden = !d.items.length; }
-  const s = sec(`<h2>🧹 Kolejka moderacji</h2><p class="mp-hint">Zgłoszenia, wpisy i zdjęcia na ścianie, komentarze, awatary, agentki, czat bitew, filmy i casting – w jednym miejscu. Powód trafia do Skrzynki użytkownika.</p>
+  const s = sec(`${FULL ? '<h2>🧹 Kolejka moderacji</h2><p class="mp-hint">Zgłoszenia, wpisy i zdjęcia na ścianie, komentarze, awatary, agentki, czat bitew, filmy i casting – w jednym miejscu. Powód trafia do Skrzynki użytkownika.</p>' : '<h2>💬 Zgłoszenia z czatów</h2><p class="mp-hint">Czat bitew i czat prywatny. Możesz zostawić, usunąć wiadomość, ostrzec albo zablokować na 7 dni. Bany zostają u admina 🛡️</p>'}
   <label class="mp-l">Powód (wysyłany użytkownikowi)<input class="mp-in" id="qR" maxlength="300" placeholder="np. nękanie innych użytkowników"></label>
   <div id="qL">${d.items.length ? d.items.map(it => `<div class="mp-item" data-src="${esc(it.src)}" data-id="${esc(it.id)}" data-bid="${esc(it.bid || '')}" data-short="${esc(it.short || '')}">
     ${it.img && !it.link ? `<img class="th" src="${esc(it.img)}" alt="" loading="lazy">` : '<span class="th" aria-hidden="true" style="font-size:34px">' + (it.src === 'cmt' ? '💬' : it.src === 'case' ? '🚩' : it.src === 'casting' ? '🎭' : it.src === 'video' ? '🎬' : '📝') + '</span>'}
@@ -144,18 +148,20 @@ async function users(q){
   const d = await req('/api/mod/users?q=' + encodeURIComponent(q || ''));
   const s = sec(`<h2>👥 Użytkownicy</h2><div class="mp-row"><input class="mp-in" id="uQ" placeholder="Szukaj po nicku" value="${esc(q || '')}" style="flex:1"><button class="mp-btn" id="uGo" type="button">Szukaj</button></div>
   <label class="mp-l">Powód (do Skrzynki użytkownika)<input class="mp-in" id="uR" maxlength="300"></label>
-  <div>${d.items.map(u => `<div class="mp-item" data-uid="${esc(u.uid)}"><span class="th" aria-hidden="true" style="font-size:30px">${u.admin ? '🛡️' : '👤'}</span>
-   <div><div class="k">${esc(u.nick || '(bez nicku)')} ${u.admin ? '<span class="mod-badge">🛡️ Moderator</span>' : ''}</div>
+  <div>${d.items.map(u => `<div class="mp-item" data-uid="${esc(u.uid)}"><span class="th" aria-hidden="true" style="font-size:30px">${u.admin || u.staff ? '🛡️' : '👤'}</span>
+   <div><div class="k">${esc(u.nick || '(bez nicku)')} ${u.admin ? '<span class="mod-badge">🛡️ Admin</span>' : u.staff === 'moderator' ? '<span class="mdr-badge">🛡️ Moderator</span>' : ''}</div>
    <p><span class="mp-chip">${esc(u.plan)}${u.until ? ' do ' + when(u.until) : ''}</span>${u.partner ? '<span class="mp-chip">💖 współpracująca</span>' : ''}${u.model ? '<span class="mp-chip" style="border-color:#FF3D9A">💗 Modelka Luny</span>' : ''}<span class="mp-chip ${u.standing.strikes ? 'bad' : ''}">strike ${u.standing.strikes}/${u.standing.max}</span>${u.standing.banned ? '<span class="mp-chip bad">⛔ ban</span>' : ''}${u.standing.block_until ? `<span class="mp-chip bad">⏸️ do ${when(u.standing.block_until)}</span>` : ''}${u.standing.warns ? `<span class="mp-chip">ostrzeżeń ${u.standing.warns}</span>` : ''}</p>
    <div class="m">od ${when(u.created)}</div></div>
-   ${u.admin ? '' : `<div class="acts"><button type="button" class="mp-btn" data-a="warn">⚠️ Ostrzeż</button><button type="button" class="mp-btn bad" data-a="strike">🟥 Strike</button><button type="button" class="mp-btn bad" data-a="temp_block">⏸️ Blokada 7 dni</button>
+   ${u.admin ? '' : !FULL ? (u.staff ? '' : '<div class="acts"><button type="button" class="mp-btn" data-a="warn">⚠️ Ostrzeż</button><button type="button" class="mp-btn bad" data-a="temp_block">⏸️ Blokada 7 dni</button></div>') : `<div class="acts"><button type="button" class="mp-btn" data-a="warn">⚠️ Ostrzeż</button><button type="button" class="mp-btn bad" data-a="strike">🟥 Strike</button><button type="button" class="mp-btn bad" data-a="temp_block">⏸️ Blokada 7 dni</button>
    ${u.standing.banned || u.standing.block_until ? '<button type="button" class="mp-btn ok" data-a="unban">🔓 Odblokuj</button>' : '<button type="button" class="mp-btn bad" data-a="ban">⛔ Ban</button>'}${u.standing.strikes ? '<button type="button" class="mp-btn" data-a="unstrike">↩️ Cofnij strike</button>' : ''}
    ${u.model ? '<button type="button" class="mp-btn bad" data-a="model_off">💔 Odbierz „Modelka Luny”</button>' : '<button type="button" class="mp-btn" data-model="1">💗 Nadaj „Modelka Luny”…</button>'}
+   ${u.staff === 'moderator' ? '<button type="button" class="mp-btn bad" data-a="staff_off">🛡️ Odbierz rolę moderatora</button>' : '<button type="button" class="mp-btn blue" data-a="staff_on">🛡️ Nadaj rolę moderatora</button>'}
    <button type="button" class="mp-btn" data-a="${u.partner ? 'partner_off' : 'partner_on'}">${u.partner ? '💔 Odbierz współpracę' : '💖 Nadaj „współpracującą”'}</button>
    <select class="mp-in" data-plan style="width:auto"><option value="">Plan testowy…</option><option value="premium">Premium 30 dni</option><option value="pro">Pro 30 dni</option><option value="none">Zdejmij nadany plan</option></select></div>`}</div>`).join('') || '<p class="mp-hint">Nikogo nie znaleziono.</p>'}</div>`);
   const go = () => users($('#uQ').value.trim()); $('#uGo').onclick = go; $('#uQ').onkeydown = e => { if (e.key === 'Enter') go(); };
   const run = async (uid, body, label) => { try { await act('/api/mod/user', Object.assign({uid, reason: $('#uR').value}, body)); toast(label || 'Gotowe ✅'); users($('#uQ').value.trim()); } catch (e){ toast('⚠️ ' + e.message); } };
-  s.querySelectorAll('[data-uid] [data-a]').forEach(b => b.onclick = () => { const a = b.dataset.a; if (['ban', 'strike', 'temp_block', 'model_off'].includes(a) && !confirm(`Na pewno: ${b.textContent}?`)) return; run(b.closest('[data-uid]').dataset.uid, {action: a, days: 7}); });
+  s.querySelectorAll('[data-uid] [data-a]').forEach(b => b.onclick = () => { const a = b.dataset.a; if (['ban', 'strike', 'temp_block', 'model_off', 'staff_off'].includes(a) && !confirm(`Na pewno: ${b.textContent}?`)) return;
+    if (a === 'staff_on' && !confirm('Nadać rolę moderatora? Ta osoba dostanie lżejszy „Panel moderatora”: czat, ostrzeżenia i blokady 7 dni, Butik (ukryj/pokaż) i wsparcie. Bez wyłączników, banów i ról.')) return; run(b.closest('[data-uid]').dataset.uid, {action: a, days: 7}); });
   s.querySelectorAll('[data-model]').forEach(b => b.onclick = () => {
     const box = b.closest('.mp-item'); if (box.querySelector('.mdl-form')) return;
     box.insertAdjacentHTML('beforeend', `<div class="mdl-form mp-card" style="grid-column:1/-1;margin:6px 0 0"><b>💗 Nadanie roli „Modelka Luny” – wszystkie trzy warunki:</b>
@@ -193,13 +199,46 @@ async function msg(){
     if (!confirm(`Wysłać do WSZYSTKICH użytkowników?\n\n„${t}”\n\n${x.slice(0, 300)}`)) return;
     try { await act('/api/mod/broadcast', {title: t, body: x, important: $('#bI').checked}); toast('Wysłane do wszystkich 📬'); $('#bT').value = $('#bX').value = ''; msg(); } catch (e){ toast('⚠️ ' + e.message); } };
 }
+/* 🛍️ Butik: ukryj / pokaż */
+async function shop(q){
+  const d = await req('/api/mod/shop?q=' + encodeURIComponent(q || ''));
+  const s = sec(`<h2>🛍️ Butik</h2><p class="mp-hint">Ukryj pozycję, jeśli coś jest nie tak (zdjęcie, opis), i pokaż ją z powrotem jednym kliknięciem. Ceny i premiery zostają u admina.</p>
+  <div class="mp-row"><input class="mp-in" id="sQ" placeholder="Szukaj stroju" value="${esc(q || '')}" style="flex:1"><button class="mp-btn" id="sGo" type="button">Szukaj</button></div><div style="margin-top:12px">
+  ${d.items.map(i => `<div class="mp-item" data-sid="${esc(i.id)}">${i.image ? `<img class="th" src="${esc(i.image)}" alt="" loading="lazy">` : '<span class="th" aria-hidden="true" style="font-size:30px">👗</span>'}
+   <div><div class="k">${esc(i.name)} ${i.hidden ? '<span class="mp-chip bad">ukryte</span>' : `<span class="mp-chip">${esc(i.status)}</span>`}</div><div class="m">${esc(i.line)} · ${esc(i.category)}</div></div>
+   <div class="acts"><button type="button" class="mp-btn ${i.hidden ? 'ok' : ''}" data-a="${i.hidden ? 'show' : 'hide'}">${i.hidden ? '👁️ Pokaż' : '🙈 Ukryj'}</button></div></div>`).join('') || '<p class="mp-hint">Nic nie znaleziono – butik ma dziś wolne 💤</p>'}</div>`);
+  const go = () => shop($('#sQ').value.trim()); $('#sGo').onclick = go; $('#sQ').onkeydown = e => { if (e.key === 'Enter') go(); };
+  s.querySelectorAll('[data-sid] [data-a]').forEach(b => b.onclick = async () => { try { await act('/api/mod/shop', {id: b.closest('[data-sid]').dataset.sid, action: b.dataset.a}); toast('Gotowe ✅'); shop($('#sQ').value.trim()); } catch (e){ toast('⚠️ ' + e.message); } });
+}
+/* 💬 Wsparcie: tickety + Pomoc na żywo (odpowiedzi zawsze jako „Zespół Luny · Moderator”) */
 async function support(){
-  sec(`<h2>💬 Wsparcie</h2><div class="mp-card"><p>Rozmowy „Pomoc na żywo” i wiadomości „Napisz do moderatora”. Odpowiadasz jako „Zespół Luny · Moderator” – nigdy pod własnym imieniem.</p>
-  <div class="mp-row"><a class="mp-btn primary" href="/admin-support.html" target="_self">Otwórz widok wsparcia ↗</a><a class="mp-btn" href="/panel.html" target="_self">Pełny panel producenta ↗</a></div></div>`);
+  const d = await req('/api/mod/support');
+  const s = sec(`<h2>💬 Wsparcie</h2><p class="mp-hint">Odpowiadasz jako „Zespół Luny · Moderator” – nigdy pod własnym imieniem. ${d.online ? '🟢 ktoś z ekipy jest dostępny' : '⚪ nikt nie ma włączonego „Jestem dostępny/-a”'}</p>
+  ${FULL ? '<div class="mp-row" style="margin-bottom:10px"><a class="mp-btn primary" href="/admin-support.html" target="_self">Pomoc na żywo – pełny widok ↗</a><a class="mp-btn" href="/panel.html" target="_self">Pełny panel producenta ↗</a></div>' : ''}
+  <h3>📨 Zgłoszenia („Napisz do moderatora”)</h3>
+  ${d.tickets.map(t => `<div class="mp-item" data-tid="${esc(t.id)}"><span class="th" aria-hidden="true" style="font-size:28px">✉️</span><div><div class="k">${esc(t.id)} · ${esc(t.title)} <span class="mp-chip">${esc(t.status)}</span></div><p>${esc(t.text)}</p><div class="m">${esc(t.category)} · ${when(t.t)}${t.reply ? ' · ostatnia odpowiedź: ' + esc(t.reply.slice(0, 80)) : ''}</div>
+    <textarea class="mp-in" data-r maxlength="3000" placeholder="Odpowiedź (trafi do Skrzynki użytkownika)"></textarea></div>
+    <div class="acts"><button type="button" class="mp-btn primary" data-a="reply">Wyślij odpowiedź</button><button type="button" class="mp-btn ok" data-a="done">✅ Rozwiązane</button></div></div>`).join('') || '<p class="mp-hint">Brak zgłoszeń – wszyscy szczęśliwi 🌙</p>'}
+  <h3>🛟 Pomoc na żywo</h3>
+  ${d.live.map(c => `<div class="mp-item" data-lid="${esc(c.sid)}"><span class="th" aria-hidden="true" style="font-size:28px">💬</span><div><div class="k">${esc(c.who)} ${c.unread ? `<span class="mp-chip bad">${c.unread} nowe</span>` : ''}${c.closed ? '<span class="mp-chip">zamknięta</span>' : ''}</div><p>${esc(c.last)}</p><div class="m">${when(c.updated)} · wiadomości: ${c.count}</div><div data-conv></div></div>
+    <div class="acts"><button type="button" class="mp-btn" data-a="open">Otwórz</button>${c.closed ? '' : '<button type="button" class="mp-btn" data-a="close">Zakończ</button>'}</div></div>`).join('') || '<p class="mp-hint">Nikt teraz nie czeka na rozmowę.</p>'}`);
+  s.querySelectorAll('[data-tid] [data-a]').forEach(b => b.onclick = async () => { const it = b.closest('[data-tid]');
+    const body = b.dataset.a === 'reply' ? {kind: 'ticket', id: it.dataset.tid, reply: it.querySelector('[data-r]').value.trim()} : {kind: 'ticket', id: it.dataset.tid, status: 'rozwiązane'};
+    if (b.dataset.a === 'reply' && !body.reply) return toast('Napisz odpowiedź ✍️');
+    try { await act('/api/mod/support', body); toast('Gotowe ✅'); support(); } catch (e){ toast('⚠️ ' + e.message); } });
+  s.querySelectorAll('[data-lid] [data-a]').forEach(b => b.onclick = async () => { const it = b.closest('[data-lid]'), sid = it.dataset.lid;
+    try {
+      if (b.dataset.a === 'close'){ await act('/api/mod/support', {kind: 'live', id: sid, action: 'close'}); toast('Rozmowa zakończona'); return support(); }
+      const r = await req('/api/mod/support', {kind: 'live', id: sid, action: 'conv'}); const box = it.querySelector('[data-conv]');
+      box.innerHTML = `<div class="mp-log">${(r.conv.msgs || []).slice(-30).map(m => `<div><b>${m.from === 'mod' ? 'Zespół Luny' : m.from === 'bot' ? 'Asystent AI' : m.from === 'system' ? '·' : 'Użytkownik'}</b> ${esc(m.text)}</div>`).join('')}</div>
+        <div class="mp-row"><input class="mp-in" data-lt maxlength="1000" placeholder="Odpowiedz…" style="flex:1"><button type="button" class="mp-btn primary" data-ls>Wyślij</button></div>`;
+      box.querySelector('[data-ls]').onclick = async () => { const t = box.querySelector('[data-lt]').value.trim(); if (!t) return;
+        try { await act('/api/mod/support', {kind: 'live', id: sid, text: t}); toast('Wysłane 💬'); b.click(); } catch (e){ toast('⚠️ ' + e.message); } };
+    } catch (e){ toast('⚠️ ' + e.message); } });
 }
 async function audit(){
   const d = await req('/api/mod/audit');
-  sec(`<h2>📜 Dziennik działań</h2><p class="mp-hint">Każda akcja panelu: kto (zawsze „Moderator”), co i kiedy.</p><div class="mp-card mp-log">${d.items.map(x => `<div><time>${when(x.t)}</time><b>${esc(x.who)}</b> · ${esc(x.action)} ${x.target ? '· ' + esc(x.target) : ''} ${x.detail ? '<span class="mp-hint">— ' + esc(x.detail) + '</span>' : ''}</div>`).join('') || '<p class="mp-hint">Pusto.</p>'}</div>`);
+  sec(`<h2>📜 Dziennik działań</h2><p class="mp-hint">Każda akcja panelu: kto („Admin” albo „Moderator · nick”), co i kiedy. Użytkownicy zawsze widzą tylko „Zespół Luny · Moderator”.</p><div class="mp-card mp-log">${d.items.map(x => `<div><time>${when(x.t)}</time><b>${esc(x.who)}</b> · ${esc(x.action)} ${x.target ? '· ' + esc(x.target) : ''} ${x.detail ? '<span class="mp-hint">— ' + esc(x.detail) + '</span>' : ''}</div>`).join('') || '<p class="mp-hint">Pusto.</p>'}</div>`);
 }
 boot();
 })();

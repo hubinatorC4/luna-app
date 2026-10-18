@@ -38,3 +38,9 @@
 .lk-prev .ava-p{width:56px;height:56px;border-radius:50%;background:#333;display:grid;place-items:center;font-weight:900}
 .lk-prev b{font-size:20px}.lk-prev .lk-btn{margin-left:auto;border-radius:999px;padding:6px 14px;font-weight:800;border:0}
 .lk-msg{font-size:13px;min-height:1.2em}
+
+/* 🛡️ Moderator (rola nadana przez admina): spokojna, srebrno-grafitowa obwódka – bez niebieskiego i bez ⚡ (zarezerwowane dla admina) */
+.mdr-ring{box-shadow:0 0 0 2px #0b0705,0 0 0 3.5px #9AA6B6,0 0 0 5px rgba(154,166,182,.25)!important;border-radius:50%}
+.mdr-badge{display:inline-flex;align-items:center;gap:3px;font-size:.72em;font-weight:800;line-height:1.5;padding:0 8px;border-radius:999px;background:rgba(154,166,182,.14);color:#d5dbe4;border:1px solid rgba(154,166,182,.45);vertical-align:middle;margin-left:4px;white-space:nowrap;-webkit-text-fill-color:#d5dbe4}
+/* emoji w nicku: własne kolory (np. czerwone ❤️), bez gradientu/koloru nicku */
+.nk .nk-emo{-webkit-text-fill-color:initial;color:initial;background:none;-webkit-background-clip:border-box;background-clip:border-box;animation:none;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla",sans-serif;font-weight:400}
