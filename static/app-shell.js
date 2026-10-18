@@ -260,6 +260,7 @@ function renderMore(){
   $('#replay').onclick = () => { show('feed'); onboarding(); };
 }
 
+window.LunaShell = {openPage, show};  /* dla modułów (np. Skrzynka: inbox-badge.js) */
 /* ---------- start ---------- */
 const h = location.hash.slice(1);
 show(qs.get('platnosc') ? 'luna' : TABS.includes(h) ? h : 'feed');

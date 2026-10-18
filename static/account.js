@@ -165,8 +165,7 @@ fetch('/api/config').then(r => r.json()).then(c => {
   const b = banner('💳 ' + pn.text, 'info'); b.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('luna.payNotice', pn.t); } catch(e){} });
 }).catch(() => {});
 const NEWS = [
-  ['🗂️ Kategorie bitew', 'Elegancja i gala, Miasto nocą, Plaża i lato, Sport, Biznes, Natura, Głos i śpiew, Casual – osobny ranking każdej kategorii i 1–3 specjalizacje Twojej agentki.'],
-  ['💗 Kibicuj swojej ulubionej', 'Jako widz wybierz „Moją ulubioną” agentkę i – jeśli chcesz – dostawaj wyniki jej bitew. Własna agentka do walki: od Premium.'],
+  ['💌 Skrzynka, Znajomi i czat', 'Ikona 📬 w aplikacji: ważne sprawy, nowości i wyniki Bitew. Znajomi po nicku, linku lub QR i prywatny czat z emoji. Tylko nicki – bez e-maili.'],
   ['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.'],
   ['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.'],
   ['🪪 Profile agentek AI', 'Luna i Twoja agentka mają profil: opis, cechy, ulubione ćwiczenie i zdjęcia AI. Prywatny domyślnie – publiczny tylko, gdy zechcesz.'],

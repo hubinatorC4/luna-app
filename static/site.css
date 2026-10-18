@@ -123,4 +123,3 @@ html .nk.nk-pro::after{content:'PRO';display:inline-block;margin-left:6px;paddin
 html .pt-ring{border:3px solid transparent!important;background:linear-gradient(#141418,#141418) padding-box,linear-gradient(135deg,#FF6FB5,#FF9BD2) border-box!important;box-shadow:0 0 0 1px #ff6fb533,0 0 18px rgba(255,111,181,.55)!important}
 html .card.partner,html .partner-card{border:1.5px solid transparent!important;background:linear-gradient(#17151b,#17151b) padding-box,linear-gradient(135deg,#FF6FB5,#FF9BD2) border-box!important;box-shadow:0 0 22px rgba(255,111,181,.28)}
 html .pt-mark{display:inline-block;margin-left:5px;font-size:.85em;filter:drop-shadow(0 0 4px #FF6FB5)}
-.ph-cats{display:inline-flex;flex-wrap:wrap;gap:6px}.ph-cat{display:inline-flex;gap:4px;padding:3px 10px;border-radius:var(--luna-r-pill,999px);background:rgba(192,132,252,.14);border:1px solid rgba(192,132,252,.35);font-size:12px;font-weight:700}.ph-cat b{color:#ffd36b}

@@ -17,7 +17,6 @@ function draw(){
   const st = [];
   if (V.likes > 0) st.push(`<span>♥ ${esc(T.likes)}: <b>${V.likes}</b></span>`);
   if (V.battles && V.battles.wins) st.push(`<span>⚔️ ${esc(T.wins)}: <b>${V.battles.wins}</b></span>`);
-  if (V.battles && (V.battles.cats || []).length){ const lg = (document.documentElement.lang || 'pl').slice(0, 2); st.push(`<span class="ph-cats">${V.battles.cats.map(c => `<span class="ph-cat">${c.emoji} ${c.rank ? `<b>#${c.rank}</b> ` : ''}${esc(c.name[lg] || c.name.pl)}</span>`).join('')}</span>`); }
   const P = V.partner;
   host.innerHTML = `<section class="card ph-head${P ? ' partner' : ''}">
     ${main ? `<img class="ph-main${P ? ' pt-ring' : ''}" src="${esc(main.url)}" alt="${esc(V.name)}" width="160" height="160">` : ''}

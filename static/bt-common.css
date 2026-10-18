@@ -5,17 +5,3 @@
 .lg-diament{background:linear-gradient(180deg,#e9dcff,#9b7bff);color:#160a33}.lg-elite{background:#111;color:#ffd36b;box-shadow:inset 0 0 0 1px #ffd36b}
 .bt-plq{display:flex;flex-direction:column;gap:4px;align-items:center;margin-top:6px}
 .bt-plq b{display:inline-block;padding:6px 12px;border-radius:var(--luna-r-input,12px);font:900 12px/1.2 system-ui;color:#2a1a00;background:linear-gradient(180deg,#ffe8a3,#d9a63a);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 4px 12px rgba(0,0,0,.4);text-align:center}
-
-/* kategorie (pigułki), etykieta współpracy, miękki dymek „Stwórz własną agentkę” */
-.btc-row{display:inline-flex;flex-wrap:wrap;gap:6px;margin:4px 0}
-.btc{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--luna-r-pill,999px);background:rgba(192,132,252,.14);border:1px solid rgba(192,132,252,.35);color:#eadcff;font-size:12px;font-weight:700;white-space:nowrap}
-.btc b{color:#ffd36b}
-.bt-feat{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:var(--luna-r-pill,999px);background:rgba(255,111,181,.16);border:1px solid rgba(255,111,181,.5);color:#ffc2df;font-size:11.5px;font-weight:800}
-.bt-bubble{position:relative;display:block;margin:12px 0 6px;padding:14px 16px;border-radius:var(--luna-r-bubble,22px);background:var(--luna-surface-2,#1e1a22);box-shadow:var(--luna-shadow-soft,0 8px 20px rgba(0,0,0,.4)),0 0 0 1.5px rgba(255,111,181,.45);color:var(--luna-text,#fff);font-weight:800;text-decoration:none;transition:transform var(--luna-t,.2s) var(--luna-ease,ease)}
-.bt-bubble::after{content:'';position:absolute;left:26px;bottom:-7px;width:14px;height:14px;background:inherit;transform:rotate(45deg);border-radius:0 0 4px 0;box-shadow:1.5px 1.5px 0 rgba(255,111,181,.45)}
-.bt-bubble:hover{transform:translateY(-1px)}.bt-bubble small{display:block;font-weight:600;color:var(--luna-muted,#c3b6a8);margin-top:3px}
-.bt-role{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:var(--luna-r-pill,999px);background:rgba(255,255,255,.07);font-weight:800;font-size:13px}
-.bt-catpick{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
-.bt-catpick label{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:var(--luna-r-pill,999px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);cursor:pointer;font-size:13px;font-weight:700}
-.bt-catpick input{accent-color:#c084fc}.bt-catpick label:has(input:checked){background:rgba(192,132,252,.2);border-color:rgba(192,132,252,.6)}
-.bt-catpick label.lock{opacity:.5;cursor:not-allowed}

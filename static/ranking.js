@@ -4,7 +4,7 @@
 const $ = s => document.querySelector(s); const B = window.LunaBt, esc = B.esc, fmt = B.fmt;
 const D = JSON.parse(document.getElementById('i18n').textContent); const L = B.L; const t = Object.assign({}, D.pl, D[L] || {});
 const lq = L === 'pl' ? '' : '?lang=' + L;
-let R = null, csrf = '', logged = false, lg = 'all', per = 'all', cat = null;
+let R = null, csrf = '', logged = false, lg = 'all', per = 'all';
 async function api(path, body){
   const o = body ? {method: 'POST', credentials: 'same-origin', headers: {'Content-Type': 'application/json', 'X-CSRF-Token': csrf}, body: JSON.stringify(body)} : {credentials: 'same-origin'};
   const r = await fetch(path, o); const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error || 'error'); return d;
@@ -13,16 +13,13 @@ const empty = s => `<p class="rk-empty">🕊️ ${esc(s)}</p>`;
 function renderMe(){
   const el = $('#rkMe'), m = R.my_agent;
   if (!logged){ el.innerHTML = `<h2>${esc(t.me_h)}</h2><p>${esc(t.me_login)}</p><a class="pill primary" href="/app#konto">${esc(t.login)}</a>`; return; }
-  if (!m && R.role === 'viewer'){ const f = R.fav;   // widz (Podstawowa/Darmowy): kibicuje, nie zgłasza agentki
-    el.innerHTML = `<h2>${esc(t.me_h)}</h2><p><span class="bt-role">👀 ${esc(B.X.viewer)}</span></p><h3 class="rk-favh">${esc(B.X.fav_h)}</h3>${f ? `<div class="rk-mine"><img src="${esc(f.img)}" alt="" width="56" height="74"><div><b>${esc(f.name)}</b> <span class="rk-ai">${esc(B.T.ai)}</span><br>${B.league(f.league)} <b>${fmt(f.pts)} ${esc(B.T.pts)}</b></div></div>` : `<p class="rk-note">${esc(B.X.fav_none)}</p>`}
-      <a class="bt-bubble" href="/promo.html${lq}#plany">✨ ${esc(B.X.create)}<small>${esc(B.X.viewer_p)}</small></a>`; return; }
   if (!m){ el.innerHTML = `<h2>${esc(t.me_h)}</h2><p>${esc(t.me_none)}</p><a class="pill primary" href="/bitwy.html${lq}#btEnter">⚔️ ${esc(t.me_cta)}</a>`; return; }
   const nx = m.next, pct = nx ? Math.max(0, Math.min(100, Math.round((m.pts - m.from) * 100 / (nx.at - m.from)))) : 100;
   el.innerHTML = `<h2>${esc(t.me_h)}</h2><div class="rk-mine"><img src="${esc(m.img)}" alt="" width="64" height="84"><div>
     <b>${esc(m.name)}</b> <span class="rk-ai">${esc(B.T.ai)}</span><br>${B.league(m.league, m.elite)} <b class="rk-big">${fmt(m.pts)} ${esc(B.T.pts)}</b><br>
     <small>${esc(t.pos_g.replace('{n}', fmt(m.pos)))} · ${esc(t.pos_l.replace('{n}', fmt(m.lpos)))}</small></div></div>
     <div class="rk-prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>
-    ${B.catPills(m.cats, Object.fromEntries((m.cats || []).map(c => [c, ((R.cats || {})[c] || []).find(x => x.id === m.id)?.cpos])))}<br><small>${esc(nx ? t.to_next.replace('{name}', B.T.lg[nx.key]).replace('{n}', fmt(nx.at - m.pts)) : t.top)}</small>${B.plaque(m.titles)}`;
+    <small>${esc(nx ? t.to_next.replace('{name}', B.T.lg[nx.key]).replace('{n}', fmt(nx.at - m.pts)) : t.top)}</small>${B.plaque(m.titles)}`;
 }
 function chips(host, items, cur, on){
   host.innerHTML = items.map(([k, label]) => `<button type="button" class="rk-chip${k === cur ? ' on' : ''}" data-k="${esc(k)}" aria-pressed="${k === cur}">${label}</button>`).join('');
@@ -30,23 +27,12 @@ function chips(host, items, cur, on){
 }
 function renderA(){
   chips($('#lgChips'), [['all', esc(t.global)]].concat(R.leagues.map(x => [x.key, B.league(x.key)])), lg, k => { lg = k; renderA(); });
+  const list = lg === 'all' ? R.agents : (R.by_league[lg] || []);
   const el = $('#listA');
-  let list, posOf;
-  if (cat){   // ranking kategorii: tylko agentki z tą specjalizacją, punkty tylko z bitew tej kategorii
-    const C = (R.cats || {})[cat] || []; list = lg === 'all' ? C : C.filter(a => a.league === lg);
-    posOf = (a, i) => lg === 'all' ? a.cpos : i + 1;
-    const head = `<p class="rk-cath">${B.catPill(cat)}</p>`;
-    if (!list.length){ el.innerHTML = head + empty(lg === 'all' ? B.X.cat_empty : t.empty_l); return; }
-    el.innerHTML = head + (R.cat_results && R.cat_results[cat] ? '' : empty(B.X.cat_empty)) + rows(list, posOf); return;
-  }
-  list = lg === 'all' ? R.agents : (R.by_league[lg] || []); posOf = a => lg === 'all' ? a.pos : a.lpos;
   if (!R.has_results && lg === 'all'){ el.innerHTML = empty(t.empty_a); return; }
   if (!list.length){ el.innerHTML = empty(t.empty_l); return; }
-  el.innerHTML = rows(list, posOf);
-}
-function rows(list, posOf){
-  return `<ol class="rk-list">${list.map((a, i) => `<li class="rk-row${R.my_agent && R.my_agent.id === a.id ? ' me' : ''}"><span class="rk-pos">${fmt(posOf(a, i))}</span>
-    <img src="${esc(a.img)}" alt="" width="40" height="52" loading="lazy"><span class="rk-name"><b>${esc(a.name)}</b> <span class="rk-ai">${esc(B.T.ai)}</span><br>${B.league(a.league, a.elite)}${cat ? '' : ' ' + (a.cats || []).map(c => B.CAT[c] ? `<span title="${esc(B.catName(c))}">${B.CAT[c].emoji}</span>` : '').join('')}</span>
+  el.innerHTML = `<ol class="rk-list">${list.map(a => `<li class="rk-row${R.my_agent && R.my_agent.id === a.id ? ' me' : ''}"><span class="rk-pos">${fmt(lg === 'all' ? a.pos : a.lpos)}</span>
+    <img src="${esc(a.img)}" alt="" width="40" height="52" loading="lazy"><span class="rk-name"><b>${esc(a.name)}</b> <span class="rk-ai">${esc(B.T.ai)}</span><br>${B.league(a.league, a.elite)}</span>
     <span class="rk-num"><b>${fmt(a.pts)}</b> ${esc(B.T.pts)}<br><small>${fmt(a.wins)}/${fmt(a.played)} · ${fmt(a.pct)}%</small></span></li>`).join('')}</ol>`;
 }
 function userRow(u, pinned){
@@ -66,15 +52,8 @@ async function renderU(){
   let ph = $('#privOn'); if (U.hidden){ if (!ph){ pb.insertAdjacentHTML('afterend', `<p class="rk-note" id="privOn">${esc(t.priv_on)}</p>`); } } else if (ph) ph.remove();
 }
 $('#privT').onchange = async e => { try { await api('/api/battles/privacy', {hide: e.target.checked}); R = await api('/api/battles/ranking?period=' + per); renderU(); } catch(err){ e.target.checked = !e.target.checked; alert(err.message); } };
-/* zakładki: Ogólny, Top użytkowników, potem każda kategoria (z filtrem lig) */
-$('#tabA').textContent = B.X.general;
-const catHost = document.createElement('div'); catHost.className = 'rk-chips rk-cats'; catHost.setAttribute('role', 'tablist'); $('.rk-tabs').after(catHost);
-function renderCats(){ catHost.innerHTML = (B.CF.cats || []).map(c => `<button type="button" role="tab" class="rk-chip${cat === c.id ? ' on' : ''}" data-c="${c.id}" aria-selected="${cat === c.id}">${c.emoji} ${esc(B.catName(c.id))}</button>`).join('');
-  catHost.querySelectorAll('button').forEach(b => b.onclick = () => { cat = b.dataset.c; tab(false, true); }); }
-function tab(u, keepCat){ if (!keepCat) cat = null; $('#tabA').classList.toggle('on', !u && !cat); $('#tabU').classList.toggle('on', u); $('#tabA').setAttribute('aria-selected', !u && !cat); $('#tabU').setAttribute('aria-selected', u); $('#pA').hidden = u; $('#pU').hidden = !u; renderCats(); if (R && !u) renderA(); }
+function tab(u){ $('#tabA').classList.toggle('on', !u); $('#tabU').classList.toggle('on', u); $('#tabA').setAttribute('aria-selected', !u); $('#tabU').setAttribute('aria-selected', u); $('#pA').hidden = u; $('#pU').hidden = !u; }
 $('#tabA').onclick = () => tab(false); $('#tabU').onclick = () => tab(true);
-renderCats();
-const hc = /^#kat-(\w+)$/.exec(location.hash); if (hc && B.CAT[hc[1]]) { cat = hc[1]; tab(false, true); }
 if (location.hash === '#top') tab(true);
 (async () => {
   try { const m = await api('/api/account/me'); csrf = m.csrf || ''; logged = !!(m.user && m.user.uid); } catch(e){}

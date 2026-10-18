@@ -19,7 +19,7 @@ import knowledge
 import api_i18n
 import textutil
 import catalog, base64, training, profiles, nicktier, partners, agentwall
-import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles
+import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox
 from datetime import datetime, timedelta
 try:
     from zoneinfo import ZoneInfo
@@ -283,6 +283,7 @@ def _admin_hash():
     except Exception:
         pass
     return None
+inbox.TOKEN_OK = lambda t: token_ok(t)  # Skrzynka: panel moderatora
 def admin_enabled(): return bool(_admin_hash() or admin_code())
 QUOTES = "\"'„”“«»‚‘’`"
 def strip_code(msg):
@@ -575,6 +576,8 @@ def run_reminders():
         out.append(("push-15m", notify.send_push("live", "Luna Live za kwadrans", "Za chwilę startujemy. Dołącz i zadaj pytanie na czacie!", "/live.html")))
     for lo, hi, tag, txt in ((6, 7, "7d", "za 7 dni"), (0, 1, "1d", "jutro")):
         for uid, pid, until in accounts.expiring(lo, hi, tag):
+            try: inbox.on_plan_expiring(uid, plans.NAMES.get(pid, pid), until, tag)
+            except Exception: pass
             out.append(("pass-" + tag, notify.send_push("manual", "Luna – dostęp wygasa " + txt,
                 f"Twój miesięczny dostęp {plans.NAMES.get(pid, pid)} wygasa {time.strftime('%d.%m.%Y', time.localtime(until))}. Potem wrócisz do planu Darmowy.", "/#plan", uid=uid)))
     notify.send_confirmations()
@@ -601,16 +604,33 @@ def _mod_push(title, body):
             try: webpush(s["sub"], payload, vapid_private_key=notify.PRIV, vapid_claims={"sub": notify.SUBJ}, ttl=3600 * 24, timeout=10)
             except Exception: pass
 
+def _grant_and_notify(uid, plan, months, by):
+    ps = accounts.grant_pass(uid, plan, months, by=by)
+    try: inbox.on_plan(uid, plans.NAMES.get(plan, plan), ps["until"])
+    except Exception as e: print("inbox plan", repr(e)[:120], file=sys.stderr)
+    return ps
+
 def _bg_loop():
     n = 0
     while True:
         try: director_tick()
         except Exception as e: print("director error", repr(e)[:200], file=sys.stderr)
         n += 1
+        if n % 60 == 30:
+            try: inbox.battle_tick()
+            except Exception as e: print("inbox battles", repr(e)[:200], file=sys.stderr)
         if n % 60 == 0:
             try: run_reminders()
             except Exception as e: print("reminder error", repr(e)[:200], file=sys.stderr)
         time.sleep(1)
+
+INBOX_NEWS = {"1.6.3": (
+    {"pl": "✨ Co nowego: Skrzynka, Znajomi i czat", "en": "✨ What’s new: Inbox, Friends and chat", "es": "✨ Novedades: Buzón, Amigos y chat", "de": "✨ Neu: Postfach, Freunde und Chat", "uk": "✨ Що нового: Скринька, Друзі й чат"},
+    {"pl": "Masz prywatną Skrzynkę 📬 z kategoriami Ważne, Aktualizacje, Bitwy i Znajomi. Dodawaj znajomych po nicku, linku albo kodzie QR i pisz z nimi na prostym czacie z emoji. Tylko nicki – bez e-maili i prawdziwych danych.",
+     "en": "You now have a private Inbox 📬 with Important, Updates, Battles and Friends. Add friends by nickname, link or QR code and chat with them using emoji. Nicknames only – no e-mails or real data.",
+     "es": "Ya tienes un Buzón privado 📬 con Importante, Novedades, Batallas y Amigos. Añade amigos por nick, enlace o código QR y chatea con emoji. Solo nicks: sin e-mails ni datos reales.",
+     "de": "Du hast jetzt ein privates Postfach 📬 mit Wichtig, Updates, Battles und Freunde. Füge Freunde per Nick, Link oder QR-Code hinzu und chatte mit Emoji. Nur Nicks – keine E-Mails oder echten Daten.",
+     "uk": "Тепер у вас є приватна Скринька 📬: Важливе, Оновлення, Битви та Друзі. Додавайте друзів за ніком, посиланням або QR-кодом і спілкуйтеся з емодзі. Лише ніки – без e-mail і справжніх даних."})}
 
 def _announce_update():
     try:
@@ -748,6 +768,8 @@ class H(SimpleHTTPRequestHandler):
             except PermissionError as e: return self._json({"error": str(e), "locked": True}, 423)
             except ValueError as e: return self._json({"error": str(e)}, 401)
             sid, csrf = accounts.new_session(uid); self._set_sid(sid, accounts.SESSION_DAYS * 86400)
+            try: inbox.on_login(uid, self.headers.get("User-Agent", ""))
+            except Exception as e: sys.stderr.write("inbox login %s\n" % type(e).__name__)
             return self._json({"ok": True, "csrf": csrf, "user": accounts.public(accounts._accts()[uid])})
         if p in ("/api/account/logout", "/api/account/delete", "/api/account/link-tester", "/api/account/declare"):
             a = self._acct()
@@ -760,6 +782,9 @@ class H(SimpleHTTPRequestHandler):
                 if not livechat.rate_ok("del:" + ip, 3, 20): return self._json({"error": "Za dużo prób."}, 429)
                 try: referral.forget(usr["uid"])
                 except Exception: pass
+                if usr.get("pw") and data.get("password") and not accounts.check_pw(usr["pw"], str(data.get("password"))): return self._json({"error": "Nieprawidłowe hasło."}, 400)
+                try: inbox.delete_user(usr["uid"])
+                except Exception as e: sys.stderr.write("inbox delete %s\n" % type(e).__name__)
                 try: accounts.delete(usr["uid"], data.get("password") or None); profiles.delete_owner(usr["uid"])
                 except ValueError as e: return self._json({"error": str(e)}, 400)
                 social.anonymise_author("u:" + usr["uid"]); antibot.forget("u:" + usr["uid"])
@@ -790,7 +815,7 @@ class H(SimpleHTTPRequestHandler):
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             try:
                 if data.get("action") == "revoke": accounts.revoke_pass(str(data.get("uid")))
-                else: accounts.grant_pass(str(data.get("uid")), data.get("plan"), data.get("months", 1))
+                else: _grant_and_notify(str(data.get("uid")), data.get("plan"), data.get("months", 1), "moderator")
             except KeyError: return self._json({"error": "not found"}, 404)
             except ValueError as e: return self._json({"error": str(e)}, 400)
             return self._json({"ok": True, "accounts": accounts.admin_list()})
@@ -867,7 +892,7 @@ class H(SimpleHTTPRequestHandler):
                     return self._json({"ok": True, **battles.chat_list(str(data.get("bid", "")), uid, int(data.get("since") or 0))})
                 if p == "/api/battles/enter":
                     pl, _ = self._plan()
-                    if not battles.is_contestant(uid, pl):   # Premium/Pro/Ultra albo agentka współpracująca
+                    if not plans.has(pl, battles.ENTER_PLAN):
                         return self._json({"error": "plan_required", "required": battles.ENTER_PLAN, "price": CFG["pricing"]["plans"]["premium"]["pln"]}, 402)
                     if not livechat.rate_ok("bte:" + uid, 2, 6): return self._json({"error": "Za szybko."}, 429)
                     e = battles.enter(uid, data)
@@ -883,14 +908,6 @@ class H(SimpleHTTPRequestHandler):
                         try: notify.subscribe(data["sub"], ["battle"], uid, merge=True)
                         except ValueError: pass
                     return self._json({"on": battles.set_notify(uid, on, str(data.get("lang", "pl"))[:2])})
-                if p == "/api/battles/prefs":
-                    return self._json(battles.set_prefs(uid, {k: data[k] for k in ("cats", "scene") if k in data}))
-                if p == "/api/battles/fav":
-                    on = data.get("notify") is True
-                    if on and isinstance(data.get("sub"), dict):
-                        try: notify.subscribe(data["sub"], ["battle"], uid, merge=True)
-                        except ValueError: pass
-                    return self._json({"fav": battles.set_fav(uid, str(data.get("id") or "")[:20], on, str(data.get("lang", "pl"))[:2])})
                 if p == "/api/battles/notes/seen":
                     battles.notes_seen(uid, [str(x)[:12] for x in (data.get("bids") or [])][:30]); return self._json({"ok": True})
                 if p == "/api/battles/privacy":
@@ -941,7 +958,10 @@ class H(SimpleHTTPRequestHandler):
                 if p == "/api/admin/social":
                     if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
                     if data.get("action") == "unban": social.unban(str(data.get("author", "")))
-                    elif data.get("action"): social.moderate(data.get("kind"), str(data.get("id", "")), data.get("action"), data.get("variants"))
+                    elif data.get("action"):
+                        mx = social.moderate(data.get("kind"), str(data.get("id", "")), data.get("action"), data.get("variants"))
+                        try: inbox.on_moderation(data.get("kind"), mx, data.get("action"))
+                        except Exception: pass
                     return self._json({"ok": True, **social.admin_list()})
             except PermissionError as e: return self._json({"error": str(e)}, 403)
             except (ValueError, KeyError) as e: return self._json({"error": str(e) if isinstance(e, ValueError) else "not found"}, 400)
@@ -1029,7 +1049,7 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"ok": True, "items": avatars.admin_list()})
         return None
     def _bt_pub(self, d, uid):
-        pl, _ = self._plan(); d["my_plan"] = pl; d["logged_in"] = bool(uid); d["can_enter"] = battles.is_contestant(uid, pl)
+        pl, _ = self._plan(); d["my_plan"] = pl; d["logged_in"] = bool(uid); d["can_enter"] = plans.has(pl, battles.ENTER_PLAN)
         show = CFG["pricing"]["show"]
         d["price"] = CFG["pricing"]["plans"]["premium"]["pln"] if show else None
         d["price_pro"] = CFG["pricing"]["plans"]["pro"]["pln"] if show else None
@@ -1054,9 +1074,6 @@ class H(SimpleHTTPRequestHandler):
             if p == "/api/battles":
                 if dev and not antibot.UA_BOT.search(self.headers.get("User-Agent", "") or "bot"): battles.touch(dev)
                 return self._json(self._bt_pub(battles.public(uid, dev, (q.get("b") or [""])[0][:12] or None), uid))
-            if p == "/api/battles/categories":
-                import battle_categories
-                return self._json(dict(battle_categories.public(), basic=battles.basic_scenes()))
             if p == "/api/battles/notes":
                 lg = (q.get("lang") or ["pl"])[0][:2]
                 return self._json({"on": battles.notify_on(uid), "items": [dict(n, text=battles.note_text(n, lg)) for n in battles.notes(uid)]})
@@ -1146,7 +1163,10 @@ class H(SimpleHTTPRequestHandler):
         if p == "/api/account/export":
             a = self._acct()
             if not a: return self._json({"error": "Zaloguj się."}, 401)
-            b = json.dumps(accounts.export(a[0]["uid"]), ensure_ascii=False, indent=2).encode()
+            ex = accounts.export(a[0]["uid"])
+            try: ex["skrzynka_i_znajomi"] = inbox.export(a[0]["uid"])
+            except Exception as e: sys.stderr.write("inbox export %s\n" % type(e).__name__)
+            b = json.dumps(ex, ensure_ascii=False, indent=2).encode()
             self.send_response(200); self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Content-Disposition", "attachment; filename=luna-moje-dane.json"); self.send_header("Content-Length", str(len(b)))
             self.end_headers(); self.wfile.write(b); return True
@@ -1166,6 +1186,9 @@ class H(SimpleHTTPRequestHandler):
         return None
     def do_GET(self):
         u = urlparse(self.path)
+        if u.path.startswith(("/api/inbox", "/api/friends", "/api/dm", "/api/admin/inbox")):
+            r = inbox.handle_get(self, u)  # Skrzynka, Znajomi, czat 1:1 (inbox.py)
+            if r is not None: return r
         if u.path.startswith(("/api/battles", "/api/admin/battles", "/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/referral", "/api/gallery", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
             r = self._get_account(u)
             if r is not None: return r
@@ -1376,7 +1399,7 @@ class H(SimpleHTTPRequestHandler):
             if n > 256 * 1024: return self._json({"error": "too large"}, 413)
             raw = self.rfile.read(n)
             if not payments.verify(raw, self.headers.get("Stripe-Signature", "")): return self._json({"error": "bad signature"}, 400)
-            try: res = payments.handle(json.loads(raw), lambda uid, plan, m: accounts.grant_pass(uid, plan, m, by="stripe"), accounts.grant_item)
+            try: res = payments.handle(json.loads(raw), lambda uid, plan, m: _grant_and_notify(uid, plan, m, "stripe"), accounts.grant_item)
             except Exception as e: sys.stderr.write("webhook error %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
             return self._json({"ok": True, "result": res})
         if not security.origin_ok(self.headers): return self._json({"error": "Niedozwolone źródło żądania."}, 403)
@@ -1388,6 +1411,9 @@ class H(SimpleHTTPRequestHandler):
         if not isinstance(data, dict): return self._json({"error": "bad json"}, 400)
         r = self._post_account(u, data)
         if r is not None: return r
+        if u.path.startswith(("/api/inbox", "/api/friends", "/api/dm", "/api/admin/inbox")):
+            r = inbox.handle_post(self, u, data)  # Skrzynka, Znajomi, czat 1:1 (inbox.py)
+            if r is not None: return r
         if u.path in ("/api/agent/profile", "/api/agent/profile/own"):
             # profil własnej agentki: plan sprawdzany na serwerze (Premium: opis + 4 zdjęcia, Pro / Ultra: 12 zdjęć + przypięte)
             pl, uid = self._plan()
@@ -1621,4 +1647,6 @@ if __name__ == "__main__":
     print(f"Luna działa na http://0.0.0.0:{port}")
     threading.Thread(target=_bg_loop, daemon=True).start()
     threading.Thread(target=_announce_update, daemon=True).start()
+    try: inbox.announce_version(VERSION, INBOX_NEWS.get(VERSION))  # „Co nowego” trafia też do Skrzynki (kategoria Aktualizacje)
+    except Exception as e: print("inbox news", repr(e)[:200], file=sys.stderr)
     ThreadingHTTPServer(("0.0.0.0", port), H).serve_forever()
