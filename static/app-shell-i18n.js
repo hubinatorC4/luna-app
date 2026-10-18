@@ -187,3 +187,32 @@ var X = {
 };
 for (var k in X) if (T[k]) for (var j in X[k]) T[k][j] = X[k][j];
 })(window.LUNA_APP_T);
+/* v1.5.5: trening własnej agentki AI według planu (Premium: podstawy i styl, Pro / Ultra: wszystko) */
+(function(T){
+var X = {
+ pl: {premium: ['Wszystko z planu Podstawowa', 'Trening agentki AI: imię, słowo wybudzające, ton, długość odpowiedzi', 'Styl agentki: kolor pierścienia i własny obraz AI', '4 stroje awatara'],
+  pro: ['Wszystko z planu Premium', 'Pełny trening agentki AI: także poza i sylwetka', 'Wszystkie stroje awatara (6)'],
+  cmp: [['Rozmowa bez limitu', 1, 1, 1], ['Pytania w Luna Live', 1, 1, 1], ['Barwa głosu', 1, 1, 1], ['Stroje awatara', '2', '4', '6'], ['Trening agentki: imię, ton, długość', 0, 1, 1], ['Styl agentki: pierścień, obraz AI', 0, 1, 1], ['Poza i sylwetka', 0, 0, 1]],
+  cap: ['✨', 'Trening własnej agentki', 'Premium: imię, ton, styl. Pro: poza.'], cap_lock: '🔒 Premium'},
+ en: {premium: ['Everything in Basic', 'AI agent training: name, wake word, tone, reply length', 'Agent style: ring colour and your own AI image', '4 avatar outfits'],
+  pro: ['Everything in Premium', 'Full AI agent training: also pose and figure', 'All avatar outfits (6)'],
+  cmp: [['Unlimited conversation', 1, 1, 1], ['Questions in Luna Live', 1, 1, 1], ['Voice tone', 1, 1, 1], ['Avatar outfits', '2', '4', '6'], ['Agent training: name, tone, length', 0, 1, 1], ['Agent style: ring, AI image', 0, 1, 1], ['Pose and figure', 0, 0, 1]],
+  cap: ['✨', 'Train your own agent', 'Premium: name, tone, style. Pro: pose.'], cap_lock: '🔒 Premium'},
+ es: {premium: ['Todo lo del plan Básico', 'Entrenamiento de la agente: nombre, palabra de activación, tono, longitud', 'Estilo de la agente: color del anillo e imagen de IA propia', '4 atuendos de avatar'],
+  pro: ['Todo lo del plan Premium', 'Entrenamiento completo: también pose y silueta', 'Todos los atuendos de avatar (6)'],
+  cmp: [['Conversación sin límite', 1, 1, 1], ['Preguntas en Luna Live', 1, 1, 1], ['Tono de voz', 1, 1, 1], ['Atuendos de avatar', '2', '4', '6'], ['Entrenamiento: nombre, tono, longitud', 0, 1, 1], ['Estilo: anillo, imagen de IA', 0, 1, 1], ['Pose y silueta', 0, 0, 1]],
+  cap: ['✨', 'Entrena tu propia agente', 'Premium: nombre, tono, estilo. Pro: pose.'], cap_lock: '🔒 Premium'},
+ de: {premium: ['Alles aus Basis', 'Training der KI-Agentin: Name, Aktivierungswort, Ton, Antwortlänge', 'Stil der Agentin: Ringfarbe und eigenes KI-Bild', '4 Avatar-Outfits'],
+  pro: ['Alles aus Premium', 'Volles Training: auch Pose und Figur', 'Alle Avatar-Outfits (6)'],
+  cmp: [['Gespräch ohne Limit', 1, 1, 1], ['Fragen bei Luna Live', 1, 1, 1], ['Stimmklang', 1, 1, 1], ['Avatar-Outfits', '2', '4', '6'], ['Training: Name, Ton, Länge', 0, 1, 1], ['Stil: Ring, KI-Bild', 0, 1, 1], ['Pose und Figur', 0, 0, 1]],
+  cap: ['✨', 'Eigene Agentin trainieren', 'Premium: Name, Ton, Stil. Pro: Pose.'], cap_lock: '🔒 Premium'},
+ uk: {premium: ['Усе з плану Базовий', 'Тренування агентки: ім’я, слово активації, тон, довжина відповіді', 'Стиль агентки: колір кільця й власне ШІ-зображення', '4 вбрання аватара'],
+  pro: ['Усе з плану Premium', 'Повне тренування: також поза й статура', 'Усі вбрання аватара (6)'],
+  cmp: [['Розмова без ліміту', 1, 1, 1], ['Запитання в Luna Live', 1, 1, 1], ['Тембр голосу', 1, 1, 1], ['Вбрання аватара', '2', '4', '6'], ['Тренування: ім’я, тон, довжина', 0, 1, 1], ['Стиль: кільце, ШІ-зображення', 0, 1, 1], ['Поза й статура', 0, 0, 1]],
+  cap: ['✨', 'Тренуйте власну агентку', 'Premium: ім’я, тон, стиль. Pro: поза.'], cap_lock: '🔒 Premium'}
+};
+for (var k in X) if (T[k]){ var t = T[k], x = X[k];
+  if (t.feat){ t.feat.premium = x.premium; t.feat.pro = x.pro; }
+  t.cmp = x.cmp; t.cap_lock = x.cap_lock;
+  if (t.caps && t.caps[3]) t.caps[3] = x.cap; }
+})(window.LUNA_APP_T);

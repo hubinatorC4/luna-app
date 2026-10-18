@@ -199,6 +199,10 @@
 [
 "<button class=\"primary\">Super!</button>",
 "<button class=\"primary\">Great!</button>"
+],
+[
+"['🔒 Trening agentki AI w planach płatnych', 'Premium: imię, słowo wybudzające, ton, długość odpowiedzi i styl. Pro / Ultra: także poza i sylwetka.']",
+"['🔒 AI agent training in paid plans', 'Premium: name, wake word, tone, reply length and style. Pro / Ultra: also pose and figure.']"
 ]
 ],
 "es": [
@@ -401,6 +405,10 @@
 [
 "<button class=\"primary\">Super!</button>",
 "<button class=\"primary\">¡Genial!</button>"
+],
+[
+"['🔒 Trening agentki AI w planach płatnych', 'Premium: imię, słowo wybudzające, ton, długość odpowiedzi i styl. Pro / Ultra: także poza i sylwetka.']",
+"['🔒 Entrenamiento de la agente en planes de pago', 'Premium: nombre, palabra de activación, tono, longitud de respuesta y estilo. Pro / Ultra: también pose y silueta.']"
 ]
 ],
 "de": [
@@ -603,6 +611,10 @@
 [
 "<button class=\"primary\">Super!</button>",
 "<button class=\"primary\">Super!</button>"
+],
+[
+"['🔒 Trening agentki AI w planach płatnych', 'Premium: imię, słowo wybudzające, ton, długość odpowiedzi i styl. Pro / Ultra: także poza i sylwetka.']",
+"['🔒 Training der KI-Agentin in bezahlten Plänen', 'Premium: Name, Aktivierungswort, Ton, Antwortlänge und Stil. Pro / Ultra: auch Pose und Figur.']"
 ]
 ],
 "uk": [
@@ -805,6 +817,10 @@
 [
 "<button class=\"primary\">Super!</button>",
 "<button class=\"primary\">Чудово!</button>"
+],
+[
+"['🔒 Trening agentki AI w planach płatnych', 'Premium: imię, słowo wybudzające, ton, długość odpowiedzi i styl. Pro / Ultra: także poza i sylwetka.']",
+"['🔒 Тренування ШІ-агентки в платних планах', 'Premium: ім’я, слово активації, тон, довжина відповіді та стиль. Pro / Ultra: також поза й статура.']"
 ]
 ]
 }

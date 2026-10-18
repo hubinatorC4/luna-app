@@ -17,7 +17,7 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import api_i18n
-import catalog, base64
+import catalog, base64, training
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
 from datetime import datetime, timedelta
 try:
@@ -1058,6 +1058,9 @@ class H(SimpleHTTPRequestHandler):
             if r is not None: return r
         if u.path == "/api/age/status":
             return self._json(age.status(parse_qs(u.query).get("vid", [""])[0][:40]))
+        if u.path == "/api/agent/tiers":
+            pl, _uid = self._plan()
+            return self._json(dict(training.public(), plan=pl))
         if u.path == "/api/voices":
             tr = VOICES_I18N.get(parse_qs(u.query).get("lang", ["pl"])[0][:5])
             return self._json({"voices": dict(zip(VOICES, tr)) if tr else VOICES, "default": DEFAULT_VOICE})
@@ -1245,6 +1248,12 @@ class H(SimpleHTTPRequestHandler):
         if not isinstance(data, dict): return self._json({"error": "bad json"}, 400)
         r = self._post_account(u, data)
         if r is not None: return r
+        if u.path == "/api/agent/custom":
+            # zapis/trening własnej agentki: serwer sprawdza plan dla każdej opcji
+            pl, _uid = self._plan()
+            err = training.check(pl, data if isinstance(data, dict) else {}, CAT)
+            if err: return self._json(err, 402)
+            return self._json({"ok": True, "plan": pl})
         if u.path == "/api/chat":
             q = str(data.get("message", "")).strip()[:1000]
             if not q: return self._json({"error": "empty"}, 400)
@@ -1258,7 +1267,10 @@ class H(SimpleHTTPRequestHandler):
                 if not plans.chat_allowed(lim_keys, CFG["free"]["chat_minutes"]):
                     return self._json({"error": "limit", "limit": True, "reply": f"Na dziś wykorzystano limit planu Darmowy (ok. {CFG['free']['chat_minutes']} min rozmowy). Wróć jutro albo wybierz plan Podstawowa lub wyższy – płatności wkrótce. Luna to asystentka AI."}, 402)
             hist = data.get("history")
-            ctx = persona_ctx(data.get("persona"))
+            pers, plocked = training.strip_persona(pl, data.get("persona"))
+            ag = next((a for a in CAT["agents"] if a["id"] == pers.get("agent")), None)
+            if ag and not plans.has(pl, ag.get("plan", "darmowy")): pers.pop("agent", None); plocked.append("agent")
+            ctx = persona_ctx(pers)
             rr = rule_reply(q)
             if rr:
                 if lim_keys: plans.add(lim_keys, 6)
@@ -1269,7 +1281,7 @@ class H(SimpleHTTPRequestHandler):
             if not a: a, src = shape(knowledge.answer(q), ctx), "offline"
             a = disclose(a, hist, ctx["name"])
             if lim_keys: plans.add(lim_keys, plans.speech_secs(q, a) + 8)
-            return self._json({"reply": a, "source": src})
+            return self._json({"reply": a, "source": src, **({"persona_locked": plocked} if plocked else {})})
         if u.path == "/api/admin/backup":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             n = {}

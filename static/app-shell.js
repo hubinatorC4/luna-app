@@ -72,6 +72,11 @@ function capsCard(d){
     const acts = [() => click('convoBtn'), () => { const q = d.getElementById('input'); if (q){ q.scrollIntoView({block: 'center', behavior: 'smooth'}); q.focus(); } },
       () => click('settingsBtn'), () => click('customBtn'), () => show('butik')];
     el.querySelectorAll('[data-cap]').forEach(b => b.onclick = () => acts[+b.dataset.cap]());
+    const upd = () => { const w = d.defaultView, b = el.querySelector('[data-cap="3"] b'); if (!b || !w) return;
+      const lk = !!(w.LunaHas && !w.LunaHas('premium')); let t = b.querySelector('.lk');
+      if (lk && !t){ t = d.createElement('em'); t.className = 'lk'; t.textContent = ' ' + (T.cap_lock || '🔒 Premium'); t.style.cssText = 'font-style:normal;font-size:11px;color:#f6c27a;white-space:nowrap'; b.appendChild(t); }
+      else if (!lk && t) t.remove(); };
+    upd(); try { d.defaultView.addEventListener('luna-plan', upd); } catch(e){}
     return true;
   };
   if (!place()){ let n = 0; const iv = setInterval(() => { if (place() || ++n > 80) clearInterval(iv); }, 150); }

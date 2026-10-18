@@ -31,7 +31,7 @@
     <button id="inboxBtn" class="icon badged" aria-label="Skrzynka moderatora" title="Skrzynka moderatora" hidden>📥<span class="badge" id="inboxBadge" hidden></span></button>
     <a id="liveRoomBtn" class="icon" href="/live.html" aria-label="Luna Live" title="Luna Live – transmisja">📺</a>
     <button id="musicBtn" class="icon" aria-label="Muzyka" title="Muzyka">🎷</button>
-    <button id="customBtn" class="icon" aria-label="Stwórz własną asystentkę" title="Stwórz własną asystentkę">✨</button>
+    <button id="customBtn" class="icon" aria-label="Trening własnej agentki AI" title="Trening własnej agentki AI">✨</button>
     <button id="settingsBtn" class="icon" aria-label="Ustawienia">⚙</button>
   </div>
 </header>
@@ -334,7 +334,15 @@
 </dialog>
 <dialog id="custom">
   <form method="dialog">
-    <h2>✨ Stwórz własną asystentkę</h2>
+    <h2>✨ Trening własnej agentki AI</h2>
+    <div class="c-lock" id="c_lock" hidden><p><b id="c_lockH">🔒 Trening własnej agentki AI jest w Premium</b><br><span id="c_lockP"></span></p><a class="primary c-unlock" id="c_unlock" href="/app.html#plans">Odblokuj Premium</a></div>
+    <details class="c-tiers" id="c_tiers"><summary>Co odblokowuje plan</summary>
+      <table><tr><th></th><th>Darmowy / Podstawowa</th><th>Premium</th><th>Pro / Ultra</th></tr>
+        <tr><td>Imię i słowo wybudzające</td><td>🔒</td><td>✓</td><td>✓</td></tr>
+        <tr><td>Ton i długość odpowiedzi</td><td>🔒</td><td>✓</td><td>✓</td></tr>
+        <tr><td>Kolor pierścienia i własny obraz AI</td><td>🔒</td><td>✓</td><td>✓</td></tr>
+        <tr><td>Stroje awatara</td><td>1–2</td><td>4</td><td>6</td></tr>
+        <tr><td>Poza i sylwetka</td><td>🔒</td><td>🔒</td><td>✓</td></tr></table></details>
     <div class="planbar">
       <label>Twój plan
         <select id="c_plan"><option value="darmowy">Darmowy</option><option value="podstawowa">Podstawowa</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select></label>
@@ -369,6 +377,10 @@
     </div>
   </form>
 </dialog>
+<style>.c-lock{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:8px 0 10px;padding:10px 12px;border:1px solid rgba(240,160,64,.45);border-radius:14px;background:rgba(240,160,64,.08)}
+.c-lock p{margin:0;font-size:14px;line-height:1.35}.c-lock span{opacity:.8;font-size:13px}.c-unlock{display:inline-block;padding:8px 14px;border-radius:20px;background:#f0a040;color:#1a0f05;font-weight:700;text-decoration:none;white-space:nowrap}
+.c-tiers{margin:0 0 10px}.c-tiers table{width:100%;border-collapse:collapse;font-size:12.5px}.c-tiers th,.c-tiers td{padding:5px 4px;border-bottom:1px solid #3a2a1c;text-align:center}.c-tiers td:first-child,.c-tiers th:first-child{text-align:left}
+#customBtn.locked{position:relative}#customBtn.locked::after{content:"🔒";position:absolute;right:-3px;bottom:-3px;font-size:11px}</style>
 <audio id="player" preload="auto"></audio>
 <dialog id="ageGate" class="agegate">
   <form id="ageForm">

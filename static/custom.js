@@ -10,6 +10,39 @@ let C = Object.assign({}, DEF, JSON.parse(localStorage.getItem('luna.custom') ||
 let CAT = null;
 const save = () => { try { localStorage.setItem('luna.custom', JSON.stringify(C)); } catch(e){ alert('Za mało miejsca na obraz – wybierz mniejszy plik.'); } };
 const has = plan => RANK[C.plan] >= RANK[plan || 'darmowy'];
+/* v1.5.5: trening agentki według planu – jeden krótki komunikat, bez natręctwa; serwer sprawdza to samo (/api/agent/custom) */
+const LG = (document.documentElement.lang || 'pl').slice(0, 2);
+const LK = {pl: ['🔒 Trening własnej agentki AI jest w ', 'od ', ' · 30 dni, jednorazowo, z VAT', 'Odblokuj ', 'Ta opcja jest w planie '],
+  en: ['🔒 Training your own AI agent is in ', 'from ', ' · 30 days, one-off, VAT incl.', 'Unlock ', 'This option is in the plan '],
+  es: ['🔒 El entrenamiento de tu propia agente de IA está en ', 'desde ', ' · 30 días, pago único, IVA incl.', 'Desbloquear ', 'Esta opción está en el plan '],
+  de: ['🔒 Das Training deiner eigenen KI-Agentin ist in ', 'ab ', ' · 30 Tage, einmalig, inkl. MwSt.', '', 'Diese Option ist im Plan '],
+  uk: ['🔒 Тренування власної ШІ-агентки – у плані ', 'від ', ' · 30 днів, разово, з ПДВ', 'Відкрити ', 'Ця опція – у плані ']}[LG] || null;
+const LKT = LK || ['🔒 Trening własnej agentki AI jest w ', 'od ', ' · 30 dni, jednorazowo, z VAT', 'Odblokuj ', 'Ta opcja jest w planie '];
+const PRICE = {premium: '59,99 zł', pro: '99,99 zł'};
+const TIER = {name: 'premium', wake: 'premium', tone: 'premium', length: 'premium', ring: 'premium', own: 'premium', pose: 'pro', body: 'pro'};
+function priceOf(plan){ const p = CAT && CAT.plans && CAT.plans.find(x => x.id === plan); return p && p.prices && p.prices.pln ? p.prices.pln + ' zł' : PRICE[plan]; }
+function lockMsg(need, focus){
+  const el = $('#c_lock'); if (!el) return;
+  need = need || (has('premium') ? 'pro' : 'premium');
+  el.hidden = has(need);
+  if (el.hidden) return;
+  $('#c_lockH').textContent = (focus ? LKT[4] : LKT[0]) + PLAN_NAME[need];
+  $('#c_lockP').textContent = LKT[1] + priceOf(need) + LKT[2];
+  $('#c_unlock').textContent = LG === 'de' ? PLAN_NAME[need] + ' freischalten' : LKT[3] + PLAN_NAME[need];
+  if (focus) el.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+}
+let syncT = 0;
+function sync(){  /* serwer jest źródłem prawdy: opcje ponad plan są cofane */
+  clearTimeout(syncT); syncT = setTimeout(() => {
+    const h = {'Content-Type': 'application/json'}; const at = sessionStorage.getItem('luna.admin'); if (at) h['X-Admin-Token'] = at; const tc = localStorage.getItem('luna.tester'); if (tc) h['X-Tester'] = tc;
+    const body = {agent: C.agent, outfit: C.outfit, name: C.name.trim(), wake: C.wake.trim(), tone: C.tone, length: C.length, ring: C.ring, own: !!C.own, pose: C.pose, body: C.body};
+    fetch('/api/agent/custom', {method: 'POST', headers: h, credentials: 'same-origin', body: JSON.stringify(body)}).then(r => r.status === 402 ? r.json() : null).then(e => {
+      if (!e) return;
+      Object.keys(TIER).forEach(k => { if (RANK[TIER[k]] > RANK[SP.plan || 'darmowy'] && !isAdmin()) C[k] = DEF[k]; });
+      save(); render(); apply(); lockMsg(e.required, true);
+    }).catch(() => {});
+  }, 600);
+}
 const freeLocked = () => false;  // przydział strojów do planów: panel → katalog (pole „plan”)
 const agent = () => (CAT && (CAT.agents.find(a => a.id === C.agent && has(a.plan)) || CAT.agents[0])) || null;
 const item = (kind, id) => { const a = agent(); return a && a[kind].find((o, i) => o.id === id && has(o.plan) && !freeLocked(kind, i)); };
@@ -50,10 +83,10 @@ function card(o, kind, selected, idx){
   b.innerHTML = `<img src="${im1}"${im2 ? ` srcset="${im1} 1x, ${im2} 2x"` : ''} alt="" loading="lazy"><span>${o.name}</span>` +
     (locked ? `<em>🔒 ${PLAN_NAME[need]}</em>` : (o.placeholder ? '<em class="soon">wkrótce</em>' : ''));
   b.onclick = () => {
-    if (locked) { alert('Ta opcja jest dostępna od planu ' + PLAN_NAME[need] + '. Płatności – wkrótce.'); return; }
+    if (locked) { lockMsg(need, true); return; }
     if (kind === 'agents') { C.agent = o.id; C.outfit = C.pose = C.body = ''; }
     else { const k = {outfits: 'outfit', poses: 'pose', bodies: 'body'}[kind]; C[k] = C[k] === o.id && kind !== 'outfits' ? '' : o.id; }
-    save(); render(); apply();
+    save(); render(); apply(); sync();
   };
   return b;
 }
@@ -73,6 +106,8 @@ function render(){
     const ok = has(el.dataset.plan); el.classList.toggle('locked', !ok);
     el.querySelectorAll('input,select,button').forEach(i => i.disabled = !ok);
   });
+  lockMsg();
+  const cb = $('#customBtn'); if (cb) cb.classList.toggle('locked', !has('premium'));
 }
 $('#c_plan').onchange = e => { if (!isAdmin()) return; C.plan = e.target.value; save(); render(); apply(); };
 window.LunaPlan = () => SP;
@@ -83,18 +118,19 @@ window.LunaPlanRefresh = () => {
     document.body.dataset.plan = C.plan; window.dispatchEvent(new CustomEvent('luna-plan', {detail: p}));
   }).catch(() => {});
 };
-['name', 'wake'].forEach(k => $('#c_' + k).oninput = e => { C[k] = e.target.value.replace(/[<>]/g, ''); save(); apply(); });
-['tone', 'length'].forEach(k => $('#c_' + k).onchange = e => { C[k] = e.target.value; save(); });
-$('#c_ring').oninput = e => { C.ring = e.target.value; save(); apply(); };
+['name', 'wake'].forEach(k => $('#c_' + k).oninput = e => { C[k] = e.target.value.replace(/[<>]/g, ''); save(); apply(); sync(); });
+['tone', 'length'].forEach(k => $('#c_' + k).onchange = e => { C[k] = e.target.value; save(); sync(); });
+$('#c_ring').oninput = e => { C.ring = e.target.value; save(); apply(); sync(); };
 $('#c_upload').onchange = async e => {
   const f = e.target.files[0]; e.target.value = ''; if (!f) return;
   if (!window.LunaAiUpload) return;
-  const url = await window.LunaAiUpload(f, 512); if (url){ C.own = url; save(); apply(); }
+  const url = await window.LunaAiUpload(f, 512); if (url){ C.own = url; save(); apply(); sync(); }
 };
 $('#c_upload_clear').onclick = () => { C.own = ''; save(); apply(); };
 $('#c_voice').onclick = () => { $('#custom').close(); $('#settingsBtn').click(); };
 $('#c_reset').onclick = () => { const plan = C.plan; C = Object.assign({}, DEF, {plan}); save(); render(); apply(); };
 $('#customBtn').onclick = () => { render(); $('#custom').showModal(); };
+$('#c_unlock').onclick = () => { try { $('#custom').close(); } catch(e){} };
 window.LunaReloadCatalog = () => fetch('/api/catalog').then(r => r.json()).then(c => { CAT = c; render(); apply(); });
 window.LunaReloadCatalog().catch(() => {});
 window.LunaPlanRefresh();
