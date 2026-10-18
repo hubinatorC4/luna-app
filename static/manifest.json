@@ -33,5 +33,7 @@
    "purpose": "maskable"
   }
  ],
- "description": "Luna mówi jak jest – asystentka AI do nauki mówienia i pracy z głosem."
+ "description": "Luna mówi jak jest – asystentka AI do nauki mówienia i pracy z głosem.",
+ "id": "/",
+ "scope": "/"
 }

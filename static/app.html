@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0705">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Luna">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<title>Luna – aplikacja</title>
+<script src="/twa.js"></script>
+<link rel="stylesheet" href="/soft.css?v=1.4.0">
+<link rel="stylesheet" href="/app-shell.css?v=1.4.0">
+</head>
+<body>
+<header class="ah">
+  <a class="ah-brand" href="#feed" data-tab="feed" aria-label="Luna">
+    <img src="/brand-emblem-256.png" alt="" width="40" height="40"><span>Luna</span>
+  </a>
+  <div class="ah-acts">
+    <button type="button" class="ah-help" id="helpBtn" data-t-aria="help_aria">?</button>
+  </div>
+</header>
+
+<main class="panels">
+  <section class="panel" id="p-feed" data-frame="/scianka.html"></section>
+  <section class="panel" id="p-luna" data-frame="/?embed=app" hidden></section>
+  <section class="panel" id="p-butik" data-frame="/butik.html" hidden></section>
+  <section class="panel scroll" id="p-plans" hidden></section>
+  <section class="panel scroll" id="p-more" hidden></section>
+  <section class="panel" id="p-page" hidden></section>
+</main>
+
+<nav class="tabbar" id="tabbar" aria-label="Menu">
+  <button type="button" data-tab="feed"><i>🏠</i><span data-t="tab_feed">Ścianka</span></button>
+  <button type="button" data-tab="luna"><i>🎙️</i><span data-t="tab_luna">Luna</span></button>
+  <button type="button" data-tab="butik"><i>👗</i><span data-t="tab_butik">Butik</span></button>
+  <button type="button" data-tab="plans"><i>💎</i><span data-t="tab_plans">Premium</span></button>
+  <button type="button" data-tab="more"><i>☰</i><span data-t="tab_more">Więcej</span></button>
+</nav>
+
+<div class="onb" id="onb" hidden role="dialog" aria-modal="true" aria-labelledby="onbH">
+  <div class="onb-card">
+    <button type="button" class="onb-skip" id="onbSkip" data-t="skip">Pomiń</button>
+    <div class="onb-ico" id="onbIco">🏠</div>
+    <h2 id="onbH"></h2>
+    <p id="onbP"></p>
+    <div class="onb-dots" id="onbDots"></div>
+    <button type="button" class="btn primary" id="onbNext" data-t="next">Dalej</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="/app-shell-i18n.js?v=1.4.0"></script>
+<script src="/app-shell.js?v=1.4.0"></script>
+</body>
+</html>

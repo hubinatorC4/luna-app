@@ -4,14 +4,14 @@ import store
 
 CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; "
        "media-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; worker-src 'self'; manifest-src 'self'; "
-       "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'")
+       "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'")
 HEADERS = {
     "Content-Security-Policy": CSP,
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Permissions-Policy": "microphone=(self), camera=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
-    "X-Frame-Options": "DENY",
+    "X-Frame-Options": "SAMEORIGIN",
     "Cross-Origin-Opener-Policy": "same-origin",
 }
 SECRET_Q = re.compile(r"((?:token|t|code|key|secret|password|sid|csrf)=)[^&\s]+", re.I)
