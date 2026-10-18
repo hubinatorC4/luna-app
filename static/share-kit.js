@@ -62,8 +62,8 @@ function css(){
   document.head.appendChild(s);
 }
 const get = p => fetch(p, {credentials: 'same-origin'}).then(r => r.ok ? r.json() : null).catch(() => null);
-function keep(host, make){ /* host jest przerysowywany co 20 s – dokładamy pasek ponownie */
-  if (!host) return; const run = () => { try { make(); } catch (e) {} }; run(); new MutationObserver(run).observe(host, {childList: true});
+function keep(host, make, deep){ /* host jest przerysowywany co 20 s – dokładamy pasek ponownie */
+  if (!host) return; const run = () => { try { make(); } catch (e) {} }; run(); new MutationObserver(run).observe(host, {childList: true, subtree: !!deep});
 }
 /* ---------- Bitwy ---------- */
 async function battles(){
@@ -101,7 +101,7 @@ function agent(){
   keep(host, () => { const b = document.getElementById('phShare'); if (!b || document.getElementById('lshCopy')) return;
     const id = new URLSearchParams(location.search).get('id') || 'luna';
     const c = document.createElement('button'); c.type = 'button'; c.id = 'lshCopy'; c.className = b.className; c.textContent = '🔗 ' + T.copy;
-    c.onclick = () => { track('share', 'page:agentka'); track('sharenet', 'utm:copy'); copy(link('/agentka.html?id=' + encodeURIComponent(id), 'agentka', 'copy')); }; b.after(c); });
+    c.onclick = () => { track('share', 'page:agentka'); track('sharenet', 'utm:copy'); copy(link('/agentka.html?id=' + encodeURIComponent(id), 'agentka', 'copy')); }; b.after(c); }, true);
 }
 const P = location.pathname;
 const go = () => { css(); if (P === '/bitwy.html' || P === '/bitwy') battles(); else if (P === '/ranking.html' || P === '/ranking') ranking(); else if (P === '/agentka.html') agent(); };

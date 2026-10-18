@@ -141,7 +141,7 @@ def localize(doc, path, lang, base):
     if p in PAGES and "application/ld+json" not in doc: doc = doc.replace("</head>", jsonld(base, lang, p in ("/", "/promo.html", "/o-lunie.html")) + "\n</head>", 1)
     if "og:site_name" not in doc: doc = doc.replace("</head>", '<meta property="og:site_name" content="Luna mówi jak jest">\n</head>', 1)
     if 'og:url' not in doc: doc = doc.replace("</head>", f'<meta property="og:url" content="{canon}">\n</head>', 1)
-    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<script src="/emoji.js" defer></script>\n<script src="/bt-mini.js?v=1.6.3" defer></script>\n<script src="/share-kit.js?v=1" defer></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
+    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<script src="/emoji.js" defer></script>\n<script src="/bt-mini.js?v=1.6.3" defer></script>\n<script src="/share-kit.js?v=2" defer></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
     doc = re.sub(r'(<meta charset="utf-8">)', r'\1<script src="/lg.js"></script>', doc, count=1, flags=re.I)
     return doc
 
