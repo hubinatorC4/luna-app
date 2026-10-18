@@ -1352,8 +1352,6 @@ class H(SimpleHTTPRequestHandler):
             self.send_response(200); self.send_header("Content-Type", "text/plain; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=86400"); self.end_headers(); self.wfile.write(b); return
         if u.path == "/api/apk-info": return self._json(apk_info())
-        if u.path == "/api/_ipdiag":  # TYMCZASOWE: pokazuje pytającemu tylko JEGO własne nagłówki IP (do konfiguracji limitów)
-            return self._json({k: self.headers.get(k) for k in ("True-Client-IP", "CF-Connecting-IP", "X-Forwarded-For", "X-Real-IP", "Rndr-Id")} | {"peer": self.client_address[0], "used": self._ip()})
         if u.path.startswith("/og/") or u.path.rstrip("/") in promo_share.REDIRECTS:   # karty do udostępniania + krótkie linki (/casting, /glosuj, /zapros)
             if promo_share.handle_get(self, u, self._pid_plan): return
         if u.path == "/api/age/status":
