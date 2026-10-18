@@ -164,16 +164,19 @@ def shape(a):
 # ---------- Tryb producenta: kod tylko po stronie serwera ----------
 ADMIN_TTL = 30 * 60
 _tokens, _attempts, _adm_lock = {}, {}, threading.Lock()
-def admin_enabled(): return bool(os.getenv("LUNA_ADMIN_CODE"))
+def admin_enabled(): return bool(admin_code())
 QUOTES = "\"'„”“«»‚‘’`"
 def strip_code(msg):
     m = msg.strip()
     while len(m) >= 2 and m[0] in QUOTES and m[-1] in QUOTES:
         m = m[1:-1].strip()
     return m
+def admin_code():
+    # tolerujemy białe znaki i cudzysłowy wokół wartości zmiennej środowiskowej
+    return strip_code(os.getenv("LUNA_ADMIN_CODE", "").replace("\ufeff", ""))
 def code_candidate(msg):
     # Liczymy jako próbę tylko wiadomości o długości kodu – zwykłe pytania nie zużywają limitu prób.
-    code = os.getenv("LUNA_ADMIN_CODE", "").strip()
+    code = admin_code()
     return bool(code) and len(strip_code(msg)) == len(code)
 def check_code(ip, msg):
     """Zwraca token przy trafieniu, None przy chybieniu lub blokadzie. Nigdy nie loguje kodu."""
@@ -184,7 +187,7 @@ def check_code(ip, msg):
         allf = [t for t in _attempts.get("*", []) if now - t < 600]
         _attempts["*"] = allf
         if len(fails) >= 8 or len(allf) >= 60: return None
-    ok = hmac.compare_digest(hashlib.sha256(strip_code(msg).encode()).digest(), hashlib.sha256(os.getenv("LUNA_ADMIN_CODE", "").strip().encode()).digest())
+    ok = hmac.compare_digest(hashlib.sha256(strip_code(msg).encode()).digest(), hashlib.sha256(admin_code().encode()).digest())
     with _adm_lock:
         if not ok:
             _attempts.setdefault(ip, []).append(now); _attempts.setdefault("*", []).append(now); return None
