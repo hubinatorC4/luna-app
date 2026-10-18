@@ -3,6 +3,11 @@ import html, json, os, re
 LANGS = ("pl", "en", "es", "de", "uk")
 OGL = {"pl": "pl_PL", "en": "en_GB", "es": "es_ES", "de": "de_DE", "uk": "uk_UA"}
 PAGES = {
+ "/o-lunie.html": {"pl": ("O Lunie – trenerka głosu AI | Luna mówi jak jest", "Luna to asystentka AI i trenerka głosu: rozmowa głosowa, 45 lekcji, barwa głosu, tryb hologram i własna asystentka. Bez reklam."),
+       "en": ("About Luna – AI voice coach | Luna Tells It Like It Is", "Luna is an AI assistant and voice coach: voice chat, 45 lessons, voice styles, hologram mode and your own assistant. No ads."),
+       "es": ("Sobre Luna – entrenadora de voz con IA | Luna dice las cosas como son", "Luna es una asistente de IA y entrenadora de voz: chat por voz, 45 lecciones, estilos de voz, modo holograma y tu propia asistente. Sin anuncios."),
+       "de": ("Über Luna – KI-Stimmtrainerin | Luna sagt, wie es ist", "Luna ist KI-Assistentin und Stimmtrainerin: Sprachchat, 45 Lektionen, Stimmfarben, Hologramm-Modus und eigene Assistentin. Ohne Werbung."),
+       "uk": ("Про Луну – ШІ-тренерка голосу | Луна каже як є", "Луна – ШІ-асистентка й тренерка голосу: голосовий чат, 45 уроків, тембри голосу, режим голограми й власна асистентка. Без реклами.")},
  "/": {"pl": ("Luna mówi jak jest – asystentka AI do pracy z głosem", "Rozmawiaj z Luną, asystentką AI do nauki mówienia i pracy z głosem."),
        "en": ("Luna Tells It Like It Is – your AI voice coach", "Talk to Luna, an AI assistant for learning to speak and working with your voice."),
        "es": ("Luna dice las cosas como son – tu entrenadora de voz con IA", "Habla con Luna, una asistente de IA para aprender a hablar y trabajar la voz."),
