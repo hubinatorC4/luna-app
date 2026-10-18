@@ -14,7 +14,7 @@ function row(list, m, mine, avSrc, label){
   const r = document.createElement('div'); r.className = 'msgrow ' + (mine ? 'me' : 'luna');
   const im = document.createElement('img'); im.className = 'mav' + (mine && m.from === 'visitor' ? ' me' : ''); im.alt = ''; im.src = avSrc || GUEST_AV;
   const b = document.createElement('div'); b.className = 'msg ' + (mine ? 'me' : 'luna');
-  const sm = document.createElement('small'); sm.className = 'meta'; sm.textContent = label + ' · ' + fmt(m.t);
+  const sm = document.createElement('small'); sm.className = 'meta'; const nm = document.createElement('span'); nm.className = 'nk' + (m.from === 'visitor' && m.tier ? ' nk-' + m.tier : ''); nm.textContent = label; sm.append(nm, ' · ' + fmt(m.t));
   const tx = document.createElement('div'); tx.textContent = m.text;
   b.append(sm, tx); r.append(im, b); list.appendChild(r);
 }

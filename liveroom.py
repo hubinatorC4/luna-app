@@ -48,7 +48,7 @@ def public_state(since=0, mod=False):
             st["banned"] = S["banned"]
         return st
 
-def post(vid, name, avatar, text, ask, ring=None):
+def post(vid, name, avatar, text, ask, ring=None, tier=""):
     if not livechat.VID_RE.fullmatch(vid or ""): raise ValueError("bad id")
     text = livechat.clean_text(text, 300); name = livechat.clean_text(name, 40) or "Widz"
     if not text: raise ValueError("Wiadomość jest pusta.")
@@ -57,6 +57,7 @@ def post(vid, name, avatar, text, ask, ring=None):
         if vid[:8] in S["banned"]: raise PermissionError("Nie możesz pisać na tym czacie.")
         m = {"id": nid(), "uid": vid[:8], "name": name, "avatar": livechat.clean_avatar(avatar), "text": text, "t": now_ms(), "ask": bool(ask)}
         if ring: m["ring"] = ring
+        if tier in ("premium", "pro"): m["tier"] = tier
         S["chat"].append(m); S["chat"] = S["chat"][-200:]
         if ask:
             S["queue"].append({"id": m["id"], "uid": m["uid"], "name": name, "text": text, "t": m["t"], "status": "pending"})

@@ -3,7 +3,7 @@
 Wszystkie komentarze są moderowane przed publikacją; wpisy na Ściance od zaufanych autorów (3+ zatwierdzone) publikują się od razu.
 Liczniki są wyłącznie prawdziwe – nic nie jest „zasiewane”."""
 import base64, hashlib, re, secrets, threading, time, unicodedata
-import store, imgsafe, avatars, official, antibot, stats, textutil
+import store, imgsafe, avatars, official, antibot, stats, textutil, nicktier
 PRICING = lambda: {}  # ustawiane przez serwer (cennik z CFG)
 
 _lock = threading.Lock()
@@ -141,7 +141,7 @@ def public_post(p, voter, V, C, mine_ak, lang="pl", T=None):
     va = _variants(p); shown = lang if lang in va else p.get("lang", "pl")
     X = antibot.excluded()
     cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
-    return {"views": stats.post_views(p["id"], T), "id": p["id"], "nick": p["nick"], "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "agent": p.get("agent"),
+    return {"views": stats.post_views(p["id"], T), "id": p["id"], "nick": p["nick"], "tier": "" if p.get("official") else nicktier.of_author(p["author"]), "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "agent": p.get("agent"),
             "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved"}
 
 def _off_hidden(): return set(store.get("official_hidden", []) or [])
@@ -233,7 +233,7 @@ def add_comment(d, uid, vid, acct_nick=None):
 
 def list_comments(target, uid, vid):
     voter = author_key(uid, vid); V = _votes(); X = antibot.excluded()
-    out = [{"id": c["id"], "parent": c["parent"], "nick": c["nick"], "text": c["text"], "rating": c.get("rating"), "t": c["t"],
+    out = [{"id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
             "votes": counts("cmt:" + c["id"], voter, V, X), "pending": c["status"] != "approved", "mine": c["author"] == voter}
            for c in _cmts() if c["target"] == target and (_cm_ok(c, X) or (c["author"] == voter and c["status"] in ("approved", "pending")))]
     rs = [c["rating"] for c in out if c.get("rating") and not c["pending"]]

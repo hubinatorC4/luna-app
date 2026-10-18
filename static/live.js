@@ -54,7 +54,7 @@ $('#joinBtn').onclick = () => {
 function msgEl(m){
   const r = el('div', 'cm' + (m.ask ? ' ask' : '')); r.dataset.id = m.id;
   const im = el('img', 'cav'); im.alt = ''; im.src = m.avatar || GUEST; if (m.ring){ im.style.borderColor = m.ring; im.style.boxShadow = '0 0 6px ' + m.ring; }
-  const b = el('div', 'cb'); const n = el('b', null, m.name); const t = el('span', null, ' ' + m.text);
+  const b = el('div', 'cb'); const n = el('b', 'nk' + (m.tier ? ' nk-' + m.tier : ''), m.name); const t = el('span', null, ' ' + m.text);
   b.append(n); if (m.ask) b.append(el('span', 'qtag', 'PYTANIE')); b.append(t);
   r.append(im, b);
   if (tok()){

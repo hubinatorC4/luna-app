@@ -108,3 +108,13 @@ body.xmas .countdown .cd span{border-color:#c9a24a;box-shadow:0 0 12px rgba(255,
 .annbox .anndots button.on{width:30px;background:transparent}
 .annbox .anndots button.on::after{width:22px;border-radius:6px;background:#ffb347}
 #items:empty{min-height:120vh}
+
+/* v1.5.8: styl nicku według planu (plan liczony na serwerze). Poppins – lokalnie, Latin + Latin Extended. */
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/poppins-regular.woff2) format('woff2')}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/poppins-bold.woff2) format('woff2')}
+html .nk.nk{font-family:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-weight:400;color:#E6E6EA}
+html .nk.nk-premium{font-weight:700;color:#3DDC97}
+html .nk.nk-pro{font-weight:700;color:#B388FF;background:linear-gradient(90deg,#B388FF 0%,#4DD0E1 50%,#B388FF 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:nkShimmer 6s linear infinite}
+html .nk.nk-pro::after{content:'PRO';display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#50306F;color:#FFF0F5;-webkit-text-fill-color:#FFF0F5;font:700 .68em/1.35 'Poppins',system-ui,sans-serif;letter-spacing:.04em;vertical-align:.12em}
+@keyframes nkShimmer{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){html .nk.nk-pro{animation:none}}
