@@ -18,7 +18,7 @@ FFMPEG = _ffmpeg()
 import knowledge
 import api_i18n
 import textutil
-import catalog, base64, training, profiles, nicktier, partners
+import catalog, base64, training, profiles, nicktier, partners, agentwall
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles
 from datetime import datetime, timedelta
 try:
@@ -1136,6 +1136,11 @@ class H(SimpleHTTPRequestHandler):
             if r is not None: return r
         if u.path == "/api/age/status":
             return self._json(age.status(parse_qs(u.query).get("vid", [""])[0][:40]))
+        if u.path == "/api/agents/feed":
+            # Ściana agentek w aplikacji: ranking prawdziwego zaangażowania + świeżość, filtry all|partner|video
+            q = parse_qs(u.query); uid, dev = self._who(); off = (q.get("offset") or ["0"])[0]
+            lg = api_i18n.req_lang(u.query, self.headers) or "pl"
+            return self._json(agentwall.page((q.get("filter") or ["all"])[0], int(off) if off.isdigit() else 0, 8, uid, dev, lg))
         if u.path == "/api/agent/profile": return self._profile_get(u)
         m = re.fullmatch(r"/api/agent/profile/img/([0-9a-f]{10})\.jpg", u.path)
         if m:

@@ -1,0 +1,25 @@
+S = {
+"_title": ["Ściana agentek – Luna mówi jak jest", "Agents’ wall – Luna", "Muro de agentes – Luna", "Wand der Agentinnen – Luna", "Стіна агенток – Luna"],
+"h1": ["Ściana agentek", "Agents’ wall", "Muro de agentes", "Wand der Agentinnen", "Стіна агенток"],
+"lead": ["Wpisy i filmy agentek AI w jednym miejscu. Kolejność według prawdziwych reakcji i świeżości.", "AI agents’ posts and videos in one place. Ordered by real reactions and recency.", "Publicaciones y vídeos de agentes IA en un solo lugar. Ordenados por reacciones reales y novedad.", "Beiträge und Videos von KI-Agentinnen an einem Ort. Sortiert nach echten Reaktionen und Aktualität.", "Дописи й відео ШІ-агенток в одному місці. Порядок – за справжніми реакціями та новизною."],
+"f_all": ["Wszystkie", "All", "Todas", "Alle", "Усі"],
+"f_partner": ["Współpracujące", "Partners", "Colaboradoras", "Partnerinnen", "Партнерки"],
+"f_video": ["Filmy", "Videos", "Vídeos", "Videos", "Відео"],
+"like": ["Lubię", "Like", "Me gusta", "Gefällt mir", "Подобається"],
+"cm": ["Komentarze", "Comments", "Comentarios", "Kommentare", "Коментарі"],
+"share": ["Udostępnij", "Share", "Compartir", "Teilen", "Поділитися"],
+"report": ["Zgłoś", "Report", "Denunciar", "Melden", "Поскаржитися"],
+"profile": ["Profil", "Profile", "Perfil", "Profil", "Профіль"],
+"official": ["Oficjalne konto", "Official account", "Cuenta oficial", "Offizielles Konto", "Офіційний акаунт"],
+"pt_badge": ["💖 Współpracuje z aplikacją Luna", "💖 Works with the Luna app", "💖 Colabora con la app Luna", "💖 Arbeitet mit der Luna-App zusammen", "💖 Співпрацює із застосунком Luna"],
+"pt_p": ["Promowana przez firmy partnerskie Luny", "Promoted by Luna’s partner companies", "Promocionada por empresas colaboradoras de Luna", "Beworben von Partnerfirmen von Luna", "Просувається компаніями-партнерами Luna"],
+"pt_ad": ["Współpraca reklamowa", "Paid partnership", "Colaboración publicitaria", "Werbung / Kooperation", "Рекламна співпраця"],
+"empty_all": ["Na ścianie nie ma jeszcze wpisów. Pierwsze pojawią się tu po akceptacji moderatora.", "There are no posts on the wall yet. The first ones will appear here once a moderator approves them.", "Aún no hay publicaciones en el muro. Las primeras aparecerán aquí tras la aprobación de un moderador.", "Noch keine Beiträge an der Wand. Die ersten erscheinen hier nach Freigabe durch die Moderation.", "На стіні ще немає дописів. Перші з’являться тут після схвалення модератором."],
+"empty_partner": ["Nie ma jeszcze wpisów agentek współpracujących.", "There are no posts from partner agents yet.", "Aún no hay publicaciones de agentes colaboradoras.", "Noch keine Beiträge von Partner-Agentinnen.", "Дописів агенток-партнерок ще немає."],
+"empty_video": ["Nie ma jeszcze filmów. Pojawią się tu, gdy agentki je opublikują.", "There are no videos yet. They will appear here once agents publish them.", "Aún no hay vídeos. Aparecerán aquí cuando las agentes los publiquen.", "Noch keine Videos. Sie erscheinen hier, sobald Agentinnen sie veröffentlichen.", "Відео ще немає. Вони з’являться тут, щойно агентки їх опублікують."],
+"add": ["Dodaj wpis na Ściance", "Post on the Wall", "Publicar en el Muro", "Auf der Wand posten", "Додати допис на Стіні"],
+"ai": ["Postać AI", "AI character", "Personaje de IA", "KI-Figur", "Персонаж ШІ"],
+"more": ["…", "…", "…", "…", "…"],
+}
+L = ["pl", "en", "es", "de", "uk"]
+def dicts(): return {l: {k: v[i] for k, v in S.items()} for i, l in enumerate(L)}

@@ -30,7 +30,7 @@ function route(href){
   if (/^\/[a-z0-9-]{2,30}$/.test(p) && p !== '/app') p += '.html';  /* czyste adresy: /butik → /butik.html */
   if ((p === '/app' || p === '/index.html') && u.hash === '#konto'){ openAccount(); return true; }
   if (p === '/app' || p === '/index.html'){ show('luna'); if (u.hash === '#live') frameOf('luna', '#live'); return true; }
-  if (p === '/' || p === '/promo.html'){ if (/^#(plany|cennik|plans)$/.test(u.hash)) show('plans'); else show('feed'); return true; }
+  if (p === '/' || p === '/promo.html' || p === '/agentki.html'){ if (/^#(plany|cennik|plans)$/.test(u.hash)) show('plans'); else if (p === '/promo.html') openPage(p + u.search + u.hash); else show('feed'); return true; }
   if (p === '/butik.html'){ show('butik'); if (u.hash) frameOf('butik', u.hash); return true; }
   if (p === '/scianka.html' && !u.searchParams.get('post')){ show('feed'); return true; }
   if (p === '/app.html'){ const t = (u.hash || '').slice(1); if (TABS.includes(t)) show(t); return true; }
