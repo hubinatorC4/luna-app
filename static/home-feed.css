@@ -118,3 +118,5 @@ body.homebody:not(.pasthero) .wall-write{display:none}
 @media (max-width:720px){.homebody .sh-stage img{object-position:50% 18%}}
 .hfshop .hfshare{display:inline-flex;align-items:center;gap:4px;margin-left:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(240,160,64,.45);color:var(--amber2,#ffd08a);font-size:15px;cursor:pointer;min-height:40px}
 .hfshop .hfshare:hover{background:rgba(240,160,64,.12)}
+@media (max-width:720px){.homebody .star-hero{grid-template-columns:minmax(0,1fr)}.homebody .star-hero>*,.homebody .sh-copy>*{min-width:0;max-width:100%}.homebody .sh-copy p{overflow-wrap:anywhere}}
+@media (max-width:720px){.homebody .sh-cta{width:100%;max-width:100%}.homebody .sh-cta .pill{box-sizing:border-box;max-width:100%;min-width:0;white-space:normal}}

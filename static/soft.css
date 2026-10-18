@@ -66,3 +66,4 @@ a{transition:color var(--t) var(--ease)}
 /* v1.5.1 – większe pola wyboru (dostępność) */
 .consent input[type=checkbox]{width:24px;height:24px;flex:0 0 24px}
 #galGrid:empty{min-height:120vh}
+.hero h1,main h1{overflow-wrap:break-word}
