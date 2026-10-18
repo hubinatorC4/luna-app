@@ -164,7 +164,16 @@ def shape(a):
 # ---------- Tryb producenta: kod tylko po stronie serwera ----------
 ADMIN_TTL = 30 * 60
 _tokens, _attempts, _adm_lock = {}, {}, threading.Lock()
-def admin_enabled(): return bool(admin_code())
+def _admin_hash():
+    # Format: pbkdf2_sha256$iteracje$sól_hex$skrót_hex  (zalecane: kod nie leży jawnie w zmiennych)
+    h = os.getenv("LUNA_ADMIN_CODE_HASH", "").strip()
+    try:
+        alg, it, salt, dig = h.split("$")
+        if alg == "pbkdf2_sha256": return int(it), bytes.fromhex(salt), bytes.fromhex(dig)
+    except Exception:
+        pass
+    return None
+def admin_enabled(): return bool(_admin_hash() or admin_code())
 QUOTES = "\"'„”“«»‚‘’`"
 def strip_code(msg):
     m = msg.strip()
@@ -175,9 +184,18 @@ def admin_code():
     # tolerujemy białe znaki i cudzysłowy wokół wartości zmiennej środowiskowej
     return strip_code(os.getenv("LUNA_ADMIN_CODE", "").replace("\ufeff", ""))
 def code_candidate(msg):
-    # Liczymy jako próbę tylko wiadomości o długości kodu – zwykłe pytania nie zużywają limitu prób.
+    # Liczymy jako próbę tylko wiadomości podobne do kodu – zwykłe pytania nie zużywają limitu prób.
+    m = strip_code(msg)
+    if _admin_hash(): return 4 <= len(m) <= 64 and not re.search(r"\s", m)
     code = admin_code()
-    return bool(code) and len(strip_code(msg)) == len(code)
+    return bool(code) and len(m) == len(code)
+def code_matches(msg):
+    m = strip_code(msg).encode()
+    h = _admin_hash()
+    if h:
+        it, salt, dig = h
+        return hmac.compare_digest(hashlib.pbkdf2_hmac("sha256", m, salt, it), dig)
+    return hmac.compare_digest(hashlib.sha256(m).digest(), hashlib.sha256(admin_code().encode()).digest())
 def check_code(ip, msg):
     """Zwraca token przy trafieniu, None przy chybieniu lub blokadzie. Nigdy nie loguje kodu."""
     now = time.time()
@@ -187,7 +205,7 @@ def check_code(ip, msg):
         allf = [t for t in _attempts.get("*", []) if now - t < 600]
         _attempts["*"] = allf
         if len(fails) >= 8 or len(allf) >= 60: return None
-    ok = hmac.compare_digest(hashlib.sha256(strip_code(msg).encode()).digest(), hashlib.sha256(admin_code().encode()).digest())
+    ok = code_matches(msg)
     with _adm_lock:
         if not ok:
             _attempts.setdefault(ip, []).append(now); _attempts.setdefault("*", []).append(now); return None
@@ -338,7 +356,7 @@ class H(SimpleHTTPRequestHandler):
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
         if u.path == "/api/health":
-            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled(), "admin_fp": hashlib.sha256(("luna-fp:" + admin_code()).encode()).hexdigest()[:4] if admin_enabled() else None})
+            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled()})
         return super().do_GET()
     def do_POST(self):
         u = urlparse(self.path)
