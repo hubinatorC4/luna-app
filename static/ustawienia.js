@@ -220,8 +220,33 @@ const BIND = {
     // Generator z opisu (t429u/t430u): proste wybory → „Stwórz moją agentkę AI” → warianty → wybór → sprawdzenie → profil gotowy. Bez wgrywania zdjęć i bez edytora.
     const W = S.querySelector('#gWrap'); let G, sel = {spec: ['diction']}, pickSet = new Set(), poll = null;
     const steps = n => `<ol class="g-steps" aria-label="${esc(T('r_gen'))}">${T('g_steps').map((x, i) => `<li class="${i + 1 < n ? 'done' : i + 1 === n ? 'cur' : ''}"${i + 1 === n ? ' aria-current="step"' : ''}><span>${i + 1 < n ? '✓' : i + 1}</span>${esc(x)}</li>`).join('')}</ol>`;
-    const chips = (k, multi) => `<fieldset class="g-f"><legend>${esc(T('g_' + k))}</legend><div class="g-chips">${G.options[k].map(o => { const on = multi ? (sel[k] || []).includes(o.id) : sel[k] === o.id;
-      return `<button type="button" class="g-chip${on ? ' on' : ''}" aria-pressed="${on}" data-k="${k}" data-v="${o.id}"${multi ? ' data-m="1"' : ''}>${esc(o.label)}</button>`; }).join('')}</div></fieldset>`;
+    const O = () => G.options.fields, openSec = new Set(['hair']);
+    const chip = (k, o, multi) => { const on = multi ? (sel[k] || []).includes(o.id) : sel[k] === o.id;
+      return `<button type="button" class="g-chip${on ? ' on' : ''}${o.lock ? ' lk' : ''}" aria-pressed="${on}" data-k="${k}" data-v="${o.id}"${multi ? ' data-m="1"' : ''}${o.lock ? ' data-lock="1"' : ''}>${o.lock ? '🔒 ' : ''}${esc(o.label)}</button>`; };
+    const chips = k => { const f = O()[k]; if (!f) return ''; const multi = !!f.multi, lockF = f.pro && G.options.tier !== 'pro';
+      const top = f.top ? f.items.slice(0, f.top) : [], rest = f.items.slice(top.length);
+      const it = x => lockF ? Object.assign({}, x, {lock: true}) : x;
+      return `<fieldset class="g-f"><legend>${esc(T('gf_' + k))}${multi ? ` <small>${esc(F('g_multi', {n: f.multi}))}</small>` : ''}${lockF ? ' <span class="st-tag">Pro</span>' : ''}</legend>
+        ${top.length ? `<p class="g-pop">${esc(T(f.real ? 'g_pop' : 'g_pop0'))}</p><div class="g-chips">${top.map(x => chip(k, it(x), multi)).join('')}</div>${rest.length ? `<p class="g-pop g-pop2">${esc(T('g_more_o'))}</p>` : ''}` : ''}
+        <div class="g-chips">${rest.map(x => chip(k, it(x), multi)).join('')}</div></fieldset>`; };
+    const slider = (id, k, mn, mx, stp, unit) => `<fieldset class="g-f"><legend>${esc(T('gf_' + k))}: <b id="${id}V">${sel[k] ? sel[k] + unit : esc(T('g_any'))}</b></legend>
+      <input type="range" id="${id}" min="${mn}" max="${mx}" step="${stp}" value="${sel[k] || Math.round((mn + mx) / 2 / stp) * stp}" aria-label="${esc(T('gf_' + k))}"${sel[k] ? '' : ' data-unset="1"'}></fieldset>`;
+    const section = (sid, fields) => { const n = fields.reduce((a, k) => a + (k === 'height' ? (sel.height ? 1 : 0) : Array.isArray(sel[k]) ? sel[k].length : sel[k] ? 1 : 0), 0) + (sel.x && sel.x[sid] ? 1 : 0);
+      let body = fields.map(k => k === 'height' ? slider('gH', 'height', G.options.height.min, G.options.height.max, G.options.height.step, ' cm') : chips(k)).join('');
+      if (sid === 'age') body += G.options.age_fine ? slider('gA', 'age_fine', G.options.age_fine.min, G.options.age_fine.max, 1, '') : `<p class="hint">🔒 ${esc(T('g_age_pro'))}</p>`;
+      if (sid === 'age') body += `<p class="hint">${esc(T('g_age_h'))}</p>`;
+      body += `<label class="g-xl" for="gx_${sid}">${esc(T('g_x'))}</label><input type="text" class="g-x" id="gx_${sid}" data-sec="${sid}" maxlength="${G.options.x_len}" value="${esc((sel.x || {})[sid] || '')}" placeholder="${esc(T('g_x_ph_' + sid))}" autocomplete="off">`;
+      return `<details class="g-sec" data-sec="${sid}"${openSec.has(sid) ? ' open' : ''}><summary>${esc(T('g_sec_' + sid))}${n ? ` <span class="g-cnt">${n}</span>` : ''}</summary><div class="g-secb">${body}</div></details>`; };
+    const sync = () => { const q = x => W.querySelector(x); if (!q('#gGo')) return;
+      sel.name = q('#gName').value; sel.desc = q('#gDesc').value; sel.x = {}; W.querySelectorAll('.g-x').forEach(i => { if (i.value.trim()) sel.x[i.dataset.sec] = i.value.trim(); });
+      W.querySelectorAll('details.g-sec').forEach(d => d.open ? openSec.add(d.dataset.sec) : openSec.delete(d.dataset.sec)); };
+    const pickR = a => a[Math.floor(Math.random() * a.length)];
+    const randomize = () => { const f = O(), free = k => (f[k].pro && G.options.tier !== 'pro') ? [] : f[k].items.filter(x => !x.lock).map(x => x.id);
+      Object.keys(f).forEach(k => { const ok = free(k); if (!ok.length) { sel[k] = f[k].multi ? [] : ''; return; }
+        if (f[k].multi) { const n = k === 'spec' ? 1 + Math.floor(Math.random() * 2) : Math.floor(Math.random() * 3); sel[k] = [...ok].sort(() => Math.random() - .5).slice(0, n); }
+        else sel[k] = ['eyeshape', 'face', 'makeup', 'pose'].includes(k) && Math.random() < .3 ? '' : pickR(ok); });
+      const h = G.options.height; sel.height = h.min + Math.round(Math.random() * (h.max - h.min) / h.step) * h.step;
+      sel.age_fine = null; };
     const capsTxt = () => F('g_caps', {px: G.caps.px, s: G.caps.video_s, p: G.caps.video_p, u: G.caps.used, l: G.caps.per_day});
     const vidBox = () => { const im = G.state && G.state.img, v = G.state && G.state.vid;
       if (!im || im.status !== 'done') return `<h3>🎬 ${esc(T('g_vid_h'))}</h3><p class="hint">${esc(T('g_vid_need'))}</p>`;
@@ -236,9 +261,11 @@ const BIND = {
       let h = `${G.partner ? `<p class="hint">${esc(T('partner'))}</p>` : ''}`;
       if (!im || st === 'rejected' || st === 'failed' || st === 'new' || st === 'draft'){
         h += steps(1) + (st === 'rejected' ? `<p class="g-note">${esc(T('g_rej'))}</p>` : '') +
-          chips('hair') + chips('eyes') + chips('style') + chips('outfit') + chips('personality') + chips('voice') + chips('spec', true) +
-          `<label for="gName">${esc(T('g_name'))}</label><input type="text" id="gName" maxlength="24" autocomplete="off">
-           <label for="gDesc">${esc(T('g_desc'))}</label><textarea id="gDesc" maxlength="200" rows="2" placeholder="${esc(T('g_desc_ph'))}"></textarea>
+          `<p class="hint">${esc(T(G.options.tier === 'pro' ? 'g_tier_pro' : 'g_tier_basic'))}</p>
+           <div class="st-btns g-tools"><button type="button" class="st-btn" id="gRnd">🎲 ${esc(T('g_rnd'))}</button><button type="button" class="st-btn" id="gClr">🧹 ${esc(T('g_clr'))}</button></div><p class="hint">${esc(T('g_pop_h'))}</p>` +
+          G.options.sections.map(x => section(x.id, x.fields)).join('') +
+          `<label for="gName">${esc(T('g_name'))}</label><input type="text" id="gName" maxlength="24" autocomplete="off" value="${esc(sel.name || '')}">
+           <label for="gDesc">${esc(T('g_desc'))}</label><textarea id="gDesc" maxlength="200" rows="2" placeholder="${esc(T('g_desc_ph'))}">${esc(sel.desc || '')}</textarea>
            <p class="hint">🛡️ ${esc(T('g_safe'))}</p><p class="hint">${esc(capsTxt())}</p>
            <div class="st-btns"><button type="button" class="primary g-big" id="gGo">✨ ${esc(T('g_go'))}</button></div>`;
       } else if (st === 'waiting' || st === 'generating'){
@@ -249,19 +276,27 @@ const BIND = {
       } else if (st === 'checking'){
         h += steps(4) + `<div class="g-wait"><span class="g-orb" aria-hidden="true"></span><p>${esc(T('g_check'))}</p></div>`;
       } else if (st === 'done'){
-        h += steps(5) + `<p class="g-ok">${esc(T('g_done'))}</p><div class="st-btns"><a class="st-btn primary" href="/agentka.html?id=me">${esc(T('g_view'))}</a><button type="button" class="st-btn" id="gNew">${esc(T('g_new'))}</button></div>`;
+        h += steps(5) + `<p class="g-ok">${esc(T('g_done'))}</p><div class="st-btns"><a class="st-btn primary" href="/agentka.html?id=me">${esc(T('g_view'))}</a><button type="button" class="st-btn" id="gEdit">✏️ ${esc(T('g_edit'))}</button><button type="button" class="st-btn" id="gNew">${esc(T('g_new'))}</button></div><p class="hint">${esc(T('g_edit_h'))}</p>`;
       }
       W.innerHTML = h + (G.state ? vidBox() : '');
       W.querySelectorAll('.g-chip').forEach(b => b.onclick = () => { const k = b.dataset.k, v = b.dataset.v;
-        if (b.dataset.m){ const a = sel[k] || []; sel[k] = a.includes(v) ? a.filter(x => x !== v) : (a.length >= 3 ? a : a.concat(v)); } else sel[k] = sel[k] === v ? '' : v;
-        const nm = W.querySelector('#gName')?.value, ds = W.querySelector('#gDesc')?.value; draw(); if (nm) W.querySelector('#gName').value = nm; if (ds) W.querySelector('#gDesc').value = ds; W.querySelector(`[data-k="${k}"][data-v="${v}"]`)?.focus(); });
+        if (b.dataset.lock) return toast(T('g_pro_lock'), '🔒');
+        sync(); const mx = (O()[k] || {}).multi || 3;
+        if (b.dataset.m){ const a = sel[k] || []; sel[k] = a.includes(v) ? a.filter(x => x !== v) : (a.length >= mx ? a : a.concat(v)); } else sel[k] = sel[k] === v ? '' : v;
+        draw(); W.querySelector(`[data-k="${k}"][data-v="${v}"]`)?.focus(); });
+      [['#gH', 'height', ' cm'], ['#gA', 'age_fine', '']].forEach(([id, k, u]) => { const r = W.querySelector(id); if (!r) return;
+        r.oninput = () => { sel[k] = +r.value; W.querySelector(id + 'V').textContent = r.value + u; delete r.dataset.unset; }; });
+      const rn = W.querySelector('#gRnd'); if (rn) rn.onclick = () => { sync(); randomize(); draw(); toast(T('g_rnd_t'), '🎲'); };
+      const cl = W.querySelector('#gClr'); if (cl) cl.onclick = () => { sel = {spec: ['diction'], x: {}}; draw(); toast(T('g_clr_t'), '🧹'); };
       const go = W.querySelector('#gGo'); if (go) go.onclick = async () => { go.disabled = true; go.classList.add('busy');
-        try { const r = await api('/api/agent/gen', Object.assign({}, sel, {name: W.querySelector('#gName').value, desc: W.querySelector('#gDesc').value}), true);
+        sync();
+        try { const r = await api('/api/agent/gen', Object.assign({}, sel), true);
           G.state = G.state || {}; G.state.img = r.job; draw(); watch(); toast(r.job.engine ? T('g_working') : '⏳', '✨'); } catch(e){ toast(e.message, '⚠️'); go.disabled = false; go.classList.remove('busy'); } };
       W.querySelectorAll('[data-pv]').forEach(b => b.onclick = () => { const v = b.dataset.pv; if (pickSet.has(v)) pickSet.delete(v); else if (pickSet.size < 4) pickSet.add(v); draw(); });
       const pk = W.querySelector('#gPick'); if (pk) pk.onclick = async () => { pk.disabled = true;
         try { const r = await api('/api/agent/gen/pick', {job: G.state.img.id, ids: [...pickSet]}, true); G.state.img = r.job; pickSet.clear(); draw(); watch(); } catch(e){ toast(e.message, '⚠️'); pk.disabled = false; } };
-      const nw = W.querySelector('#gNew'); if (nw) nw.onclick = () => { G.state.img = null; draw(); };
+      const nw = W.querySelector('#gNew'); if (nw) nw.onclick = () => { sel = {spec: ['diction'], x: {}}; G.state.img = null; draw(); };
+      const ed = W.querySelector('#gEdit'); if (ed) ed.onclick = () => { const d = G.state.img.draft || {}; sel = Object.assign({spec: ['diction'], x: {}}, d); G.state.img = null; draw(); toast(T('g_edit_t'), '✏️'); };
       const gv = W.querySelector('#gVid'); if (gv) gv.onclick = async () => { gv.disabled = true;
         try { const r = await api('/api/agent/gen/video', {}, true); G.state.vid = r.job; draw(); watch(); } catch(e){ toast(e.message, '⚠️'); gv.disabled = false; } };
     };
@@ -271,7 +306,7 @@ const BIND = {
       try { const g = await api('/api/agent/gen?lang=' + lang()); const was = G.state.img && G.state.img.status; G = g; draw();
         if (was !== (g.state.img || {}).status && (g.state.img || {}).status === 'variants') toast(T('g_pick'), '🎨'); } catch(e){} }, 4000); };
     try { G = await api('/api/agent/gen?lang=' + lang()); } catch(e){ W.innerHTML = `<p class="hint">${esc(e.message)}</p>`; return; }
-    const d = G.state && G.state.img && G.state.img.draft; if (d) sel = Object.assign({spec: ['diction']}, d);
+    const d = G.state && G.state.img && G.state.img.draft; if (d) sel = Object.assign({spec: ['diction'], x: {}}, d);
     draw(); watch();
   },
   online: S => S.querySelectorAll('[name=onl]').forEach(i => i.onchange = async () => { try { await api('/api/friends/prefs', {online: i.value}, true); FP.online = i.value; toast(T('saved'), '💚'); } catch(e){ toast(e.message, '⚠️'); } }),

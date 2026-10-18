@@ -73,3 +73,18 @@
 .st-about{border:1px solid #ffffff1a;border-radius:16px;padding:10px 14px 12px;margin:16px 0 4px}
 .st-about legend{padding:0 6px;font-weight:700}
 .st-about input[type=number]{width:130px;border-radius:14px;padding:10px 14px;font-size:16px}
+
+/* v1.6.9 Generator: sekcje, 🔥, suwaki */
+.g-sec{border:1px solid #ffffff1a;border-radius:18px;margin:10px 0;background:#ffffff06;overflow:hidden}
+.g-sec>summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:700;display:flex;align-items:center;gap:8px;min-height:48px}
+.g-sec>summary::-webkit-details-marker{display:none}
+.g-sec>summary::after{content:"▾";margin-left:auto;transition:transform .2s}
+.g-sec[open]>summary::after{transform:rotate(180deg)}
+.g-secb{padding:0 14px 14px}
+.g-cnt{background:#ff9f43;color:#1a1020;border-radius:999px;font-size:12px;padding:1px 8px}
+.g-pop{font-size:12.5px;font-weight:700;color:#ffb36b;margin:6px 0 4px}.g-pop2{color:#b9b6c6;font-weight:600}
+.g-chip.lk{opacity:.6}
+.g-f input[type=range]{width:100%;accent-color:#ff9f43}
+.g-f input[type=range][data-unset]{opacity:.55}
+.g-xl{font-size:13px;color:#c9c4d8;margin-top:10px}
+.g-tools{gap:8px}

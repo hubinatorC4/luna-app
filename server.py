@@ -1415,7 +1415,7 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"login": not uid, "plan": pl, "gen_plan": gp, "partner": gp != pl, "locked": not plans.has(gp, "premium"),
                                "lock": quality.lock("premium", "gen") if not plans.has(gp, "premium") else None,
                                "caps": {"px": c["gen_px"], "per_day": c["gen"], "used": quality.gen_used(uid) if uid else 0, "video_s": (L or {}).get("max_s", 0), "video_p": (L or {}).get("label", "")},
-                               "options": agentgen.options(lg), "state": agentgen.state(uid) if uid else None})
+                               "options": agentgen.options(lg, gp), "state": agentgen.state(uid) if uid else None})
         m = re.fullmatch(r"/api/agent/gen/vid/([0-9a-f]{12})\.mp4", u.path)
         if m:
             _pl, vu = self._plan(); fp = agentgen.vid_path(m.group(1), vu)
@@ -1763,6 +1763,7 @@ class H(SimpleHTTPRequestHandler):
                 try: _mod_push("Generator agentek: nowe zadanie", r["kind"])
                 except Exception: pass
                 return self._json({"ok": True, "job": r})
+            except PermissionError as e: return self._json(dict(quality.lock("pro", "gen"), error=str(e)), 402)   # opcje Pro/Ultra
             except ValueError as e: return self._json({"error": str(e)}, 400)
         if u.path == "/api/admin/videos":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
