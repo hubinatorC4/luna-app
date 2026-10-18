@@ -18,7 +18,7 @@ FFMPEG = _ffmpeg()
 import knowledge
 import api_i18n
 import textutil
-import catalog, base64, training, profiles, nicktier, partners, agentwall
+import catalog, base64, training, profiles, nicktier, partners, agentwall, quality, userprof
 import promo_share
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox
 from datetime import datetime, timedelta
@@ -708,7 +708,7 @@ class H(SimpleHTTPRequestHandler):
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         p = urlparse(self.path).path
-        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own") else 64 * 1024
+        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post", "/api/battles/enter", "/api/agent/profile/own", "/api/me/avatar") else 64 * 1024
         if n > lim: raise ValueError("too large")
         return textutil.fix_surrogates(json.loads(self.rfile.read(n) or b"{}")) if n else {}
 
@@ -793,7 +793,7 @@ class H(SimpleHTTPRequestHandler):
                 if usr.get("pw") and data.get("password") and not accounts.check_pw(usr["pw"], str(data.get("password"))): return self._json({"error": "Nieprawidłowe hasło."}, 400)
                 try: inbox.delete_user(usr["uid"])
                 except Exception as e: sys.stderr.write("inbox delete %s\n" % type(e).__name__)
-                try: accounts.delete(usr["uid"], data.get("password") or None); profiles.delete_owner(usr["uid"])
+                try: accounts.delete(usr["uid"], data.get("password") or None); profiles.delete_owner(usr["uid"]); userprof.delete(usr["uid"])
                 except ValueError as e: return self._json({"error": str(e)}, 400)
                 social.anonymise_author("u:" + usr["uid"]); antibot.forget("u:" + usr["uid"])
                 self._set_sid("", 0); return self._json({"ok": True})
@@ -1057,6 +1057,12 @@ class H(SimpleHTTPRequestHandler):
         if p == "/api/admin/avatars":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             act, uid, id_ = data.get("action"), str(data.get("uid", ""))[:8], str(data.get("id", ""))[:20]
+            if id_.startswith("ua-"):  # awatar profilu użytkownika: akceptacja / odrzucenie
+                ou = userprof.uid_by_short(uid)
+                if ou and act in ("dismiss", "approve"): userprof.moderate_avatar(ou, True)
+                elif ou and act in ("remove", "ban"): userprof.moderate_avatar(ou, False)
+                if act in ("dismiss", "approve", "remove"): avatars.dismiss(id_)
+                if act != "ban": return self._json({"ok": True, "items": avatars.admin_list()})
             if act == "remove": avatars.block(uid, True)
             elif act == "restore": avatars.block(uid, False)
             elif act == "ban": avatars.block(uid, True); liveroom.ban(uid, True)
@@ -1126,7 +1132,18 @@ class H(SimpleHTTPRequestHandler):
                 lg = (q.get("lang") or ["pl"])[0]
                 return self._json(social.feed((q.get("sort") or [""])[0] if (q.get("sort") or [""])[0] in ("top", "hot") else "new", int(b) if b.isdigit() else None, lim, uid, dev, lg if lg in social.LANGS else "pl"))
             if p.startswith("/api/wall/img/"):
-                return self._dataurl(social.wall_img(p.rsplit("/", 1)[-1]))
+                iid = p.rsplit("/", 1)[-1]; du = social.wall_img(iid)
+                if not du: return self._dataurl(du)
+                pl, _u = self._plan(); cap = quality.caps(pl)["img"]
+                w = (q.get("w") or [""])[0]
+                if w.isdigit():
+                    err = quality.check_img(pl, int(w))
+                    if err: return self._json(err, 402)
+                    cap = max(240, int(w))
+                try: b, ct = quality.scaled_dataurl(iid, du, cap)
+                except ValueError: return self._dataurl(du)
+                self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
+                self.send_header("Cache-Control", "private, max-age=3600"); self.send_header("Vary", "Cookie"); self.end_headers(); self.wfile.write(b); return
             if p == "/api/comments":
                 t = (q.get("target") or [""])[0]
                 if not social.TARGET_RE.fullmatch(t): return self._json({"error": "bad target"}, 400)
@@ -1182,7 +1199,7 @@ class H(SimpleHTTPRequestHandler):
         if p == "/api/account/export":
             a = self._acct()
             if not a: return self._json({"error": "Zaloguj się."}, 401)
-            ex = accounts.export(a[0]["uid"])
+            ex = accounts.export(a[0]["uid"]); ex["user_profile"] = userprof.get(a[0]["uid"])
             try: ex["skrzynka_i_znajomi"] = inbox.export(a[0]["uid"])
             except Exception as e: sys.stderr.write("inbox export %s\n" % type(e).__name__)
             b = json.dumps(ex, ensure_ascii=False, indent=2).encode()
@@ -1221,6 +1238,34 @@ class H(SimpleHTTPRequestHandler):
             lg = api_i18n.req_lang(u.query, self.headers) or "pl"
             return self._json(agentwall.page((q.get("filter") or ["all"])[0], int(off) if off.isdigit() else 0, 8, uid, dev, lg))
         if u.path == "/api/agent/profile": return self._profile_get(u)
+        if u.path == "/api/me/profile":
+            pl, uid = self._plan(); c = quality.caps(pl)
+            base = {"plan": pl, "plan_name": plans.NAMES[pl], "caps": c, "video_levels": [v for v in quality.VIDEO_LEVELS if v <= c["video"]],
+                    "gen": {"limit": c["gen"], "used": quality.gen_used(uid) if uid else 0, "px": c["gen_px"],
+                            "bases": [{"id": k, "plan": v, "ok": plans.has(pl, v)} for k, v in profiles.LUNA_PHOTOS.items()]}, "presets": list(userprof.PRESETS)}
+            if not uid: return self._json({**base, "login": True})
+            pid, rr = profiles.mine(uid)
+            hw = any(x.get("author") == "u:" + uid and x.get("status") != "deleted" for x in social._posts())
+            return self._json({**base, "profile": userprof.get(uid), "agent": {"id": pid, "own": (rr or {}).get("own", "")} if rr else None,
+                               "completion": userprof.completion(uid, hw, bool(rr))})
+        if u.path == "/api/user/profile":
+            _pl, uid = self._plan()
+            return self._json(userprof.public_view((parse_qs(u.query).get("nick") or [""])[0][:30], uid))
+        m = re.fullmatch(r"/api/user/avatar/([0-9a-f]{8})\.jpg", u.path)
+        if m:
+            _pl, vu = self._plan(); ou = userprof.uid_by_short(m.group(1)); i = userprof.avatar_img(ou, vu) if ou else None
+            if not i: return self._json({"error": "not found"}, 404)
+            b = base64.b64decode(i["b"])
+            self.send_response(200); self.send_header("Content-Type", "image/png" if i["ext"] == "png" else "image/jpeg"); self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "private, max-age=300"); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/api/media/check":
+            # wideo/obraz powyżej limitu planu → 402 z nazwą planu
+            pl, _uid = self._plan(); q = parse_qs(u.query)
+            try:
+                if (q.get("video") or [""])[0]: err = quality.check_video(pl, int(q["video"][0]))
+                else: err = quality.check_img(pl, int((q.get("w") or ["0"])[0]))
+            except ValueError: return self._json({"error": "bad"}, 400)
+            return self._json(err, 402) if err else self._json({"ok": True, "caps": quality.caps(pl)})
         m = re.fullmatch(r"/api/agent/profile/img/([0-9a-f]{10})\.jpg", u.path)
         if m:
             i = profiles.own_img(m.group(1))
@@ -1436,6 +1481,29 @@ class H(SimpleHTTPRequestHandler):
         if u.path.startswith(("/api/inbox", "/api/friends", "/api/dm", "/api/admin/inbox")):
             r = inbox.handle_post(self, u, data)  # Skrzynka, Znajomi, czat 1:1 (inbox.py)
             if r is not None: return r
+        if u.path in ("/api/me/profile", "/api/me/avatar", "/api/agent/generate"):
+            # Mój panel: anonimowy profil użytkownika (nick) + Generator agentek (402 z nazwą planu)
+            pl, uid = self._plan()
+            if not uid: return self._json({"error": "Zaloguj się.", "login": True}, 401)
+            if not livechat.rate_ok("me:" + uid, 30, 600): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
+            try:
+                if u.path == "/api/agent/generate":
+                    r, err = profiles.generate(uid, pl, str(data.get("base", "")), str(data.get("crop", "portret")))
+                    if err: return self._json(err, 402)
+                    return self._json({"ok": True, **r})
+                if u.path == "/api/me/avatar":
+                    ref, px = userprof.set_avatar_upload(uid, pl, data.get("data"))
+                    try: _mod_push("Nowy awatar użytkownika do akceptacji", userprof.nick_of(uid))
+                    except Exception: pass
+                    return self._json({"ok": True, "avatar": ref, "px": px, "pending": True})
+                if str(data.get("avatar", "")).startswith("gen:"):
+                    if not plans.has(pl, "premium"): return self._json(quality.lock("premium"), 402)
+                    pid, rr = profiles.mine(uid)
+                    if not rr or not rr.get("own") or str(data["avatar"])[4:] != rr.get("own"): return self._json({"error": "Najpierw wygeneruj obraz w Generatorze agentek."}, 400)
+                r = userprof.save(uid, data)
+                return self._json({"ok": True, "profile": r})
+            except PermissionError as e: return self._json({"error": str(e)}, 429 if "limit" in str(e) else 403)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
         if u.path in ("/api/agent/profile", "/api/agent/profile/own"):
             # profil własnej agentki: plan sprawdzany na serwerze (Premium: opis + 4 zdjęcia, Pro / Ultra: 12 zdjęć + przypięte)
             pl, uid = self._plan()

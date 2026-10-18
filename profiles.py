@@ -113,6 +113,11 @@ def save_own(uid, plan, data_url, declared):
     if not plans.has(plan, "premium"): return None, lock("premium")
     pid, r = mine(uid)
     if not r: raise ValueError("Najpierw zapisz profil (imię agentki).")
+    import quality
+    try: _raw0 = base64.b64decode(re.sub(r"^data:image/\w+;base64,", "", str(data_url or "")))
+    except Exception: _raw0 = b""
+    if _raw0 and quality.is_user_photo(_raw0):
+        raise PermissionError("To zdjęcie zostało dodane jako „Zdjęcie użytkownika” – nie może być twarzą agentki AI.")
     url, info = avatars.check_upload(data_url, declared, "prof-" + pid, r["name"])  # kontrola + wpis do kolejki moderacji awatarów
     raw = base64.b64decode(re.sub(r"^data:image/\w+;base64,", "", data_url))
     out, ext = imgsafe.reencode(raw, max_px=768, max_in=5 * 1024 * 1024, quality=4)  # bez metadanych
@@ -129,6 +134,37 @@ def save_own(uid, plan, data_url, declared):
             if v.get("vid") == "prof-" + pid: v["kind"] = "profile"; v["uid"] = uid[:8]; v["profile"] = pid
         store.put("avatar_mod", M)
     return h, None
+
+GEN_CROPS = {"portret": "crop='min(iw,ih*4/5)':ih", "kwadrat": "crop='min(iw,ih)':'min(iw,ih)'", "szeroki": "null"}
+def generate(uid, plan, base, crop="portret"):
+    """Generator agentek: obraz AI złożony z istniejących ujęć AI Luny (strój/poza dozwolone w planie), wyjście wg planu:
+    Premium 1280 px, Pro / Ultra 1920 px (najwyższa rozdzielczość źródła – bez powiększania). Dzienny limit. Zawsze oznaczony jako AI."""
+    import quality, os, subprocess, tempfile
+    if not plans.has(plan, "premium"): return None, quality.lock("premium")
+    if base not in LUNA_PHOTOS: raise ValueError("Wybierz strój lub pozę z listy.")
+    if not plans.has(plan, LUNA_PHOTOS[base]): return None, quality.lock(LUNA_PHOTOS[base])
+    if crop not in GEN_CROPS: crop = "portret"
+    pid, r = mine(uid)
+    if not r: raise ValueError("Najpierw zapisz profil (imię agentki).")
+    ok, n, lim = quality.gen_take(uid, plan)
+    if not ok: raise PermissionError(f"Dzisiejszy limit generatora ({lim}) został wykorzystany. Wróć jutro. 💚")
+    px = quality.caps(plan)["gen_px"]
+    src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "catalog", "luna", base + "@2x.jpg")
+    if not os.path.exists(src): src = src.replace("@2x", "")
+    with tempfile.TemporaryDirectory() as d:
+        dst = os.path.join(d, "o.jpg")
+        vf = GEN_CROPS[crop] + f",scale='min({px},iw)':'min({px},ih)':force_original_aspect_ratio=decrease"
+        rr = subprocess.run([imgsafe._ff(), "-v", "error", "-y", "-i", src, "-map_metadata", "-1", "-frames:v", "1", "-vf", vf, "-q:v", "2", dst], capture_output=True, timeout=30)
+        if rr.returncode or not os.path.exists(dst): raise ValueError("Nie udało się wygenerować obrazu.")
+        out = open(dst, "rb").read()
+    h = hashlib.sha1(out).hexdigest()[:10]
+    with _lock:
+        I = _imgs(); I[pid] = {"b": base64.b64encode(out).decode(), "ext": "jpg", "h": h, "t": int(time.time()), "gen": base, "ai": True}; store.put("agent_profile_img", I)
+        P = _P(); x = P.get(pid); old = x.get("own", "")
+        x["own"] = h; x["photos"] = [("own:" + h) if p == "own:" + old else p for p in x["photos"]]
+        if x.get("pinned") == "own:" + old: x["pinned"] = "own:" + h
+        P[pid] = x; store.put("agent_profiles", P)
+    return {"h": h, "url": _photo_url("own:" + h, pid), "ref": "own:" + h, "px": px, "used": n, "limit": lim, "ai": True}, None
 
 def own_img(pid):
     r = _P().get(pid)

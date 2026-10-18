@@ -78,17 +78,21 @@ def create_post(d, uid, vid, acct_nick=None):
     if not uid and d.get("adult") is not True: raise ValueError("Potwierdź, że masz ukończone 18 lat.")
     text = check_text(d.get("text"), MAX_POST)
     nick = acct_nick or nick_ok(d.get("nick"))
-    img_id = None
+    img_id = None; img_kind = None
+    if d.get("image") and d.get("img_kind") == "user":
+        url = user_photo_wall(d.get("image"), d.get("user_decl"), uid)
+        img_kind = "user"
+    elif d.get("image"):
+        url, _info = avatars_check_wall(d.get("image"), d.get("img_decl")); img_kind = "ai"
     if d.get("image"):
-        url, _info = avatars_check_wall(d.get("image"), d.get("img_decl"))
         img_id = secrets.token_hex(8)
         with _lock:
             I = store.get("wall_img", {}) or {}; I[img_id] = url
             store.put("wall_img", dict(list(I.items())[-400:]))
     agent = re.sub(r"[^\w\-]", "", str(d.get("agent", "")))[:40] or None
-    auto = _trusted(ak)
+    auto = _trusted(ak) and img_kind != "user"  # zdjęcia użytkownika zawsze przechodzą przez moderację przed publikacją
     lang = d.get("lang") if d.get("lang") in LANGS else "pl"
-    p = {"id": secrets.token_hex(6), "lang": lang, "variants": {}, "official": False, "author": ak, "uid": uid or "", "nick": nick, "text": text, "img": img_id, "agent": agent,
+    p = {"id": secrets.token_hex(6), "lang": lang, "variants": {}, "official": False, "author": ak, "uid": uid or "", "nick": nick, "text": text, "img": img_id, "img_kind": img_kind, "agent": agent,
          "t": int(time.time()), "edited": 0, "status": "approved" if auto else "pending", "ever_approved": auto, "reports": 0}
     with _lock:
         P = _posts(); P.append(p); store.put("wall_posts", P[-3000:])
@@ -104,8 +108,23 @@ def avatars_check_wall(data_url, declared):
     info = avatars.inspect(raw)
     if info["camera"] and not info["ai_markers"]:
         raise PermissionError("Ten plik wygląda na zdjęcie z aparatu lub telefonu. Na Ściance publikujemy tylko obrazy wygenerowane przez AI.")
-    out, ext = imgsafe.reencode(raw, max_px=1024, max_in=5 * 1024 * 1024, quality=5)
+    out, ext = imgsafe.reencode(raw, max_px=1920, max_in=5 * 1024 * 1024, quality=3)  # wydawane dalej według planu oglądającego
     return f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode(), info
+
+USER_DECL = ("own", "no_nudity", "no_minors", "consent", "no_brands")
+def user_photo_wall(data_url, decl, uid):
+    """Własne zdjęcie użytkownika (nie AI) na wall: tylko z kontem, oświadczenia, maks. 854 px, bez EXIF/GPS, zawsze moderacja."""
+    import quality
+    if not uid: raise PermissionError("Własne zdjęcia mogą dodawać zalogowani użytkownicy (konto pozwala je zgłosić i usunąć).")
+    if not isinstance(decl, dict) or not all(decl.get(k) is True for k in USER_DECL):
+        raise ValueError("Zaznacz wszystkie oświadczenia: to Twoje zdjęcie, bez nagości, bez osób niepełnoletnich, inne osoby wyraziły zgodę, bez marek i logo.")
+    m = re.fullmatch(r"data:image/(png|jpeg|jpg|webp);base64,([A-Za-z0-9+/=]+)", str(data_url or ""))
+    if not m: raise ValueError("Dozwolone są tylko obrazy JPG, PNG lub WEBP.")
+    raw = base64.b64decode(m.group(2))
+    if len(raw) > 5 * 1024 * 1024: raise ValueError("Plik jest za duży (maks. 5 MB).")
+    out, ext = imgsafe.reencode(raw, max_px=quality.USER_PHOTO_PX, max_in=5 * 1024 * 1024, quality=4)  # bez EXIF/GPS
+    quality.user_photo_mark(raw); quality.user_photo_mark(out)  # nigdy jako twarz agentki
+    return f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
 
 def edit_post(pid, d, uid, vid):
     ak = author_key(uid, vid)
@@ -141,7 +160,7 @@ def public_post(p, voter, V, C, mine_ak, lang="pl", T=None):
     va = _variants(p); shown = lang if lang in va else p.get("lang", "pl")
     X = antibot.excluded()
     cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
-    return {"views": stats.post_views(p["id"], T), "id": p["id"], "nick": p["nick"], "tier": "" if p.get("official") else nicktier.of_author(p["author"]), "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "agent": p.get("agent"),
+    return {"views": stats.post_views(p["id"], T), "id": p["id"], "nick": p["nick"], "tier": "" if p.get("official") else nicktier.of_author(p["author"]), "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "img_kind": p.get("img_kind") or ("ai" if p.get("img") else None), "agent": p.get("agent"),
             "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved"}
 
 def _off_hidden(): return set(store.get("official_hidden", []) or [])

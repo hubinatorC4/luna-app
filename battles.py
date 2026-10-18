@@ -470,7 +470,8 @@ def users_board(period="all", uid=None, accts=None, plan_of=None, limit=100):
         if social.banned("u:" + u) or u not in accts: continue
         x["pts"] = x["wins"] * PTS_WIN; x["pct"] = round(x["wins"] * 100 / x["played"]) if x["played"] else 0
         a = accts[u]
-        try: nick = social.nick_ok(a.get("name") or "")
+        try:
+            import userprof; nick = social.nick_ok(userprof.nick_of(u) or a.get("name") or "")
         except ValueError: nick = ""
         rows.append(dict(x, uid=u, nick=nick or ("Widz " + u[:4]), plan=nicktier.of_uid(u) or "podstawowa", league=league(tot.get(u, 0)),
                          total_pts=tot.get(u, 0), agents=_agents_created(u), hidden=u in P))
