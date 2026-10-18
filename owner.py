@@ -102,3 +102,21 @@ def inbox(since_ts):
     try: out["suspects_flagged"] = len([s for s in social.antibot.admin_list() if s["status"] == "flagged"])
     except Exception: out["suspects_flagged"] = 0
     return out
+
+_POP = {"t": 0, "ids": []}
+def butik_popular(n=12):
+    """„Popularne w Butiku”: tylko prawdziwe sygnały z 30 dni (wyświetlenia, polubienia po filtrze antybotowym, koszyk,
+    udostępnienia, zakupy). Bez sygnałów → pusta lista (sekcja się nie pokazuje). Pamięć podręczna 10 min."""
+    if time.time() - _POP["t"] < 600: return _POP["ids"][:n]
+    S = stats.series(30); V = social._votes(); X = social.antibot.excluded(); P = _payments(30)
+    buys = {}
+    for p in P:
+        if p.get("kind") == "item": buys[p.get("ref")] = buys.get(p.get("ref"), 0) + 1
+    out = []
+    for i in butik._load():
+        if butik.eff_status(i) != "released" or not i.get("image"): continue
+        k = "item:" + i["id"]; c = social.counts(k, None, V, X)
+        sc = _sum(S, k + ":v") + 5 * max(c["up"] - c["down"], 0) + 8 * _sum(S, k + ":cart") + 6 * _sum(S, k + ":share") + 20 * buys.get(i["id"], 0)
+        if sc > 0: out.append((sc, i["id"]))
+    out.sort(reverse=True); _POP.update(t=time.time(), ids=[x[1] for x in out[:24]])
+    return _POP["ids"][:n]

@@ -51,6 +51,17 @@ def alternates(base, path):
     links.append(f'<link rel="alternate" hreflang="x-default" href="{base}{p}">')
     return "\n".join(links)
 
+OGIMG = {"/butik.html": "/og-butik.jpg", "/twarz.html": "/og-casting.jpg", "/dolacz.html": "/og-casting.jpg", "/galeria.html": "/og-luna-star.jpg",
+         "/": "/og-luna-star.jpg", "/promo.html": "/og-luna-star.jpg", "/o-lunie.html": "/og-luna-star.jpg", "/scianka.html": "/og-luna-star.jpg"}
+def jsonld(base, lang):
+    """Organizacja bez danych osobowych + aplikacja (tylko prawdziwe informacje)."""
+    import json as _j
+    org = {"@context": "https://schema.org", "@type": "Organization", "name": "Luna mówi jak jest", "url": base + "/", "logo": base + "/icon-512.png"}
+    app = {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Luna – trenerka głosu AI" if (lang or "pl") == "pl" else "Luna – AI voice coach",
+           "applicationCategory": "EducationalApplication", "operatingSystem": "Android, Web", "url": base + "/", "image": base + "/og-luna-star.jpg",
+           "inLanguage": list(LANGS), "offers": {"@type": "Offer", "price": "0", "priceCurrency": "PLN"}}
+    return "".join(f'<script type="application/ld+json">{_j.dumps(x, ensure_ascii=False)}</script>' for x in (org, app))
+
 def localize(doc, path, lang, base):
     p = "/" if path in ("", "/index.html") else path
     meta = PAGES.get(p, {}).get(lang) if lang else None
@@ -64,15 +75,24 @@ def localize(doc, path, lang, base):
         if 'og:title' not in doc: doc = doc.replace("</title>", f'</title>\n<meta property="og:title" content="{t}">', 1)
         if 'name="description"' not in doc: doc = doc.replace("</title>", f'</title>\n<meta name="description" content="{d}">', 1)
         doc = doc.replace("</title>", f'</title>\n<meta property="og:description" content="{d}"><meta property="og:locale" content="{OGL[l]}">', 1)
-    canon = f"{base}{p}" + (f"?lang={lang}" if lang else "")
+    canon = f"{base}{'/' if p == '/promo.html' else p}" + (f"?lang={lang}" if lang else "")
+    if p in OGIMG: doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{OGIMG[p]}">', doc, count=1)
+    if "og:locale" not in doc: doc = doc.replace("</title>", f'</title>\n<meta property="og:locale" content="{OGL[l]}">', 1)
+    if 'property="og:type"' not in doc: doc = doc.replace("</title>", '</title>\n<meta property="og:type" content="website">', 1)
     doc = re.sub(r'(<meta property="og:image" content=")/', r"\g<1>" + base + "/", doc)
+    if "twitter:card" not in doc:
+        mt = re.search(r"<title>(.*?)</title>", doc, re.S); md = re.search(r'<meta name="description" content="([^"]*)"', doc); mi = re.search(r'<meta property="og:image" content="([^"]*)"', doc)
+        tw = '<meta name="twitter:card" content="summary_large_image">' + (f'<meta name="twitter:title" content="{mt.group(1).strip()}">' if mt else "") + \
+             (f'<meta name="twitter:description" content="{md.group(1)}">' if md else "") + (f'<meta name="twitter:image" content="{mi.group(1)}">' if mi else "")
+        doc = doc.replace("</head>", tw + "\n</head>", 1)
+    if p in ("/", "/promo.html", "/o-lunie.html") and "application/ld+json" not in doc: doc = doc.replace("</head>", jsonld(base, lang) + "\n</head>", 1)
     if 'og:url' not in doc: doc = doc.replace("</head>", f'<meta property="og:url" content="{canon}">\n</head>', 1)
     doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js"></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
     return doc
 
 def sitemap(base):
     out = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
-    for p in [x for x in PAGES if x not in ("/privacy.html", "/regulamin.html")]:
+    for p in [x for x in PAGES if x not in ("/privacy.html", "/regulamin.html", "/promo.html")]:
         alts = "".join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{base}{p}?lang={l}"/>' for l in LANGS) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{base}{p}"/>'
         out.append(f"<url><loc>{base}{p}</loc>{alts}</url>")
         for l in LANGS: out.append(f"<url><loc>{base}{p}?lang={l}</loc>{alts}</url>")

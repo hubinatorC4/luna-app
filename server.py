@@ -25,7 +25,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.4.9"
+VERSION = "1.5.0"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -956,6 +956,8 @@ class H(SimpleHTTPRequestHandler):
             adm = token_ok(self.headers.get("X-Admin-Token"))
             d = butik.public(CFG["pricing"]["show"] or adm); d["preview"] = adm and not CFG["pricing"]["show"]
             d["plans"] = [{"id": k, "name": plans.NAMES[k], **({"prices": (v if CFG["pricing"]["foreign"] else {"pln": v["pln"]})} if CFG["pricing"]["show"] or adm else {})} for k, v in CFG["pricing"]["plans"].items()]; d["foreign"] = CFG["pricing"]["foreign"]
+            try: d["popular"] = owner.butik_popular(12)
+            except Exception: d["popular"] = []
             d["payments"] = {"web": payments.enabled(), "mode": payments.mode() if adm else None, "methods": ["BLIK", "karta / card"] + (["Przelewy24"] if payments.P24 else [])}
             return self._json(d)
         if p.startswith(("/api/wall", "/api/comments", "/api/admin/social", "/api/admin/wall/img/")):

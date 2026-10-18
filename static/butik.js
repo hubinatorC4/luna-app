@@ -43,6 +43,13 @@ function render(){
   $('#chips').innerHTML = present.length > 1 ? `<button type="button" class="chip${!CHIP ? ' on' : ''}" data-chip="">${esc(X.all)}</button>` + present.map(c => `<button type="button" class="chip${CHIP === c[0] ? ' on' : ''}" data-chip="${c[0]}">${esc((c[L === 'pl' ? 1 : 2] || {})[L] || c[1])}</button>`).join('') : '';
   $('#chips').querySelectorAll('[data-chip]').forEach(b => b.onclick = () => { CHIP = b.dataset.chip; render(); });
   const its = all.filter(i => !CHIP || chipOf(i) === CHIP);
+  /* „Popularne w Butiku” – kolejność z prawdziwych statystyk (serwer); bez danych sekcja jest ukryta */
+  const PP = {pl: '🔥 Popularne w Butiku', en: '🔥 Popular in the Boutique', es: '🔥 Lo más popular de la Boutique', de: '🔥 Beliebt in der Boutique', uk: '🔥 Популярне в Бутику'};
+  let pop = $('#popRow'); if (!pop){ pop = document.createElement('div'); pop.id = 'popRow'; pop.className = 'poprow'; $('#chips').before(pop); }
+  const PI = (B.popular || []).map(id => all.find(i => i.id === id)).filter(Boolean).slice(0, 12);
+  pop.hidden = !PI.length;
+  pop.innerHTML = PI.length ? `<h3>${esc(PP[L] || PP.pl)}</h3><div class="popscroll">${PI.map(i => `<a class="popc" href="#${esc(i.id)}" data-pop="${esc(i.id)}"><img src="${esc(i.image)}" alt="" loading="lazy" width="160" height="120"><span>${esc(en ? (i.name_en || i.name) : i.name)}</span>${i.price ? `<b>${esc(money(i.price))}</b>` : ''}</a>`).join('')}</div>` : '';
+  pop.querySelectorAll('[data-pop]').forEach(a => a.onclick = e => { e.preventDefault(); CHIP = ''; history.replaceState(null, '', '#' + a.dataset.pop); render(); const el = document.getElementById(a.dataset.pop); if (el) el.scrollIntoView({behavior: 'smooth', block: 'center'}); });
   const icard = i => { const v = (i.variants || []).filter(x => x.hex); const nm = en ? (i.name_en || i.name) : i.name;
     const real = i.image || (v.find(x => x.image) || {}).image; const img = real || '/catalog/butik/placeholder.svg';
     const sw = v.length ? `<div class="swatches" role="radiogroup" aria-label="${esc(X.color)}">${v.map((x, n) => `<button type="button" role="radio" aria-checked="${n === 0}" class="sw${n === 0 ? ' on' : ''}${x.image ? '' : ' noimg'}"${x.image || n === 0 ? '' : ' disabled'} style="--c:${esc(x.hex)}" data-img="${esc(x.image || '')}" data-name="${esc(L === 'pl' ? x.color_name_pl : x.color_name_en)}" aria-label="${esc(L === 'pl' ? x.color_name_pl : x.color_name_en)}" title="${esc((L === 'pl' ? x.color_name_pl : x.color_name_en) + (x.image ? '' : ' · ' + X.nophoto))}"></button>`).join('')}</div><small class="swname">${esc(X.color)}: <b>${esc(L === 'pl' ? v[0].color_name_pl : v[0].color_name_en)}</b></small>${v.length > 1 ? `<div class="allcol">🎨 ${esc(X.allcol)}</div>` : ''}` : '';
