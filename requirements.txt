@@ -1,6 +1,6 @@
 edge-tts>=6.1.10
 imageio-ffmpeg>=0.5.1
-tzdata>=2024.1
+tzdata>=2026.5
 pywebpush>=2.0.0
 psycopg[binary]>=3.1
 argon2-cffi>=23.1
