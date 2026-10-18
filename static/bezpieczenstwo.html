@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Bezpieczeństwo konta – Luna mówi jak jest</title>
+<meta name="robots" content="noindex, follow">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="/portal.css?v=1.4.1"><link rel="stylesheet" href="/site.css?v=1.5.0"><link rel="stylesheet" href="/bezpieczenstwo.css?v=1">
+<script src="/twa.js"></script>
+</head>
+<body class="site">
+<main class="sec-wrap">
+  <h1 data-s="h">🔐 Bezpieczeństwo konta</h1>
+  <p class="sec-lead" data-s="lead">Twoje konto jest anonimowe – wystarczy nick. Tu włączysz dodatkowe zabezpieczenia.</p>
+  <section class="sec-card" id="needLogin" hidden><p data-s="login">Zaloguj się w aplikacji, aby zarządzać bezpieczeństwem konta.</p><p><a class="pill primary" href="/app" data-s="open">Otwórz Lunę</a></p></section>
+  <section class="sec-card" id="twofa" hidden>
+    <h2 data-s="t_h">Weryfikacja dwuetapowa (2FA)</h2>
+    <p class="sec-state" id="tState"></p>
+    <div id="tOff" hidden>
+      <p data-s="t_info">Po włączeniu przy logowaniu podasz też 6-cyfrowy kod z darmowej aplikacji (np. Aegis, 2FAS, Google Authenticator, Microsoft Authenticator).</p>
+      <p><button type="button" class="pill primary" id="tSetup" data-s="t_setup">Włącz 2FA</button></p>
+      <div id="tNew" hidden>
+        <ol class="sec-steps"><li data-s="s1">Na telefonie stuknij „Dodaj do aplikacji” albo wpisz klucz ręcznie.</li><li data-s="s2">Wpisz 6-cyfrowy kod, który pokaże aplikacja.</li></ol>
+        <p><a class="pill ghost" id="tUri" href="#" data-s="t_add">Dodaj do aplikacji</a></p>
+        <p class="sec-key"><span data-s="t_key">Klucz:</span> <code id="tKey"></code></p>
+        <p><input id="tCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="\d{6}" placeholder="123456" aria-label="Kod 2FA"> <button type="button" class="pill primary" id="tEnable" data-s="t_enable">Potwierdź</button></p>
+      </div>
+    </div>
+    <div id="tOn" hidden>
+      <p><input id="dPw" type="password" autocomplete="current-password" placeholder="Hasło" aria-label="Hasło"> <input id="dCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" aria-label="Kod 2FA"></p>
+      <p><button type="button" class="pill ghost" id="tDisable" data-s="t_disable">Wyłącz 2FA</button></p>
+    </div>
+  </section>
+  <section class="sec-card" id="sess" hidden>
+    <h2 data-s="l_h">Sesje</h2>
+    <p data-s="l_info">Zgubiony telefon albo logowanie na cudzym komputerze? Wyloguj się wszędzie jednym przyciskiem.</p>
+    <p><button type="button" class="pill ghost" id="lAll" data-s="l_btn">Wyloguj ze wszystkich urządzeń</button></p>
+  </section>
+  <p class="sec-msg" id="msg" role="status" aria-live="polite"></p>
+  <p class="sec-foot"><a href="/privacy.html" data-s="priv">Polityka prywatności</a> · <a href="/.well-known/security.txt" data-s="report">Zgłoś problem z bezpieczeństwem</a></p>
+</main>
+<script src="/bezpieczenstwo.js"></script>
+</body>
+</html>

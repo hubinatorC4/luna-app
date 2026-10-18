@@ -14,8 +14,8 @@ async function api(path, body){
 }
 function show(){ const on = !!tok(); $('#login').hidden = on; $('#app').hidden = !on; $('#logout').hidden = !on; if (on) load(); }
 $('#lf').onsubmit = async e => { e.preventDefault(); $('#lerr').textContent = '';
-  try { const r = await fetch('/api/admin/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({passphrase: $('#pass').value})}); const d = await r.json();
-    $('#pass').value = ''; if (!r.ok) throw new Error(d.error || r.status); sessionStorage.setItem('luna.admin', d.admin_token); show(); } catch(x){ $('#lerr').textContent = '⚠️ ' + x.message; } };
+  try { const r = await fetch('/api/admin/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({passphrase: $('#pass').value + ($('#otp') && $('#otp').value.trim() ? ' ' + $('#otp').value.trim() : '')})}); const d = await r.json();
+    $('#pass').value = ''; if ($('#otp')) $('#otp').value = ''; if (!r.ok) throw new Error(d.error || r.status); sessionStorage.setItem('luna.admin', d.admin_token); show(); } catch(x){ $('#lerr').textContent = '⚠️ ' + x.message; } };
 $('#logout').onclick = async () => { try { await api('/api/admin/logout', {}); } catch(e){} sessionStorage.removeItem('luna.admin'); show(); };
 document.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { TAB = b.dataset.t; document.querySelectorAll('[data-t]').forEach(x => x.classList.toggle('on', x === b)); render(); });
 document.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { DAYS = +b.dataset.d; document.querySelectorAll('[data-d]').forEach(x => x.classList.toggle('on', x === b)); load(); });

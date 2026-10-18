@@ -15,7 +15,7 @@
 <section id="login" class="card" hidden>
   <h1>Zaloguj się</h1>
   <p class="hint">Wpisz kod producenta. Kod nie jest zapisywany ani logowany; sesja wygasa automatycznie.</p>
-  <form id="lf"><input type="password" id="pass" autocomplete="current-password" aria-label="Kod producenta" placeholder="Kod producenta" required><button type="submit">Zaloguj</button></form>
+  <form id="lf"><input type="password" id="pass" autocomplete="current-password" aria-label="Kod producenta" placeholder="Kod producenta" required><input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="\d{6}" aria-label="Kod 2FA" placeholder="Kod 2FA (6 cyfr)"><button type="submit">Zaloguj</button></form>
   <p class="err" id="lerr" role="alert"></p>
 </section>
 <section id="app" hidden>

@@ -1,0 +1,11 @@
+.sec-wrap{max-width:640px;margin:0 auto;padding:28px 18px 60px}
+.sec-lead{opacity:.85}
+.sec-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--luna-r-lg,22px);padding:18px 20px;margin:16px 0;box-shadow:var(--luna-shadow-md,0 8px 28px rgba(0,0,0,.35))}
+.sec-card h2{margin:0 0 8px;font-size:1.15rem}
+.sec-state{font-weight:600}
+.sec-state.on{color:#3DDC97}.sec-state.off{color:#ffb35c}
+.sec-key code{word-break:break-all;background:rgba(0,0,0,.35);padding:4px 8px;border-radius:10px;font-size:.95rem}
+.sec-card input{background:rgba(0,0,0,.35);color:inherit;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:10px 14px;font-size:1rem;max-width:200px}
+.sec-steps{padding-left:20px}
+.sec-msg{min-height:1.4em;font-weight:600}
+.sec-foot{opacity:.7;font-size:.9rem}

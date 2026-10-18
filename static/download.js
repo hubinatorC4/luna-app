@@ -34,4 +34,17 @@ document.querySelectorAll('.dl-tabs button').forEach(b => b.onclick = () => show
 const tabs = document.querySelector('.dl-tabs'); const first = tabs && tabs.querySelector(`[data-p="${plat}"]`); if (first) tabs.prepend(first);
 show(plat); apply();
 fetch('/api/config').then(r => r.json()).then(c => { play = (c.app && c.app.play_url) || ''; apply(); }).catch(() => {});
+/* Suma kontrolna SHA-256 i odcisk certyfikatu APK – każdy może sprawdzić, że plik jest oryginalny (sha256sum, apksigner) */
+fetch('/api/apk-info').then(r => r.json()).then(i => {
+  const cta = document.querySelector('.dl-cta'); if (!i.sha256 || !cta || document.getElementById('dlSum')) return;
+  const L = {pl: ['Wersja', 'Sprawdź plik', 'Certyfikat podpisu'], en: ['Version', 'Verify the file', 'Signing certificate'], de: ['Version', 'Datei prüfen', 'Signaturzertifikat'], es: ['Versión', 'Verifica el archivo', 'Certificado de firma'], uk: ['Версія', 'Перевірити файл', 'Сертифікат підпису']}[lang] || ['Version', 'Verify', 'Certificate'];
+  const d = document.createElement('details'); d.id = 'dlSum'; d.className = 'dl-sum';
+  d.style.cssText = 'margin:8px auto 0;max-width:640px;font-size:.82rem;opacity:.8;word-break:break-all;text-align:left';
+  const mk = (tag, txt) => { const e = document.createElement(tag); e.textContent = txt; return e; };
+  d.append(mk('summary', '🔒 ' + L[1] + ' · SHA-256'));
+  d.append(mk('p', L[0] + ' ' + i.version + ' · ' + i.file + ' · ' + (i.size / 1048576).toFixed(2) + ' MB'));
+  const c = mk('code', i.sha256); const p = document.createElement('p'); p.append('SHA-256: ', c); d.append(p);
+  d.append(mk('p', L[2] + ' (SHA-256): ' + i.cert_sha256));
+  cta.after(d);
+}).catch(() => {});
 })();
