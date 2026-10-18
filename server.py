@@ -23,6 +23,7 @@ import catalog, base64, training, profiles, nicktier, partners, agentwall, quali
 import promo_share
 import forms18_routes
 import nsfw_filter
+import reports_routes, reports
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox, support
 from datetime import datetime, timedelta
 try:
@@ -867,6 +868,7 @@ class H(SimpleHTTPRequestHandler):
                 return self._json({"error": "To hasło wyciekło już kiedyś w sieci (sprawdzone anonimowo w Have I Been Pwned). Wybierz inne, unikalne hasło.", "pwned": True}, 400)
             try: uid, sent = accounts.signup(data, notify.PUBLIC_URL)
             except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
+            except PermissionError as e: return self._json({"error": str(e), "banned": True}, 403)
             except ValueError as e: return self._json({"error": str(e)}, 400)
             try: referral.on_signup(uid, data.get("ref"), "u:" + uid)
             except Exception: pass
@@ -1519,6 +1521,9 @@ class H(SimpleHTTPRequestHandler):
             b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
             self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
+        if u.path in ("/api/me/standing", "/api/admin/reports") or u.path.startswith("/api/admin/user/avatar/"):
+            r = reports_routes.get(self, u, token_ok)   # Zgłoś 🚩: stan konta i kolejka moderatora
+            if r is not None: return r
         if u.path.startswith(("/api/forms/", "/api/admin/forms")):
             r = forms18_routes.get(self, u, token_ok, casting_state()["open"])
             if r is not None: return r
@@ -1667,6 +1672,8 @@ class H(SimpleHTTPRequestHandler):
                 doc = promo_share.inject(doc, u.path, parse_qs(u.query), lang, notify.PUBLIC_URL.rstrip("/"), self._pid_plan)
                 if u.path in ("/index.html", "/agentka.html", "/bitwy.html") and "owner-line.js" not in doc:   # 👑 linia własności agentki
                     doc = doc.replace("</body>", '<script src="/owner-line.js?v=1.0" defer></script>\n</body>', 1)
+                if u.path not in ("/panel.html", "/admin-support.html") and "report.js" not in doc:   # Zgłoś 🚩 (arkusz zgłoszeń, 🚩 na zdjęciach) i Stan konta
+                    doc = doc.replace("</body>", '<script src="/report.js?v=1.0" defer></script>\n<script src="/standing.js?v=1.0" defer></script>\n</body>', 1)
                 if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
                     doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
                 NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html", "/admin-support.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
@@ -1706,8 +1713,6 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"error": "bad json"}, 400)
         except Exception: return self._json({"error": "bad json"}, 400)
         if not isinstance(data, dict): return self._json({"error": "bad json"}, 400)
-        r = self._post_account(u, data)
-        if r is not None: return r
         if u.path.startswith(("/api/support/", "/api/admin/support")):
             r = support.handle_post(self, u, data)  # Pomoc na żywo + Napisz do moderatora (support.py) – pomoc działa zawsze, także przed potwierdzeniem 18+
             if r is not None: return r
@@ -1715,6 +1720,13 @@ class H(SimpleHTTPRequestHandler):
             r = forms18_routes.post(self, u, data, token_ok, casting_state()["open"], notify.PUBLIC_URL.rstrip("/"))
             if r is not None: return r
         if forms18_routes.needs_adult(self, u.path): return self._json({"error": "Potwierdź, że masz ukończone 18 lat.", "need_adult": True}, 403)
+        r = reports_routes.write_blocked(self, u.path)   # czasowa / trwała blokada konta (3 poważne naruszenia)
+        if r is not None: return r
+        if u.path in ("/api/report", "/api/admin/reports"):
+            r = reports_routes.post(self, u, data, token_ok)
+            if r is not None: return r
+        r = self._post_account(u, data)
+        if r is not None: return r
         if u.path.startswith(("/api/inbox", "/api/friends", "/api/dm", "/api/admin/inbox")):
             r = inbox.handle_post(self, u, data)  # Skrzynka, Znajomi, czat 1:1 (inbox.py)
             if r is not None: return r

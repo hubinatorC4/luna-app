@@ -89,6 +89,10 @@ def inbox(since_ts):
                                      "offer": r.get("offer"), "has_voice_sample": bool(r.get("voice")), "time": _iso(r["t"])}
                                     for r in forms18.admin_list() if r.get("t", 0) > since_ts or r["verification"].get("at", 0) > since_ts]
     except Exception: out["form_applications"] = []
+    try:  # Zgłoś 🚩: sprawy czekające na decyzję (bez danych zgłaszających)
+        import reports
+        out["reports_open"] = reports.open_count()
+    except Exception: out["reports_open"] = 0
     acc = [u for u in (store.get("accounts", {}) or {}).values() if u.get("created", 0) > since_ts]
     out["signups"] = {"count": len(acc), "nicknames": [_short(u.get("name") or "—", 30) for u in acc][:50]}
     tk = [t for t in tickets._all() if t.get("t", 0) > since_ts]

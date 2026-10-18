@@ -41,6 +41,10 @@
 "For lesser violations we use a graded scale: 1) a warning, 2) a temporary block, 3) an account ban. For particularly harmful violations the moderator may skip steps."
 ],
 [
+"Zasada trzech poważnych naruszeń: każde poważne naruszenie potwierdzone decyzją moderatora zapisujemy na koncie (licznik „Poważne naruszenia: X z 3” widzisz w ustawieniach, w sekcji „Stan konta”, a każda decyzja w skrzynce podaje numer naruszenia). Po trzecim poważnym naruszeniu konto zostaje trwale zablokowane. Najcięższe pojedyncze czyny – w szczególności treści seksualne z udziałem małoletnich, groźby i poważne oszustwa – mogą skutkować natychmiastową trwałą blokadą. Po trwałej blokadzie możesz przeczytać uzasadnienie, odwołać się, pobrać kopię danych lub usunąć konto; dane traktujemy zgodnie z Polityką prywatności, a aby zapobiec ponownej rejestracji, przechowujemy wyłącznie skrót (hash) adresu e-mail.",
+"Three-strikes rule: every serious violation confirmed by a moderator’s decision is recorded on the account (you can see the “Serious violations: X of 3” counter in settings under “Account status”, and every decision in your inbox states the violation number). After the third serious violation the account is permanently banned. The most egregious single acts – in particular sexual content involving minors, threats and serious fraud – may lead to an immediate permanent ban. After a permanent ban you can read the reasons, appeal, download a copy of your data or delete the account; we handle the data under the Privacy Policy and, to prevent re-registration, keep only a hash of the e-mail address."
+],
+[
 "O każdej decyzji (usunięcie treści, ograniczenie albo blokada) informujemy w skrzynce wiadomości, e-mailem lub w aplikacji i podajemy uzasadnienie: której treści dotyczy, jaką regułę naruszono i jaką decyzję podjęliśmy (art. 17 aktu o usługach cyfrowych).",
 "We notify you of every decision (content removal, restriction or block) in your inbox, by email or in the app, with a statement of reasons: which content it concerns, which rule was broken and what we decided (Art. 17 of the Digital Services Act)."
 ],
@@ -49,8 +53,8 @@
 "Appeal: you can appeal any decision within 6 months – via the help bot, your inbox or the “Technical problems” page (write “Appeal”). A human reviews every appeal without undue delay."
 ],
 [
-"Zgłoś: każdą treść lub zachowanie możesz zgłosić przyciskiem „Zgłoś” przy wpisie, komentarzu, profilu lub wiadomości albo na stronie „Bezpieczeństwo i anonimowość”.",
-"Report: you can report any content or behaviour with the “Report” button next to a post, comment, profile or message, or on the “Safety and anonymity” page."
+"Zgłoś: każdą treść lub zachowanie możesz zgłosić przyciskiem 🚩 „Zgłoś” przy profilu użytkownika, profilu agentki, wpisie, komentarzu, wiadomości na czacie bitwy, wiadomości prywatnej i zdjęciu albo na stronie „Bezpieczeństwo i anonimowość”. Wybierasz powód i możesz dodać krótki opis. Tożsamości zgłaszającego nie ujawniamy osobie zgłoszonej. Treść zgłoszoną przez co najmniej trzy różne osoby ukrywamy automatycznie do czasu decyzji, a zgłoszenie w kategorii „Osoba niepełnoletnia” powoduje natychmiastowe ukrycie. Decyzję podejmuje człowiek; o wyniku informujemy zgłaszającego i osobę, której dotyczy. Nadużywanie zgłoszeń (np. masowe lub celowo fałszywe) może zostać uznane za naruszenie Regulaminu.",
+"Report: you can report any content or behaviour with the 🚩 “Report” button on a user profile, agent profile, post, comment, battle chat message, private message and photo, or on the “Safety and anonymity” page. You choose a reason and may add a short note. We never reveal the reporter’s identity to the reported person. Content reported by at least three different people is hidden automatically until a decision, and a report in the “Minor (under 18)” category hides it immediately. A human makes the decision; we inform both the reporter and the person concerned of the outcome. Abusing reports (e.g. mass or deliberately false reports) may be treated as a breach of the Terms."
 ],
 [
 "§ 9f. Formularze testerów i castingu – weryfikacja 18+",
@@ -135,6 +139,10 @@
 "En infracciones leves aplicamos una escala: 1) advertencia, 2) bloqueo temporal, 3) bloqueo de la cuenta. Ante una infracción especialmente dañina, el moderador puede saltarse pasos."
 ],
 [
+"Zasada trzech poważnych naruszeń: każde poważne naruszenie potwierdzone decyzją moderatora zapisujemy na koncie (licznik „Poważne naruszenia: X z 3” widzisz w ustawieniach, w sekcji „Stan konta”, a każda decyzja w skrzynce podaje numer naruszenia). Po trzecim poważnym naruszeniu konto zostaje trwale zablokowane. Najcięższe pojedyncze czyny – w szczególności treści seksualne z udziałem małoletnich, groźby i poważne oszustwa – mogą skutkować natychmiastową trwałą blokadą. Po trwałej blokadzie możesz przeczytać uzasadnienie, odwołać się, pobrać kopię danych lub usunąć konto; dane traktujemy zgodnie z Polityką prywatności, a aby zapobiec ponownej rejestracji, przechowujemy wyłącznie skrót (hash) adresu e-mail.",
+"Regla de las tres infracciones graves: cada infracción grave confirmada por una decisión de moderación se registra en la cuenta (el contador «Infracciones graves: X de 3» aparece en ajustes, en «Estado de la cuenta», y cada decisión en el buzón indica el número de la infracción). Tras la tercera infracción grave, la cuenta se bloquea de forma permanente. Los actos individuales más graves – en particular el contenido sexual con menores, las amenazas y los fraudes graves – pueden suponer un bloqueo permanente inmediato. Tras un bloqueo permanente puedes leer los motivos, recurrir, descargar una copia de tus datos o eliminar la cuenta; tratamos los datos según la Política de privacidad y, para evitar un nuevo registro, solo guardamos un hash de la dirección de correo."
+],
+[
 "O każdej decyzji (usunięcie treści, ograniczenie albo blokada) informujemy w skrzynce wiadomości, e-mailem lub w aplikacji i podajemy uzasadnienie: której treści dotyczy, jaką regułę naruszono i jaką decyzję podjęliśmy (art. 17 aktu o usługach cyfrowych).",
 "Te informamos de cada decisión (retirada de contenido, restricción o bloqueo) en tu bandeja, por correo o en la aplicación, con una exposición de motivos: a qué contenido afecta, qué norma se infringió y qué decidimos (art. 17 de la Ley de Servicios Digitales)."
 ],
@@ -143,8 +151,8 @@
 "Recurso: puedes recurrir cualquier decisión en un plazo de 6 meses, a través del bot de ayuda, tu bandeja o la página «Problemas técnicos» (escribe «Recurso»). Una persona revisa cada recurso sin demora indebida."
 ],
 [
-"Zgłoś: każdą treść lub zachowanie możesz zgłosić przyciskiem „Zgłoś” przy wpisie, komentarzu, profilu lub wiadomości albo na stronie „Bezpieczeństwo i anonimowość”.",
-"Denunciar: puedes denunciar cualquier contenido o comportamiento con el botón «Denunciar» junto a una publicación, comentario, perfil o mensaje, o en la página «Seguridad y anonimato»."
+"Zgłoś: każdą treść lub zachowanie możesz zgłosić przyciskiem 🚩 „Zgłoś” przy profilu użytkownika, profilu agentki, wpisie, komentarzu, wiadomości na czacie bitwy, wiadomości prywatnej i zdjęciu albo na stronie „Bezpieczeństwo i anonimowość”. Wybierasz powód i możesz dodać krótki opis. Tożsamości zgłaszającego nie ujawniamy osobie zgłoszonej. Treść zgłoszoną przez co najmniej trzy różne osoby ukrywamy automatycznie do czasu decyzji, a zgłoszenie w kategorii „Osoba niepełnoletnia” powoduje natychmiastowe ukrycie. Decyzję podejmuje człowiek; o wyniku informujemy zgłaszającego i osobę, której dotyczy. Nadużywanie zgłoszeń (np. masowe lub celowo fałszywe) może zostać uznane za naruszenie Regulaminu.",
+"Denunciar: puedes denunciar cualquier contenido o comportamiento con el botón 🚩 «Denunciar» en un perfil de usuario, perfil de agente, publicación, comentario, mensaje del chat de batalla, mensaje privado y foto, o en la página «Seguridad y anonimato». Eliges un motivo y puedes añadir una nota breve. Nunca revelamos a la persona denunciada quién la denunció. El contenido denunciado por al menos tres personas distintas se oculta automáticamente hasta la decisión, y una denuncia en la categoría «Persona menor de edad» lo oculta de inmediato. La decisión la toma una persona; informamos del resultado a quien denunció y a la persona afectada. El abuso de las denuncias (p. ej., masivas o deliberadamente falsas) puede considerarse un incumplimiento del Reglamento."
 ],
 [
 "§ 9f. Formularze testerów i castingu – weryfikacja 18+",
@@ -229,6 +237,10 @@
 "Bei leichteren Verstößen gehen wir stufenweise vor: 1) Verwarnung, 2) befristete Sperre, 3) Kontosperre. Bei besonders schädlichen Verstößen kann die Moderation Stufen überspringen."
 ],
 [
+"Zasada trzech poważnych naruszeń: każde poważne naruszenie potwierdzone decyzją moderatora zapisujemy na koncie (licznik „Poważne naruszenia: X z 3” widzisz w ustawieniach, w sekcji „Stan konta”, a każda decyzja w skrzynce podaje numer naruszenia). Po trzecim poważnym naruszeniu konto zostaje trwale zablokowane. Najcięższe pojedyncze czyny – w szczególności treści seksualne z udziałem małoletnich, groźby i poważne oszustwa – mogą skutkować natychmiastową trwałą blokadą. Po trwałej blokadzie możesz przeczytać uzasadnienie, odwołać się, pobrać kopię danych lub usunąć konto; dane traktujemy zgodnie z Polityką prywatności, a aby zapobiec ponownej rejestracji, przechowujemy wyłącznie skrót (hash) adresu e-mail.",
+"Drei-Verstöße-Regel: Jeder schwere Verstoß, der durch eine Entscheidung der Moderation bestätigt wurde, wird im Konto vermerkt (den Zähler „Schwere Verstöße: X von 3“ siehst du in den Einstellungen unter „Kontostatus“, und jede Entscheidung im Postfach nennt die Nummer des Verstoßes). Nach dem dritten schweren Verstoß wird das Konto dauerhaft gesperrt. Die schwersten Einzeltaten – insbesondere sexuelle Inhalte mit Minderjährigen, Drohungen und schwerer Betrug – können zu einer sofortigen dauerhaften Sperre führen. Nach einer dauerhaften Sperre kannst du die Begründung lesen, Einspruch einlegen, eine Kopie deiner Daten herunterladen oder das Konto löschen; wir behandeln die Daten gemäß Datenschutzerklärung und speichern, um eine erneute Registrierung zu verhindern, nur einen Hash der E-Mail-Adresse."
+],
+[
 "O każdej decyzji (usunięcie treści, ograniczenie albo blokada) informujemy w skrzynce wiadomości, e-mailem lub w aplikacji i podajemy uzasadnienie: której treści dotyczy, jaką regułę naruszono i jaką decyzję podjęliśmy (art. 17 aktu o usługach cyfrowych).",
 "Über jede Entscheidung (Entfernung von Inhalten, Einschränkung oder Sperre) informieren wir dich im Postfach, per E-Mail oder in der App, mit Begründung: welcher Inhalt betroffen ist, welche Regel verletzt wurde und was wir entschieden haben (Art. 17 Gesetz über digitale Dienste)."
 ],
@@ -237,8 +249,8 @@
 "Widerspruch: Gegen jede Entscheidung kannst du innerhalb von 6 Monaten Widerspruch einlegen – über den Hilfe-Bot, dein Postfach oder die Seite „Technische Probleme“ (schreib „Widerspruch“). Ein Mensch prüft jeden Widerspruch ohne unnötige Verzögerung."
 ],
 [
-"Zgłoś: każdą treść lub zachowanie możesz zgłosić przyciskiem „Zgłoś” przy wpisie, komentarzu, profilu lub wiadomości albo na stronie „Bezpieczeństwo i anonimowość”.",
-"Melden: Jeden Inhalt und jedes Verhalten kannst du über die Schaltfläche „Melden“ bei Beitrag, Kommentar, Profil oder Nachricht oder auf der Seite „Sicherheit und Anonymität“ melden."
+"Zgłoś: każdą treść lub zachowanie możesz zgłosić przyciskiem 🚩 „Zgłoś” przy profilu użytkownika, profilu agentki, wpisie, komentarzu, wiadomości na czacie bitwy, wiadomości prywatnej i zdjęciu albo na stronie „Bezpieczeństwo i anonimowość”. Wybierasz powód i możesz dodać krótki opis. Tożsamości zgłaszającego nie ujawniamy osobie zgłoszonej. Treść zgłoszoną przez co najmniej trzy różne osoby ukrywamy automatycznie do czasu decyzji, a zgłoszenie w kategorii „Osoba niepełnoletnia” powoduje natychmiastowe ukrycie. Decyzję podejmuje człowiek; o wyniku informujemy zgłaszającego i osobę, której dotyczy. Nadużywanie zgłoszeń (np. masowe lub celowo fałszywe) może zostać uznane za naruszenie Regulaminu.",
+"Melden: Jeden Inhalt und jedes Verhalten kannst du über die Schaltfläche 🚩 „Melden“ an Nutzerprofil, Agentinnen-Profil, Beitrag, Kommentar, Battle-Chat-Nachricht, privater Nachricht und Foto oder auf der Seite „Sicherheit und Anonymität“ melden. Du wählst einen Grund und kannst eine kurze Notiz hinzufügen. Die Identität der meldenden Person geben wir der gemeldeten Person nie preis. Inhalte, die mindestens drei verschiedene Personen melden, werden bis zur Entscheidung automatisch ausgeblendet; eine Meldung in der Kategorie „Minderjährige Person“ blendet sie sofort aus. Die Entscheidung trifft ein Mensch; über das Ergebnis informieren wir die meldende und die betroffene Person. Missbrauch von Meldungen (z. B. massenhaft oder absichtlich falsch) kann als Verstoß gegen die Nutzungsbedingungen gewertet werden."
 ],
 [
 "§ 9f. Formularze testerów i castingu – weryfikacja 18+",
@@ -323,6 +335,10 @@
 "За легші порушення діє поступова шкала: 1) попередження, 2) тимчасове блокування, 3) блокування акаунта. У разі особливо шкідливого порушення модератор може пропустити етапи."
 ],
 [
+"Zasada trzech poważnych naruszeń: każde poważne naruszenie potwierdzone decyzją moderatora zapisujemy na koncie (licznik „Poważne naruszenia: X z 3” widzisz w ustawieniach, w sekcji „Stan konta”, a każda decyzja w skrzynce podaje numer naruszenia). Po trzecim poważnym naruszeniu konto zostaje trwale zablokowane. Najcięższe pojedyncze czyny – w szczególności treści seksualne z udziałem małoletnich, groźby i poważne oszustwa – mogą skutkować natychmiastową trwałą blokadą. Po trwałej blokadzie możesz przeczytać uzasadnienie, odwołać się, pobrać kopię danych lub usunąć konto; dane traktujemy zgodnie z Polityką prywatności, a aby zapobiec ponownej rejestracji, przechowujemy wyłącznie skrót (hash) adresu e-mail.",
+"Правило трьох серйозних порушень: кожне серйозне порушення, підтверджене рішенням модератора, фіксуємо в акаунті (лічильник «Серйозні порушення: X з 3» видно в налаштуваннях, у розділі «Стан акаунта», а кожне рішення у скриньці містить номер порушення). Після третього серйозного порушення акаунт блокується назавжди. Найтяжчі одиничні дії – зокрема сексуальний контент за участю неповнолітніх, погрози та серйозне шахрайство – можуть призвести до негайного постійного блокування. Після постійного блокування можна прочитати обґрунтування, оскаржити рішення, завантажити копію даних або видалити акаунт; дані обробляємо згідно з Політикою конфіденційності, а щоб запобігти повторній реєстрації, зберігаємо лише хеш адреси e-mail."
+],
+[
 "O każdej decyzji (usunięcie treści, ograniczenie albo blokada) informujemy w skrzynce wiadomości, e-mailem lub w aplikacji i podajemy uzasadnienie: której treści dotyczy, jaką regułę naruszono i jaką decyzję podjęliśmy (art. 17 aktu o usługach cyfrowych).",
 "Про кожне рішення (видалення контенту, обмеження чи блокування) повідомляємо у скриньці, електронною поштою або в застосунку з обґрунтуванням: якого контенту воно стосується, яке правило порушено і яке рішення ухвалено (ст. 17 Акта про цифрові послуги)."
 ],
@@ -331,8 +347,8 @@
 "Оскарження: будь-яке рішення можна оскаржити протягом 6 місяців – через бота допомоги, скриньку або сторінку «Технічні проблеми» (напишіть «Оскарження»). Кожну скаргу без зайвої затримки розглядає людина."
 ],
 [
-"Zgłoś: każdą treść lub zachowanie możesz zgłosić przyciskiem „Zgłoś” przy wpisie, komentarzu, profilu lub wiadomości albo na stronie „Bezpieczeństwo i anonimowość”.",
-"Поскаржитися: будь-який контент чи поведінку можна позначити кнопкою «Поскаржитися» біля допису, коментаря, профілю чи повідомлення або на сторінці «Безпека й анонімність»."
+"Zgłoś: każdą treść lub zachowanie możesz zgłosić przyciskiem 🚩 „Zgłoś” przy profilu użytkownika, profilu agentki, wpisie, komentarzu, wiadomości na czacie bitwy, wiadomości prywatnej i zdjęciu albo na stronie „Bezpieczeństwo i anonimowość”. Wybierasz powód i możesz dodać krótki opis. Tożsamości zgłaszającego nie ujawniamy osobie zgłoszonej. Treść zgłoszoną przez co najmniej trzy różne osoby ukrywamy automatycznie do czasu decyzji, a zgłoszenie w kategorii „Osoba niepełnoletnia” powoduje natychmiastowe ukrycie. Decyzję podejmuje człowiek; o wyniku informujemy zgłaszającego i osobę, której dotyczy. Nadużywanie zgłoszeń (np. masowe lub celowo fałszywe) może zostać uznane za naruszenie Regulaminu.",
+"Поскаржитися: будь-який контент чи поведінку можна позначити кнопкою 🚩 «Поскаржитися» в профілі користувача, профілі агентки, дописі, коментарі, повідомленні в чаті битви, приватному повідомленні та на фото або на сторінці «Безпека й анонімність». Ви обираєте причину й можете додати короткий коментар. Особі, на яку поскаржилися, ми ніколи не розкриваємо, хто це зробив. Вміст, на який поскаржилися щонайменше троє різних людей, автоматично приховуємо до ухвалення рішення, а скарга в категорії «Неповнолітня особа» приховує його негайно. Рішення ухвалює людина; про результат повідомляємо і того, хто поскаржився, і особу, якої це стосується. Зловживання скаргами (наприклад, масові чи навмисно неправдиві) може вважатися порушенням Правил."
 ],
 [
 "§ 9f. Formularze testerów i castingu – weryfikacja 18+",

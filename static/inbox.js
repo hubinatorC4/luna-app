@@ -104,7 +104,7 @@ function rowBtns(p, kind){
   if (kind === 'out') return `<button class="ib-btn" data-f="cancel">${esc(T.cancel)}</button>`;
   if (kind === 'blocked') return `<button class="ib-btn" data-f="unblock">${esc(T.unblock)}</button>`;
   return `<button class="ib-btn ib-star${p.close ? ' on' : ''}" data-f="${p.close ? 'unclose' : 'close'}" aria-pressed="${p.close ? 'true' : 'false'}" aria-label="${esc(p.close ? T.close_rm : T.close_add)}" title="${esc(T.close_h)}">${p.close ? '★' : '☆'}</button><button class="ib-btn primary" data-f="chat">💬 ${esc(T.write)}${p.unread ? ` <b class="ib-badge">${p.unread}</b>` : ''}</button>
-    <details class="ib-more"><summary aria-label="${esc(T.more)}">⋯</summary><div><button class="ib-btn" data-f="remove">${esc(T.remove)}</button><button class="ib-btn danger" data-f="block">${esc(T.block)}</button><button class="ib-btn danger" data-f="report">${esc(T.report)}</button></div></details>`;
+    <details class="ib-more"><summary aria-label="${esc(T.more)}">⋯</summary><div><button class="ib-btn" data-f="remove">${esc(T.remove)}</button><button class="ib-btn danger" data-f="block">${esc(T.block)}</button><button class="ib-btn danger" data-f="report" data-report="user:${p.pid}">🚩 ${esc(T.report)}</button></div></details>`;
 }
 const row = (p, kind) => `<li class="ib-fr" data-pid="${p.pid}">${av(p)}<span class="ib-fn">${nk(p)}${kind === 'friends' ? `${prHtml(p)}<small>${p.last ? esc(p.last.x) : esc(T.since) + ' ' + new Date(p.since * 1000).toLocaleDateString(lang)}</small>` : ''}</span><span class="ib-fa">${rowBtns(p, kind)}</span></li>`;
 async function renderFriends(){
@@ -172,7 +172,7 @@ function draw(d){
   d.items.forEach(m => { if (log.querySelector(`[data-mid="${m.id}"]`)) return;
     const li = document.createElement('li'); li.className = 'ib-bub ' + (m.mine ? 'me' : 'them'); li.dataset.mid = m.id;
     if (m.photo){ photoBubble(li, m); log.appendChild(li); return; }
-    li.innerHTML = `<span class="ib-tx">${esc(m.text)}</span><time datetime="${new Date(m.t * 1000).toISOString()}">${esc(clock(m.t))}</time>${m.mine ? '' : `<button type="button" class="ib-rep" aria-label="${esc(T.report_msg)}" title="${esc(T.report_msg)}">⚑</button>`}`;
+    li.innerHTML = `<span class="ib-tx">${esc(m.text)}</span><time datetime="${new Date(m.t * 1000).toISOString()}">${esc(clock(m.t))}</time>${m.mine ? '' : `<button type="button" class="ib-rep" data-report="dm:${esc(chat.pid)}:${m.id}" aria-label="${esc(T.report_msg)}" title="${esc(T.report_msg)}">⚑</button>`}`;
     const r = li.querySelector('.ib-rep'); if (r) r.onclick = async () => { if (!confirm(T.q_report_msg)) return;
       try { await api('/api/dm/report', {pid: chat.pid, mid: m.id}); li.remove(); toast(T.reported); } catch(e){ toast(e.message); } };
     log.appendChild(li); });
@@ -190,7 +190,7 @@ function photoBubble(li, m){
   const wh = m.w && m.h ? ` width="${m.w}" height="${m.h}"` : '';
   li.innerHTML = `<figure class="ib-ph${m.mine ? '' : ' blur'}"><img src="${src}" alt="${esc(m.mine ? T.ph_mine : T.ph_alt)}" loading="lazy" decoding="async"${wh}>
     ${m.mine ? '' : `<button type="button" class="ib-phshow"><span>👁️ ${esc(T.ph_show)}</span><small>${esc(T.ph_hint)}</small></button>`}</figure>
-    ${m.mine ? '' : `<div class="ib-phact"><button type="button" class="ib-btn" data-a="report">⚑ ${esc(T.ph_report)}</button><button type="button" class="ib-btn danger" data-a="block">⛔ ${esc(T.ph_block)}</button></div>`}${t}`;
+    ${m.mine ? '' : `<div class="ib-phact"><button type="button" class="ib-btn" data-a="report" data-report="dm:${esc(chat.pid)}:${m.id}">🚩 ${esc(T.ph_report)}</button><button type="button" class="ib-btn danger" data-a="block">⛔ ${esc(T.ph_block)}</button></div>`}${t}`;
   const sh = li.querySelector('.ib-phshow'); if (sh) sh.onclick = () => { li.querySelector('.ib-ph').classList.remove('blur'); sh.remove(); };
   const rp = li.querySelector('[data-a=report]'); if (rp) rp.onclick = async () => { if (!confirm(T.q_ph_report)) return;
     try { await api('/api/dm/report', {pid: chat.pid, mid: m.id}); li.remove(); toast(T.reported); } catch(e){ toast(e.message); } };

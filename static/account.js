@@ -18,7 +18,7 @@ window.LunaConfirmAdult = async () => {
   if (!ME || ME.adult_confirmed) return;
   const r = await api('/api/account/confirm-adult', {adult_confirmed: true}); ME = r.user; acctUI();
 };
-(() => { const st = document.createElement('style'); st.textContent = '.age18q{margin:10px 0;padding:14px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-align:center}.age18q b{display:block;font-size:18px;margin-bottom:10px}.age18b{display:grid;grid-template-columns:1fr 1fr;gap:10px}.age18b button{min-height:52px;font-size:18px;font-weight:800;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:#26292e;color:#f2f2f4;cursor:pointer}.age18b .a18y[aria-pressed=true]{background:#3DDC97;color:#06120c;border-color:#3DDC97}.age18b .a18n[aria-pressed=true]{background:#3a2a2e;border-color:#ff8a9a}.a18bye{margin:10px 0 0;font-size:14px}'; document.head.appendChild(st); })();
+(() => { const st = document.createElement('style'); st.textContent = '.a18strike{margin:2px 0 8px;font-size:12.5px;opacity:.8}.a18strike a{color:inherit}.age18q{margin:10px 0;padding:14px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-align:center}.age18q b{display:block;font-size:18px;margin-bottom:10px}.age18b{display:grid;grid-template-columns:1fr 1fr;gap:10px}.age18b button{min-height:52px;font-size:18px;font-weight:800;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:#26292e;color:#f2f2f4;cursor:pointer}.age18b .a18y[aria-pressed=true]{background:#3DDC97;color:#06120c;border-color:#3DDC97}.age18b .a18n[aria-pressed=true]{background:#3a2a2e;border-color:#ff8a9a}.a18bye{margin:10px 0 0;font-size:14px}'; document.head.appendChild(st); })();
 function ageGate(){
   if (ME && !ME.adult_confirmed){ if (window.LunaAgeGate) window.LunaAgeGate.show({account: true}); else setTimeout(ageGate, 400); }
 }
@@ -102,6 +102,7 @@ function acctUI(){
           <div class="age18b"><button type="button" class="a18y" aria-pressed="false">Tak</button><button type="button" class="a18n" aria-pressed="false">Nie</button></div>
           <p class="a18bye" hidden>Dziękujemy za szczerość 💚 Luna jest tylko dla osób pełnoletnich. Wróć, gdy skończysz 18 lat – Luna poczeka, ona i tak nie śpi 😉</p></div>
         <label class="consent"><input type="checkbox" name="terms"> <span>Akceptuję <a href="/regulamin.html" target="_blank">regulamin</a> i <a href="/privacy.html" target="_blank">informację o prywatności</a>. *</span></label>
+        <p class="a18strike">Trzy poważne wpadki i Luna mówi pa pa – na zawsze 👋 <a href="/regulamin.html#trzy-naruszenia" target="_blank">Zasady</a></p>
       </div>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
       <div class="btns"><button class="primary a_submit" type="button">Zaloguj</button></div>

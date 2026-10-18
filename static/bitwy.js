@@ -170,7 +170,7 @@ async function vote(e){
   busy = false;
 }
 /* ---------- czat ---------- */
-function msgHtml(m){ return `<div class="bt-m${m.mine ? ' mine' : ''}" data-id="${m.id}">${m.mine ? '' : `<button type="button" data-mrep="${m.id}" aria-label="${esc(t.report)}">⚑</button>`}<b class="nk${m.tier ? ' nk-' + m.tier : ''}">${esc(m.nick)}</b>${m.partner ? ptm(m) : ''}${esc(m.text)}</div>`; }
+function msgHtml(m){ return `<div class="bt-m${m.mine ? ' mine' : ''}" data-id="${m.id}">${m.mine ? '' : `<button type="button" data-mrep="${m.id}" data-report="btchat:${esc((S.battle && S.battle.id) || '')}:${m.id}" aria-label="${esc(t.report)}">⚑</button>`}<b class="nk${m.tier ? ' nk-' + m.tier : ''}">${esc(m.nick)}</b>${m.partner ? ptm(m) : ''}${esc(m.text)}</div>`; }
 async function pollChat(){
   if (!S || S.state !== 'live' || document.hidden) return;
   try { const d = await api('/api/battles/chat?bid=' + S.battle.id + '&since=' + lastMsg); addMsgs(d.items); } catch(e){}

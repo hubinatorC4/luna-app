@@ -32,7 +32,7 @@ function draw(){
     <div class="ph-acts"><button type="button" class="pill ${V.liked ? 'primary' : 'ghost'}" id="phLike" aria-pressed="${V.liked}">${esc(V.liked ? T.liked : T.like)}</button>
       <button type="button" class="pill ghost" id="phShare">${esc(T.share)}</button>
       ${battlesOn ? `<a class="pill ghost" href="/bitwy.html?agent=${encodeURIComponent(V.id)}${lq() ? '&' + lq() : ''}">${esc(T.battles)}</a>` : ''}
-      ${V.official || V.mine ? '' : `<button type="button" class="pill ghost" id="phRep">${esc(T.report)}</button>`}</div>
+      ${V.official || V.mine ? '' : `<button type="button" class="pill ghost" id="phRep" data-report="${esc(V.target)}">🚩 ${esc(T.report)}</button>`}</div>
     <p class="ph-msg small" id="phMsg" role="status"></p>
     ${V.battles && V.battles.history && V.battles.history.length ? `<details class="card"><summary>${esc(T.hist)}</summary><ul class="ph-hist">${V.battles.history.slice(0, 20).map(b => `<li>${b.result === 'win' ? '🏆' : b.result === 'draw' ? '🤝' : '•'} ${esc(V.name)} ${b.mine} : ${b.theirs} ${esc(b.opp)} · ${new Date(b.end * 1000).toLocaleDateString(lang())}</li>`).join('')}</ul></details>` : ''}
     ${ph.length ? `<div class="ph-grid">${ph.map(p => `<img src="${esc(p.url)}" alt="${esc(V.name)} – AI" loading="lazy" width="240" height="300"${p.ref === V.pinned ? ' class="pin"' : ''}>`).join('')}</div>` : ''}

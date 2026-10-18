@@ -43,6 +43,10 @@ def signup(d, base_url=""):
     email = str(d.get("email", "")).strip()[:254]; pw = d.get("password"); name = str(d.get("name", "")).strip()[:30]
     name = re.sub(r"[<>\x00-\x1f]", "", name)
     if not EMAIL_RE.fullmatch(email): raise ValueError("Podaj poprawny adres e-mail.")
+    try:
+        import reports
+        if reports.email_banned(email): raise PermissionError("To konto zostało wcześniej trwale zablokowane (3 poważne naruszenia). Jeśli to pomyłka, napisz odwołanie przez formularz pomocy.")
+    except ImportError: pass
     validate_pw(pw)
     decl = age.confirm(d)  # „Masz 18 lat?” → Tak (samodeklaracja, bez daty urodzenia); stare klienty z datą < 18 → Underage
     if d.get("terms") is not True: raise ValueError("Zaakceptuj regulamin i informację o prywatności.")
@@ -256,6 +260,9 @@ def delete(uid, pw=None, check=True):
         if check and pw is not None and not check_pw(u["pw"], str(pw or "")): raise ValueError("Nieprawidłowe hasło.")
         a.pop(uid); store.put("accounts", a)
         s = {k: v for k, v in _sess().items() if v["uid"] != uid}; store.put("sessions", s)
+    try:
+        import reports; reports.delete_user(uid, u.get("email", ""))   # Zgłoś 🚩: strike'i; przy trwałej blokadzie zostaje tylko skrót e-maila
+    except Exception: pass
     try:
         if u.get("tester"): testers.delete(u["tester"])
         es = store.get("email_subs", {}) or {}
