@@ -98,7 +98,7 @@ if ($('#refCopy')) $('#refCopy').onclick = async () => { const u = location.orig
 /* „do góry”, szybki kompozytor, „Nowe posty (n)”, zapamiętanie pozycji przewinięcia */
 document.body.insertAdjacentHTML('beforeend', `<button type="button" class="wall-top" hidden aria-label="${X.top}">↑</button><button type="button" class="wall-write" aria-label="${X.write}">✍️</button><button type="button" class="wall-pill" hidden></button>`);
 const topB = $('.wall-top'), pill = $('.wall-pill');
-addEventListener('scroll', () => { topB.hidden = scrollY < 900; }, {passive: true});
+addEventListener('scroll', () => { topB.hidden = scrollY < 900; document.body.classList.toggle('pasthero', scrollY > 650); }, {passive: true});
 topB.onclick = () => scrollTo({top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
 $('.wall-write').onclick = () => { f.scrollIntoView({block: 'center', behavior: 'smooth'}); setTimeout(() => f.text.focus(), 300); };
 function hidePill(){ pill.hidden = true; }

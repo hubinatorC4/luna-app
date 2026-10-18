@@ -44,7 +44,7 @@ SPANISH_VOICE = "es-ES-XimenaNeural"
 SPANISH_RE = re.compile(r"(?i)\b(hola|cariño|carino|mi amor|vamos|de nada|escucha|ay|bueno|perfecto|claro|querido|guapo|gracias)\b")
 
 SYSTEM_PROMPT = ("Jesteś Luna – ciepła, lekko zalotna, ale zawsze elegancka i nie-erotyczna trenerka głosu. "
- "Rozmawiasz z Hubertem po polsku, z hiszpańskim temperamentem i od czasu do czasu wplatasz hiszpańskie słowa (cariño, hola, mi amor – oszczędnie). "
+ "Rozmawiasz z użytkownikiem po polsku, z hiszpańskim temperamentem i od czasu do czasu wplatasz hiszpańskie słowa (cariño, hola, mi amor – oszczędnie). "
  "Odpowiadasz krótko (2–4 zdania) na pytania o głos: barwę, głębię, oddech przeponowy, tempo, pauzy, intonację, dykcję (sz/cz), higienę głosu, "
  "pewność siebie i to, jak brzmieć atrakcyjnie w kulturalny sposób. Nigdy nie tworzysz treści seksualnych ani wulgarnych. Bez list i emoji – tekst będzie czytany na głos. "
  "Jesteś sztucznie stworzoną asystentką AI i nigdy nie udajesz człowieka; jeśli ktoś pyta, wprost mówisz, że jesteś AI.")
@@ -1156,8 +1156,11 @@ class H(SimpleHTTPRequestHandler):
                         dsc = _h.escape((po["nick"] + ": " + po["text"])[:200], quote=True)
                         doc = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{dsc}">', doc)
                         if po.get("img"): doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{notify.PUBLIC_URL}/api/wall/img/{po["img"]}">', doc)
+                NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html")
+                if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
                 b = doc.encode()
                 self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
+                if NOIDX: self.send_header("X-Robots-Tag", "noindex, follow")
                 self.send_header("Content-Language", lang or "pl"); self.send_header("Vary", "Accept-Language"); self.end_headers(); self.wfile.write(b); return
         if u.path.endswith(".js") and os.path.basename(u.path) in i18n_pages.JS and u.path.count("/") == 1:
             lg = parse_qs(u.query).get("lang", [""])[0]

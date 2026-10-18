@@ -67,7 +67,7 @@ def localize(doc, path, lang, base):
 
 def sitemap(base):
     out = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
-    for p in PAGES:
+    for p in [x for x in PAGES if x not in ("/privacy.html", "/regulamin.html")]:
         alts = "".join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{base}{p}?lang={l}"/>' for l in LANGS) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{base}{p}"/>'
         out.append(f"<url><loc>{base}{p}</loc>{alts}</url>")
         for l in LANGS: out.append(f"<url><loc>{base}{p}?lang={l}</loc>{alts}</url>")

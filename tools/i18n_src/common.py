@@ -52,6 +52,7 @@ E = [
  "© 2026 Luna sagt, wie es ist · Luna ist eine KI-Assistentin; ihre Figur wurde künstlich erzeugt",
  "© 2026 Луна каже як є · Луна — ШІ-асистентка; її образ згенеровано штучно"],
 ["Luna mówi jak jest", "Luna Tells It Like It Is", "Luna dice las cosas como son", "Luna sagt, wie es ist", "Луна каже як є"],
+["Luna – asystentka AI w kremowym swetrze (postać wygenerowana sztucznie)", "Luna – AI assistant in a cream jumper (artificially generated character)", "Luna – asistente de IA con un jersey color crema (personaje generado artificialmente)", "Luna – KI-Assistentin im cremefarbenen Pullover (künstlich erzeugte Figur)", "Луна – ШІ-асистентка в кремовому светрі (штучно згенерований персонаж)"],
 ["Luna – asystentka AI (postać wygenerowana sztucznie)", "Luna – AI assistant (artificially generated character)", "Luna – asistente de IA (personaje generado artificialmente)", "Luna – KI-Assistentin (künstlich erzeugte Figur)", "Луна – ШІ-асистентка (штучно згенерований образ)"],
 ["🤖 Luna – asystentka AI (postać wygenerowana sztucznie)", "🤖 Luna – AI assistant (artificially generated character)", "🤖 Luna – asistente de IA (personaje generado artificialmente)", "🤖 Luna – KI-Assistentin (künstlich erzeugte Figur)", "🤖 Луна – ШІ-асистентка (штучно згенерований образ)"],
 ]

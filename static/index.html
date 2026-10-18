@@ -56,7 +56,7 @@
 <p class="disclaimer" data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</p>
 <div class="cta-row">
   <button type="button" class="convo-btn" id="convoBtn">🎙️ Rozmowa na żywo</button>
-  <a class="apk-btn no-twa" href="https://github.com/hubinatorC4/luna-app/releases/download/android-v1.0.0/luna-1.0.0-release.apk" rel="noopener">🤖 Pobierz na Androida</a>
+  <a class="apk-btn no-twa" href="/download/luna-1.0.0.apk" rel="noopener">🤖 Pobierz na Androida</a>
 </div>
 <p class="apk-hint no-twa">Plik APK: po pobraniu zezwól na instalację z nieznanych źródeł. Link do testów w Google Play – wkrótce. <a href="/testerzy.html">Jak zostać testerem?</a></p>
 <p class="plan-warn" id="planWarn" hidden></p>
@@ -108,7 +108,7 @@
     <label class="row" id="holoRow"><input type="checkbox" id="holoChk"> Tryb hologram <span class="tag" id="holoTag"></span></label>
     <fieldset class="timbre">
       <legend>Twój profil</legend>
-      <label>Twoje imię (widoczne w czacie)<input type="text" id="u_name" maxlength="30" placeholder="np. Hubert"></label>
+      <label>Twoje imię (widoczne w czacie)<input type="text" id="u_name" maxlength="30" placeholder="np. Ola"></label>
       <p class="hint">Wybierz gotowy awatar lub ikonę albo wygeneruj własny awatar AI. Nie wgrywaj zdjęć prawdziwych osób.</p>
       <div class="presets uav" id="u_presets"></div>
       <details class="gen" open><summary>✨ Wygeneruj awatar AI</summary>
@@ -219,7 +219,7 @@
     </details>
     <details id="planSection"><summary>💳 Plany, ceny i limity</summary>
       <p class="hint">Cennik v2: Podstawowa za darmo (z kontem), Premium 59,99 zł i Pro 99,99 zł za 30 dni, bez automatycznego odnawiania, ceny brutto z VAT. Po wygaśnięciu – powrót do Podstawowej (z kontem) lub Darmowego. Płatności WWW: Stripe (po ustawieniu klucza).</p>
-      <label class="row"><input type="checkbox" id="adm_pr_show"> Pokaż ceny publicznie (domyślnie wyłączone – do akceptacji Huberta)</label>
+      <label class="row"><input type="checkbox" id="adm_pr_show"> Pokaż ceny publicznie (domyślnie wyłączone – do akceptacji właściciela)</label>
       <label>Adres w Google Play (gdy ustawiony, przycisk „Pobierz aplikację” zmienia się na „Pobierz z Google Play”)<input id="adm_app_play" type="url" maxlength="300" placeholder="https://play.google.com/store/apps/details?id=..."></label>
       <label class="row"><input type="checkbox" id="adm_pr_foreign"> Pokaż też EUR/USD (robocze odpowiedniki; domyślnie tylko PLN)</label>
       <table class="prtab"><tr><th>Plan</th><th>zł</th><th>EUR</th><th>USD</th></tr><tr><td>Podstawowa</td><td><input id="adm_pr_podstawowa_pln" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_podstawowa_eur" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_podstawowa_usd" inputmode="decimal" maxlength="8" size="6"></td></tr><tr><td>Premium</td><td><input id="adm_pr_premium_pln" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_premium_eur" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_premium_usd" inputmode="decimal" maxlength="8" size="6"></td></tr><tr><td>Pro / Ultra</td><td><input id="adm_pr_pro_pln" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_pro_eur" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_pro_usd" inputmode="decimal" maxlength="8" size="6"></td></tr></table>

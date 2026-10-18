@@ -4,7 +4,7 @@ import store
 
 PUB = os.getenv("VAPID_PUBLIC_KEY", "").strip()
 PRIV = os.getenv("VAPID_PRIVATE_KEY", "").strip()
-SUBJ = os.getenv("VAPID_SUBJECT", "mailto:hubinatorC4@users.noreply.github.com").strip()
+SUBJ = os.getenv("VAPID_SUBJECT", "mailto:luna-team@users.noreply.github.com").strip()
 EMAIL_PROVIDER = os.getenv("EMAIL_PROVIDER", "").strip().lower()
 EMAIL_KEY = os.getenv("EMAIL_API_KEY", "").strip()
 EMAIL_FROM = os.getenv("EMAIL_FROM", "").strip()

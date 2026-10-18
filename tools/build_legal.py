@@ -11,7 +11,7 @@ DISC = [("Polski", "Luna to asystentka AI do nauki mówienia i pracy z głosem. 
         ("Українська", "Луна — це ШІ-асистентка для навчання мовлення та роботи з голосом. Продукт жодним чином не має на меті сексуалізацію жінок.")]
 body = """<main class="page legal">
 <h1>Regulamin aplikacji „Luna mówi jak jest”</h1>
-<p class="hint">Obowiązuje od 18.10.2026 r. Dotyczy strony https://luna-voice-coach.onrender.com, aplikacji webowej (PWA) oraz aplikacji na Androida (com.hubertszumski.luna).</p>
+<p class="hint">Obowiązuje od 18.10.2026 r. Dotyczy strony https://luna-voice-coach.onrender.com, aplikacji webowej (PWA) oraz aplikacji na Androida (com.lunamowijakjest.app).</p>
 <p class="disclaimer" data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</p>
 <div class="card"><b>Zastrzeżenie w 5 językach</b><ul>""" + "".join(f"<li lang=\"{l[:2].lower() if l != 'Українська' else 'uk'}\"><b>{l}:</b> {t}</li>" for l, t in DISC) + """</ul></div>
 

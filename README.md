@@ -37,7 +37,7 @@ python3 -c "import hashlib,os,getpass;s=os.urandom(16).hex();c=getpass.getpass('
 Panel producenta otworzysz, wpisując kod w zwykłym czacie. Kod jest sprawdzany wyłącznie na serwerze i nie trafia do historii rozmowy.
 
 ## Wdrażanie (Render)
-1. `./deploy.sh "Opis zmian"` robi commit i push na GitHub (`hubinatorC4/luna-app`, gałąź `main`).
+1. `./deploy.sh "Opis zmian"` robi commit i push na GitHub (repozytorium projektu, gałąź `main`).
 2. Jeśli w Renderze połączysz repozytorium z GitHubem, wdrożenie uruchomi się samo. W przeciwnym razie kliknij **Manual Deploy**.
 3. Przy nowej wersji podbij `VERSION` w `static/sw.js` i `server.py`. Zainstalowane aplikacje pokażą wtedy komunikat **„Dostępna nowa wersja – odśwież”**.
 

@@ -1,4 +1,4 @@
-"""Buduje data/wall_official.json (oficjalne wpisy Ścianki, zatwierdzone przez Huberta) + obrazy WebP.
+"""Buduje data/wall_official.json (oficjalne wpisy Ścianki, zatwierdzone przez właściciela) + obrazy WebP.
 Źródło treści: tools/official_texts.py (kopia luna_scianka_oficjalne/src/texts.py). Ceny NIE są tu zapisywane –
 serwer dobiera je z katalogu Butiku i cennika planów przy każdym żądaniu."""
 import json, os, re, sys, datetime

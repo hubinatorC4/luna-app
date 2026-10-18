@@ -42,7 +42,7 @@ FAQ = [
     ("Jak zainstalować Lunę na telefonie?", "Android: w Chrome stuknij menu ⋮ i wybierz „Zainstaluj aplikację”. iPhone: w Safari stuknij Udostępnij i „Do ekranu początkowego”."),
     ("Jak skontaktować się z twórcą?", "Użyj zakładki „Czat z twórcą”. Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni."),
 ]
-THUMBS = ["/catalog/luna/outfit_koronkowa.jpg", "/catalog/luna/outfit_sweter.jpg", "/catalog/luna/outfit_wieczorowa.jpg",
+THUMBS = ["/catalog/luna/pose_prosto.jpg", "/catalog/luna/outfit_sweter.jpg", "/catalog/luna/outfit_wieczorowa.jpg",
           "/catalog/luna/outfit_biznes.jpg", "/catalog/luna/outfit_koktajlowa.jpg", "/catalog/luna/pose_polobrot.jpg",
           "/catalog/luna/pose_zamyslona.jpg", "/catalog/luna/pose_siedzaca.jpg"]
 
@@ -65,7 +65,7 @@ def build():
                           "thumb": THUMBS[(i * 3 + j) % len(THUMBS)]})
     for k, (q, a) in enumerate(FAQ):
         items.append({"id": f"f{k}", "kind": "faq", "title": q, "cat": "faq", "level": "p", "level_name": LEVELS["p"], "text": a,
-                      "secs": secs(a), "keywords": [], "order": len(items), "new": False, "thumb": "/avatar-512.jpg"})
+                      "secs": secs(a), "keywords": [], "order": len(items), "new": False, "thumb": "/catalog/luna/outfit_biznes.jpg"})
     return {"cats": CATS, "levels": LEVELS, "items": items}
 
 LIB = build()

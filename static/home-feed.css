@@ -70,3 +70,43 @@ body.homebody{overflow-x:clip}
 
 .hfshop .hfimg{position:relative;display:block}.hfshop .hfimg img{display:block;width:100%}
 .hfshop .hfph{position:absolute;left:12px;bottom:12px;background:rgba(15,10,20,.82);color:#fff;font-size:.85rem;font-weight:700;padding:5px 11px;border-radius:999px}
+/* v1.4.3 – Luna na pierwszym planie */
+.homebody .star-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:28px;align-items:center;padding:22px}
+.homebody .sh-stage{position:relative;border-radius:28px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,200,140,.18);aspect-ratio:4/5;max-height:560px}
+.homebody .sh-stage img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
+.homebody .sh-tagai{position:absolute;left:14px;bottom:14px;background:rgba(15,10,8,.78);backdrop-filter:blur(6px);color:#ffe7c7;font-weight:700;font-size:.92rem;padding:7px 14px;border-radius:999px}
+.homebody .star-hero h1{font-size:clamp(2.1rem,4.2vw,3.2rem);line-height:1.08}
+.homebody .sh-badges{display:flex;flex-wrap:wrap;gap:8px}
+.homebody .sh-badges span{white-space:normal}
+@media (max-width:720px){
+  .homebody .star-hero{grid-template-columns:1fr;gap:16px;padding:14px;text-align:center}
+  .homebody .sh-stage{aspect-ratio:4/3;max-height:none}
+  .homebody .sh-badges{justify-content:center;padding:0 54px 0 0}
+  .homebody .sh-cta{justify-content:center}
+  body.homebody{padding-bottom:84px}
+}
+/* Lekcje głosu z Luną */
+.hflessons h2{margin:0 0 4px}.hflessons .hfsub{margin:0 0 14px;opacity:.85}
+.lsday{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:center;text-decoration:none;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,200,140,.18);border-radius:24px;overflow:hidden;padding:0 18px 0 0}
+.lsday .lsimg img{width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;object-position:50% 25%;display:block}
+.lsbody{display:flex;flex-direction:column;gap:8px;padding:14px 0}
+.lskick{font-size:.85rem;color:#ffc27a;font-weight:700}.lsbody b{font-size:1.3rem;line-height:1.25}
+.lstxt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;opacity:.9}
+.lsbody .pill{align-self:flex-start;min-height:46px;display:inline-flex;align-items:center}
+.lsrow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(170px,1fr);gap:12px;overflow-x:auto;padding:16px 2px 8px;scroll-snap-type:x mandatory}
+.lstile{scroll-snap-align:start;position:relative;display:flex;flex-direction:column;gap:2px;text-decoration:none;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;padding-bottom:10px}
+.lstile img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:50% 25%;display:block;margin-bottom:6px}
+.lstile .lsic{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);border-radius:999px;padding:3px 8px}
+.lstile b,.lstile small{padding:0 12px}.lstile small{opacity:.75}
+.lstile:hover,.lsday:hover{border-color:rgba(255,190,120,.5)}
+@media (max-width:720px){.lsday{grid-template-columns:1fr;padding:0}.lsbody{padding:12px 16px 16px}}
+/* mobile: przyciski pływające nie zasłaniają hero */
+body.homebody:not(.pasthero) .wall-write{display:none}
+@media (max-width:720px){
+  .homebody .hb-fab{width:48px!important;height:48px!important;font-size:22px!important;right:12px!important;bottom:12px!important}
+  .homebody .wall-write{right:12px;bottom:70px}.homebody .wall-top{right:12px;bottom:126px}
+  .homebody .sh-cta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .homebody .sh-cta .pill{justify-content:center;text-align:center;min-height:48px;margin:0;width:100%}
+  .homebody .sh-cta .pill.primary{grid-column:1/-1}
+  .homebody .sh-badges{padding:0}
+}
