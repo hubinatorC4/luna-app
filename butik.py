@@ -4,7 +4,7 @@ import json, os, re, threading, time
 import store
 
 SEED = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "catalog_outfits.json")
-LIMITS = {"usd": (1.0, 99.99), "eur": (0.99, 100.0), "pln": (3.99, 429.99)}  # min 1 USD, max 100 EUR
+LIMITS = {"usd": (1.0, 99.99), "eur": (0.99, 100.0), "pln": (3.99, 399.99)}  # min 1 USD, maks. 99,99 USD / 399,99 zł
 TIERS = ("free", "podstawowa", "premium", "pro")
 STATUSES = ("planned", "released", "hidden")
 _lock = threading.Lock(); _cache = {"items": None, "lines": None}
@@ -12,12 +12,24 @@ _lock = threading.Lock(); _cache = {"items": None, "lines": None}
 def _seed():
     d = json.load(open(SEED, encoding="utf-8"))
     return d["lines"], d["items"]
+def _seed_ver():
+    """Skrót pliku katalogu – każda zmiana ziarna (nowe zdjęcia, ceny, nazwy) przeładowuje zapisany katalog."""
+    import hashlib
+    try: return hashlib.sha256(open(SEED, "rb").read()).hexdigest()[:16]
+    except Exception: return "1"
 
 def _load():
     if _cache["items"] is None:
         lines, seed = _seed()
         saved = store.get("butik_items", None)
-        its = saved if isinstance(saved, list) and saved else seed
+        if isinstance(saved, list) and saved and store.get("butik_seed_ver", "1") != _seed_ver():
+            # nowa wersja katalogu: dane i ceny z ziarna, zachowujemy tylko status nadany przez moderatora (wydany/ukryty)
+            st = {i["id"]: i.get("status") for i in saved}
+            its = [dict(i, status=st[i["id"]]) if st.get(i["id"]) in ("released", "hidden") and i.get("status") != "released" else i for i in seed]
+            store.put("butik_items", its); store.put("butik_seed_ver", _seed_ver())
+        else:
+            its = saved if isinstance(saved, list) and saved else seed
+            if not (isinstance(saved, list) and saved): store.put("butik_seed_ver", _seed_ver())
         rd = {i["id"]: i["release_date"] for i in seed if i.get("release_date")}
         for i in its:
             if i["id"] in rd and not i.get("release_date"): i["release_date"] = rd[i["id"]]
@@ -35,7 +47,7 @@ def check_price(p):
         v = str((p or {}).get(cur, "")).replace(",", ".").strip()
         try: f = round(float(v), 2)
         except ValueError: raise ValueError(f"Podaj cenę {cur.upper()}.")
-        if not (lo <= f <= hi): raise ValueError(f"Cena {cur.upper()} musi być w przedziale {lo:.2f}–{hi:.2f} (min. 1 USD, maks. 100 EUR).")
+        if not (lo <= f <= hi): raise ValueError(f"Cena {cur.upper()} musi być w przedziale {lo:.2f}–{hi:.2f} (min. 1 USD, maks. 99,99 USD / 399,99 zł).")
         out[cur] = f
     return out
 
@@ -63,7 +75,7 @@ def ranges(items=None):
 
 def public(show_prices=False):
     its = [i for i in _load() if eff_status(i) == "released" or (i["status"] == "planned" and i.get("release_date"))]
-    keep = ("id", "name", "name_en", "line", "collection", "category", "colors", "material", "description", "tier", "rarity", "image", "release_version", "release_date")
+    keep = ("id", "name", "name_en", "line", "collection", "category", "colors", "material", "material_en", "cut", "cut_en", "details", "accessories", "description", "description_en", "variants", "tier", "rarity", "price_tier", "image", "release_version", "release_date")
     out = [{k: i.get(k) for k in keep} | ({"price": i["price"]} if show_prices else {}) | ({"upcoming": True} if eff_status(i) != "released" else {}) for i in its]
     planned = {}
     for i in _load():

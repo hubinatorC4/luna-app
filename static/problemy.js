@@ -9,7 +9,7 @@ f.onsubmit = async e => {
   const fd = new FormData(f); const file = f.shot.files[0];
   if (file && file.size > 5 * 1024 * 1024){ err.textContent = '⚠️ max 5 MB'; return; }
   const body = {category: fd.get('category'), description: fd.get('description'), email: fd.get('email') || '', website: fd.get('website') || '', t0,
-    env: {version: '1.3.2', ua: navigator.userAgent, lang: document.documentElement.lang, screen: `${screen.width}x${screen.height}`, page: document.referrer || location.pathname, twa: document.documentElement.classList.contains('twa') ? '1' : '0'}};
+    env: {version: '1.4.0', ua: navigator.userAgent, lang: document.documentElement.lang, screen: `${screen.width}x${screen.height}`, page: document.referrer || location.pathname, twa: document.documentElement.classList.contains('twa') ? '1' : '0'}};
   if (file) body.screenshot = await readFile(file);
   const btn = f.querySelector('[type=submit]'); btn.disabled = true;
   try {

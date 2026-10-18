@@ -157,8 +157,10 @@ body = f"""<main class="page">
 <h1 data-i18n="h1">{P['h1']}</h1>
 <p class="lead" data-i18n="lead">{P['lead']}</p>
 <p><span class="badge-noads" data-note="noads"></span></p>
+<div class="annbox" id="ann" aria-live="polite"><button type="button" class="annnav" data-prev aria-label="‹">‹</button><p class="anntext"></p><button type="button" class="annnav" data-next aria-label="›">›</button><div class="anndots"></div></div>
+<p class="nonude" id="nonude"><b>Tylko eleganckie, w pełni zakrywające stroje.</b> W Butiku nie ma nagości, bielizny ani strojów odsłaniających – Luna zawsze wygląda z klasą.</p>
 <div class="tabsx" role="tablist"><button type="button" class="on" data-tab="col" data-i18n="t_col">{P['t_col']}</button><button type="button" data-tab="price" data-i18n="t_price">{P['t_price']}</button></div>
-<section id="tab-col"><div class="grid3" id="items"></div></section>
+<section id="tab-col"><div class="chips" id="chips" role="group" aria-label="Kategorie"></div><div class="grid3" id="items"></div></section>
 <section id="tab-price" hidden>
   <p class="warnbox" id="preview" hidden data-i18n="preview">{P['preview']}</p>
   <h2 data-i18n="lines_h">{P['lines_h']}</h2><table class="tbl" id="lines"></table>
@@ -173,7 +175,7 @@ body = f"""<main class="page">
 page("butik.html", P["_title"], "Butik Luny – stroje w trzech liniach: Ekonomiczna, Classic i Couture. Cennik planów i strojów.", body, C.BUTIK, ["/social.js", "/butik.js"], "a_butik")
 print("ok")
 
-# ---------- scianka (Ścianka Luny) ----------
+# ---------- scianka (Ścianka Agentek Głosu) ----------
 P = C.WALL["pl"]
 body = f"""<div class="wallpage">
 <section class="hero"><h1 data-i18n="h1">{P['h1']}</h1><p class="sub" data-i18n="sub">{P['sub']}</p>

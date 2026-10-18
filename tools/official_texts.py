@@ -20,7 +20,7 @@ DATES=dict(
 T={}
 T["pl"]=dict(
  html="pl",banner="Podgląd postów oficjalnego konta – przed publikacją",nav=["Start","Galeria agentek","Ścianka","Butik"],
- title="Ścianka Luny",sub="Mów tak, żeby chcieli słuchać",lead="Sześć postów oficjalnego konta w kolejności publikacji. Nowe wpisy, więc liczniki startują od zera.",
+ title="Ścianka Agentek Głosu",sub="Mów tak, żeby chcieli słuchać",lead="Sześć postów oficjalnego konta w kolejności publikacji. Nowe wpisy, więc liczniki startują od zera.",
  acc="Luna · oficjalne konto",ver="Zweryfikowane konto",sched="Planowana publikacja:",report="⋯ Zgłoś",com="Komentarze",share="↗ Udostępnij",
  end="Koniec podglądu. Nic nie zostało jeszcze opublikowane. 💚",foot="Luna mówi jak jest · bez reklam",
  tiers=dict(basic="Plan Podstawowa",premium="Plan Premium",pro="Plan Pro"),
@@ -45,7 +45,7 @@ T["pl"]=dict(
    sign="Do zobaczenia w drużynie.",btn="Dołącz do drużyny",btn2="Inne formy współpracy"))
 T["en"]=dict(
  html="en",banner="Official account posts – preview before publishing",nav=["Home","Agent Gallery","Wall","Boutique"],
- title="Luna’s Wall",sub="Speak so they want to listen",lead="Six posts from the official account, in publishing order. They’re brand new, so every counter starts at zero.",
+ title="Voice Agents’ Wall",sub="Speak so they want to listen",lead="Six posts from the official account, in publishing order. They’re brand new, so every counter starts at zero.",
  acc="Luna · official account",ver="Verified account",sched="Scheduled for:",report="⋯ Report",com="Comments",share="↗ Share",
  end="End of preview. Nothing has been published yet. 💚",foot="Luna mówi jak jest · no ads",
  tiers=dict(basic="Basic plan",premium="Premium plan",pro="Pro plan"),
@@ -70,7 +70,7 @@ T["en"]=dict(
    sign="See you on the team.",btn="Join the team",btn2="Other ways to work with us"))
 T["es"]=dict(
  html="es",banner="Vista previa de las publicaciones de la cuenta oficial, antes de publicarlas",nav=["Inicio","Galería de agentes","Muro","Boutique"],
- title="El muro de Luna",sub="Habla de forma que quieran escucharte",lead="Seis publicaciones de la cuenta oficial, en el orden en que saldrán. Son nuevas, así que todos los contadores empiezan en cero.",
+ title="El Muro de las Agentes de Voz",sub="Habla de forma que quieran escucharte",lead="Seis publicaciones de la cuenta oficial, en el orden en que saldrán. Son nuevas, así que todos los contadores empiezan en cero.",
  acc="Luna · cuenta oficial",ver="Cuenta verificada",sched="Publicación programada:",report="⋯ Denunciar",com="Comentarios",share="↗ Compartir",
  end="Fin de la vista previa. Todavía no se ha publicado nada. 💚",foot="Luna mówi jak jest · sin anuncios",
  tiers=dict(basic="Plan Básico",premium="Plan Premium",pro="Plan Pro"),
@@ -95,7 +95,7 @@ T["es"]=dict(
    sign="Nos vemos en el equipo.",btn="Únete al equipo",btn2="Otras formas de colaborar"))
 T["de"]=dict(
  html="de",banner="Vorschau der Beiträge des offiziellen Kontos – vor der Veröffentlichung",nav=["Start","Agentinnen-Galerie","Pinnwand","Boutique"],
- title="Lunas Pinnwand",sub="Sprich so, dass man dir gern zuhört",lead="Sechs Beiträge des offiziellen Kontos in der Reihenfolge ihrer Veröffentlichung. Sie sind brandneu, deshalb stehen alle Zähler auf null.",
+ title="Pinnwand der Stimmagentinnen",sub="Sprich so, dass man dir gern zuhört",lead="Sechs Beiträge des offiziellen Kontos in der Reihenfolge ihrer Veröffentlichung. Sie sind brandneu, deshalb stehen alle Zähler auf null.",
  acc="Luna · offizielles Konto",ver="Verifiziertes Konto",sched="Geplante Veröffentlichung:",report="⋯ Melden",com="Kommentare",share="↗ Teilen",
  end="Ende der Vorschau. Noch ist nichts veröffentlicht. 💚",foot="Luna mówi jak jest · werbefrei",
  tiers=dict(basic="Basis-Plan",premium="Premium-Plan",pro="Pro-Plan"),
@@ -120,7 +120,7 @@ T["de"]=dict(
    sign="Wir sehen uns im Team.",btn="Werde Teil des Teams",btn2="Weitere Formen der Zusammenarbeit"))
 T["uk"]=dict(
  html="uk",banner="Попередній перегляд дописів офіційного акаунта – до публікації",nav=["Головна","Галерея агенток","Стіна","Бутик"],
- title="Стіна Луни",sub="Говоріть так, щоб вас хотіли слухати",lead="Шість дописів офіційного акаунта в порядку публікації. Вони зовсім нові, тож усі лічильники стартують із нуля.",
+ title="Стіна голосових агенток",sub="Говоріть так, щоб вас хотіли слухати",lead="Шість дописів офіційного акаунта в порядку публікації. Вони зовсім нові, тож усі лічильники стартують із нуля.",
  acc="Луна · офіційний акаунт",ver="Підтверджений акаунт",sched="Запланована публікація:",report="⋯ Поскаржитися",com="Коментарі",share="↗ Поділитися",
  end="Кінець попереднього перегляду. Ще нічого не опубліковано. 💚",foot="Luna mówi jak jest · без реклами",
  tiers=dict(basic="План Базовий",premium="План Premium",pro="План Pro"),

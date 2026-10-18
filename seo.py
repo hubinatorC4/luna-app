@@ -75,4 +75,4 @@ def sitemap(base):
     return "\n".join(out)
 
 def robots(base):
-    return f"User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: {base}/sitemap.xml\n"
+    return f"User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /panel.html\nSitemap: {base}/sitemap.xml\n"

@@ -188,12 +188,20 @@ def export(uid):
     return {"exported_at": int(time.time()), "account": u, "tester_application": t,
             "note": "Eksport danych konta Luna (RODO art. 15/20). Rozmowy z Luną i profil (imię, awatar) są przechowywane tylko na Twoim urządzeniu."}
 
-def delete(uid, pw):
+def delete(uid, pw=None, check=True):
+    """Usuwa konto i dane osobowe (e-mail, imię, hasło, sesje, zgłoszenie testera, zapis na e-maile). Jedno kliknięcie + potwierdzenie w UI."""
     with _lock:
         a = _accts(); u = a.get(uid)
-        if not u or not check_pw(u["pw"], str(pw or "")): raise ValueError("Nieprawidłowe hasło.")
+        if not u: raise ValueError("Nie ma takiego konta.")
+        if check and pw is not None and not check_pw(u["pw"], str(pw or "")): raise ValueError("Nieprawidłowe hasło.")
         a.pop(uid); store.put("accounts", a)
         s = {k: v for k, v in _sess().items() if v["uid"] != uid}; store.put("sessions", s)
+    try:
+        if u.get("tester"): testers.delete(u["tester"])
+        es = store.get("email_subs", {}) or {}
+        es2 = {k: v for k, v in es.items() if str(v.get("email", "")).lower() != str(u.get("email", "")).lower()}
+        if len(es2) != len(es): store.put("email_subs", es2)
+    except Exception: pass
     return True
 
 def admin_list():

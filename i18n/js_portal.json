@@ -1,0 +1,458 @@
+{
+"en": [
+[
+"'/api/library'",
+"'/api/library?lang=en'"
+],
+[
+"'/api/catalog'",
+"'/api/catalog?lang=en'"
+],
+[
+"/oraz:$/",
+"/:$/"
+],
+[
+"' · Luna, asystentka AI'",
+"' · Luna, AI assistant'"
+],
+[
+"'Kategorie'; $('#vsub').textContent = 'Wybierz obszar, nad którym chcesz popracować.'",
+"'Categories'; $('#vsub').textContent = 'Choose the area you want to work on.'"
+],
+[
+"n + (n === 1 ? ' porada' : n < 5 ? ' porady' : ' porad')",
+"n + (n === 1 ? ' tip' : ' tips')"
+],
+[
+"`Wyniki: „${query}”`",
+"`Results: “${query}”`"
+],
+[
+"`Znaleziono: ${items.length}`",
+"`Found: ${items.length}`"
+],
+[
+"'Brak wyników – spróbuj innego słowa, np. „oddech” albo „trema”.'",
+"'No results – try another word, e.g. “breathing” or “stage fright”.'"
+],
+[
+"'Najnowsze'; $('#vsub').textContent = 'Ostatnio dodane do biblioteki porad.'",
+"'Newest'; $('#vsub').textContent = 'Recently added to the tips library.'"
+],
+[
+"'Popularne'; $('#vsub').textContent = 'Polecane na start – krótkie porady, które możesz przećwiczyć od razu.'",
+"'Popular'; $('#vsub').textContent = 'Recommended to start with – short tips you can practise right away.'"
+],
+[
+"'▶ Posłuchaj Luny'",
+"'▶ Listen to Luna'"
+],
+[
+"'⏳ Luna przygotowuje głos…'",
+"'⏳ Luna is getting her voice ready…'"
+],
+[
+"'⏸ Pauza'",
+"'⏸ Pause'"
+],
+[
+"'▶ Posłuchaj jeszcze raz'",
+"'▶ Listen again'"
+],
+[
+"' Kategoria: '",
+"' Category: '"
+],
+[
+"'Brak podpowiedzi – naciśnij Enter, aby szukać w treści.'",
+"'No suggestions – press Enter to search the content.'"
+],
+[
+"'Ile kosztuje Luna?'",
+"'How much does Luna cost?'"
+],
+[
+"`Aplikacja jest bezpłatna. Plan Darmowy działa bez konta (z dziennym limitem), Podstawowa jest za darmo – wystarczy konto. Premium kosztuje ${pr('premium')}, a Pro ${pr('pro')} za 30 dni – jednorazowo, bez automatycznego odnawiania, cena zawiera VAT. Testerzy dostają 2 miesiące Premium za darmo.`",
+"`The app is free. The Free plan works without an account (with a daily limit), Basic is free – all you need is an account. Premium costs ${pr('premium')} and Pro ${pr('pro')} for 30 days – a one-off payment, no automatic renewal, VAT included. Testers get 2 months of Premium free.`"
+],
+[
+"'bez konta, z limitem'",
+"'no account, with a limit'"
+],
+[
+"'za darmo – wystarczy konto'",
+"'free – just create an account'"
+],
+[
+"'30 dni · bez odnawiania · cena zawiera VAT'",
+"'30 days · no renewal · VAT included'"
+],
+[
+"'✓ Bez opłat'",
+"'✓ No charge'"
+],
+[
+"'🎁 Testerzy: Premium 2 miesiące za darmo'",
+"'🎁 Testers: 2 months of Premium free'"
+],
+[
+"' (wartość '",
+"' (worth '"
+],
+[
+"'Płatności – wkrótce'",
+"'Payments – coming soon'"
+],
+[
+"'● NA ŻYWO'",
+"'● LIVE'"
+],
+[
+"toLocaleDateString('pl-PL'",
+"toLocaleDateString('en-GB'"
+]
+],
+"es": [
+[
+"'/api/library'",
+"'/api/library?lang=es'"
+],
+[
+"'/api/catalog'",
+"'/api/catalog?lang=es'"
+],
+[
+"/oraz:$/",
+"/:$/"
+],
+[
+"' · Luna, asystentka AI'",
+"' · Luna, asistente de IA'"
+],
+[
+"'Kategorie'; $('#vsub').textContent = 'Wybierz obszar, nad którym chcesz popracować.'",
+"'Categorías'; $('#vsub').textContent = 'Elige el área que quieres trabajar.'"
+],
+[
+"n + (n === 1 ? ' porada' : n < 5 ? ' porady' : ' porad')",
+"n + (n === 1 ? ' consejo' : ' consejos')"
+],
+[
+"`Wyniki: „${query}”`",
+"`Resultados: «${query}»`"
+],
+[
+"`Znaleziono: ${items.length}`",
+"`Encontrados: ${items.length}`"
+],
+[
+"'Brak wyników – spróbuj innego słowa, np. „oddech” albo „trema”.'",
+"'Sin resultados: prueba otra palabra, p. ej. «respiración» o «nervios».'"
+],
+[
+"'Najnowsze'; $('#vsub').textContent = 'Ostatnio dodane do biblioteki porad.'",
+"'Más recientes'; $('#vsub').textContent = 'Lo último añadido a la biblioteca de consejos.'"
+],
+[
+"'Popularne'; $('#vsub').textContent = 'Polecane na start – krótkie porady, które możesz przećwiczyć od razu.'",
+"'Populares'; $('#vsub').textContent = 'Recomendados para empezar: consejos breves que puedes practicar ya.'"
+],
+[
+"'▶ Posłuchaj Luny'",
+"'▶ Escucha a Luna'"
+],
+[
+"'⏳ Luna przygotowuje głos…'",
+"'⏳ Luna está preparando la voz…'"
+],
+[
+"'⏸ Pauza'",
+"'⏸ Pausa'"
+],
+[
+"'▶ Posłuchaj jeszcze raz'",
+"'▶ Escuchar de nuevo'"
+],
+[
+"' Kategoria: '",
+"' Categoría: '"
+],
+[
+"'Brak podpowiedzi – naciśnij Enter, aby szukać w treści.'",
+"'Sin sugerencias: pulsa Intro para buscar en el contenido.'"
+],
+[
+"'Ile kosztuje Luna?'",
+"'¿Cuánto cuesta Luna?'"
+],
+[
+"`Aplikacja jest bezpłatna. Plan Darmowy działa bez konta (z dziennym limitem), Podstawowa jest za darmo – wystarczy konto. Premium kosztuje ${pr('premium')}, a Pro ${pr('pro')} za 30 dni – jednorazowo, bez automatycznego odnawiania, cena zawiera VAT. Testerzy dostają 2 miesiące Premium za darmo.`",
+"`La aplicación es gratuita. El plan Gratis funciona sin cuenta (con límite diario) y Básico es gratis: basta con una cuenta. Premium cuesta ${pr('premium')} y Pro ${pr('pro')} por 30 días, en un pago único, sin renovación automática e IVA incluido. Los testers reciben 2 meses de Premium gratis.`"
+],
+[
+"'bez konta, z limitem'",
+"'sin cuenta, con límite'"
+],
+[
+"'za darmo – wystarczy konto'",
+"'gratis: basta con una cuenta'"
+],
+[
+"'30 dni · bez odnawiania · cena zawiera VAT'",
+"'30 días · sin renovación · IVA incluido'"
+],
+[
+"'✓ Bez opłat'",
+"'✓ Sin coste'"
+],
+[
+"'🎁 Testerzy: Premium 2 miesiące za darmo'",
+"'🎁 Testers: 2 meses de Premium gratis'"
+],
+[
+"' (wartość '",
+"' (valor: '"
+],
+[
+"'Płatności – wkrótce'",
+"'Pagos: próximamente'"
+],
+[
+"'● NA ŻYWO'",
+"'● EN DIRECTO'"
+],
+[
+"toLocaleDateString('pl-PL'",
+"toLocaleDateString('es-ES'"
+]
+],
+"de": [
+[
+"'/api/library'",
+"'/api/library?lang=de'"
+],
+[
+"'/api/catalog'",
+"'/api/catalog?lang=de'"
+],
+[
+"/oraz:$/",
+"/:$/"
+],
+[
+"' · Luna, asystentka AI'",
+"' · Luna, KI-Assistentin'"
+],
+[
+"'Kategorie'; $('#vsub').textContent = 'Wybierz obszar, nad którym chcesz popracować.'",
+"'Kategorien'; $('#vsub').textContent = 'Wähle den Bereich, an dem du arbeiten möchtest.'"
+],
+[
+"n + (n === 1 ? ' porada' : n < 5 ? ' porady' : ' porad')",
+"n + (n === 1 ? ' Tipp' : ' Tipps')"
+],
+[
+"`Wyniki: „${query}”`",
+"`Ergebnisse: „${query}“`"
+],
+[
+"`Znaleziono: ${items.length}`",
+"`Gefunden: ${items.length}`"
+],
+[
+"'Brak wyników – spróbuj innego słowa, np. „oddech” albo „trema”.'",
+"'Keine Ergebnisse – versuch ein anderes Wort, z. B. „Atmung“ oder „Lampenfieber“.'"
+],
+[
+"'Najnowsze'; $('#vsub').textContent = 'Ostatnio dodane do biblioteki porad.'",
+"'Neueste'; $('#vsub').textContent = 'Zuletzt zur Tipp-Bibliothek hinzugefügt.'"
+],
+[
+"'Popularne'; $('#vsub').textContent = 'Polecane na start – krótkie porady, które możesz przećwiczyć od razu.'",
+"'Beliebt'; $('#vsub').textContent = 'Empfohlen für den Start – kurze Tipps, die du sofort üben kannst.'"
+],
+[
+"'▶ Posłuchaj Luny'",
+"'▶ Luna anhören'"
+],
+[
+"'⏳ Luna przygotowuje głos…'",
+"'⏳ Luna bereitet ihre Stimme vor…'"
+],
+[
+"'⏸ Pauza'",
+"'⏸ Pause'"
+],
+[
+"'▶ Posłuchaj jeszcze raz'",
+"'▶ Noch einmal anhören'"
+],
+[
+"' Kategoria: '",
+"' Kategorie: '"
+],
+[
+"'Brak podpowiedzi – naciśnij Enter, aby szukać w treści.'",
+"'Keine Vorschläge – drück Enter, um im Inhalt zu suchen.'"
+],
+[
+"'Ile kosztuje Luna?'",
+"'Was kostet Luna?'"
+],
+[
+"`Aplikacja jest bezpłatna. Plan Darmowy działa bez konta (z dziennym limitem), Podstawowa jest za darmo – wystarczy konto. Premium kosztuje ${pr('premium')}, a Pro ${pr('pro')} za 30 dni – jednorazowo, bez automatycznego odnawiania, cena zawiera VAT. Testerzy dostają 2 miesiące Premium za darmo.`",
+"`Die App ist kostenlos. Der Gratis-Plan funktioniert ohne Konto (mit Tageslimit), Basis ist kostenlos – ein Konto genügt. Premium kostet ${pr('premium')} und Pro ${pr('pro')} für 30 Tage – einmalig, ohne automatische Verlängerung, inkl. MwSt. Tester bekommen 2 Monate Premium gratis.`"
+],
+[
+"'bez konta, z limitem'",
+"'ohne Konto, mit Limit'"
+],
+[
+"'za darmo – wystarczy konto'",
+"'kostenlos – Konto genügt'"
+],
+[
+"'30 dni · bez odnawiania · cena zawiera VAT'",
+"'30 Tage · keine Verlängerung · inkl. MwSt.'"
+],
+[
+"'✓ Bez opłat'",
+"'✓ Kostenlos'"
+],
+[
+"'🎁 Testerzy: Premium 2 miesiące za darmo'",
+"'🎁 Tester: 2 Monate Premium gratis'"
+],
+[
+"' (wartość '",
+"' (Wert: '"
+],
+[
+"'Płatności – wkrótce'",
+"'Zahlungen – bald verfügbar'"
+],
+[
+"'● NA ŻYWO'",
+"'● LIVE'"
+],
+[
+"toLocaleDateString('pl-PL'",
+"toLocaleDateString('de-DE'"
+]
+],
+"uk": [
+[
+"'/api/library'",
+"'/api/library?lang=uk'"
+],
+[
+"'/api/catalog'",
+"'/api/catalog?lang=uk'"
+],
+[
+"/oraz:$/",
+"/:$/"
+],
+[
+"' · Luna, asystentka AI'",
+"' · Луна, ШІ-асистентка'"
+],
+[
+"'Kategorie'; $('#vsub').textContent = 'Wybierz obszar, nad którym chcesz popracować.'",
+"'Категорії'; $('#vsub').textContent = 'Оберіть сферу, над якою хочете попрацювати.'"
+],
+[
+"n + (n === 1 ? ' porada' : n < 5 ? ' porady' : ' porad')",
+"n + (n === 1 ? ' порада' : n < 5 ? ' поради' : ' порад')"
+],
+[
+"`Wyniki: „${query}”`",
+"`Результати: «${query}»`"
+],
+[
+"`Znaleziono: ${items.length}`",
+"`Знайдено: ${items.length}`"
+],
+[
+"'Brak wyników – spróbuj innego słowa, np. „oddech” albo „trema”.'",
+"'Нічого не знайдено – спробуйте інше слово, напр. «дихання» або «хвилювання».'"
+],
+[
+"'Najnowsze'; $('#vsub').textContent = 'Ostatnio dodane do biblioteki porad.'",
+"'Найновіше'; $('#vsub').textContent = 'Нещодавно додане до бібліотеки порад.'"
+],
+[
+"'Popularne'; $('#vsub').textContent = 'Polecane na start – krótkie porady, które możesz przećwiczyć od razu.'",
+"'Популярне'; $('#vsub').textContent = 'Рекомендовано для початку – короткі поради, які можна відпрацювати одразу.'"
+],
+[
+"'▶ Posłuchaj Luny'",
+"'▶ Послухати Луну'"
+],
+[
+"'⏳ Luna przygotowuje głos…'",
+"'⏳ Луна готує голос…'"
+],
+[
+"'⏸ Pauza'",
+"'⏸ Пауза'"
+],
+[
+"'▶ Posłuchaj jeszcze raz'",
+"'▶ Послухати ще раз'"
+],
+[
+"' Kategoria: '",
+"' Категорія: '"
+],
+[
+"'Brak podpowiedzi – naciśnij Enter, aby szukać w treści.'",
+"'Немає підказок – натисніть Enter, щоб шукати у вмісті.'"
+],
+[
+"'Ile kosztuje Luna?'",
+"'Скільки коштує Луна?'"
+],
+[
+"`Aplikacja jest bezpłatna. Plan Darmowy działa bez konta (z dziennym limitem), Podstawowa jest za darmo – wystarczy konto. Premium kosztuje ${pr('premium')}, a Pro ${pr('pro')} za 30 dni – jednorazowo, bez automatycznego odnawiania, cena zawiera VAT. Testerzy dostają 2 miesiące Premium za darmo.`",
+"`Застосунок безкоштовний. План Безкоштовний працює без акаунта (з денним лімітом), Базовий безкоштовний – достатньо акаунта. Premium коштує ${pr('premium')}, а Pro ${pr('pro')} за 30 днів – разово, без автоматичного продовження, ціна з ПДВ. Тестувальники отримують 2 місяці Premium безкоштовно.`"
+],
+[
+"'bez konta, z limitem'",
+"'без акаунта, з лімітом'"
+],
+[
+"'za darmo – wystarczy konto'",
+"'безкоштовно – достатньо акаунта'"
+],
+[
+"'30 dni · bez odnawiania · cena zawiera VAT'",
+"'30 днів · без продовження · ціна з ПДВ'"
+],
+[
+"'✓ Bez opłat'",
+"'✓ Без оплати'"
+],
+[
+"'🎁 Testerzy: Premium 2 miesiące za darmo'",
+"'🎁 Тестувальники: 2 місяці Premium безкоштовно'"
+],
+[
+"' (wartość '",
+"' (вартість '"
+],
+[
+"'Płatności – wkrótce'",
+"'Оплата – незабаром'"
+],
+[
+"'● NA ŻYWO'",
+"'● НАЖИВО'"
+],
+[
+"toLocaleDateString('pl-PL'",
+"toLocaleDateString('uk-UA'"
+]
+]
+}

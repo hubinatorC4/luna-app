@@ -1,0 +1,346 @@
+{
+"en": [
+[
+"`Zostało ${d.remaining} z ${d.limit} miejsc`",
+"`${d.remaining} of ${d.limit} places left`"
+],
+[
+"'Komplet – wszystkie miejsca zajęte'",
+"'Full – all places taken'"
+],
+[
+"🎉 Jesteś na liście testerów! Twój kod testera: ",
+"🎉 You’re on the tester list! Your tester code: "
+],
+[
+"Zachowaj go – wpiszesz go w aplikacji (Ustawienia → Twój profil), jeśli zmienisz urządzenie.",
+"Keep it – you’ll enter it in the app (Settings → Your profile) if you change devices."
+],
+[
+"Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
+"Thank you! All 50 tester places are taken. Sign up for notifications so you don’t miss the launch."
+],
+[
+"<label>Imię *<",
+"<label>First name *<"
+],
+[
+"<legend>Masz telefon z Androidem? *</legend>",
+"<legend>Do you have an Android phone? *</legend>"
+],
+[
+"required>Tak</label>",
+"required>Yes</label>"
+],
+[
+"value=\"0\">Nie</label>",
+"value=\"0\">No</label>"
+],
+[
+"</span>Fioletowa</label>",
+"</span>Purple</label>"
+],
+[
+"</span>Niebieska</label>",
+"</span>Blue</label>"
+],
+[
+"<label>Data urodzenia *<",
+"<label>Date of birth *<"
+],
+[
+">Informacja o danych</a>",
+">Data information</a>"
+],
+[
+"`✅ Tester ${st.name}: Premium aktywne do ${new Date(st.until * 1000).toLocaleDateString('pl-PL')}, obwódka ${st.ring_choice}.`",
+"`✅ Tester ${st.name}: Premium active until ${new Date(st.until * 1000).toLocaleDateString('en-GB')}.`"
+],
+[
+"`⏳ Zgłoszenie przyjęte (${st.name}). Premium i obwódkę ${st.ring_choice} włączymy po zatwierdzeniu.`",
+"`⏳ Application received (${st.name}). Premium and your avatar ring will be enabled after approval.`"
+],
+[
+"Dlaczego chcesz testować? <small>(opcjonalnie)</small>",
+"Why do you want to test? <small>(optional)</small>"
+],
+[
+"Kolor obwódki Twojego awatara *",
+"Your avatar ring colour *"
+],
+[
+"Do zamkniętych testów w Google Play potrzebny jest adres e-mail powiązany z Twoim kontem Google – najlepiej podaj właśnie ten.",
+"Closed testing on Google Play requires the email address linked to your Google account – ideally enter that one."
+],
+[
+"Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe. *",
+"I declare that I am an adult (18+) and have my own bank account. *"
+],
+[
+"Zgłaszam się do testów",
+"Sign me up for testing"
+],
+[
+"'Nie udało się wczytać formularza. Odśwież stronę.'",
+"'Couldn’t load the form. Please refresh the page.'"
+]
+],
+"es": [
+[
+"`Zostało ${d.remaining} z ${d.limit} miejsc`",
+"`Quedan ${d.remaining} de ${d.limit} plazas`"
+],
+[
+"'Komplet – wszystkie miejsca zajęte'",
+"'Completo: todas las plazas ocupadas'"
+],
+[
+"🎉 Jesteś na liście testerów! Twój kod testera: ",
+"🎉 ¡Estás en la lista de testers! Tu código de tester: "
+],
+[
+"Zachowaj go – wpiszesz go w aplikacji (Ustawienia → Twój profil), jeśli zmienisz urządzenie.",
+"Guárdalo: lo introducirás en la aplicación (Ajustes → Tu perfil) si cambias de dispositivo."
+],
+[
+"Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
+"¡Gracias! Las 50 plazas de tester ya están ocupadas. Activa las notificaciones para no perderte el lanzamiento."
+],
+[
+"<label>Imię *<",
+"<label>Nombre *<"
+],
+[
+"<legend>Masz telefon z Androidem? *</legend>",
+"<legend>¿Tienes un teléfono Android? *</legend>"
+],
+[
+"required>Tak</label>",
+"required>Sí</label>"
+],
+[
+"value=\"0\">Nie</label>",
+"value=\"0\">No</label>"
+],
+[
+"</span>Fioletowa</label>",
+"</span>Morado</label>"
+],
+[
+"</span>Niebieska</label>",
+"</span>Azul</label>"
+],
+[
+"<label>Data urodzenia *<",
+"<label>Fecha de nacimiento *<"
+],
+[
+">Informacja o danych</a>",
+">Información sobre datos</a>"
+],
+[
+"`✅ Tester ${st.name}: Premium aktywne do ${new Date(st.until * 1000).toLocaleDateString('pl-PL')}, obwódka ${st.ring_choice}.`",
+"`✅ Tester ${st.name}: Premium activo hasta ${new Date(st.until * 1000).toLocaleDateString('es-ES')}.`"
+],
+[
+"`⏳ Zgłoszenie przyjęte (${st.name}). Premium i obwódkę ${st.ring_choice} włączymy po zatwierdzeniu.`",
+"`⏳ Solicitud recibida (${st.name}). Activaremos Premium y el aro del avatar tras la aprobación.`"
+],
+[
+"Dlaczego chcesz testować? <small>(opcjonalnie)</small>",
+"¿Por qué quieres probarla? <small>(opcional)</small>"
+],
+[
+"Kolor obwódki Twojego awatara *",
+"Color del aro de tu avatar *"
+],
+[
+"Do zamkniętych testów w Google Play potrzebny jest adres e-mail powiązany z Twoim kontem Google – najlepiej podaj właśnie ten.",
+"Para las pruebas cerradas en Google Play se necesita el correo vinculado a tu cuenta de Google; lo mejor es indicar ese."
+],
+[
+"Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe. *",
+"Declaro que soy mayor de edad (18+) y tengo una cuenta bancaria propia. *"
+],
+[
+"Zgłaszam się do testów",
+"Me apunto a las pruebas"
+],
+[
+"'Nie udało się wczytać formularza. Odśwież stronę.'",
+"'No se pudo cargar el formulario. Actualiza la página.'"
+]
+],
+"de": [
+[
+"`Zostało ${d.remaining} z ${d.limit} miejsc`",
+"`Noch ${d.remaining} von ${d.limit} Plätzen frei`"
+],
+[
+"'Komplet – wszystkie miejsca zajęte'",
+"'Ausgebucht – alle Plätze vergeben'"
+],
+[
+"🎉 Jesteś na liście testerów! Twój kod testera: ",
+"🎉 Du stehst auf der Testerliste! Dein Testercode: "
+],
+[
+"Zachowaj go – wpiszesz go w aplikacji (Ustawienia → Twój profil), jeśli zmienisz urządzenie.",
+"Bewahre ihn auf – du gibst ihn in der App ein (Einstellungen → Dein Profil), wenn du das Gerät wechselst."
+],
+[
+"Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
+"Danke! Alle 50 Testerplätze sind vergeben. Aktiviere Benachrichtigungen, um den Start nicht zu verpassen."
+],
+[
+"<label>Imię *<",
+"<label>Vorname *<"
+],
+[
+"<legend>Masz telefon z Androidem? *</legend>",
+"<legend>Hast du ein Android-Handy? *</legend>"
+],
+[
+"required>Tak</label>",
+"required>Ja</label>"
+],
+[
+"value=\"0\">Nie</label>",
+"value=\"0\">Nein</label>"
+],
+[
+"</span>Fioletowa</label>",
+"</span>Lila</label>"
+],
+[
+"</span>Niebieska</label>",
+"</span>Blau</label>"
+],
+[
+"<label>Data urodzenia *<",
+"<label>Geburtsdatum *<"
+],
+[
+">Informacja o danych</a>",
+">Datenschutzhinweis</a>"
+],
+[
+"`✅ Tester ${st.name}: Premium aktywne do ${new Date(st.until * 1000).toLocaleDateString('pl-PL')}, obwódka ${st.ring_choice}.`",
+"`✅ Tester ${st.name}: Premium aktiv bis ${new Date(st.until * 1000).toLocaleDateString('de-DE')}.`"
+],
+[
+"`⏳ Zgłoszenie przyjęte (${st.name}). Premium i obwódkę ${st.ring_choice} włączymy po zatwierdzeniu.`",
+"`⏳ Anmeldung erhalten (${st.name}). Premium und der Avatar-Ring werden nach der Freigabe aktiviert.`"
+],
+[
+"Dlaczego chcesz testować? <small>(opcjonalnie)</small>",
+"Warum möchtest du testen? <small>(optional)</small>"
+],
+[
+"Kolor obwódki Twojego awatara *",
+"Ringfarbe deines Avatars *"
+],
+[
+"Do zamkniętych testów w Google Play potrzebny jest adres e-mail powiązany z Twoim kontem Google – najlepiej podaj właśnie ten.",
+"Für geschlossene Tests bei Google Play brauchst du die E-Mail-Adresse deines Google-Kontos – gib am besten genau diese an."
+],
+[
+"Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe. *",
+"Ich erkläre, dass ich volljährig (18+) bin und ein eigenes Bankkonto habe. *"
+],
+[
+"Zgłaszam się do testów",
+"Ich melde mich zum Test"
+],
+[
+"'Nie udało się wczytać formularza. Odśwież stronę.'",
+"'Formular konnte nicht geladen werden. Bitte Seite neu laden.'"
+]
+],
+"uk": [
+[
+"`Zostało ${d.remaining} z ${d.limit} miejsc`",
+"`Залишилося ${d.remaining} з ${d.limit} місць`"
+],
+[
+"'Komplet – wszystkie miejsca zajęte'",
+"'Усі місця зайняті'"
+],
+[
+"🎉 Jesteś na liście testerów! Twój kod testera: ",
+"🎉 Ви в списку тестувальників! Ваш код тестувальника: "
+],
+[
+"Zachowaj go – wpiszesz go w aplikacji (Ustawienia → Twój profil), jeśli zmienisz urządzenie.",
+"Збережіть його – ви введете його в застосунку (Налаштування → Ваш профіль), якщо зміните пристрій."
+],
+[
+"Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
+"Дякуємо! Усі 50 місць для тестувальників уже зайняті. Підпишіться на сповіщення, щоб не пропустити прем’єру."
+],
+[
+"<label>Imię *<",
+"<label>Ім’я *<"
+],
+[
+"<legend>Masz telefon z Androidem? *</legend>",
+"<legend>Маєте телефон з Android? *</legend>"
+],
+[
+"required>Tak</label>",
+"required>Так</label>"
+],
+[
+"value=\"0\">Nie</label>",
+"value=\"0\">Ні</label>"
+],
+[
+"</span>Fioletowa</label>",
+"</span>Фіолетова</label>"
+],
+[
+"</span>Niebieska</label>",
+"</span>Синя</label>"
+],
+[
+"<label>Data urodzenia *<",
+"<label>Дата народження *<"
+],
+[
+">Informacja o danych</a>",
+">Інформація про дані</a>"
+],
+[
+"`✅ Tester ${st.name}: Premium aktywne do ${new Date(st.until * 1000).toLocaleDateString('pl-PL')}, obwódka ${st.ring_choice}.`",
+"`✅ Тестувальник ${st.name}: Premium активний до ${new Date(st.until * 1000).toLocaleDateString('uk-UA')}.`"
+],
+[
+"`⏳ Zgłoszenie przyjęte (${st.name}). Premium i obwódkę ${st.ring_choice} włączymy po zatwierdzeniu.`",
+"`⏳ Заявку прийнято (${st.name}). Premium і обвідку аватара ввімкнемо після підтвердження.`"
+],
+[
+"Dlaczego chcesz testować? <small>(opcjonalnie)</small>",
+"Чому хочете тестувати? <small>(необов’язково)</small>"
+],
+[
+"Kolor obwódki Twojego awatara *",
+"Колір обвідки вашого аватара *"
+],
+[
+"Do zamkniętych testów w Google Play potrzebny jest adres e-mail powiązany z Twoim kontem Google – najlepiej podaj właśnie ten.",
+"Для закритого тестування в Google Play потрібна адреса е-пошти, пов’язана з вашим акаунтом Google, – найкраще вкажіть саме її."
+],
+[
+"Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe. *",
+"Заявляю, що я повнолітня особа (18+) і маю власний банківський рахунок. *"
+],
+[
+"Zgłaszam się do testów",
+"Зголошуюся до тестування"
+],
+[
+"'Nie udało się wczytać formularza. Odśwież stronę.'",
+"'Не вдалося завантажити форму. Оновіть сторінку.'"
+]
+]
+}

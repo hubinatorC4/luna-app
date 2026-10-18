@@ -1,0 +1,23 @@
+:root{color-scheme:dark}
+body{margin:0;background:#0a0a0a;color:#f7efe6;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.ph{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid #2c2622;position:sticky;top:0;background:#0a0a0aee;z-index:5}
+.ph b{font-size:18px}
+main{max-width:1280px;margin:0 auto;padding:16px}
+.hint{color:#a89c90;font-size:14px}
+.card{background:#161412;border:1px solid #2c2622;border-radius:22px;padding:18px 20px;margin:0 0 16px}
+h1{margin:0 0 8px;font-size:24px}h2{margin:0 0 10px;font-size:19px}
+button{font:inherit;color:inherit;background:#1e1a17;border:1px solid #2c2622;border-radius:999px;padding:9px 16px;cursor:pointer;min-height:40px}
+button.on{background:rgba(255,176,71,.18);border-color:rgba(255,176,71,.5);color:#ffcf8a}
+button.danger{border-color:#7a2a2a;color:#ffb4b4}button.ok{border-color:#1f6e3f;color:#a6f3c3}
+#lf{display:flex;gap:10px;flex-wrap:wrap}#lf input{flex:1;min-width:220px;padding:10px 16px;border-radius:999px;border:1px solid #2c2622;background:#0f0d0c;color:inherit;font:inherit}
+.err{color:#ff9a9a}
+.tabs,.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:0 0 16px}
+.kpi{background:#161412;border:1px solid #2c2622;border-radius:18px;padding:14px 16px}.kpi b{display:block;font-size:26px;color:#ffb347}.kpi span{color:#a89c90;font-size:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px}
+.tw{overflow:auto;max-height:560px;border-radius:14px;border:1px solid #2c2622}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:7px 10px;border-bottom:1px solid #241f1b;text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:#1e1a17;cursor:pointer;user-select:none}td.n,th.n{text-align:right}
+.spark{display:inline-flex;align-items:flex-end;gap:1px;height:22px;vertical-align:middle}.spark i{display:inline-block;width:3px;background:#ffb347;opacity:.8;min-height:1px}
+.empty{color:#a89c90;padding:12px}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;background:#241f1b;font-size:12.5px;margin:1px}

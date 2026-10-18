@@ -42,6 +42,7 @@ document.addEventListener('click', async e => {
   const target = b.dataset.target, v = Number(b.dataset.vote);
   try { const d = await api('/api/vote', {target, v});
     document.querySelectorAll(`[data-target="${CSS.escape(target)}"][data-vote]`).forEach(x => { const up = x.dataset.vote === '1'; x.querySelector('em').textContent = up ? d.up : d.down; const on = d.mine === Number(x.dataset.vote); x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); });
+    if (target.startsWith('post:')) document.querySelectorAll(`[data-cnt-like="${CSS.escape(target.slice(5))}"] b`).forEach(x => x.textContent = Number(d.up).toLocaleString(lang === 'uk' ? 'uk-UA' : lang));
   } catch(err){ alert(err.message); }
 });
 /* ---------- zgłoś ---------- */
@@ -60,21 +61,32 @@ document.addEventListener('click', async e => {
   const host = s.closest('article, .cmtbox, .item, section') || s.parentElement; const old = host.querySelector(':scope > .sharebox');
   if (old) old.remove(); else s.closest('.acts').insertAdjacentHTML('afterend', shareBox(url, text));
 });
-/* ---------- komentarze ---------- */
+/* ---------- komentarze: mały czat pod wpisem (najnowsze na dole, moderacja przed publikacją) ---------- */
+const X2 = {pl: {more: 'Pokaż wcześniejsze komentarze', ph: 'Napisz komentarz…', del: 'Usunięty użytkownik', you: 'Ty'}, en: {more: 'Show earlier comments', ph: 'Write a comment…', del: 'Deleted user', you: 'You'},
+ es: {more: 'Ver comentarios anteriores', ph: 'Escribe un comentario…', del: 'Usuario eliminado', you: 'Tú'}, de: {more: 'Frühere Kommentare anzeigen', ph: 'Schreib einen Kommentar…', del: 'Gelöschter Nutzer', you: 'Du'},
+ uk: {more: 'Показати попередні коментарі', ph: 'Напишіть коментар…', del: 'Видалений користувач', you: 'Ви'}}[lang];
+const nickShow = n => n === 'Usunięty użytkownik' ? X2.del : n;
+function clock(ts){ const d = new Date(ts * 1000), now = new Date(); const hm = d.toLocaleTimeString(lang === 'uk' ? 'uk-UA' : lang, {hour: '2-digit', minute: '2-digit'});
+  return d.toDateString() === now.toDateString() ? hm : d.toLocaleDateString(lang === 'uk' ? 'uk-UA' : lang, {day: 'numeric', month: 'short'}) + ' · ' + hm; }
 function cmtHTML(c, target, replies){
-  const stars = c.rating ? ' ' + '★'.repeat(c.rating) + '☆'.repeat(5 - c.rating) : '';
-  return `<div class="cmt" data-cid="${esc(c.id)}">${ava(c.nick, 36)}<div class="cbody"><div class="bubble"><b class="nick">${esc(c.nick)}</b>${c.pending ? `<span class="pend">${T.waiting}</span>` : ''}<span class="stars" aria-label="${c.rating || ''}/5">${stars}</span><p>${esc(c.text)}</p></div>
-  <div class="cmeta"><span>${ago(c.t)}</span>${c.pending ? '' : `<button type="button" data-vote="1" data-target="cmt:${esc(c.id)}" class="${c.votes.mine === 1 ? 'on' : ''}">👍 <em>${c.votes.up}</em></button><button type="button" data-vote="-1" data-target="cmt:${esc(c.id)}" class="${c.votes.mine === -1 ? 'on' : ''}">👎 <em>${c.votes.down}</em></button>`}${replies ? `<button type="button" data-replyto="${esc(c.id)}">${T.reply}</button>` : ''}${c.pending ? '' : `<button type="button" data-report="cmt:${esc(c.id)}">${T.report}</button>`}</div>
-  ${replies ? `<div class="replies">${replies.map(r => `<div class="reply">${cmtHTML(r, target, null)}</div>`).join('')}</div>` : ''}</div></div>`;
+  const stars = c.rating ? ' ' + '★'.repeat(c.rating) + '☆'.repeat(5 - c.rating) : ''; const nk = nickShow(c.nick);
+  return `<div class="cmt chat${c.mine ? ' mine' : ''}${c.pending ? ' pend' : ''}" data-cid="${esc(c.id)}">${ava(nk, 34)}<div class="cbody"><div class="bubble"><b class="nick">${esc(nk)}</b>${c.pending ? ` <span class="pend">⏳ ${T.waiting}</span>` : ''}<span class="stars" aria-label="${c.rating || ''}/5">${stars}</span><p>${esc(c.text)}</p></div>
+  <div class="cmeta"><time datetime="${new Date(c.t * 1000).toISOString()}" title="${esc(new Date(c.t * 1000).toLocaleString(lang))}">${clock(c.t)}</time>${c.pending ? '' : `<button type="button" data-vote="1" data-target="cmt:${esc(c.id)}" class="${c.votes.mine === 1 ? 'on' : ''}" aria-label="👍">👍 <em>${c.votes.up}</em></button><button type="button" data-vote="-1" data-target="cmt:${esc(c.id)}" class="${c.votes.mine === -1 ? 'on' : ''}" aria-label="👎">👎 <em>${c.votes.down}</em></button><button type="button" data-replyto="${esc(c.id)}">${T.reply}</button><button type="button" data-report="cmt:${esc(c.id)}">${T.report}</button>`}</div>
+  ${replies && replies.length ? `<div class="replies">${replies.map(r => `<div class="reply">${cmtHTML(r, target, null)}</div>`).join('')}</div>` : ''}</div></div>`;
 }
+const SHOW = 3;
 async function comments(el, target, opts){
   opts = opts || {};
-  el.classList.add('cmtbox');
-  el.innerHTML = '<p class="cmsg">…</p>';
+  el.classList.add('cmtbox', 'chatbox');
+  if (!el.innerHTML) el.innerHTML = '<p class="cmsg">…</p>';
   let d; try { d = await api('/api/comments?target=' + encodeURIComponent(target)); } catch(e){ el.innerHTML = `<p class="cmsg err">${esc(e.message)}</p>`; return; }
   const top = d.items.filter(c => !c.parent), rep = id => d.items.filter(c => c.parent === id);
   const avg = d.rating ? `<p class="cmsg">${T.avg}: <b>${String(d.rating).replace('.', lang === 'en' ? '.' : ',')}</b> / 5 (${d.nratings})</p>` : '';
-  el.innerHTML = avg + (top.length ? top.map(c => cmtHTML(c, target, rep(c.id))).join('') : `<p class="cmsg">${T.none}</p>`) + formHTML(opts.rating, null);
+  const hiddenN = el.dataset.all ? 0 : Math.max(0, top.length - SHOW);
+  const shown = top.slice(hiddenN);
+  el.innerHTML = avg + (hiddenN ? `<button type="button" class="cmore" data-cmore>💬 ${X2.more} (${hiddenN})</button>` : '') +
+    `<div class="clist">${shown.length ? shown.map(c => cmtHTML(c, target, rep(c.id))).join('') : `<p class="cmsg">${T.none}</p>`}</div>` + formHTML(opts.rating, null);
+  const mc = el.querySelector('[data-cmore]'); if (mc) mc.onclick = () => { el.dataset.all = 1; comments(el, target, opts); };
   bindForm(el.querySelector('.cform'), el, target, null, opts);
   el.querySelectorAll('[data-replyto]').forEach(b => b.onclick = () => {
     const box = b.closest('.cbody'); if (box.querySelector('.cform')) return;
@@ -82,19 +94,50 @@ async function comments(el, target, opts){
   if (opts.onCount) opts.onCount(d.items.filter(c => !c.pending).length);
 }
 function formHTML(rating, parent){
-  return `<form class="cform" novalidate>${parent ? '' : ''}<input class="cn" name="nick" maxlength="30" placeholder="${T.nick}" aria-label="${T.nick}" value="${esc(nickGet())}" required>
-  <input name="text" maxlength="1000" placeholder="${T.write}" aria-label="${T.write}" required>${rating ? `<select name="rating" aria-label="${T.rating}"><option value="">${T.rating}</option>${[5, 4, 3, 2, 1].map(n => `<option value="${n}">${'★'.repeat(n)}</option>`).join('')}</select>` : ''}
-  <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><button type="submit">${T.send}</button><p class="cmsg" role="status" style="flex-basis:100%;margin:0"></p></form>`;
+  const nk = nickGet();
+  return `<form class="cform chatform" novalidate>${ava(nk || '✦', 30)}<input class="cn" name="nick" maxlength="30" placeholder="${T.nick}" aria-label="${T.nick}" value="${esc(nk)}" required${nk ? ' hidden' : ''}>
+  <input name="text" maxlength="1000" placeholder="${parent ? T.reply + '…' : X2.ph}" aria-label="${X2.ph}" required enterkeyhint="send">${rating ? `<select name="rating" aria-label="${T.rating}"><option value="">${T.rating}</option>${[5, 4, 3, 2, 1].map(n => `<option value="${n}">${'★'.repeat(n)}</option>`).join('')}</select>` : ''}
+  <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><button type="submit" class="csend" aria-label="${T.send}" title="${T.send}">➤</button><p class="cmsg" role="status" style="flex-basis:100%;margin:0"></p></form>`;
 }
 function bindForm(f, el, target, parent, opts){
+  const nickIn = f.querySelector('input[name=nick]'), txt = f.querySelector('input[name=text]');
+  txt.addEventListener('focus', () => { if (!nickIn.value) nickIn.hidden = false; });
   f.onsubmit = async e => { e.preventDefault(); const fd = new FormData(f), msg = f.querySelector('.cmsg');
+    if (!fd.get('nick')){ nickIn.hidden = false; nickIn.focus(); return; }
     if (Date.now() - t0 < 2500){ msg.textContent = '…'; return; }
     try { nickSet(fd.get('nick')); await api('/api/comments', {target, parent, nick: fd.get('nick'), text: fd.get('text'), rating: fd.get('rating') || null, website: fd.get('website')});
-      msg.className = 'cmsg ok'; msg.textContent = T.pending; f.querySelector('input[name=text]').value = ''; setTimeout(() => comments(el, target, opts), 1800);
+      msg.className = 'cmsg ok'; msg.textContent = T.pending; txt.value = ''; setTimeout(() => comments(el, target, opts), 1200);
     } catch(err){ msg.className = 'cmsg err'; msg.textContent = err.message; } };
 }
+/* ---------- liczniki pod wpisem i anonimowe statystyki ---------- */
+const NUM = n => Number(n || 0).toLocaleString(lang === 'uk' ? 'uk-UA' : lang);
+const CL = {pl: ['polubień', 'wyświetleń', 'komentarzy'], en: ['likes', 'views', 'comments'], es: ['me gusta', 'vistas', 'comentarios'], de: ['Likes', 'Aufrufe', 'Kommentare'], uk: ['вподобань', 'переглядів', 'коментарів']}[lang];
+function counterRow(p){
+  const up = (p.votes || {}).up || 0;
+  return `<div class="counters" aria-label="${NUM(up)} ${CL[0]} · ${NUM(p.views)} ${CL[1]} · ${NUM(p.ncomments)} ${CL[2]}"><span data-cnt-like="${esc(p.id)}">👍 <b>${NUM(up)}</b> ${CL[0]}</span><span>👁 <b>${NUM(p.views)}</b> ${CL[1]}</span><span data-cnt-cm="${esc(p.id)}">💬 <b>${NUM(p.ncomments)}</b> ${CL[2]}</span></div>`;
+}
+let SID = ''; try { SID = sessionStorage.getItem('luna.vsid') || ''; if (!SID){ SID = Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join(''); sessionStorage.setItem('luna.vsid', SID); } } catch(e){}
+const Q = {view: new Set()}; let qT = null; const sent = new Set();
+function track(ev, key){
+  if (!SID || navigator.webdriver) return;
+  const k = ev + '|' + key; if (sent.has(k)) return; sent.add(k);
+  if (ev !== 'view'){ navigator.sendBeacon ? navigator.sendBeacon('/api/track', new Blob([JSON.stringify({sid: SID, ev, keys: [key], lang})], {type: 'application/json'})) : api('/api/track', {sid: SID, ev, keys: [key], lang}).catch(() => {}); return; }
+  Q.view.add(key); clearTimeout(qT); qT = setTimeout(() => { const keys = [...Q.view]; Q.view.clear(); if (keys.length) api('/api/track', {sid: SID, ev: 'view', keys, lang}).catch(() => {}); }, 1500);
+}
+const timers = new WeakMap();
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+  const el = e.target;
+  if (e.isIntersecting && e.intersectionRatio >= .5){ if (!timers.has(el)) timers.set(el, setTimeout(() => { track('view', el.dataset.track); io.unobserve(el); }, 1000)); }
+  else { clearTimeout(timers.get(el)); timers.delete(el); }
+}), {threshold: [0, .5, 1]}) : null;
+function observe(root){ if (!io) return; (root || document).querySelectorAll('[data-track]:not([data-tracked])').forEach(el => { el.dataset.tracked = 1; io.observe(el); }); }
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href]'); const host = e.target.closest('[data-track]');
+  if (a && host && /^post:/.test(host.dataset.track) && !a.closest('.acts')) track('click', host.dataset.track);
+  const sh = e.target.closest('[data-share]'); if (sh && host) track('share', host.dataset.track);
+}, true);
 async function votesFor(targets){ if (!targets.length) return {}; try { return await api('/api/votes?t=' + targets.map(encodeURIComponent).join(',')); } catch(e){ return {}; } }
-window.LunaSocial = {T, lang, esc, ago, api, ava, voteButtons, comments, shareBox, report, votesFor, nickGet, nickSet};
+window.LunaSocial = {T, lang, esc, ago, api, ava, voteButtons, comments, shareBox, report, votesFor, nickGet, nickSet, counterRow, track, observe, nickShow, NUM};
 /* auto: [data-comments="target"] i [data-votes="target"] */
 function auto(){
   document.querySelectorAll('[data-comments]').forEach(el => { if (!el.dataset.ready){ el.dataset.ready = 1; comments(el, el.dataset.comments, {rating: el.dataset.rating === '1'}); } });

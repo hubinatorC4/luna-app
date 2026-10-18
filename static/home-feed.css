@@ -1,0 +1,72 @@
+/* Strona główna v1.4.0 – jeden długi kanał (jak Facebook/Instagram), miękki zaokrąglony styl, większe litery i cele dotyku. */
+html,body.homebody{height:auto!important;overflow-y:auto!important}
+body.homebody{font-size:17.5px;line-height:1.6}
+.homebody main.hf{max-width:820px;margin:0 auto;padding:14px 16px 40px;display:flex;flex-direction:column;gap:22px;min-height:0;height:auto;overflow:visible}
+.homebody .tabs a{font-size:16px;padding:12px 14px}
+body.homebody{overflow-x:clip}
+.homebody main .pill{font-size:16px;min-height:44px;padding:10px 18px}
+.homebody main .pill.big{font-size:18px;padding:13px 24px;min-height:50px}
+.homebody .tester-banner{margin:0;border-radius:24px;padding:14px 18px;font-size:16px}
+/* kompaktowe intro */
+.homebody .star-hero{padding:22px 18px;margin:0;max-width:none;border-radius:28px;background:linear-gradient(180deg,#1e1a17,#161412);border:1px solid #2c2622;gap:14px}
+.homebody .sh-ring{width:min(36vw,150px)}
+.homebody .star-hero h1{font-size:clamp(30px,6vw,44px);margin:2px 0 6px}
+.homebody .sh-tag{font-size:18.5px;margin:0 0 12px}
+.homebody .star-hero .fan,.homebody .star-hero .money,.homebody .star-hero .disclaimer{display:none}
+.homebody .sh-badges{font-size:14.5px}
+@media(min-width:860px){.homebody .star-hero{grid-template-columns:auto 1fr;padding:26px 30px}.homebody .sh-ring{width:170px}}
+.homebody .hero-strip{display:none}
+/* nagłówek Ścianki */
+.homebody .hfwall{display:flex;flex-direction:column;gap:14px}
+.homebody .hfhead h2{font-family:"Playfair Display",Georgia,serif;font-size:clamp(28px,5vw,38px);line-height:1.1;margin:6px 0 4px;background:linear-gradient(180deg,#fff 20%,#ffcf8a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.homebody .hfhead p{margin:0;color:#cfc3b6;font-size:17px}
+.homebody .hfall{display:inline-block;margin-top:6px;font-weight:800;color:#ffb347;text-decoration:none;padding:8px 0;min-height:44px}
+.homebody .hfhost{display:flex;flex-direction:column;gap:0}
+.homebody .chunk:empty{display:none}
+.homebody .wallpage .post{margin-bottom:22px}
+/* karty sekcji w kanale */
+.homebody .hfcard{margin:0 0 22px;padding:22px 22px 18px;border:1px solid #2c2622;border-top:1px solid #2c2622;border-radius:28px;background:linear-gradient(180deg,#1e1a17,#161412);box-shadow:0 18px 40px -18px rgba(0,0,0,.7);position:relative}
+.homebody .hfcard h2,.homebody .hfcard .vtitle{font-size:clamp(24px,4.4vw,30px);line-height:1.2;margin:2px 0 8px}
+.homebody .hfcard .vsub,.homebody .hfcard p{font-size:17px}
+.homebody .hfclamp{max-height:720px;overflow:hidden;padding-bottom:70px}
+.homebody .hfclamp::after{content:"";position:absolute;left:0;right:0;bottom:0;height:150px;border-radius:0 0 28px 28px;background:linear-gradient(180deg,transparent,#161412 70%);pointer-events:none}
+.homebody .hfclamp.open{max-height:none}
+.homebody .hfclamp.open::after{display:none}
+.homebody .hfmore{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:2;padding:12px 26px;min-height:48px;border-radius:999px;background:linear-gradient(135deg,#ffb347,#ff9000);color:#1a0e00;font-weight:800;font-size:16.5px;border:0;cursor:pointer;box-shadow:0 10px 26px -10px rgba(255,144,0,.7)}
+.homebody .hfclamp.open .hfmore{position:static;transform:none;display:block;margin:14px auto 0}
+.homebody .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.homebody .plans{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.homebody .plan h3{font-size:21px}.homebody .plan .pbig{font-size:34px}.homebody .plan li{font-size:15.5px}
+.homebody .faq summary{font-size:17.5px;padding:14px 4px;min-height:48px}
+.homebody .filters select{font-size:16px;min-height:44px}
+/* karta produktu z Butiku */
+.homebody .hfshop{display:block;margin:0 0 22px;border-radius:28px;overflow:hidden;text-decoration:none;color:#f7efe6;background:linear-gradient(180deg,#1e1a17,#161412);border:1px solid #2c2622;box-shadow:0 18px 40px -18px rgba(0,0,0,.7);position:relative}
+.homebody .hfshop img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#0f1424}
+.homebody .hfkick{position:absolute;top:14px;left:14px;background:rgba(10,10,10,.72);backdrop-filter:blur(6px);padding:7px 14px;border-radius:999px;font-weight:800;font-size:14px;border:1px solid rgba(255,255,255,.18)}
+.homebody .hfbody{display:flex;flex-direction:column;gap:8px;padding:18px 22px 20px}
+.homebody .hfname{font-family:"Playfair Display",Georgia,serif;font-size:24px;line-height:1.25;font-weight:800}
+.homebody .hfrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.homebody .hfprice{font-size:30px;font-weight:900;color:#ffb347;line-height:1}
+.homebody .hfsw{display:inline-flex;gap:8px;align-items:center}
+.homebody .hfsw i{width:22px;height:22px;border-radius:50%;display:inline-block;border:2px solid rgba(255,255,255,.22)}
+.homebody .hfsw small{color:#a89c90;font-weight:700}
+.homebody .hfall2{color:#2ee66b;font-weight:800;font-size:15.5px}
+.homebody .hfsoon{color:#ffcf8a;font-weight:800;font-size:15.5px}
+.homebody .hfcta{align-self:flex-start;margin-top:4px;padding:12px 22px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid #2c2622;font-weight:800;font-size:16.5px}
+.homebody .hfshop:hover .hfcta{background:rgba(255,176,71,.16)}
+.homebody .hfend{margin-top:0}
+@media(max-width:600px){
+  .homebody .tester-banner [data-note=testers]{display:none}
+  .homebody .star-hero{padding:16px 12px;gap:8px}
+  .homebody .sh-ring{width:104px}
+  .homebody .sh-tag{font-size:17px;margin-bottom:8px}
+  .homebody .sh-cta{gap:8px}
+  .homebody .sh-cta .pill.ghost{font-size:15px;min-height:42px;padding:8px 14px}
+  .homebody main.hf{padding:10px 8px 30px;gap:16px}
+  .homebody .hfcard{padding:18px 14px 16px;border-radius:24px}
+  .homebody .hfname{font-size:21px}
+  .homebody .hfprice{font-size:26px}
+}
+
+.hfshop .hfimg{position:relative;display:block}.hfshop .hfimg img{display:block;width:100%}
+.hfshop .hfph{position:absolute;left:12px;bottom:12px;background:rgba(15,10,20,.82);color:#fff;font-size:.85rem;font-weight:700;padding:5px 11px;border-radius:999px}

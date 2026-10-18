@@ -1,0 +1,170 @@
+{
+"en": [
+[
+"'Czat ruszy razem z transmisją.'",
+"'The chat starts with the stream.'"
+],
+[
+"(s.viewers === 1 ? ' widz' : ' widzów')",
+"(s.viewers === 1 ? ' viewer' : ' viewers')"
+],
+[
+"'Temat: '",
+"'Topic: '"
+],
+[
+"'Pytania z czatu i ćwiczenia głosu'",
+"'Chat questions and voice exercises'"
+],
+[
+"'Następna transmisja: '",
+"'Next stream: '"
+],
+[
+"' (czas polski)'",
+"' (Polish time)'"
+],
+[
+"'. Następna: '",
+"'. Next: '"
+],
+[
+"`· ${s.queue_len} pytań w kolejce`",
+"`· ${s.queue_len} questions in the queue`"
+],
+[
+"'Brak pytań w kolejce.'",
+"'No questions in the queue.'"
+],
+[
+"'PYTANIE'",
+"'QUESTION'"
+]
+],
+"es": [
+[
+"'Czat ruszy razem z transmisją.'",
+"'El chat empezará con el directo.'"
+],
+[
+"(s.viewers === 1 ? ' widz' : ' widzów')",
+"(s.viewers === 1 ? ' espectador' : ' espectadores')"
+],
+[
+"'Temat: '",
+"'Tema: '"
+],
+[
+"'Pytania z czatu i ćwiczenia głosu'",
+"'Preguntas del chat y ejercicios de voz'"
+],
+[
+"'Następna transmisja: '",
+"'Próximo directo: '"
+],
+[
+"' (czas polski)'",
+"' (hora de Polonia)'"
+],
+[
+"'. Następna: '",
+"'. Próximo: '"
+],
+[
+"`· ${s.queue_len} pytań w kolejce`",
+"`· ${s.queue_len} preguntas en cola`"
+],
+[
+"'Brak pytań w kolejce.'",
+"'No hay preguntas en cola.'"
+],
+[
+"'PYTANIE'",
+"'PREGUNTA'"
+]
+],
+"de": [
+[
+"'Czat ruszy razem z transmisją.'",
+"'Der Chat startet mit dem Stream.'"
+],
+[
+"(s.viewers === 1 ? ' widz' : ' widzów')",
+"(s.viewers === 1 ? ' Zuschauer' : ' Zuschauer')"
+],
+[
+"'Temat: '",
+"'Thema: '"
+],
+[
+"'Pytania z czatu i ćwiczenia głosu'",
+"'Fragen aus dem Chat und Stimmübungen'"
+],
+[
+"'Następna transmisja: '",
+"'Nächster Stream: '"
+],
+[
+"' (czas polski)'",
+"' (polnische Zeit)'"
+],
+[
+"'. Następna: '",
+"'. Nächster: '"
+],
+[
+"`· ${s.queue_len} pytań w kolejce`",
+"`· ${s.queue_len} Fragen in der Warteschlange`"
+],
+[
+"'Brak pytań w kolejce.'",
+"'Keine Fragen in der Warteschlange.'"
+],
+[
+"'PYTANIE'",
+"'FRAGE'"
+]
+],
+"uk": [
+[
+"'Czat ruszy razem z transmisją.'",
+"'Чат запрацює разом із трансляцією.'"
+],
+[
+"(s.viewers === 1 ? ' widz' : ' widzów')",
+"(s.viewers === 1 ? ' глядач' : ' глядачів')"
+],
+[
+"'Temat: '",
+"'Тема: '"
+],
+[
+"'Pytania z czatu i ćwiczenia głosu'",
+"'Запитання з чату та вправи для голосу'"
+],
+[
+"'Następna transmisja: '",
+"'Наступна трансляція: '"
+],
+[
+"' (czas polski)'",
+"' (за польським часом)'"
+],
+[
+"'. Następna: '",
+"'. Наступна: '"
+],
+[
+"`· ${s.queue_len} pytań w kolejce`",
+"`· ${s.queue_len} запитань у черзі`"
+],
+[
+"'Brak pytań w kolejce.'",
+"'У черзі немає запитань.'"
+],
+[
+"'PYTANIE'",
+"'ЗАПИТАННЯ'"
+]
+]
+}

@@ -21,7 +21,7 @@ def reencode(raw, max_px=1024, max_in=4 * 1024 * 1024, quality=4):
         src, dst = os.path.join(d, "in." + k), os.path.join(d, "out." + out_ext)
         open(src, "wb").write(raw)
         vf = f"scale='min({max_px},iw)':'min({max_px},ih)':force_original_aspect_ratio=decrease"
-        cmd = [_ff(), "-v", "error", "-y", "-i", src, "-map_metadata", "-1", "-frames:v", "1", "-vf", vf]
+        cmd = [_ff(), "-v", "error", "-y", "-i", src, "-map_metadata", "-1", "-map_chapters", "-1", "-fflags", "+bitexact", "-flags:v", "+bitexact", "-frames:v", "1", "-vf", vf]
         cmd += (["-q:v", str(quality)] if out_ext == "jpg" else []) + [dst]
         r = subprocess.run(cmd, capture_output=True, timeout=20)
         if r.returncode or not os.path.exists(dst): raise ValueError("Nie udało się przetworzyć obrazu.")

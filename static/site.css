@@ -59,3 +59,28 @@ body.xmas .countdown .cd span{border-color:#c9a24a;box-shadow:0 0 12px rgba(255,
 
 .item.upcoming{outline:1px solid rgba(46,230,107,.35)}
 .soonb{display:inline-block;margin-top:6px;font-size:12px;font-weight:800;color:#c8ffd9;background:rgba(46,230,107,.12);border:1px solid rgba(46,230,107,.3);padding:3px 10px;border-radius:999px;white-space:nowrap}
+/* v1.4.0 Butik: ogłoszenia, informacja o skromnych strojach, kategorie, kolory */
+.annbox{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;margin:14px 0 10px;padding:16px 14px 12px;border-radius:26px;background:linear-gradient(135deg,rgba(255,176,71,.12),rgba(192,132,252,.08));border:1px solid rgba(255,176,71,.28)}
+.annbox .anntext{margin:0;font-size:17.5px;line-height:1.55;min-height:3.1em}
+.annbox .annnav{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:inherit;font-size:22px;cursor:pointer}
+.annbox .anndots{grid-column:1/-1;display:flex;justify-content:center;gap:6px}
+.annbox .anndots button{width:9px;height:9px;padding:0;border-radius:50%;border:0;background:rgba(255,255,255,.25);cursor:pointer}
+.annbox .anndots button.on{background:#ffb347;width:22px;border-radius:6px}
+.nonude{margin:6px 0 16px;padding:12px 16px;border-radius:18px;background:rgba(46,230,107,.08);border:1px solid rgba(46,230,107,.3);font-size:16px}
+.nonude b{color:#2ee66b}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}
+.chips .chip{min-height:44px;padding:10px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:inherit;font-weight:800;font-size:15.5px;cursor:pointer}
+.chips .chip.on{background:rgba(255,176,71,.18);border-color:rgba(255,176,71,.5);color:#ffcf8a}
+.item .pimg{transition:opacity .15s}
+.swatches{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 2px}
+.swatches .sw{width:28px;height:28px;border-radius:50%;background:var(--c);border:2px solid rgba(255,255,255,.18);padding:0;cursor:pointer;position:relative}
+.swatches .sw::before{content:"";position:absolute;inset:-8px}
+.swatches .sw.on{box-shadow:0 0 0 2px #0a0a0a,0 0 0 4px #D6B56A}
+.swatches .sw.noimg{opacity:.4;filter:grayscale(.5);border-style:dashed}
+.swname{color:#bbb}
+.allcol{margin-top:6px;font-weight:800;color:#2ee66b;font-size:14.5px}
+.item .bprice{font-size:24px;font-weight:900}
+
+#nowosci{grid-column:1/-1;height:0;display:block}
+.item .pwrap{position:relative}
+.item .phsoon{position:absolute;left:10px;bottom:10px;background:rgba(15,10,20,.82);color:#fff;font-size:.82rem;font-weight:700;padding:5px 10px;border-radius:999px}

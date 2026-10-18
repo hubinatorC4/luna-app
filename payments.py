@@ -49,6 +49,7 @@ def verify(payload, sig_header, secret=None, tolerance=300, now=None):
     exp = hmac.new(secret.encode(), f"{t}.".encode() + payload, hashlib.sha256).hexdigest()
     return any(hmac.compare_digest(exp, v) for v in parts.get("v1", []))
 
+ON_PAID = None
 def handle(event, grant_pass, grant_item):
     """Obsługa zdarzenia. Zwraca opis wyniku. Idempotentnie po id sesji Checkout."""
     typ = event.get("type"); s = (event.get("data") or {}).get("object") or {}
@@ -64,4 +65,7 @@ def handle(event, grant_pass, grant_item):
         else: return "unknown"
         done[sid] = {"t": int(time.time()), "kind": kind, "ref": ref, "uid": uid, "amount": s.get("amount_total"), "currency": s.get("currency")}
         store.put("payments_done", done)
+    try:
+        if kind == "item" and ON_PAID: ON_PAID(ref, s.get("amount_total"), s.get("currency"))
+    except Exception: pass
     return "granted"

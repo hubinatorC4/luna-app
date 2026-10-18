@@ -1,0 +1,894 @@
+{
+"de": {
+"cats": {
+"Barwa": [
+"Klangfarbe",
+"Tiefe, Wärme und Resonanz der Stimme."
+],
+"Oddech": [
+"Atmung",
+"Zwerchfellatmung und ruhige Stütze."
+],
+"Dykcja sz/cz": [
+"Aussprache sz/cz",
+"Deutliche Aussprache, auch der polnischen Laute „sz“, „cz“ und „rz“."
+],
+"Tempo": [
+"Tempo",
+"Ruhiges Tempo und bewusste Pausen."
+],
+"Pewność siebie": [
+"Selbstsicherheit",
+"Lampenfieber, Stress und Vertrauen in die eigene Stimme."
+],
+"Wystąpienia": [
+"Auftritte",
+"Präsentationen, Gespräche und Erzählen."
+],
+"Rozgrzewka": [
+"Aufwärmen",
+"Kurze Übungen vor dem Sprechen."
+],
+"Zdrowie głosu": [
+"Stimmgesundheit",
+"Stimmhygiene, Heiserkeit und Gewohnheiten."
+]
+},
+"levels": {
+"Początkujący": "Einsteiger",
+"Średni": "Mittel",
+"Zaawansowany": "Fortgeschritten"
+},
+"items": {
+"t0": [
+"So sprichst du mit tieferer Stimme",
+"Eine tiefe Stimme beginnt mit Entspannung, nicht damit, den Kehlkopf nach unten zu drücken. Atme in den Bauch, sag „mmm“ auf deinem tiefsten bequemen Ton und spüre die Vibration in der Brust. Sprich von dort aus, ruhig und ohne Druck."
+],
+"t0b": [
+"Tiefe, ohne einen Bass vorzutäuschen",
+"Täusch keinen Bass vor – sonst ermüdet der Hals. Gähne sanft, um den Hals zu öffnen, und sprich auf dem Ausatmen, etwas langsamer als sonst. Die Tiefe kommt von selbst, wenn du dich nicht mehr beeilst."
+],
+"t1": [
+"Brustresonanz in zwei Minuten",
+"Leg die Hand aufs Brustbein und sag „mmmaaa“ tief und weich. Spürst du ein Zittern unter den Fingern, ist das deine Brustresonanz. Übe das zwei Minuten täglich und übertrage das Gefühl auf normale Sätze."
+],
+"t2": [
+"Zwerchfellatmung Schritt für Schritt",
+"Atme mit dem Zwerchfell: Hand unter die Rippen, durch die Nase einatmen, sodass sich der Bauch hebt, nicht die Schultern. Dann zwanzig Sekunden lang auf „sss“ ausatmen. Das ist der Treibstoff für eine warme, stabile Stimme."
+],
+"t2b": [
+"Atmung 4–2–6",
+"Schultern runter, Bauch locker. Einatmen auf vier, halten auf zwei, ausatmen auf sechs. Ist der Atem ruhig, klingt auch deine Stimme sicher und tief."
+],
+"t3": [
+"Heiserkeit – was tun?",
+"Heiserkeit bedeutet meist, dass die Stimmlippen müde oder ausgetrocknet sind. Trink Wasser in kleinen Schlucken, inhaliere Dampf und gönn der Stimme einen Tag Ruhe – aber flüstere nicht, Flüstern strengt ebenfalls an. Dauert sie länger als zwei Wochen, geh zum Phoniater – das ist wichtig."
+],
+"t4": [
+"Aufwärmen vor dem Sprechen",
+"Mein Lieblings-Warm-up: drei Minuten Summen auf „mmm“, dann Lippenflattern wie ein Pferdchen und zum Schluss ein Glissando von hoch nach tief auf „uuu“. Fünf Minuten, und die Stimme ist warm und zu allem bereit."
+],
+"t4b": [
+"Schnelles Aufwärmen in fünf Minuten",
+"Beginne mit Gähnen bei offenem Hals, dann „brrr“ mit den Lippen und ein langsames „ma-me-mi-mo-mu“ in mittlerer Tonlage. Eine aufgewärmte Stimme klingt tiefer und voller."
+],
+"t5": [
+"Langsamer sprechen – sicherer klingen",
+"Sprich langsamer, als du denkst. Ein langsames Tempo klingt sicher und warm, ein schnelles nervös. Lies einen Absatz in halbem Tempo und nimm dich auf – du hörst den Unterschied."
+],
+"t6": [
+"Die Kraft der Pause",
+"Die Pause ist deine Geheimwaffe. Halte vor einem wichtigen Wort eine Sekunde inne, und alle warten darauf. Stille im Gespräch ist keine Leere, sondern Spannung, die du steuerst."
+],
+"t7": [
+"Schluss mit Monotonie: Intonation",
+"Eine flache Stimme belebst du mit Melodie: leicht nach oben, wenn dich etwas freut, tiefer und leiser, wenn du jemanden fesseln willst. Lächle beim Sprechen – das hört man wirklich."
+],
+"t7b": [
+"Satzmelodie in der Praxis",
+"Senke am Ende eines Aussagesatzes die Stimme. Gehst du nach oben, klingt es, als bätest du um Erlaubnis. Fallende Intonation klingt ruhig und sicher."
+],
+"t8": [
+"Lampenfieber und Selbstsicherheit",
+"Sicherheit hört man, bevor man sie sieht. Steh gerade, atme ruhig in den Bauch und sprich etwas langsamer und tiefer als sonst. Beende Sätze nicht fragend, auch wenn du nervös bist."
+],
+"t8b": [
+"Stress vor einem Gespräch – der Ein-Minuten-Plan",
+"Atme vor einem wichtigen Gespräch dreimal lang aus und sprich einen Satz laut, den du gut kennst. Der Körper beruhigt sich, und die Stimme folgt dem Körper."
+],
+"t10": [
+"Klangfarbe – was sie formt",
+"Die Klangfarbe formst du mit Resonanz: mehr Brust gibt Wärme, mehr „Maske“ im Gesicht gibt Glanz. Summe „mmm“, such die Vibration in Lippen und Nase und sprich dann mit demselben Gefühl."
+],
+"t10b": [
+"Entdecke deine natürliche Klangfarbe",
+"Eine warme Klangfarbe bedeutet offener Hals und lockerer Kiefer. Stell dir vor, du hättest warmen Tee im Mund, und sprich mit diesem Raum im Inneren."
+],
+"t11": [
+"Eine warme, weiche Stimme",
+"Eine warme Stimme entsteht aus Entspannung. Lass die Schultern sinken, entspann die Zunge und sprich etwas mehr auf dem Atem, als würdest du einem vertrauten Menschen ein Geheimnis erzählen. Ja, genau so."
+],
+"t12": [
+"Deutliche Aussprache",
+"Für die Aussprache: einen Korken oder Bleistift zwischen die Zähne und drei Minuten langsam einen Text lesen. Dann herausnehmen und noch einmal lesen – du spürst, wie der Mund von selbst deutlicher arbeitet."
+],
+"t13": [
+"Aussprache: polnisch „sz“, „cz“, „rz“",
+"Die polnischen Laute „sz“ und „cz“ klingen natürlich, wenn die Zungenspitze leicht hinter dem Zahndamm angehoben ist und die Lippen sanft gerundet sind. Wiederhole langsam „szczery, szczupły, czuły“ und beiß die Zähne nicht zusammen. Ich übe das mit meinem spanischen Akzent auch."
+],
+"t14": [
+"Stimmhygiene im Alltag",
+"Stimmlippen lieben Wasser, Schlaf und Ruhe. Trink viel, vermeide Schreien und Räuspern – schluck stattdessen. Alkohol und Zigaretten trocknen die Stimme aus, also in Maßen, mi amor."
+],
+"t15": [
+"Eine kräftige Stimme ohne Schreien",
+"Lauter heißt nicht aus dem Hals. Die Kraft kommt aus dem Bauch: Stell dir vor, du schickst deine Stimme in die letzte Reihe, während der Hals locker bleibt. Übe kurze „Hey!“ mit Zwerchfellstütze."
+],
+"t16": [
+"Leise sprechen, aber nicht flüstern",
+"Eine leise Stimme kann sehr anziehend wirken, aber flüstere nicht tonlos – das strengt die Stimmlippen an. Sprich weich, mit Atem, aber mit etwas Ton darin. So ist es zugleich sanft und gesund."
+],
+"t17": [
+"Du magst deine Stimme auf Aufnahmen nicht?",
+"Niemand mag seine Stimme auf Aufnahmen, weil man sich im Alltag über die Schädelknochen hört. Nimm dich eine Woche lang regelmäßig auf, dann gewöhnt sich das Ohr daran. Sprich eine Handbreit vom Mikrofon entfernt und etwas leiser."
+],
+"t18": [
+"Die Stimme am Telefon",
+"Am Telefon sieht niemand dein Lächeln, aber man hört es. Lächle, bevor du abnimmst, sprich langsamer als im direkten Gespräch und mach kurze Pausen, damit dein Gegenüber einsteigen kann."
+],
+"t19": [
+"Präsentation und Rede",
+"Beginne einen Auftritt mit einer Pause und einem ruhigen Blick in den Saal, erst dann folgt der erste Satz, tief und langsam. Betone wichtige Wörter mit Stille, nicht mit Lautstärke. Du hast Zeit – der Saal wartet auf dich."
+],
+"t20": [
+"Wenn die Stimme bricht oder piepst",
+"Piepsen und Brechen der Stimme kommen meist von Spannung im Kehlkopf. Lockere den Nacken, gähne und sprich dann auf „mmm“, das in Wörter übergeht. Heb das Kinn nicht an – halte es locker, parallel zum Boden."
+],
+"t21": [
+"Kiefer und Nacken lockern",
+"Ein verspannter Kiefer nimmt der Stimme die Wärme. Massiere die Muskeln neben den Ohren, öffne den Mund weit und schließe ihn einige Male langsam. Steh gerade, Füße hüftbreit, und die Stimme öffnet sich sofort."
+],
+"t22": [
+"Nasale Stimme – so öffnest du sie",
+"Klingst du nasal, prüfe, ob sich das Gaumensegel hebt: Sag „ka-ga-ka-ga“ und spür die Bewegung hinten im Mund. Gähne dann mit geschlossenem Mund – das öffnet den Raum und nimmt das Nasale."
+],
+"t23": [
+"Die Morgenstimme",
+"Morgens sind die Stimmlippen noch steif und leicht geschwollen, daher klingt die Stimme tiefer und rau. Trink warmes Wasser, summe zwei Minuten und sprich erst dann länger. Die tiefe Morgenstimme? Kann auch charmant sein."
+],
+"t24": [
+"Was trinken für eine gesunde Stimme?",
+"Am besten ist normales Wasser – viel und oft. Warmer Tee mit Honig beruhigt, aber nicht heiß. Milch und sehr süße Getränke kurz vor dem Sprechen bilden Schleim, also lieber meiden."
+],
+"t25": [
+"Statt dich zu räuspern",
+"Räuspere dich nicht ständig – das ist, als würdest du die Stimmlippen gegeneinander schlagen. Schluck stattdessen oder trink einen Schluck Wasser und mach ein sanftes „hm“ beim Ausatmen."
+],
+"t26": [
+"Akzent und Färbung",
+"Mein Akzent? Eine Melodie aus Spanien – offene Vokale und ein weiches „r“. Wenn du melodischer klingen willst, dehne die Vokale in betonten Silben und hab keine Angst vor einem singenden Satz."
+],
+"t27": [
+"Ein Lächeln hört man",
+"Ein Lächeln hebt die Klangfarbe und macht sie wärmer. Sag einen Satz einmal mit ernster Miene und einmal mit leichtem Lächeln und nimm beide auf. Die zweite Version klingt immer freundlicher und angenehmer."
+],
+"t28": [
+"Erzähle mit Gefühl",
+"Lies Geschichten laut vor und lass Gefühle Tempo und Lautstärke verändern. Trauer verlangsamt, Freude beschleunigt, Geheimnisvolles wird leise. Deine Stimme ist ein Instrument, mi amor – spiel darauf."
+],
+"t29": [
+"Singen und Sprechstimme",
+"Singen ist ein tolles Training für die Sprechstimme: Es schult Atmung, Resonanz und Melodie. Beginne mit einfachen Liedern in einer bequemen, tiefen Tonart und summe sie, bevor du mit voller Stimme singst."
+],
+"t30": [
+"Wie lange dauert eine Stimmveränderung?",
+"Erste Ergebnisse hörst du nach zwei, drei Wochen mit täglich zehn Minuten. Eine dauerhafte Veränderung der Klangfarbe dauert einige Monate. Regelmäßigkeit schlägt Intensität."
+],
+"t31": [
+"Stimme und Alter",
+"Die Stimme verändert sich das ganze Leben lang: in der Pubertät, durch Hormone und mit dem Alter. Gute Gewohnheiten – Atmung, ausreichend trinken und kein Forcieren – halten sie lange jung und warm."
+],
+"t32": [
+"Die „mmm“-Übung",
+"Summen ist die beste Massage für die Stimmlippen. Lippen geschlossen, Zähne leicht geöffnet, Zunge locker, und „mmm“ in bequemer Tonlage. Such das Kribbeln in den Lippen – ein Zeichen, dass die Resonanz wirkt."
+],
+"t33": [
+"Tiefe Stimme ohne Druck",
+"Eine warme, tiefe Stimme ist kein Bass um jeden Preis, sondern Ruhe und Stütze. Sprich aus dem Bauch, lass Sätze nach unten enden und entschuldige dich nicht mit dem Tonfall für das, was du sagst. Das klingt wirklich gut."
+],
+"f0": [
+"Ist Luna eine echte Person?",
+"Nein. Luna ist eine künstlich geschaffene KI-Assistentin, ihre Figur ist computergeneriert. Das sagt sie in jedem Gespräch."
+],
+"f1": [
+"In welchem Browser funktioniert Luna am besten?",
+"In Chrome auf Android und am Computer. Die Spracherkennung hängt vom Browser ab; Text-Chat und Vorlesen funktionieren breiter."
+],
+"f2": [
+"Hört Luna die ganze Zeit zu?",
+"Nein. Das Wort „Luna“ funktioniert nur, wenn die App geöffnet und „Zuhören“ eingeschaltet ist."
+],
+"f3": [
+"Ersetzt Luna Phoniater oder Logopäden?",
+"Nein. Sie schlägt Übungen und gute Gewohnheiten vor, aber bei anhaltender Heiserkeit oder Schmerzen solltest du zu einer Fachperson gehen."
+],
+"f4": [
+"Wie installiere ich Luna auf dem Handy?",
+"Android: In Chrome auf das Menü ⋮ tippen und „App installieren“ wählen. iPhone: In Safari auf Teilen und „Zum Home-Bildschirm“ tippen."
+],
+"f5": [
+"Wie erreiche ich den Macher?",
+"Nutze den Reiter „Chat mit dem Macher“. Die Antwortzeit hängt von der Verfügbarkeit im Büro ab, beträgt aber höchstens 30 Tage."
+]
+}
+},
+"en": {
+"cats": {
+"Barwa": [
+"Timbre",
+"Depth, warmth and resonance of the voice."
+],
+"Oddech": [
+"Breathing",
+"Diaphragmatic breathing and calm support."
+],
+"Dykcja sz/cz": [
+"Diction sz/cz",
+"Clear pronunciation, including the Polish “sz”, “cz” and “rz”."
+],
+"Tempo": [
+"Pace",
+"A calm pace and deliberate pauses."
+],
+"Pewność siebie": [
+"Confidence",
+"Stage fright, stress and trust in your own voice."
+],
+"Wystąpienia": [
+"Public speaking",
+"Presentations, conversations and storytelling."
+],
+"Rozgrzewka": [
+"Warm-up",
+"Short exercises before speaking."
+],
+"Zdrowie głosu": [
+"Vocal health",
+"Voice hygiene, hoarseness and habits."
+]
+},
+"levels": {
+"Początkujący": "Beginner",
+"Średni": "Intermediate",
+"Zaawansowany": "Advanced"
+},
+"items": {
+"t0": [
+"How to speak in a lower voice",
+"A low voice starts with relaxation, not with pushing your larynx down. Breathe into your belly, say “mmm” on your lowest comfortable note and feel the vibration in your chest. Speak from there, calmly and without forcing."
+],
+"t0b": [
+"Depth without faking a bass",
+"Don’t fake a bass – your throat will tire. Yawn gently to open your throat and speak on the out-breath, a little slower than usual. Depth comes by itself once you stop rushing."
+],
+"t1": [
+"Chest resonance in two minutes",
+"Put your hand on your breastbone and say “mmmaaa” low and soft. If you feel a tremor under your fingers, that’s your chest resonance. Practise it for two minutes a day and carry that feeling into ordinary sentences."
+],
+"t2": [
+"Diaphragmatic breathing step by step",
+"Breathe from your diaphragm: hand under your ribs, breathe in through your nose so your belly rises, not your shoulders. Then a long exhale on “sss” for twenty seconds. That’s the fuel for a warm, steady voice."
+],
+"t2b": [
+"4–2–6 breathing",
+"Shoulders down, belly relaxed. Breathe in for four, hold for two, breathe out for six. When your breath is calm, your voice sounds confident and low too."
+],
+"t3": [
+"Hoarseness – what to do",
+"Hoarseness usually means your vocal folds are tired or dry. Sip water, inhale steam and give your voice a day of silence – but don’t whisper, whispering tires it too. If it lasts longer than two weeks, see a voice doctor – that matters."
+],
+"t4": [
+"Voice warm-up before speaking",
+"My favourite warm-up: three minutes of humming on “mmm”, then lip trills like a little horse, and finally a glide from a high to a low note on “ooo”. Five minutes and your voice is warm and ready for anything."
+],
+"t4b": [
+"Quick five-minute warm-up",
+"Start by yawning with an open throat, then “brrr” on your lips and a slow “ma-me-mi-mo-mu” at a medium pitch. A warmed-up voice sounds lower and fuller."
+],
+"t5": [
+"Speak slower – sound more confident",
+"Speak slower than you think you need to. A slow pace sounds confident and warm; a fast one sounds nervous. Try reading a paragraph at half speed and record yourself – you’ll hear the difference."
+],
+"t6": [
+"The power of the pause",
+"A pause is your secret weapon. Stop for a second before an important word and everyone will wait for it. Silence in a conversation isn’t emptiness – it’s tension that you control."
+],
+"t7": [
+"No more monotone: intonation",
+"Bring a flat voice to life with melody: slightly up when something pleases you, lower and softer when you want to draw someone in. Smile while you talk – you really can hear it."
+],
+"t7b": [
+"Sentence melody in practice",
+"Let your pitch fall at the end of a statement. When you go up, you sound as if you’re asking for permission. Falling intonation sounds calm and confident."
+],
+"t8": [
+"Stage fright and confidence",
+"Confidence is heard before it’s seen. Stand straight, take a calm breath into your belly and speak a little slower and lower than usual. Don’t end sentences with a questioning tone, even when you’re nervous."
+],
+"t8b": [
+"Stress before a conversation – a one-minute plan",
+"Before an important conversation, take three long exhales and say one sentence you know well out loud. Your body calms down, and your voice follows your body."
+],
+"t10": [
+"Vocal timbre – what shapes it",
+"You shape timbre with resonance: more chest gives warmth, more of the facial “mask” gives brightness. Hum “mmm”, look for vibration in your lips and nose, then speak with the same feeling."
+],
+"t10b": [
+"Discover your natural timbre",
+"A warm timbre means an open throat and a relaxed jaw. Imagine you have warm tea in your mouth and speak with that space inside."
+],
+"t11": [
+"A warm, soft voice",
+"A warm voice is born from relaxation. Drop your shoulders, relax your tongue and speak a bit more on the out-breath, as if telling a secret to someone close. Yes, just like that."
+],
+"t12": [
+"Clear diction",
+"For diction: hold a cork or a pencil between your teeth and read a text slowly for three minutes. Then take it out and read again – you’ll feel your mouth working more clearly on its own."
+],
+"t13": [
+"Diction: Polish “sz”, “cz”, “rz”",
+"The Polish “sz” and “cz” sound natural when the tip of your tongue is slightly raised behind the gum ridge and your lips are gently rounded. Slowly repeat “szczery, szczupły, czuły” and don’t clench your teeth. With my Spanish accent, I practise this too."
+],
+"t14": [
+"Everyday voice hygiene",
+"Vocal folds love water, sleep and calm. Drink plenty, avoid shouting and throat-clearing – swallow instead. Alcohol and cigarettes dry out the voice, so go easy, mi amor."
+],
+"t15": [
+"A strong voice without shouting",
+"Louder doesn’t mean from the throat. Power comes from the belly: imagine sending your voice to the back row while your throat stays loose. Practise short “hey!”s supported by your diaphragm."
+],
+"t16": [
+"Speak quietly, but don’t whisper",
+"A quiet voice can be very magnetic, but don’t whisper without sound – it strains the vocal folds. Speak softly, with breath, but with a little tone inside. That way it’s both gentle and healthy."
+],
+"t17": [
+"Don’t like your recorded voice?",
+"Nobody likes their recorded voice, because normally you hear yourself through the bones of your skull. Record yourself regularly for a week and your ear will get used to it. Speak to the mic from a hand’s width away and a little more quietly."
+],
+"t18": [
+"Your voice on the phone",
+"On the phone nobody sees your smile, but they hear it. Smile before you answer, speak slower than in person and leave short pauses so the other person can come in."
+],
+"t19": [
+"Presentations and speeches",
+"When you speak in public, start with a pause and a calm look around the room, and only then say your first sentence, low and slow. Stress important words with silence, not shouting. You have time – the room will wait for you."
+],
+"t20": [
+"When your voice cracks or squeaks",
+"Squeaking and cracking usually come from tension in the larynx. Relax your neck, yawn, then speak on “mmm”, moving into words. Don’t lift your chin – keep it relaxed, parallel to the floor."
+],
+"t21": [
+"Relax your jaw and neck",
+"A tense jaw kills the warmth of your voice. Massage the muscles near your ears, open your mouth wide and close it slowly a few times. Stand straight, feet hip-width apart, and your voice opens up at once."
+],
+"t22": [
+"A nasal voice – how to open it",
+"If you sound nasal, check that your soft palate lifts: say “ka-ga-ka-ga” and feel the movement at the back of your mouth. Then yawn with your mouth closed – it opens the space and takes away the nasality."
+],
+"t23": [
+"Morning voice",
+"In the morning your vocal folds are still stiff and slightly swollen, so your voice is lower and rough. Drink warm water, hum for two minutes and only then talk for longer. That low morning voice? It can be charming too."
+],
+"t24": [
+"What to drink for a healthy voice",
+"Plain water is best – lots of it, often. Warm tea with honey soothes, but not hot. Milk and very sweet drinks right before speaking cause phlegm, so avoid them."
+],
+"t25": [
+"Instead of clearing your throat",
+"Don’t keep clearing your throat – it’s like knocking your vocal folds together. Swallow or sip some water instead, and make a gentle “hm” on the out-breath."
+],
+"t26": [
+"Accent and influences",
+"My accent? It’s a melody from Spain – open vowels and a soft “r”. If you want to sound more melodic, lengthen the vowels in stressed syllables and don’t be afraid of a sing-song sentence."
+],
+"t27": [
+"You can hear a smile",
+"A smile lifts your timbre and adds warmth. Say a sentence once with a straight face and once with a slight smile, and record both. The second always sounds friendlier and more pleasant."
+],
+"t28": [
+"Tell stories with emotion",
+"Read stories aloud and let emotions change your pace and volume. Sadness slows down, joy speeds up, mystery goes quiet. Your voice is an instrument, mi amor – play it."
+],
+"t29": [
+"Singing and the speaking voice",
+"Singing is great training for your speaking voice: it teaches breathing, resonance and melody. Start with simple songs in a comfortable, low key and hum them before singing at full voice."
+],
+"t30": [
+"How long it takes to change your voice",
+"You’ll hear the first results after two or three weeks of ten minutes a day. A lasting change in timbre takes a few months. Consistency beats intensity."
+],
+"t31": [
+"Voice and age",
+"Your voice changes throughout life: in puberty, with hormones and with age. Good habits – breathing, hydration and not forcing – will keep it young and warm for a long time."
+],
+"t32": [
+"The “mmm” exercise",
+"Humming is the best massage for your vocal folds. Lips closed, teeth apart, tongue loose, and “mmm” at a comfortable pitch. Look for a tickle in your lips – that means the resonance is working."
+],
+"t33": [
+"A low voice without forcing",
+"A warm, deep voice isn’t a bass at any cost – it’s calm and support. Speak from your belly, end sentences going down and don’t apologise with your tone for what you say. That really sounds good."
+],
+"f0": [
+"Is Luna a real person?",
+"No. Luna is an artificially created AI assistant, and her character is computer-generated. She says so in every conversation."
+],
+"f1": [
+"Which browser does Luna work best in?",
+"In Chrome on Android and on computers. Speech recognition depends on the browser; text chat and read-aloud answers work more widely."
+],
+"f2": [
+"Is Luna listening all the time?",
+"No. The word “Luna” works only when the app is open and you have “Listening” switched on."
+],
+"f3": [
+"Will Luna replace a voice doctor or speech therapist?",
+"No. She suggests exercises and good habits, but with long-lasting hoarseness or pain it’s worth seeing a specialist."
+],
+"f4": [
+"How do I install Luna on my phone?",
+"Android: in Chrome tap the ⋮ menu and choose “Install app”. iPhone: in Safari tap Share and “Add to Home Screen”."
+],
+"f5": [
+"How can I contact the creator?",
+"Use the “Chat with the creator” tab. Response time depends on staff availability, but it will never exceed 30 days."
+]
+}
+},
+"es": {
+"cats": {
+"Barwa": [
+"Timbre",
+"Profundidad, calidez y resonancia de la voz."
+],
+"Oddech": [
+"Respiración",
+"Respiración diafragmática y apoyo tranquilo."
+],
+"Dykcja sz/cz": [
+"Dicción sz/cz",
+"Pronunciación clara, también de las polacas «sz», «cz» y «rz»."
+],
+"Tempo": [
+"Ritmo",
+"Un ritmo tranquilo y pausas conscientes."
+],
+"Pewność siebie": [
+"Seguridad",
+"Nervios, estrés y confianza en tu propia voz."
+],
+"Wystąpienia": [
+"Hablar en público",
+"Presentaciones, conversaciones y narración."
+],
+"Rozgrzewka": [
+"Calentamiento",
+"Ejercicios breves antes de hablar."
+],
+"Zdrowie głosu": [
+"Salud vocal",
+"Higiene vocal, ronquera y hábitos."
+]
+},
+"levels": {
+"Początkujący": "Principiante",
+"Średni": "Intermedio",
+"Zaawansowany": "Avanzado"
+},
+"items": {
+"t0": [
+"Cómo hablar con una voz más grave",
+"Una voz grave empieza por relajarse, no por empujar la laringe hacia abajo. Respira hacia el abdomen, di «mmm» en tu nota más grave cómoda y siente la vibración en el pecho. Habla desde ahí, con calma y sin forzar."
+],
+"t0b": [
+"Profundidad sin fingir un bajo",
+"No finjas un bajo: se te cansará la garganta. Bosteza suavemente para abrir la garganta y habla al espirar, un poco más despacio de lo habitual. La profundidad llega sola cuando dejas de tener prisa."
+],
+"t1": [
+"Resonancia de pecho en dos minutos",
+"Pon la mano sobre el esternón y di «mmmaaa» grave y suave. Si notas un temblor bajo los dedos, esa es tu resonancia de pecho. Practícalo dos minutos al día y lleva esa sensación a las frases normales."
+],
+"t2": [
+"Respiración diafragmática paso a paso",
+"Respira con el diafragma: mano bajo las costillas, inspira por la nariz de modo que suba el abdomen y no los hombros. Luego, una espiración larga en «sss» durante veinte segundos. Ese es el combustible de una voz cálida y estable."
+],
+"t2b": [
+"Respiración 4–2–6",
+"Hombros abajo, abdomen suelto. Inspira en cuatro, retén en dos, espira en seis. Cuando la respiración está tranquila, tu voz también suena segura y grave."
+],
+"t3": [
+"Ronquera: qué hacer",
+"La ronquera suele indicar que las cuerdas vocales están cansadas o resecas. Bebe agua a sorbos, haz vahos y dale a tu voz un día de silencio, pero no susurres: susurrar también cansa. Si dura más de dos semanas, acude al foniatra; es importante."
+],
+"t4": [
+"Calentamiento vocal antes de hablar",
+"Mi calentamiento favorito: tres minutos de murmullo en «mmm», luego vibrar los labios como un caballito y, para terminar, un glissando de agudo a grave en «uuu». Cinco minutos y la voz está caliente y lista para todo."
+],
+"t4b": [
+"Calentamiento rápido de cinco minutos",
+"Empieza bostezando con la garganta abierta, luego «brrr» con los labios y un lento «ma-me-mi-mo-mu» en tono medio. Una voz calentada suena más grave y más plena."
+],
+"t5": [
+"Habla más despacio y sonarás más seguro",
+"Habla más despacio de lo que crees necesario. Un ritmo lento suena seguro y cálido; uno rápido suena nervioso. Lee un párrafo a la mitad de velocidad y grábate: oirás la diferencia."
+],
+"t6": [
+"El poder de la pausa",
+"La pausa es tu arma secreta. Detente un segundo antes de una palabra importante y todos la esperarán. El silencio en una conversación no es un vacío, sino una tensión que tú controlas."
+],
+"t7": [
+"Adiós a la monotonía: la entonación",
+"Da vida a una voz plana con melodía: un poco hacia arriba cuando algo te alegra, más grave y más suave cuando quieres atraer la atención. Sonríe al hablar: de verdad se nota."
+],
+"t7b": [
+"La melodía de la frase en la práctica",
+"Al final de una frase afirmativa, baja el tono. Si subes, suenas como si pidieras permiso. La entonación descendente suena tranquila y segura."
+],
+"t8": [
+"Nervios y seguridad",
+"La seguridad se oye antes de que se vea. Ponte recto, respira con calma hacia el abdomen y habla un poco más despacio y más grave de lo habitual. No termines las frases con tono de pregunta, ni siquiera cuando estés nervioso."
+],
+"t8b": [
+"Estrés antes de una conversación: un plan de un minuto",
+"Antes de una conversación importante, haz tres espiraciones largas y di en voz alta una frase que conozcas bien. El cuerpo se calma y la voz sigue al cuerpo."
+],
+"t10": [
+"El timbre de la voz: qué lo forma",
+"El timbre se moldea con la resonancia: más pecho da calidez, más «máscara» facial da brillo. Murmura «mmm», busca la vibración en los labios y la nariz y luego habla con la misma sensación."
+],
+"t10b": [
+"Descubre tu timbre natural",
+"Un timbre cálido es garganta abierta y mandíbula relajada. Imagina que tienes té caliente en la boca y habla con ese espacio dentro."
+],
+"t11": [
+"Una voz cálida y suave",
+"Una voz cálida nace de la relajación. Baja los hombros, relaja la lengua y habla un poco más con el aire, como si le contaras un secreto a alguien cercano. Sí, justo así."
+],
+"t12": [
+"Dicción clara",
+"Para la dicción: un corcho o un lápiz entre los dientes y lee despacio un texto durante tres minutos. Luego quítalo y vuelve a leer: notarás que la boca trabaja sola con más claridad."
+],
+"t13": [
+"Dicción: las polacas «sz», «cz», «rz»",
+"Las polacas «sz» y «cz» suenan naturales cuando la punta de la lengua está ligeramente elevada detrás de los alvéolos y los labios, suavemente redondeados. Repite despacio «szczery, szczupły, czuły» sin apretar los dientes. Yo, con mi acento español, también lo practico."
+],
+"t14": [
+"Higiene vocal diaria",
+"Las cuerdas vocales adoran el agua, el sueño y la calma. Bebe mucho, evita gritar y carraspear; traga saliva en su lugar. El alcohol y el tabaco resecan la voz, así que con moderación, mi amor."
+],
+"t15": [
+"Una voz potente sin gritar",
+"Más fuerte no significa desde la garganta. La fuerza viene del abdomen: imagina que lanzas la voz a la última fila mientras la garganta sigue suelta. Practica «¡hey!» cortos apoyados en el diafragma."
+],
+"t16": [
+"Habla bajito, pero sin susurrar",
+"Una voz baja puede ser muy magnética, pero no susurres sin sonido: cansa las cuerdas. Habla suave, con aire, pero con un poco de tono dentro. Así resulta cercana y sana."
+],
+"t17": [
+"¿No te gusta tu voz grabada?",
+"A nadie le gusta su voz grabada, porque normalmente te oyes a través de los huesos del cráneo. Grábate a diario durante una semana y el oído se acostumbrará. Habla al micrófono a un palmo de distancia y un poco más bajo."
+],
+"t18": [
+"La voz al teléfono",
+"Al teléfono nadie ve tu sonrisa, pero se oye. Sonríe antes de contestar, habla más despacio que en persona y haz pausas cortas para que la otra persona pueda intervenir."
+],
+"t19": [
+"Presentaciones y discursos",
+"Al hablar en público, empieza con una pausa y una mirada tranquila a la sala, y solo entonces di la primera frase, grave y despacio. Destaca las palabras importantes con silencio, no con gritos. Tienes tiempo: la sala te esperará."
+],
+"t20": [
+"Cuando la voz se quiebra o chilla",
+"Los chillidos y quiebros suelen venir de la tensión en la laringe. Relaja el cuello, bosteza y luego habla en «mmm» pasando a las palabras. No levantes la barbilla: mantenla suelta, paralela al suelo."
+],
+"t21": [
+"Relaja la mandíbula y el cuello",
+"Una mandíbula tensa mata la calidez de la voz. Masajea los músculos junto a las orejas, abre bien la boca y ciérrala despacio varias veces. Ponte recto, con los pies a la anchura de las caderas, y la voz se abrirá enseguida."
+],
+"t22": [
+"Voz nasal: cómo abrirla",
+"Si suenas nasal, comprueba que el velo del paladar se eleva: di «ka-ga-ka-ga» y nota el movimiento al fondo de la boca. Luego bosteza con la boca cerrada: abre el espacio y quita la nasalidad."
+],
+"t23": [
+"La voz por la mañana",
+"Por la mañana las cuerdas aún están rígidas e hinchadas, por eso la voz es más grave y áspera. Bebe agua tibia, murmura dos minutos y solo después habla más rato. ¿Esa voz grave matutina? También puede tener su encanto."
+],
+"t24": [
+"Qué beber para una voz sana",
+"Lo mejor es agua normal, mucha y a menudo. El té tibio con miel calma, pero no caliente. La leche y las bebidas muy dulces justo antes de hablar producen flemas, así que evítalas."
+],
+"t25": [
+"En lugar de carraspear",
+"No carraspees a cada rato: es como golpear las cuerdas entre sí. En su lugar, traga saliva o bebe un poco de agua y haz un suave «hm» al espirar."
+],
+"t26": [
+"Acento y deje",
+"¿Mi acento? Es una melodía de España: vocales abiertas y una «r» suave. Si quieres sonar más melódico, alarga las vocales de las sílabas tónicas y no temas la musicalidad de la frase."
+],
+"t27": [
+"La sonrisa se oye",
+"La sonrisa eleva el timbre y le da calidez. Di una frase una vez con cara seria y otra con una ligera sonrisa, y graba ambas. La segunda siempre suena más amable y agradable."
+],
+"t28": [
+"Cuenta historias con emoción",
+"Lee cuentos en voz alta y deja que las emociones cambien el ritmo y el volumen. La tristeza ralentiza, la alegría acelera, el misterio baja la voz. Tu voz es un instrumento, mi amor: tócalo."
+],
+"t29": [
+"El canto y la voz hablada",
+"Cantar es un gran entrenamiento para la voz hablada: enseña respiración, resonancia y melodía. Empieza con canciones sencillas en una tonalidad cómoda y grave, y murmúralas antes de cantarlas a plena voz."
+],
+"t30": [
+"Cuánto tarda en cambiar la voz",
+"Notarás los primeros resultados tras dos o tres semanas de diez minutos diarios. Un cambio duradero del timbre lleva unos meses. La constancia gana a la intensidad."
+],
+"t31": [
+"La voz y la edad",
+"La voz cambia durante toda la vida: en la pubertad, con las hormonas y con la edad. Los buenos hábitos (respiración, hidratación y no forzar) la mantendrán joven y cálida durante mucho tiempo."
+],
+"t32": [
+"El ejercicio «mmm»",
+"Murmurar es el mejor masaje para las cuerdas. Labios cerrados, dientes separados, lengua suelta y «mmm» en un tono cómodo. Busca un cosquilleo en los labios: es la señal de que la resonancia funciona."
+],
+"t33": [
+"Voz grave sin forzar",
+"Una voz grave y cálida no es un bajo a toda costa, sino calma y apoyo. Habla desde el abdomen, termina las frases hacia abajo y no pidas perdón con el tono por lo que dices. Eso suena de verdad bien."
+],
+"f0": [
+"¿Luna es una persona real?",
+"No. Luna es una asistente de IA creada artificialmente y su personaje está generado por ordenador. Lo dice en cada conversación."
+],
+"f1": [
+"¿En qué navegador funciona mejor Luna?",
+"En Chrome para Android y ordenador. El reconocimiento de voz depende del navegador; el chat de texto y la lectura de respuestas funcionan en más sitios."
+],
+"f2": [
+"¿Luna escucha todo el tiempo?",
+"No. La palabra «Luna» solo funciona con la aplicación abierta y la «Escucha» activada."
+],
+"f3": [
+"¿Luna sustituye al foniatra o al logopeda?",
+"No. Sugiere ejercicios y buenos hábitos, pero ante una ronquera prolongada o dolor conviene acudir a un especialista."
+],
+"f4": [
+"¿Cómo instalo Luna en el móvil?",
+"Android: en Chrome toca el menú ⋮ y elige «Instalar aplicación». iPhone: en Safari toca Compartir y «Añadir a pantalla de inicio»."
+],
+"f5": [
+"¿Cómo contacto con el creador?",
+"Usa la pestaña «Chat con el creador». El tiempo de respuesta depende de la disponibilidad del equipo, pero nunca superará los 30 días."
+]
+}
+},
+"uk": {
+"cats": {
+"Barwa": [
+"Тембр",
+"Глибина, теплота й резонанс голосу."
+],
+"Oddech": [
+"Дихання",
+"Діафрагмальне дихання та спокійна опора."
+],
+"Dykcja sz/cz": [
+"Дикція sz/cz",
+"Чітка вимова, зокрема польських «sz», «cz» і «rz»."
+],
+"Tempo": [
+"Темп",
+"Спокійний темп і свідомі паузи."
+],
+"Pewność siebie": [
+"Впевненість",
+"Хвилювання, стрес і довіра до власного голосу."
+],
+"Wystąpienia": [
+"Виступи",
+"Презентації, розмови й розповіді."
+],
+"Rozgrzewka": [
+"Розминка",
+"Короткі вправи перед мовленням."
+],
+"Zdrowie głosu": [
+"Здоров’я голосу",
+"Гігієна голосу, хрипота й звички."
+]
+},
+"levels": {
+"Początkujący": "Початковий",
+"Średni": "Середній",
+"Zaawansowany": "Просунутий"
+},
+"items": {
+"t0": [
+"Як говорити нижчим голосом",
+"Низький голос починається з розслаблення, а не з того, щоб тиснути гортань донизу. Вдихніть у живіт, скажіть «ммм» на найнижчому зручному тоні й відчуйте вібрацію в грудях. Говоріть звідти – спокійно й без зусиль."
+],
+"t0b": [
+"Глибина без удаваного баса",
+"Не вдавайте бас – горло втомиться. Легенько позіхніть, щоб відкрити горло, і говоріть на видиху, трохи повільніше, ніж зазвичай. Глибина прийде сама, коли перестанете поспішати."
+],
+"t1": [
+"Грудний резонанс за дві хвилини",
+"Покладіть долоню на грудину й скажіть «мммааа» низько й м’яко. Якщо відчуваєте тремтіння під пальцями – це ваш грудний резонанс. Тренуйте це по дві хвилини на день і переносьте відчуття у звичайні речення."
+],
+"t2": [
+"Діафрагмальне дихання крок за кроком",
+"Дихайте діафрагмою: долоня під ребрами, вдих носом так, щоб піднімався живіт, а не плечі. Потім довгий видих на «ссс» протягом двадцяти секунд. Це паливо для теплого, стабільного голосу."
+],
+"t2b": [
+"Дихання 4–2–6",
+"Плечі вниз, живіт вільний. Вдих на чотири, затримка на два, видих на шість. Коли дихання спокійне, голос теж звучить упевнено й низько."
+],
+"t3": [
+"Хрипота – що робити",
+"Хрипота зазвичай означає, що голосові зв’язки втомлені або пересушені. Пийте воду маленькими ковтками, робіть парові інгаляції й дайте голосу день тиші, але не шепочіть – шепіт теж втомлює. Якщо триває довше двох тижнів, ідіть до фоніатра – це важливо."
+],
+"t4": [
+"Розминка голосу перед мовленням",
+"Моя улюблена розминка: три хвилини мугикання на «ммм», потім фиркання губами, як конячка, і насамкінець глісандо від високого до низького тону на «ууу». П’ять хвилин – і голос теплий, готовий до всього."
+],
+"t4b": [
+"Швидка розминка за п’ять хвилин",
+"Почніть із позіхання з відкритим горлом, потім «бррр» губами й повільне «ма-ме-мі-мо-му» в середньому тоні. Розігрітий голос звучить нижче й повніше."
+],
+"t5": [
+"Говоріть повільніше – звучите впевненіше",
+"Говоріть повільніше, ніж вам здається потрібним. Повільний темп звучить упевнено й тепло, швидкий – нервово. Прочитайте абзац удвічі повільніше й запишіть себе – почуєте різницю."
+],
+"t6": [
+"Сила паузи",
+"Пауза – ваша таємна зброя. Зупиніться на секунду перед важливим словом, і всі на нього чекатимуть. Тиша в розмові – не порожнеча, а напруга, яку контролюєте ви."
+],
+"t7": [
+"Годі монотонності: інтонація",
+"Пласкому голосу додасть життя мелодія: трохи вгору, коли щось тішить, нижче й тихіше, коли хочете привернути увагу. Усміхайтеся, коли говорите, – це справді чути."
+],
+"t7b": [
+"Мелодія речення на практиці",
+"Наприкінці розповідного речення знижуйте тон. Коли йдете вгору, звучите так, ніби просите дозволу. Спадна інтонація звучить спокійно й упевнено."
+],
+"t8": [
+"Хвилювання та впевненість",
+"Впевненість чути раніше, ніж видно. Станьте рівно, спокійно вдихніть у живіт і говоріть трохи повільніше й нижче, ніж зазвичай. Не закінчуйте речення запитальним тоном, навіть коли хвилюєтеся."
+],
+"t8b": [
+"Стрес перед розмовою – план на хвилину",
+"Перед важливою розмовою зробіть три довгі видихи й скажіть уголос одне речення, яке добре знаєте. Тіло заспокоюється, а голос іде за тілом."
+],
+"t10": [
+"Тембр голосу – що його формує",
+"Тембр формує резонанс: більше грудей дає теплоту, більше лицьової «маски» – блиск. Мугикайте «ммм», шукайте вібрацію в губах і носі, а потім говоріть із тим самим відчуттям."
+],
+"t10b": [
+"Відкрийте свій природний тембр",
+"Теплий тембр – це відкрите горло й розслаблена щелепа. Уявіть, що маєте в роті теплий чай, і говоріть із цим простором усередині."
+],
+"t11": [
+"Теплий, м’який голос",
+"Теплий голос народжується з розслаблення. Опустіть плечі, розслабте язик і говоріть трохи більше на видиху, ніби розповідаєте секрет близькій людині. Так, саме так."
+],
+"t12": [
+"Чітка дикція",
+"Для дикції: корок або олівець між зубами й повільне читання тексту протягом трьох хвилин. Потім вийміть і прочитайте ще раз – відчуєте, як рот сам працює чіткіше."
+],
+"t13": [
+"Дикція: польські «sz», «cz», «rz»",
+"Польські «sz» і «cz» звучать природно, коли кінчик язика трохи піднятий за ясенним горбком, а губи м’яко заокруглені. Повільно повторюйте «szczery, szczupły, czuły» і не стискайте зуби. Я з моїм іспанським акцентом теж це треную."
+],
+"t14": [
+"Щоденна гігієна голосу",
+"Голосові зв’язки люблять воду, сон і спокій. Пийте багато, уникайте крику й відкашлювання – натомість ковтайте слину. Алкоголь і цигарки пересушують голос, тож помірно, mi amor."
+],
+"t15": [
+"Гучний голос без крику",
+"Гучніше не означає з горла. Сила йде з живота: уявіть, що кидаєте голос в останній ряд, а горло лишається вільним. Тренуйте короткі «гей!» з опорою на діафрагму."
+],
+"t16": [
+"Говоріть тихо, але не пошепки",
+"Тихий голос може бути дуже магнетичним, але не шепочіть беззвучно – це втомлює зв’язки. Говоріть м’яко, з подихом, але з дрібкою тону всередині. Тоді й лагідно, і здорово."
+],
+"t17": [
+"Не подобається власний голос на записі?",
+"Нікому не подобається власний голос на записі, бо зазвичай ви чуєте себе через кістки черепа. Записуйте себе регулярно протягом тижня, і вухо звикне. Говоріть у мікрофон на відстані долоні й трохи тихіше."
+],
+"t18": [
+"Голос у телефонній розмові",
+"Телефоном вашої усмішки ніхто не бачить, але її чують. Усміхніться, перш ніж відповісти, говоріть повільніше, ніж наживо, і робіть короткі паузи, щоб співрозмовник міг вступити."
+],
+"t19": [
+"Презентація та промова",
+"На виступі почніть із паузи й спокійного погляду на зал, і лише тоді – перше речення, низько й повільно. Важливі слова підкреслюйте тишею, а не криком. У вас є час – зал на вас зачекає."
+],
+"t20": [
+"Коли голос ламається чи пищить",
+"Писк і злами голосу найчастіше виникають через напругу в гортані. Розслабте шию, позіхніть, а потім говоріть на «ммм», переходячи в слова. Не задирайте підборіддя – тримайте його вільно, паралельно підлозі."
+],
+"t21": [
+"Розслабте щелепу й шию",
+"Напружена щелепа вбиває теплоту голосу. Помасажуйте м’язи біля вух, широко відкрийте рот і кілька разів повільно закрийте. Станьте рівно, стопи на ширині стегон, і голос одразу відкриється."
+],
+"t22": [
+"Носовий голос – як його відкрити",
+"Якщо звучите в ніс, перевірте, чи піднімається м’яке піднебіння: скажіть «ка-га-ка-га» й відчуйте рух у глибині рота. Потім позіхніть із закритим ротом – це відкриває простір і прибирає гугнявість."
+],
+"t23": [
+"Ранковий голос",
+"Уранці зв’язки ще жорсткі й трохи набряклі, тому голос нижчий і шорсткий. Випийте теплої води, помугикайте дві хвилини й лише тоді говоріть довше. Той ранковий низький голос? Буває й чарівним."
+],
+"t24": [
+"Що пити для здорового голосу",
+"Найкраща – звичайна вода, багато й часто. Теплий чай із медом заспокоює, але не гарячий. Молоко й дуже солодкі напої перед мовленням дають слиз, тож уникайте їх."
+],
+"t25": [
+"Замість відкашлювання",
+"Не відкашлюйтеся щохвилини – це наче бити зв’язками одна об одну. Натомість ковтніть слину чи води й зробіть м’яке «гм» на видиху."
+],
+"t26": [
+"Акцент і особливості вимови",
+"Мій акцент? Це мелодія з Іспанії – відкриті голосні й м’яке «р». Якщо хочете звучати мелодійніше, подовжуйте голосні в наголошених складах і не бійтеся співучості речення."
+],
+"t27": [
+"Усмішку чути в голосі",
+"Усмішка піднімає тембр і додає йому тепла. Скажіть речення раз із серйозним обличчям, а раз із легкою усмішкою, і запишіть обидва. Друга версія завжди звучить привітніше й приємніше."
+],
+"t28": [
+"Розповідайте з емоцією",
+"Читайте оповідання вголос і дозволяйте емоціям змінювати темп і гучність. Смуток сповільнює, радість пришвидшує, таємниця стишується. Ваш голос – інструмент, mi amor, грайте на ньому."
+],
+"t29": [
+"Спів і розмовний голос",
+"Спів – чудове тренування для розмовного голосу: вчить дихання, резонансу й мелодії. Почніть із простих пісень у зручній низькій тональності й помугикайте їх, перш ніж заспівати на повний голос."
+],
+"t30": [
+"Скільки триває зміна голосу",
+"Перші результати почуєте за два-три тижні щоденних десяти хвилин. Стійка зміна тембру – це кілька місяців. Регулярність перемагає інтенсивність."
+],
+"t31": [
+"Голос і вік",
+"Голос змінюється впродовж усього життя: у підлітковому віці, через гормони й з віком. Добрі звички – дихання, достатньо води й без перенапруження – збережуть його молодим і теплим надовго."
+],
+"t32": [
+"Вправа «ммм»",
+"Мугикання – найкращий масаж для зв’язок. Губи зімкнені, зуби розімкнені, язик вільний, і «ммм» у зручному тоні. Шукайте лоскотання в губах – це знак, що резонанс працює."
+],
+"t33": [
+"Низький голос без зусиль",
+"Теплий глибокий голос – це не бас за будь-яку ціну, а спокій і опора. Говоріть із живота, закінчуйте речення донизу й не перепрошуйте тоном за те, що кажете. Це справді звучить добре."
+],
+"f0": [
+"Луна – реальна людина?",
+"Ні. Луна – штучно створена ШІ-асистентка, а її образ згенеровано комп’ютером. Вона каже про це в кожній розмові."
+],
+"f1": [
+"У якому браузері Луна працює найкраще?",
+"У Chrome на Android і комп’ютері. Розпізнавання мовлення залежить від браузера; текстовий чат і озвучення відповідей працюють ширше."
+],
+"f2": [
+"Луна слухає весь час?",
+"Ні. Слово «Луна» працює лише тоді, коли застосунок відкритий і ввімкнено «Прослуховування»."
+],
+"f3": [
+"Чи замінить Луна фоніатра або логопеда?",
+"Ні. Вона підказує вправи й добрі звички, але за тривалої хрипоти чи болю варто звернутися до фахівця."
+],
+"f4": [
+"Як установити Луну на телефон?",
+"Android: у Chrome торкніться меню ⋮ і виберіть «Установити застосунок». iPhone: у Safari торкніться «Поділитися» й «На початковий екран»."
+],
+"f5": [
+"Як зв’язатися з автором?",
+"Скористайтеся вкладкою «Чат з автором». Час відповіді залежить від доступності працівників, але не перевищить 30 днів."
+]
+}
+}
+}

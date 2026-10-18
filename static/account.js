@@ -64,8 +64,15 @@ function acctUI(){
     $('#a_logout').onclick = async () => { await api('/api/account/logout', {}).catch(() => {}); ME = null; CSRF = ''; acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); };
     $('#a_link').onclick = async () => { try { const r = await api('/api/account/link-tester', {code: $('#a_tester').value}); ME = r.user; localStorage.setItem('luna.tester', ME.tester); acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); } catch(e){ $('#a_err').textContent = '⚠️ ' + e.message; } };
     $('#a_delete').onclick = async () => {
-      const pw = prompt('Aby trwale usunąć konto i dane z serwera, wpisz hasło:'); if (!pw) return;
-      try { await api('/api/account/delete', {password: pw}); ME = null; CSRF = ''; alert('Konto zostało usunięte.'); acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); } catch(e){ $('#a_err').textContent = '⚠️ ' + e.message; }
+      const L = (localStorage.getItem('luna.lang') || navigator.language || 'pl').slice(0, 2).toLowerCase();
+      const M = {pl: ['Usunąć konto na zawsze?\n\nUsuniemy konto i dane osobowe (e-mail, imię, hasło, sesje, zgłoszenie testera). Twoje dawne komentarze i wpisy zostaną zanonimizowane jako „Usunięty użytkownik”. Tego nie da się cofnąć.', 'Konto i dane osobowe zostały usunięte.'],
+        en: ['Delete your account for good?\n\nWe will delete your account and personal data (email, name, password, sessions, tester application). Your past comments and posts will be anonymised as “Deleted user”. This cannot be undone.', 'Your account and personal data have been deleted.'],
+        es: ['¿Eliminar tu cuenta para siempre?\n\nEliminaremos la cuenta y tus datos personales (correo, nombre, contraseña, sesiones, solicitud de tester). Tus comentarios y publicaciones anteriores se anonimizarán como «Usuario eliminado». No se puede deshacer.', 'Tu cuenta y tus datos personales se han eliminado.'],
+        de: ['Konto endgültig löschen?\n\nWir löschen dein Konto und deine personenbezogenen Daten (E-Mail, Name, Passwort, Sitzungen, Testeranmeldung). Frühere Kommentare und Beiträge werden als „Gelöschter Nutzer“ anonymisiert. Das kann nicht rückgängig gemacht werden.', 'Dein Konto und deine personenbezogenen Daten wurden gelöscht.'],
+        uk: ['Видалити акаунт назавжди?\n\nМи видалимо акаунт і персональні дані (е-пошту, ім’я, пароль, сесії, заявку тестувальника). Ваші попередні коментарі та дописи буде анонімізовано як «Видалений користувач». Цю дію не можна скасувати.', 'Акаунт і персональні дані видалено.']}[L] || null;
+      const m = M || ['Usunąć konto na zawsze?', 'Konto zostało usunięte.'];
+      if (!confirm(m[0])) return;
+      try { await api('/api/account/delete', {}); ME = null; CSRF = ''; alert(m[1]); acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); } catch(e){ $('#a_err').textContent = '⚠️ ' + e.message; }
     };
     return;
   }
@@ -81,15 +88,16 @@ function acctUI(){
         <label class="consent"><input type="checkbox" name="terms"> <span>Akceptuję <a href="/regulamin.html" target="_blank">regulamin</a> i <a href="/privacy.html" target="_blank">informację o prywatności</a>. *</span></label>
         <p class="hint">To oświadczenie – nie weryfikujemy wieku ani konta bankowego.</p>
       </div>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
       <div class="btns"><button class="primary" type="submit">Zaloguj</button></div>
       <p class="tst-err" id="a_err"></p>
     </form>`;
-  let mode = 'in'; const f = $('#a_form');
+  let mode = 'in'; const f = $('#a_form'); const shownAt = Date.now();
   box.querySelectorAll('.tabs2 button').forEach(b => b.onclick = () => { mode = b.dataset.t; box.querySelectorAll('.tabs2 button').forEach(x => x.classList.toggle('on', x === b)); f.querySelector('.up').hidden = mode !== 'up'; f.querySelector('[type=submit]').textContent = mode === 'up' ? 'Załóż konto' : 'Zaloguj'; f.password.autocomplete = mode === 'up' ? 'new-password' : 'current-password'; });
   f.onsubmit = async e => {
     e.preventDefault(); const err = $('#a_err'); err.textContent = '';
     const body = {email: f.email.value.trim(), password: f.password.value};
-    if (mode === 'up') Object.assign(body, {name: f.name.value, dob: f.dob.value, adult: f.adult.checked, terms: f.terms.checked});
+    if (mode === 'up') Object.assign(body, {name: f.name.value, dob: f.dob.value, adult: f.adult.checked, terms: f.terms.checked, website: f.website.value, fill_ms: Date.now() - shownAt});
     try {
       const r = await api(mode === 'up' ? '/api/account/signup' : '/api/account/login', body);
       ME = r.user; CSRF = r.csrf; f.password.value = '';
@@ -127,20 +135,19 @@ fetch('/api/config').then(r => r.json()).then(c => {
   const b = banner('💳 ' + pn.text, 'info'); b.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('luna.payNotice', pn.t); } catch(e){} });
 }).catch(() => {});
 const NEWS = [
-  ['🎙️ Rozmowa na żywo', 'Mów do Luny bez dotykania ekranu – po odpowiedzi mikrofon sam się włącza. Koniec: „Luna, koniec” albo 30 s ciszy.'],
-  ['💳 Płatności', 'Dostęp na 30 dni bez automatycznego odnawiania. W przeglądarce zapłacisz BLIK-iem lub kartą (start wkrótce), w aplikacji z Google Play – przez Google Play. Ceny zawierają VAT.'],
-  ['👤 Konto i 18+', 'Konto e-mail z bezpiecznym hasłem, eksport i usuwanie danych. Luna jest dla osób pełnoletnich.'],
-  ['🛍 Butik Luny', 'Trzy linie strojów – Ekonomiczna, Classic i Couture. Nowości wydajemy partiami.'],
-  ['🧑‍🎨 Awatary', 'Gotowe awatary i generator awatara AI. Zdjęć prawdziwych osób nie wgrywamy.'],
-  ['🛠 Problemy techniczne', 'Coś nie gra? Zgłoś to w nowej zakładce – dostaniesz numer zgłoszenia.']
+  ['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.'],
+  ['🧱 Ścianka Agentek Głosu', 'Nowa nazwa Ścianki. Pod wpisami: polubienia, wyświetlenia i komentarze jak w czacie – tylko prawdziwe liczby.'],
+  ['🛍 Nowy Butik Luny', 'Nowa kolekcja, kategorie i kolory. Wszystkie kolory w cenie stroju. Tylko eleganckie, zakrywające stroje.'],
+  ['🔒 Prywatność', 'Usuwamy metadane (GPS, urządzenie) ze zdjęć. Konto usuniesz jednym kliknięciem.'],
+  ['🤖 Ochrona przed botami', 'Fałszywe konta nie zawyżają liczników.']
 ];
 window.LunaNews = () => {
   let d = $('#newsDlg');
   if (!d){ d = document.createElement('dialog'); d.id = 'newsDlg'; d.className = 'news';
-    d.innerHTML = '<h2>Co nowego w wersji 1.3.1</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
+    d.innerHTML = '<h2>Co nowego w wersji 1.4.0</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
     document.body.appendChild(d); }
-  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.3.1'); } catch(e){}
+  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.4.0'); } catch(e){}
 };
-try { if (localStorage.getItem('luna.seenVer') !== '1.3.1' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
+try { if (localStorage.getItem('luna.seenVer') !== '1.4.0' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-news]')){ e.preventDefault(); window.LunaNews(); } });
 })();

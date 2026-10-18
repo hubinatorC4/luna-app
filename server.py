@@ -17,7 +17,7 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import catalog, base64
-import official, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
+import official, i18n_pages, stats, antibot, owner, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
 from datetime import datetime, timedelta
 try:
     from zoneinfo import ZoneInfo
@@ -25,7 +25,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.3.2"
+VERSION = "1.4.0"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -610,6 +610,8 @@ def _announce_update():
 def _wall_pricing():
     P = CFG["pricing"]; return {"show": P["show"], "foreign": P["foreign"], "plans": P["plans"]}
 social.PRICING = _wall_pricing
+payments.ON_PAID = lambda ref, amt, cur: stats.add("item:" + str(ref) + ":buy")
+stats.threadsafe_start()
 
 def _help_prices():
     if not CFG["pricing"]["show"]: return None
@@ -697,9 +699,12 @@ class H(SimpleHTTPRequestHandler):
             security.audit("POST " + p, ip, str(data.get("action") or data.get("code") or data.get("uid") or "")[:40])
         if p == "/api/account/signup":
             if not (livechat.rate_ok("su:" + ip, 3, 20) and livechat.rate_ok("su:*", 30, 2000)): return self._json({"error": "Za dużo prób – spróbuj później."}, 429)
+            ok, why = antibot.signup_check(str(data.get("email", "")), ip, self.headers.get("User-Agent", ""), data)
+            if not ok: return self._json({"error": "Nie udało się założyć konta." if why == "honeypot" else why}, 400 if why == "honeypot" else 429 if "sieci" in why else 400)
             try: uid, sent = accounts.signup(data, notify.PUBLIC_URL)
             except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
             except ValueError as e: return self._json({"error": str(e)}, 400)
+            antibot.on_write("u:" + uid, ip, self.headers.get("User-Agent", ""), str(data.get("email", "")).split("@")[0][:3] + "…@" + str(data.get("email", "")).rsplit("@", 1)[-1])
             sid, csrf = accounts.new_session(uid); self._set_sid(sid, accounts.SESSION_DAYS * 86400)
             return self._json({"ok": True, "verification_sent": sent, "csrf": csrf, "user": accounts.public(accounts._accts()[uid])})
         if p == "/api/account/login":
@@ -718,8 +723,9 @@ class H(SimpleHTTPRequestHandler):
                 accounts.end_session(self._cookie("luna_sid")); self._set_sid("", 0); return self._json({"ok": True})
             if p == "/api/account/delete":
                 if not livechat.rate_ok("del:" + ip, 3, 20): return self._json({"error": "Za dużo prób."}, 429)
-                try: accounts.delete(usr["uid"], data.get("password"))
+                try: accounts.delete(usr["uid"], data.get("password") or None)
                 except ValueError as e: return self._json({"error": str(e)}, 400)
+                social.anonymise_author("u:" + usr["uid"]); antibot.forget("u:" + usr["uid"])
                 self._set_sid("", 0); return self._json({"ok": True})
             if p == "/api/account/link-tester":
                 try: return self._json({"ok": True, "user": accounts.public(accounts.link_tester(usr["uid"], data.get("code")))})
@@ -761,6 +767,35 @@ class H(SimpleHTTPRequestHandler):
             try: _mod_push("Nowe zgłoszenie do projektu Luna", f"{rec['name']} – {rec['role_other'] or rec['role']}")
             except Exception: pass
             return self._json({"ok": True})
+        if p == "/api/track":
+            ua = self.headers.get("User-Agent", "")
+            if stats.is_bot(ua) or not livechat.rate_ok("tr:" + ip, 60, 600): return self._json({"ok": True})
+            uid, dev = self._who()
+            if antibot.hidden(social.author_key(uid, dev)): return self._json({"ok": True})
+            sid = str(data.get("sid", ""))[:64]; ev = data.get("ev"); lg = str(data.get("lang", ""))[:2]
+            keys = [str(k)[:80] for k in (data.get("keys") or [])[:40] if isinstance(k, str)]
+            for k in keys:
+                if not stats.KEY_RE.fullmatch(k) or k.count(":") != 1: continue
+                if ev == "view": stats.view(sid, k, lg)
+                elif ev in ("click", "share", "cart") and re.fullmatch(r"[A-Za-z0-9_-]{16,64}", sid) and stats.once(sid, k + ":" + ev): stats.add(k + ":" + ev)
+            return self._json({"ok": True})
+        if p == "/api/admin/login":
+            if not livechat.rate_ok("al:" + ip, 5, 60): return self._json({"error": "Za dużo prób."}, 429)
+            tok = check_code(ip, str(data.get("passphrase", ""))[:80])
+            if not tok: return self._json({"error": "Nieprawidłowy kod."}, 401)
+            return self._json({"admin_token": tok, "ttl": ADMIN_TTL})
+        if p == "/api/admin/suspects":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            aks = [str(a)[:40] for a in (data.get("aks") or [])[:500]]
+            for ak in aks:
+                if data.get("action") == "restore": antibot.restore(ak)
+                elif data.get("action") == "delete":
+                    social.purge_author(ak, ban=True)
+                    if ak.startswith("u:"):
+                        try: accounts.delete(ak[2:], check=False)
+                        except ValueError: pass
+                    antibot.forget(ak)
+            return self._json({"ok": True, "suspects": antibot.admin_list()})
         if p.startswith(("/api/wall/", "/api/comments", "/api/vote", "/api/report", "/api/admin/social")):
             if p.startswith(("/api/wall/", "/api/comments")) and not CFG["features"]["wall"] and p.startswith("/api/wall/"): return self._json({"error": "wkrótce"}, 404)
             if data.get("website"): return self._json({"ok": True})  # honeypot
@@ -769,6 +804,7 @@ class H(SimpleHTTPRequestHandler):
                 if p == "/api/wall/post":
                     if not (livechat.rate_ok("wp:" + ip, 2, 20) and livechat.rate_ok("wp:" + dev, 2, 15)): return self._json({"error": "Za dużo wpisów – odczekaj chwilę."}, 429)
                     po = social.create_post(data, uid, dev)
+                    antibot.on_write(social.author_key(uid, dev), ip, self.headers.get("User-Agent", ""), po.get("nick"))
                     if po["status"] == "pending":
                         try: _mod_push("Ścianka: nowy wpis do akceptacji", po["nick"] + ": " + po["text"][:80])
                         except Exception: pass
@@ -781,12 +817,22 @@ class H(SimpleHTTPRequestHandler):
                 if p == "/api/comments":
                     if not (livechat.rate_ok("cm:" + ip, 4, 60) and livechat.rate_ok("cm:" + dev, 3, 40)): return self._json({"error": "Za dużo komentarzy – odczekaj chwilę."}, 429)
                     c = social.add_comment(data, uid, dev)
+                    try:
+                        antibot.on_comment(c["author"], ip, self.headers.get("User-Agent", ""), c["text"], c["nick"], social._cmts()[:-1])
+                        if c["target"].startswith(("post:", "item:")): stats.add(c["target"] + ":cmt")
+                    except Exception as e: sys.stderr.write("antibot cmt %s\n" % type(e).__name__)
                     try: _mod_push("Nowy komentarz do akceptacji", c["nick"] + ": " + c["text"][:80])
                     except Exception: pass
                     return self._json({"ok": True, "pending": True})
                 if p == "/api/vote":
                     if not (livechat.rate_ok("vt:" + ip, 40, 2000) and livechat.rate_ok("vt:" + dev, 30, 1500)): return self._json({"error": "Za szybko."}, 429)
-                    v = data.get("v"); return self._json(social.vote(str(data.get("target", "")), social.author_key(uid, dev), v if v in (1, -1) else 0))
+                    v = data.get("v"); ak = social.author_key(uid, dev); tg = str(data.get("target", ""))
+                    res = social.vote(tg, ak, v if v in (1, -1) else 0)
+                    try:
+                        antibot.on_vote(ak, ip, self.headers.get("User-Agent", ""))
+                        if tg.startswith(("post:", "item:")) and v in (1, -1) and res.get("mine") == v: stats.add(tg + (":like" if v == 1 else ":dislike"))
+                    except Exception as e: sys.stderr.write("antibot vote %s\n" % type(e).__name__)
+                    return self._json(res)
                 if p == "/api/report":
                     if not livechat.rate_ok("rp:" + ip, 5, 50): return self._json({"error": "Za dużo zgłoszeń."}, 429)
                     social.report(str(data.get("target", "")), data.get("reason", ""), social.author_key(uid, dev)); return self._json({"ok": True})
@@ -1011,8 +1057,28 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/admin/backup":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"version": VERSION, "t": int(time.time()), "testers": store.get("testers", {}), "push_subs": store.get("push_subs", {}), "email_subs": store.get("email_subs", {})})
+        if u.path == "/api/owner/inbox":
+            if not livechat.rate_ok("oi:" + self._ip(), 20, 3000): return self._json({"error": "rate limited"}, 429)
+            tokv = os.getenv("OWNER_FEED_TOKEN", "").strip(); auth = self.headers.get("Authorization", "")
+            if len(tokv) < 32 or not auth.startswith("Bearer ") or not hmac.compare_digest(auth[7:].strip().encode(), tokv.encode()):
+                return self._json({"error": "unauthorized"}, 401)
+            q = parse_qs(u.query).get("since", [""])[0]
+            try: since = datetime.fromisoformat(q.replace("Z", "+00:00")).timestamp() if q else time.time() - 86400
+            except ValueError: return self._json({"error": "since must be ISO 8601, e.g. 2026-10-18T12:00:00Z"}, 400)
+            now = time.time()
+            body = owner.inbox(since)
+            return self._json({"since": owner._iso(since), "until": owner._iso(now), "version": VERSION, **body})
+        if u.path in ("/api/admin/stats", "/api/admin/suspects"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            if u.path.endswith("suspects"): return self._json({"suspects": antibot.admin_list(), "threshold": antibot.THRESH, "turnstile": antibot.turnstile_on()})
+            try: days = int(parse_qs(u.query).get("days", ["30"])[0])
+            except ValueError: days = 30
+            days = days if days in (7, 30, 90) else 30
+            stats.flush()
+            return self._json({"days": days, "butik": owner.butik_report(days), "site": owner.site_report(days), "posts": owner.posts_report(days), "persistent": store.status()["persistent"]})
         if u.path == "/api/library":
-            return self._json(library.LIB)
+            lg = parse_qs(u.query).get("lang", [""])[0]
+            return self._json(i18n_pages.library(library.LIB, lg))
         if u.path == "/api/live-room/state":
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             n = liveroom.touch(q.get("vid", ""))
@@ -1059,13 +1125,14 @@ class H(SimpleHTTPRequestHandler):
             self.send_response(200); self.send_header("Content-Type", "application/xml; charset=utf-8" if u.path.endswith(".xml") else "text/plain; charset=utf-8")
             self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
         if u.path == "/scianka.html" and not CFG["features"]["wall"]:
-            return self._json({"error": "Ścianka Luny – wkrótce."}, 404)
+            return self._json({"error": "Ścianka Agentek Głosu – wkrótce."}, 404)
         if u.path == "/" or u.path.endswith(".html"):
             fp = os.path.join(STATIC, "index.html" if u.path == "/" else u.path.lstrip("/"))
             if os.path.isfile(os.path.realpath(fp)) and os.path.realpath(fp).startswith(os.path.realpath(STATIC)):
                 lang = parse_qs(u.query).get("lang", [""])[0]
                 lang = lang if lang in seo.LANGS else ""
                 doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, lang, notify.PUBLIC_URL.rstrip("/"))
+                doc = i18n_pages.legal_note(i18n_pages.apply(doc, u.path, lang), u.path, lang)
                 pid = parse_qs(u.query).get("post", [""])[0]
                 if u.path == "/scianka.html" and re.fullmatch(r"[0-9a-f]{12}|off-\d{1,3}", pid or ""):
                     po = social.get_post(pid)
@@ -1081,6 +1148,12 @@ class H(SimpleHTTPRequestHandler):
                 b = doc.encode()
                 self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
                 self.send_header("Content-Language", lang or "pl"); self.send_header("Vary", "Accept-Language"); self.end_headers(); self.wfile.write(b); return
+        if u.path.endswith(".js") and os.path.basename(u.path) in i18n_pages.JS and u.path.count("/") == 1:
+            lg = parse_qs(u.query).get("lang", [""])[0]
+            if lg in seo.LANGS and lg != "pl":
+                b = i18n_pages.js(os.path.basename(u.path), open(os.path.join(STATIC, u.path.lstrip("/")), encoding="utf-8").read(), lg).encode()
+                self.send_response(200); self.send_header("Content-Type", "text/javascript; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
+                self.end_headers(); self.wfile.write(b); return
         return super().do_GET()
     def do_POST(self):
         u = urlparse(self.path)

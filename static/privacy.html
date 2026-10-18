@@ -12,7 +12,7 @@ a{color:#2ee66b}table{border-collapse:collapse;width:100%}td,th{border:1px solid
 .muted{color:#d9c3ad;font-size:.9em}
 </style>
 <script src="/twa.js"></script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
-<link rel="stylesheet" href="/site.css?v=1.3.2">
+<link rel="stylesheet" href="/site.css?v=1.4.0">
 </head>
 <body>
 <h1>Polityka prywatności aplikacji „Luna mówi jak jest”</h1>
@@ -39,9 +39,15 @@ a{color:#2ee66b}table{border-collapse:collapse;width:100%}td,th{border:1px solid
 <tr><td>Zgłoszenia „Dołącz do projektu” i casting „Twarz AI”: imię, e-mail, rola, wiadomość, link, opcjonalny wzrost, data urodzenia, oświadczenie 18+</td><td>Odpowiedź na zgłoszenie</td><td>Nie</td><td>Do 12 miesięcy lub do wycofania zgody. W castingu nie zbieramy zdjęć przed podpisaniem umowy.</td></tr>
 <tr><td>Problemy techniczne: kategoria, opis, opcjonalny e-mail i zrzut ekranu (bez EXIF), wersja aplikacji, przeglądarka/system, język</td><td>Rozwiązanie problemu</td><td>Nie</td><td>Do 12 miesięcy; zrzut ekranu widzi tylko moderator</td></tr>
 <tr><td>Rozmowy z pomocnikiem AI (bot pomocy) i pytania bez odpowiedzi</td><td>Odpowiedzi na pytania, ulepszanie bazy FAQ</td><td>Nie</td><td>Do 90 dni; po przekazaniu do człowieka – jak zgłoszenie</td></tr>
+<tr><td>Anonimowe statystyki popularności: zdarzenia „wyświetlenie strony/sekcji/stroju/wpisu”, „dodanie do koszyka”, „zakup”, z datą, ścieżką strony i identyfikatorem pozycji – bez adresu IP, ciasteczek śledzących, identyfikatora urządzenia i danych osobowych</td><td>Wiedza, które części strony i stroje w Butiku są popularne (statystyki widoczne tylko dla właściciela)</td><td>Tak (bez danych osobowych)</td><td>Zbiorcze liczniki dzienne do 13 miesięcy</td></tr>
+<tr><td>Liczniki wyświetleń wpisów: wpis liczy się raz na sesję przeglądarki dziennie, gdy jest widoczny co najmniej w połowie przez ≥1 s. Do odliczenia powtórzeń używamy losowego identyfikatora sesji (sessionStorage, kasowany po zamknięciu karty) i jego skrótu z dzienną solą, usuwaną po 2 dniach – bez IP i bez danych osobowych</td><td>Publiczne liczniki pod wpisami i zbiorcze statystyki dla właściciela</td><td>Tak (bez danych osobowych)</td><td>Zbiorcze liczniki dzienne do 13 miesięcy</td></tr>
+<tr><td>Ochrona przed fałszywymi kontami i botami: wynik i powody oznaczenia (np. seria polubień w kilka sekund, powtarzany komentarz, jednorazowy adres e-mail, automatyczna przeglądarka), dzienny skrót sieci (nie sam adres IP)</td><td>Rzetelne liczniki, ochrona przed spamem i nadużyciami. Podejrzane konta są ukrywane w liczeniu (ich polubienia, wyświetlenia i komentarze nie liczą się publicznie); decyzję o usunięciu podejmuje człowiek</td><td>Tak (technicznie niezbędne)</td><td>Do czasu decyzji moderatora; skróty sieci – 1 dzień</td></tr>
 <tr><td>Skrót (hash) adresu IP, losowy identyfikator odwiedzającego</td><td>Ochrona przed spamem i nadużyciami, liczenie widzów transmisji</td><td>Tak (technicznie niezbędne)</td><td>Do 30 dni</td></tr>
 <tr><td>Ustawienia aplikacji (głos, motyw, wybrany strój)</td><td>Zapamiętanie Twoich preferencji</td><td>—</td><td>Tylko w pamięci Twojego urządzenia</td></tr>
 </table>
+
+<h2>3a. Obrazy i anonimowość</h2>
+<p>Każdy przesłany obraz (awatar, obraz na Ściance, zrzut ekranu do zgłoszenia) kodujemy na serwerze od nowa – usuwamy przy tym <b>wszystkie metadane EXIF</b> (lokalizację GPS, model urządzenia, daty). Publicznie pokazujemy tylko nick i inicjał – nigdy e-maila, imienia z konta ani lokalizacji.</p>
 
 <h2>4. Mikrofon</h2>
 <p>Mikrofon jest używany tylko po Twojej zgodzie, gdy włączysz rozmowę głosową lub nasłuchiwanie słowa „Luna”. Rozpoznawanie mowy wykonuje mechanizm przeglądarki lub systemu (np. Google w Chrome). Nie nagrywamy i nie przechowujemy Twojego głosu na naszym serwerze; do aplikacji trafia tylko rozpoznany tekst.</p>
@@ -60,10 +66,10 @@ a{color:#2ee66b}table{border-collapse:collapse;width:100%}td,th{border:1px solid
 
 <h2>6. Twoje prawa (RODO)</h2>
 <p>Masz prawo do dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przeniesienia oraz sprzeciwu, a także do wycofania zgody w dowolnym momencie. Napisz w <a href="/#live">czacie z twórcą</a> w aplikacji. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (uodo.gov.pl).</p>
-<p>Podstawy prawne: zgoda (art. 6 ust. 1 lit. a RODO) – e-mail, push, czat z twórcą; wykonanie usługi (lit. b) – odpowiedzi Luny; prawnie uzasadniony interes (lit. f) – bezpieczeństwo i ochrona przed nadużyciami.</p>
+<p>Podstawy prawne: zgoda (art. 6 ust. 1 lit. a RODO) – e-mail, push, czat z twórcą; wykonanie usługi (lit. b) – odpowiedzi Luny; prawnie uzasadniony interes (lit. f) – bezpieczeństwo, ochrona przed nadużyciami i anonimowe statystyki.</p>
 
 <h2>7. Usunięcie danych</h2>
-<p>Jeśli masz konto, w Ustawieniach → Konto i plan możesz <b>pobrać swoje dane</b> (plik JSON) i <b>trwale usunąć konto</b> – usuwamy wtedy konto i sesje od razu. Pozostałe dane: wypisz się z maili linkiem w wiadomości, wyłącz powiadomienia w ustawieniach i napisz do nas z prośbą o usunięcie rozmów lub zgłoszeń. Usuniemy je w ciągu 30 dni. Dane o płatnościach przechowujemy tak długo, jak wymagają tego przepisy podatkowe.</p>
+<p>Jeśli masz konto, w Ustawieniach → Konto i plan możesz <b>pobrać swoje dane</b> (plik JSON) i <b>trwale usunąć konto jednym kliknięciem</b> (z potwierdzeniem) – od razu usuwamy konto, e-mail, imię, hasło, sesje, zgłoszenie testera i zapis na maile, a Twoje dawne komentarze i wpisy anonimizujemy jako „Usunięty użytkownik”. Pozostałe dane: wypisz się z maili linkiem w wiadomości, wyłącz powiadomienia w ustawieniach i napisz do nas z prośbą o usunięcie rozmów lub zgłoszeń. Usuniemy je w ciągu 30 dni. Dane o płatnościach przechowujemy tak długo, jak wymagają tego przepisy podatkowe.</p>
 
 <h2>8. Dzieci</h2>
 <p>Aplikacja jest przeznaczona dla osób dorosłych (18+). Prosimy o datę urodzenia i oświadczenie o pełnoletności – to oświadczenie, którego nie weryfikujemy. Osobom poniżej 18 lat odmawiamy dostępu i nie zapisujemy ich danych.</p>
@@ -79,10 +85,10 @@ a{color:#2ee66b}table{border-collapse:collapse;width:100%}td,th{border:1px solid
   <p><span class="badge-noads" data-note="noads">🚫 Bez reklam – Luna nie ogląda reklam, bo i tak by je przegadała 😄 Zero reklam, sama przyjemność gadania.</span></p>
   <p class="money no-twa" data-note="money">Luna nie je, nie śpi i nie pije kawy… ale serwery już tak ☕ Każda drobna złotówka się przyda, a wsparcie jest zawsze dobrowolne.</p>
   <p class="disc"><span class="b18">18+</span> <span data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</span></p>
-  <nav><a href="/">Aplikacja</a><a href="/promo.html">Porady</a><a href="/butik.html">Butik</a><a href="/scianka.html">Ścianka</a><a href="/live.html">Luna Live</a><a href="/testerzy.html">Testerzy</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/wesprzyj.html" class="no-twa">Wesprzyj Lunę</a><a href="/regulamin.html">Regulamin</a><a href="/privacy.html">Prywatność</a><a href="/#live">Czat z twórcą</a></nav>
-  <p class="copy">© 2026 Luna mówi jak jest · Luna jest asystentką AI, a jej postać została wygenerowana sztucznie · v1.3.2</p>
+  <nav><a href="/">Aplikacja</a><a href="/promo.html">Porady</a><a href="/butik.html">Butik</a><a href="/scianka.html">Ścianka Agentek Głosu</a><a href="/live.html">Luna Live</a><a href="/testerzy.html">Testerzy</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/wesprzyj.html" class="no-twa">Wesprzyj Lunę</a><a href="/regulamin.html">Regulamin</a><a href="/privacy.html">Prywatność</a><a href="/#live">Czat z twórcą</a></nav>
+  <p class="copy">© 2026 Luna mówi jak jest · Luna jest asystentką AI, a jej postać została wygenerowana sztucznie · v1.4.0</p>
 </footer>
 <script src="/notices.js"></script>
-<script src="/helpbot-loader.js?v=1.3.2"></script>
+<script src="/helpbot-loader.js?v=1.4.0"></script>
 </body>
 </html>

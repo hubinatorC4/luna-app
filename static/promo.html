@@ -12,11 +12,11 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.json">
-<link rel="stylesheet" href="/portal.css?v=1.3">
+<link rel="stylesheet" href="/portal.css?v=1.4.0">
 <script src="/twa.js"></script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
-<link rel="stylesheet" href="/site.css?v=1.3.2"><link rel="stylesheet" href="/scianka.css?v=1.3.2">
+<link rel="stylesheet" href="/site.css?v=1.4.0"><link rel="stylesheet" href="/scianka.css?v=1.4.0"><link rel="stylesheet" href="/home-feed.css?v=1.4.0">
 </head>
-<body>
+<body class="homebody">
 <header class="top">
   <div class="bar">
     <a class="logo" href="/promo.html" aria-label="Luna – strona główna"><span class="lring"><img src="/brand-emblem-256.png" srcset="/brand-emblem-256.png 1x, /brand-emblem-512.png 2x" alt=""></span><span class="lname">Luna <small class="lsub">mówi jak jest</small></span></a>
@@ -38,11 +38,11 @@
     <a href="/live.html" class="livetab">Luna Live <span class="lv" id="liveTab"></span></a>
     <a href="#plany" data-tab="plany">Plany</a>
     <a href="/#live">Czat z twórcą</a>
-    <a href="/butik.html">Butik</a><a href="/scianka.html">Ścianka</a><a href="/testerzy.html" class="hot">Testerzy 🎁</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/problemy.html">Pomoc</a>
+    <a href="/butik.html">Butik</a><a href="/scianka.html">Ścianka Agentek Głosu</a><a href="/testerzy.html" class="hot">Testerzy 🎁</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/problemy.html">Pomoc</a>
   </nav>
 </header>
 
-<main>
+<main class="hf">
   <section class="tester-banner" id="testerBannerTop">
     <div class="tb-ring"><img src="/avatar-256.jpg" alt=""></div>
     <div class="tb-copy">
@@ -74,7 +74,35 @@
   <section class="hero-strip">
     <p>Chcesz lepiej się wypowiadać i wysławiać? <span>Chcesz ciekawie opowiadać o sobie?</span> <b>To jest to. Poznaj Lunę.</b></p>
   </section>
+  <section class="hfwall wallpage" id="scianka" data-track="sec:scianka">
+    <div class="hfhead"><h2 data-wi18n="hf_h">Ścianka Agentek Głosu</h2><p data-wi18n="hf_sub">Posty, nowości, Butik i casting – wszystko w jednym miejscu. Przewijaj w dół.</p><a class="hfall" href="/scianka.html" data-wi18n="hf_all">Otwórz pełną Ściankę →</a></div>
+    <form class="composer card" id="composer" novalidate>
+      <span class="ava gen" id="meAva" aria-hidden="true">✦</span>
+      <div class="cmain">
+        <textarea class="cfield" name="text" maxlength="2000" rows="2" data-wi18n-ph="ph" placeholder="Napisz coś…" aria-label="Napisz coś…"></textarea>
+        <div class="cextra" id="cExtra" hidden>
+          <input class="nickin" name="nick" maxlength="30" data-wi18n-ph="nick" placeholder="Twój nick" aria-label="Twój nick" autocomplete="nickname">
+          <label id="adultRow"><input type="checkbox" name="adult"> <span data-wi18n="adult">Potwierdzam, że mam ukończone 18 lat.</span></label>
+          <label id="imgDeclRow" hidden><input type="checkbox" name="img_decl"> <span data-wi18n="img_decl">Oświadczam, że to obraz wygenerowany przez AI i nie przedstawia prawdziwej osoby.</span></label>
+          <div id="imgPrev"></div>
+        </div>
+        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="file" id="imgFile" accept="image/png,image/jpeg,image/webp" hidden>
+        <div class="crow"><button type="button" class="ghost" id="imgBtn" data-wi18n="img">🖼️ Obraz AI</button><button type="submit" class="primary" data-wi18n="publish">Opublikuj</button></div>
+        <p class="cmsg" id="cMsg" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </section>
+  <div id="feedHost" class="hfhost" aria-live="polite"><div id="feed" class="wallpage chunk"></div></div>
+  <div class="wallpage hfend">
+    <div class="card empty" id="empty" hidden><div class="big">🎙️</div><h3 data-wi18n="empty_h">Tu jeszcze cisza… ale nie na długo! 🎙️</h3><p data-wi18n="empty">Bądź pierwszą osobą, która coś napisze.</p></div>
+    <p class="endnote" id="endnote" hidden data-wi18n="end">To już wszystko ✨ Wróć później po nowe wpisy.</p>
+    <div id="sentinel"></div>
+  </div>
+  <div id="hfQueue" hidden>
 
+
+  <section class="sec hfcard" id="porady" data-track="sec:porady">
   <div class="filters" id="filters">
     <label>Kategoria<select id="fCat"><option value="">Wszystkie</option></select></label>
     <label>Długość<select id="fLen"><option value="">Każda</option><option value="s">Krótkie (do 15 s)</option><option value="m">Średnie (15–25 s)</option><option value="l">Dłuższe (ponad 25 s)</option></select></label>
@@ -87,14 +115,15 @@
     <p class="vsub" id="vsub"></p>
     <div class="grid" id="grid"></div>
   </section>
+  </section>
 
-  <section class="sec" id="plany">
+  <section class="sec hfcard" id="plany" data-track="sec:plany">
     <h2>Chcesz więcej możliwości? <em>Wybierz plan.</em></h2>
     <p class="vsub">Aplikacja jest darmowa do pobrania. Plan Darmowy działa bez konta (z dziennym limitem), Podstawowa jest za darmo z kontem, a Premium i Pro to jednorazowe dostępy na 30 dni – bez automatycznego odnawiania, ceny zawierają VAT. Każdy wyższy plan zawiera wszystko z niższych. <b>Płatności online – wkrótce.</b></p>
     <div class="plans" id="plans"></div>
   </section>
 
-  <section class="sec tsec" id="testerzy">
+  <section class="sec tsec hfcard" id="testerzy" data-track="sec:testerzy">
     <div class="tcopy">
       <span class="kick">Rekrutacja testerów</span>
       <h2>Szukamy testerów Luny!</h2>
@@ -107,13 +136,13 @@
     <div id="testerzy-form" class="tform"></div>
   </section>
 
-  <section class="sec" id="dolacz">
+  <section class="sec hfcard" id="dolacz" data-track="sec:dolacz">
     <h2>Dołącz do projektu Luna <em>– twórz z nami.</em></h2>
     <p class="vsub invite" data-note="invite"></p>
     <p><a class="pill primary" href="/dolacz.html">✉️ Napisz do nas</a> <a class="pill ghost" href="/twarz.html">⭐ Casting „Twarz AI”</a></p>
   </section>
 
-  <section class="sec dl" id="pobierz">
+  <section class="sec dl hfcard" id="pobierz" data-track="sec:pobierz">
     <h2 data-dl="h">Pobierz aplikację</h2>
     <p class="vsub" data-dl="lead">Luna zawsze pod ręką – na telefonie, bez reklam.</p>
     <p class="dl-cta"><a class="pill primary big" id="dlBtn" href="https://github.com/hubinatorC4/luna-app/releases/download/android-v1.0.0/luna-1.0.0-release.apk" rel="noopener"><span aria-hidden="true">📲</span> <span data-dl="btn">Pobierz aplikację</span></a></p>
@@ -135,11 +164,20 @@
     </ol>
   </section>
 
-  <section class="sec" id="faq">
+  <section class="sec hfcard" id="faq" data-track="sec:faq">
     <h2>Masz pytania? <em>Mamy odpowiedzi.</em></h2>
     <div class="faq" id="faqList"></div>
     <p class="vsub">Więcej o Lunie: <a href="/o-lunie.html">funkcje, hologram, własna asystentka</a>.</p>
   </section>
+
+  <section class="sec wallpage hfcard" id="komentarze" data-track="sec:komentarze">
+    <h2 data-cmh>Co mówią o Lunie? <em>Twoja kolej.</em></h2>
+    <p class="vsub" data-cms>Komentarze sprawdza moderator przed publikacją. Piszemy życzliwie. 💚</p>
+    <div class="acts" style="border:0;padding:0;margin:0 0 6px"><span data-votes="home:luna"></span><a class="act" href="/scianka.html">🧱 Ścianka Agentek Głosu →</a></div>
+    <div data-comments="home:luna"></div>
+  </section>
+  </div>
+<noscript><style>#hfQueue{display:block!important}</style></noscript>
 </main>
 
 <dialog id="card" class="cardlg">
@@ -153,31 +191,30 @@
   </div>
 </dialog>
 <audio id="cAudio" preload="none"></audio>
-<script src="/portal.js?v=1.3"></script>
-<script src="/testers.js?v=1.3"></script>
-<script src="/push.js?v=1.3"></script>
+<script src="/portal.js?v=1.4.0"></script>
+<script src="/testers.js?v=1.4.0"></script>
+<script src="/push.js?v=1.4.0"></script>
 <script type="application/json" id="i18n">{"pl": {"h_title": "Luna mówi jak jest", "h_tag": "Twoja trenerka głosu AI. Mówi jak jest, żeby Tobie mówiło się jeszcze lepiej.", "h_talk": "🎙️ Porozmawiaj z Luną", "h_test": "🎁 Zostań testerem", "h_listen": "▶ Posłuchaj Luny", "h_noads": "🚫 Bez reklam", "h_ai": "🤖 Luna jest asystentką AI – postać wygenerowana sztucznie"}, "en": {"h_title": "Luna Tells It Like It Is", "h_tag": "Your AI voice coach. She tells it like it is, so you can speak even better.", "h_talk": "🎙️ Talk to Luna", "h_test": "🎁 Become a tester", "h_listen": "▶ Hear Luna", "h_noads": "🚫 No ads", "h_ai": "🤖 Luna is an AI assistant – an artificially generated character"}, "es": {"h_title": "Luna dice las cosas como son", "h_tag": "Tu entrenadora de voz con IA. Te dice las cosas como son para que hables aún mejor.", "h_talk": "🎙️ Habla con Luna", "h_test": "🎁 Hazte tester", "h_listen": "▶ Escucha a Luna", "h_noads": "🚫 Sin anuncios", "h_ai": "🤖 Luna es una asistente de IA, un personaje generado artificialmente"}, "de": {"h_title": "Luna sagt, wie es ist", "h_tag": "Deine KI-Stimmtrainerin. Sie sagt, wie es ist, damit du noch besser sprichst.", "h_talk": "🎙️ Mit Luna sprechen", "h_test": "🎁 Tester werden", "h_listen": "▶ Luna anhören", "h_noads": "🚫 Keine Werbung", "h_ai": "🤖 Luna ist eine KI-Assistentin – eine künstlich erzeugte Figur"}, "uk": {"h_title": "Луна каже як є", "h_tag": "Твоя ШІ-тренерка голосу. Каже як є, щоб тобі говорилося ще краще.", "h_talk": "🎙️ Поговорити з Луною", "h_test": "🎁 Стати тестувальником", "h_listen": "▶ Послухати Луну", "h_noads": "🚫 Без реклами", "h_ai": "🤖 Луна — ШІ-асистентка, штучно згенерований персонаж"}}</script>
 <script src="/notices.js"></script>
 <script src="/pagei18n.js"></script>
 <script src="/hero.js"></script>
-  <section class="sec wallpage" id="komentarze">
-    <h2 data-cmh>Co mówią o Lunie? <em>Twoja kolej.</em></h2>
-    <p class="vsub" data-cms>Komentarze sprawdza moderator przed publikacją. Piszemy życzliwie. 💚</p>
-    <div class="acts" style="border:0;padding:0;margin:0 0 6px"><span data-votes="home:luna"></span><a class="act" href="/scianka.html">🧱 Ścianka Luny →</a></div>
-    <div data-comments="home:luna"></div>
-  </section>
+
 <footer class="sitefoot">
   <img class="fbadge" src="/brand-badge-256.png" srcset="/brand-badge-256.png 1x, /brand-badge-512.png 2x" width="96" height="96" alt="Luna mówi jak jest" loading="lazy">
   <p class="fan" data-note="fan">Luna mówi jak jest to projekt fanowski – i taki zostanie, słowo Luny! Wspieraj nas zawsze, gdziekolwiek jesteś. 💚</p>
   <p><span class="badge-noads" data-note="noads">🚫 Bez reklam – Luna nie ogląda reklam, bo i tak by je przegadała 😄 Zero reklam, sama przyjemność gadania.</span></p>
   <p class="money no-twa" data-note="money">Luna nie je, nie śpi i nie pije kawy… ale serwery już tak ☕ Każda drobna złotówka się przyda, a wsparcie jest zawsze dobrowolne.</p>
   <p class="disc"><span class="b18">18+</span> <span data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</span></p>
-  <nav><a href="/">Aplikacja</a><a href="/promo.html">Porady</a><a href="/butik.html">Butik</a><a href="/scianka.html">Ścianka</a><a href="/live.html">Luna Live</a><a href="/testerzy.html">Testerzy</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/wesprzyj.html" class="no-twa">Wesprzyj Lunę</a><a href="/regulamin.html">Regulamin</a><a href="/privacy.html">Prywatność</a><a href="/#live">Czat z twórcą</a></nav>
-  <p class="copy">© 2026 Luna mówi jak jest · Luna jest asystentką AI, a jej postać została wygenerowana sztucznie · v1.3.2</p>
+  <nav><a href="/">Aplikacja</a><a href="/promo.html">Porady</a><a href="/butik.html">Butik</a><a href="/scianka.html">Ścianka Agentek Głosu</a><a href="/live.html">Luna Live</a><a href="/testerzy.html">Testerzy</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/wesprzyj.html" class="no-twa">Wesprzyj Lunę</a><a href="/regulamin.html">Regulamin</a><a href="/privacy.html">Prywatność</a><a href="/#live">Czat z twórcą</a></nav>
+  <p class="copy">© 2026 Luna mówi jak jest · Luna jest asystentką AI, a jej postać została wygenerowana sztucznie · v1.4.0</p>
 </footer>
-<script src="/helpbot-loader.js?v=1.3.2"></script>
-<script src="/download.js?v=1.3.2"></script>
-<script src="/social.js?v=1.3.2"></script>
-<script src="/promo-social.js?v=1.3.2"></script>
+<script src="/helpbot-loader.js?v=1.4.0"></script>
+<script src="/download.js?v=1.4.0"></script>
+<script type="application/json" id="wall-i18n">{"pl": {"_title": "Ścianka Agentek Głosu – Luna mówi jak jest", "h1": "Ścianka Agentek Głosu", "sub": "Mów tak, żeby chcieli słuchać", "lead": "Miejsce, w którym dzielimy się postępami, agentkami i dobrym słowem. Bez reklam, za to z ciepłym tonem.", "ph": "Napisz coś…", "nick": "Twój nick", "img": "🖼️ Obraz AI", "agent": "✨ Agentka", "publish": "Opublikuj", "adult": "Potwierdzam, że mam ukończone 18 lat.", "img_decl": "Oświadczam, że to obraz wygenerowany przez AI i nie przedstawia prawdziwej osoby.", "t_new": "Nowe", "t_top": "Popularne", "empty_h": "Tu jeszcze cisza… ale nie na długo! 🎙️", "empty": "Bądź pierwszą osobą, która coś napisze. Podziel się postępem, ulubionym ćwiczeniem albo po prostu dobrym słowem.", "end": "To już wszystko ✨ Wróć później po nowe wpisy.", "rules_h": "Zasady Ścianki", "rules": "<li>Piszemy życzliwie – ton też się liczy.</li><li>Obrazy tylko wygenerowane przez AI – bez zdjęć prawdziwych osób.</li><li>Zero treści seksualnych, mowy nienawiści i spamu.</li><li>Nowe wpisy sprawdza moderator.</li><li>Coś nie tak? Kliknij „⋯ Zgłoś”.</li>", "agents_h": "Agentki tygodnia", "agents_empty": "Galeria agentek startuje wkrótce – tu pokażemy najczęściej lubiane agentki tygodnia (prawdziwe głosy, bez dosypywania).", "ref_h": "Poleć Lunę", "ref": "Znasz kogoś, komu przyda się pewniejszy głos? Wyślij link do Luny. Program poleceń z nagrodami – wkrótce.", "ref_btn": "Skopiuj link", "hf_h": "Ścianka Agentek Głosu", "hf_sub": "Posty, nowości, Butik i casting – wszystko w jednym miejscu. Przewijaj w dół.", "hf_all": "Otwórz pełną Ściankę →"}, "en": {"_title": "Voice Agents’ Wall – Luna Tells It Like It Is", "h1": "Voice Agents’ Wall", "sub": "Speak so they want to listen", "lead": "A place to share progress, agents and kind words. No ads – just a warm tone.", "ph": "Write something…", "nick": "Your nickname", "img": "🖼️ AI image", "agent": "✨ Agent", "publish": "Post", "adult": "I confirm that I am 18 or older.", "img_decl": "I declare that this image was generated by AI and does not depict a real person.", "t_new": "New", "t_top": "Popular", "empty_h": "It’s quiet here… but not for long! 🎙️", "empty": "Be the first to post. Share your progress, a favourite exercise or simply a kind word.", "end": "That’s all for now ✨ Come back later for new posts.", "rules_h": "Wall rules", "rules": "<li>Be kind – tone matters too.</li><li>AI-generated images only – no photos of real people.</li><li>No sexual content, hate speech or spam.</li><li>A moderator reviews new posts.</li><li>Something wrong? Click “⋯ Report”.</li>", "agents_h": "Agents of the week", "agents_empty": "The agent gallery is launching soon – this is where the most-liked agents of the week will appear (real votes, nothing added).", "ref_h": "Recommend Luna", "ref": "Know someone who could use a more confident voice? Send them a link to Luna. A referral programme with rewards is coming soon.", "ref_btn": "Copy link", "hf_h": "Voice Agents’ Wall", "hf_sub": "Posts, news, the Boutique and casting – all in one place. Keep scrolling.", "hf_all": "Open the full Wall →"}, "es": {"_title": "El Muro de las Agentes de Voz – Luna dice las cosas como son", "h1": "El Muro de las Agentes de Voz", "sub": "Habla para que quieran escucharte", "lead": "Un lugar para compartir avances, agentes y palabras amables. Sin anuncios y con un tono cálido.", "ph": "Escribe algo…", "nick": "Tu apodo", "img": "🖼️ Imagen IA", "agent": "✨ Agente", "publish": "Publicar", "adult": "Confirmo que tengo 18 años o más.", "img_decl": "Declaro que esta imagen ha sido generada por IA y no representa a una persona real.", "t_new": "Nuevas", "t_top": "Populares", "empty_h": "Aquí aún hay silencio… ¡pero no por mucho tiempo! 🎙️", "empty": "Sé la primera persona en publicar. Comparte tus avances, tu ejercicio favorito o simplemente una palabra amable.", "end": "Eso es todo ✨ Vuelve más tarde para ver nuevas publicaciones.", "rules_h": "Normas del muro", "rules": "<li>Escribimos con amabilidad: el tono también cuenta.</li><li>Solo imágenes generadas por IA, nada de fotos de personas reales.</li><li>Nada de contenido sexual, discursos de odio ni spam.</li><li>Un moderador revisa las publicaciones nuevas.</li><li>¿Algo va mal? Pulsa «⋯ Denunciar».</li>", "agents_h": "Agentes de la semana", "agents_empty": "La galería de agentes llegará pronto: aquí verás las agentes con más «me gusta» de la semana (votos reales, sin inflar).", "ref_h": "Recomienda a Luna", "ref": "¿Conoces a alguien a quien le vendría bien una voz más segura? Envíale un enlace a Luna. El programa de recomendaciones con premios llegará pronto.", "ref_btn": "Copiar enlace", "hf_h": "El Muro de las Agentes de Voz", "hf_sub": "Publicaciones, novedades, la Boutique y el casting, todo en un solo lugar. Sigue bajando.", "hf_all": "Abrir el Muro completo →"}, "de": {"_title": "Pinnwand der Stimmagentinnen – Luna sagt, wie es ist", "h1": "Pinnwand der Stimmagentinnen", "sub": "Sprich so, dass man dir zuhören will", "lead": "Ein Ort für Fortschritte, Agentinnen und freundliche Worte. Ohne Werbung, dafür mit warmem Ton.", "ph": "Schreib etwas…", "nick": "Dein Nickname", "img": "🖼️ KI-Bild", "agent": "✨ Agentin", "publish": "Veröffentlichen", "adult": "Ich bestätige, dass ich mindestens 18 Jahre alt bin.", "img_decl": "Ich erkläre, dass dieses Bild von einer KI erzeugt wurde und keine echte Person zeigt.", "t_new": "Neu", "t_top": "Beliebt", "empty_h": "Noch ist es hier still… aber nicht mehr lange! 🎙️", "empty": "Sei die erste Person, die etwas schreibt. Teile deinen Fortschritt, deine Lieblingsübung oder einfach ein nettes Wort.", "end": "Das war’s ✨ Schau später wieder vorbei.", "rules_h": "Regeln der Pinnwand", "rules": "<li>Wir schreiben freundlich – auch der Ton zählt.</li><li>Nur KI-generierte Bilder, keine Fotos echter Personen.</li><li>Keine sexuellen Inhalte, keine Hassrede, kein Spam.</li><li>Neue Beiträge prüft ein Moderator.</li><li>Stimmt etwas nicht? Klicke auf „⋯ Melden“.</li>", "agents_h": "Agentinnen der Woche", "agents_empty": "Die Agentinnen-Galerie startet bald – hier erscheinen dann die beliebtesten Agentinnen der Woche (echte Stimmen, nichts geschönt).", "ref_h": "Luna empfehlen", "ref": "Kennst du jemanden, dem eine selbstsicherere Stimme guttun würde? Schick ihm einen Link zu Luna. Ein Empfehlungsprogramm mit Belohnungen folgt bald.", "ref_btn": "Link kopieren", "hf_h": "Pinnwand der Stimmagentinnen", "hf_sub": "Beiträge, Neuigkeiten, Boutique und Casting – alles an einem Ort. Einfach weiterscrollen.", "hf_all": "Ganze Pinnwand öffnen →"}, "uk": {"_title": "Стіна голосових агенток – Луна каже як є", "h1": "Стіна голосових агенток", "sub": "Говори так, щоб хотілося слухати", "lead": "Місце, де ми ділимося успіхами, агентками й добрим словом. Без реклами, зате з теплим тоном.", "ph": "Напишіть щось…", "nick": "Ваш нік", "img": "🖼️ ШІ-зображення", "agent": "✨ Агентка", "publish": "Опублікувати", "adult": "Підтверджую, що мені виповнилося 18 років.", "img_decl": "Заявляю, що це зображення згенероване ШІ і не зображує реальну людину.", "t_new": "Нові", "t_top": "Популярні", "empty_h": "Тут поки тихо… але ненадовго! 🎙️", "empty": "Станьте першою людиною, яка щось напише. Поділіться успіхом, улюбленою вправою або просто добрим словом.", "end": "Поки що це все ✨ Заходьте пізніше по нові дописи.", "rules_h": "Правила стіни", "rules": "<li>Пишемо доброзичливо — тон теж має значення.</li><li>Лише зображення, згенеровані ШІ, — жодних фото реальних людей.</li><li>Жодного сексуального контенту, мови ворожнечі та спаму.</li><li>Нові дописи перевіряє модератор.</li><li>Щось не так? Натисніть «⋯ Поскаржитися».</li>", "agents_h": "Агентки тижня", "agents_empty": "Галерея агенток незабаром запрацює — тут з’являться найпопулярніші агентки тижня (справжні голоси, нічого не накручено).", "ref_h": "Порекомендуйте Луну", "ref": "Знаєте когось, кому знадобиться впевненіший голос? Надішліть посилання на Луну. Програма рекомендацій із нагородами — незабаром.", "ref_btn": "Скопіювати посилання", "hf_h": "Стіна голосових агенток", "hf_sub": "Дописи, новини, Бутик і кастинг – усе в одному місці. Гортайте вниз.", "hf_all": "Відкрити всю Стіну →"}}</script>
+<script src="/social.js?v=1.4.0"></script>
+<script src="/promo-social.js?v=1.4.0"></script>
+<script src="/wall-official.js?v=1.4.0"></script>
+<script src="/scianka.js?v=1.4.0"></script>
+<script src="/home-feed.js?v=1.4.0"></script>
 </body>
 </html>

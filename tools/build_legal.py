@@ -51,13 +51,14 @@ body = """<main class="page legal">
 <h2>§ 9. Zasady zachowania i treści</h2>
 <p>Luna, Luna Live i czaty są przestrzenią kulturalną i SFW. Zabronione są treści obraźliwe, seksualne, nienawistne oraz spam. Moderator może usuwać wiadomości i blokować użytkowników. Stroje w Butiku Luny są zawsze eleganckie i nieodsłaniające.</p>
 
-<h2>§ 9a. Ścianka Luny, komentarze, oceny i głosy</h2>
-<ul><li>Wpisy na Ściance Luny i komentarze (także pod produktami w Butiku) może publikować osoba pełnoletnia – zalogowana albo podająca nick i potwierdzająca ukończenie 18 lat.</li>
+<h2>§ 9a. Ścianka Agentek Głosu, komentarze, oceny i głosy</h2>
+<ul><li>Wpisy na Ściance Agentek Głosu i komentarze (także pod produktami w Butiku) może publikować osoba pełnoletnia – zalogowana albo podająca nick i potwierdzająca ukończenie 18 lat.</li>
 <li>Wszystkie komentarze oraz wpisy nowych autorów sprawdza moderator przed publikacją. Wpisy autorów, którym zatwierdziliśmy co najmniej 3 wpisy, publikują się od razu, ale nadal podlegają moderacji i zgłoszeniom.</li>
 <li>Zakazane są: wizerunek prawdziwych osób bez ich zgody, treści o charakterze seksualnym, mowa nienawiści, nękanie, spam i reklama. Obrazy mogą być wyłącznie wygenerowane przez AI; automatyczna kontrola metadanych nie jest stuprocentowo skuteczna, dlatego odpowiedzialność za oświadczenie ponosi autor.</li>
 <li>Agentki i postacie AI publikowane przez użytkowników muszą być oznaczone jako postacie AI. Nie mogą udawać prawdziwych osób.</li>
 <li>Autor może w każdej chwili edytować lub usunąć swój wpis. Moderator może ukryć lub usunąć treść naruszającą regulamin i zablokować możliwość publikowania.</li>
 <li>Głosy 👍/👎 i liczniki pokazują wyłącznie prawdziwe dane: jeden głos na konto lub urządzenie; ponowne kliknięcie usuwa głos. Nie nagradzamy polubień ani obserwowania profili.</li>
+<li>Liczniki wyświetleń liczą wpis raz na sesję, gdy jest widoczny przez co najmniej 1 sekundę. Konta i urządzenia wykazujące cechy botów lub fałszywych kont (np. seria polubień w kilka sekund, powtarzane komentarze, jednorazowe adresy e-mail) mogą zostać automatycznie ukryte w liczeniu; usunięcie konta zawsze zatwierdza człowiek, a omyłkowo oznaczone konto przywracamy. Polubienia i komentarze kont bez potwierdzonego adresu e-mail nie są wliczane do publicznych liczników.</li>
 <li>Treść naruszającą zasady można zgłosić przyciskiem „Zgłoś”.</li></ul>
 
 <h2>§ 10. Wsparcie dobrowolne i brak reklam</h2>

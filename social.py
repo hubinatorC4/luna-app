@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Ścianka Luny, komentarze, głosy 👍/👎 i zgłoszenia – wspólna warstwa (store: Postgres lub JSON).
+"""Ścianka Agentek Głosu, komentarze, głosy 👍/👎 i zgłoszenia – wspólna warstwa (store: Postgres lub JSON).
 Wszystkie komentarze są moderowane przed publikacją; wpisy na Ściance od zaufanych autorów (3+ zatwierdzone) publikują się od razu.
 Liczniki są wyłącznie prawdziwe – nic nie jest „zasiewane”."""
 import base64, hashlib, re, secrets, threading, time, unicodedata
-import store, imgsafe, avatars, official
+import store, imgsafe, avatars, official, antibot, stats
 PRICING = lambda: {}  # ustawiane przez serwer (cennik z CFG)
 
 _lock = threading.Lock()
@@ -63,9 +63,11 @@ def vote(target, voter, v):
         V[target] = t; store.put("votes", V)
     return counts(target, voter)
 
-def counts(target, voter=None, V=None):
-    t = (V if V is not None else _votes()).get(target, {})
-    return {"up": sum(1 for x in t.values() if x == 1), "down": sum(1 for x in t.values() if x == -1), "mine": t.get(voter, 0) if voter else 0}
+def counts(target, voter=None, V=None, X=None):
+    """Publiczne liczniki: bez głosów kont ukrytych w cieniu (antibot) i kont bez potwierdzonego e-maila."""
+    t = (V if V is not None else _votes()).get(target, {}); X = X if X is not None else antibot.excluded()
+    return {"up": sum(1 for k, x in t.items() if x == 1 and k not in X), "down": sum(1 for k, x in t.items() if x == -1 and k not in X), "mine": t.get(voter, 0) if voter else 0}
+def _cm_ok(c, X): return c["status"] == "approved" and c["author"] not in X
 
 # ---------- Ścianka ----------
 def _trusted(ak): return sum(1 for p in _posts() if p["author"] == ak and p.get("ever_approved")) >= TRUST_AFTER
@@ -134,20 +136,22 @@ def wall_img(iid):
 def _variants(p):
     v = {p.get("lang", "pl"): p["text"]}; v.update({k: t for k, t in (p.get("variants") or {}).items() if k in LANGS and t}); return v
 
-def public_post(p, voter, V, C, mine_ak, lang="pl"):
+def public_post(p, voter, V, C, mine_ak, lang="pl", T=None):
     c = counts("post:" + p["id"], voter, V)
     va = _variants(p); shown = lang if lang in va else p.get("lang", "pl")
-    cm = [x for x in C if x["target"] == "post:" + p["id"] and x["status"] == "approved"]
-    return {"id": p["id"], "nick": p["nick"], "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "agent": p.get("agent"),
+    X = antibot.excluded()
+    cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
+    return {"views": stats.post_views(p["id"], T), "id": p["id"], "nick": p["nick"], "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "agent": p.get("agent"),
             "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved"}
 
 def _off_hidden(): return set(store.get("official_hidden", []) or [])
 
 def feed(sort, before, limit, uid, vid, lang="pl"):
     voter = author_key(uid, vid); V = _votes(); C = _cmts(); hid = _off_hidden()
-    P = [p for p in _posts() if p["status"] == "approved" or (p["author"] == voter and p["status"] == "pending")]
+    X = antibot.excluded(); T = stats.totals()
+    P = [p for p in _posts() if (p["status"] == "approved" and p["author"] not in X) or (p["author"] == voter and p["status"] in ("approved", "pending"))]
     P += [dict(o, _off=True) for o in official.raw() if o["id"] not in hid]
-    score = lambda p: counts("post:" + p["id"], None, V)["up"] - counts("post:" + p["id"], None, V)["down"]
+    def score(p): c = counts("post:" + p["id"], None, V, X); return c["up"] - c["down"]
     if sort == "top":
         wk = time.time() - 7 * 86400
         P = [p for p in P if p["t"] >= wk or p.get("_off")]
@@ -160,9 +164,9 @@ def feed(sort, before, limit, uid, vid, lang="pl"):
     pr = PRICING()
     def pub(p):
         if p.get("_off"):
-            cm = [x for x in C if x["target"] == "post:" + p["id"] and x["status"] == "approved"]
-            return official.public(p, lang, pr, {"votes": counts("post:" + p["id"], voter, V), "ncomments": len(cm)})
-        return public_post(p, voter, V, C, voter, lang)
+            cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
+            return official.public(p, lang, pr, {"votes": counts("post:" + p["id"], voter, V, X), "ncomments": len(cm), "views": stats.post_views(p["id"], T)})
+        return public_post(p, voter, V, C, voter, lang, T)
     return {"items": [pub(p) for p in items], "next": nxt}
 
 def get_post(pid):
@@ -195,10 +199,10 @@ def add_comment(d, uid, vid, acct_nick=None):
     return c
 
 def list_comments(target, uid, vid):
-    voter = author_key(uid, vid); V = _votes()
+    voter = author_key(uid, vid); V = _votes(); X = antibot.excluded()
     out = [{"id": c["id"], "parent": c["parent"], "nick": c["nick"], "text": c["text"], "rating": c.get("rating"), "t": c["t"],
-            "votes": counts("cmt:" + c["id"], voter, V), "pending": c["status"] != "approved"}
-           for c in _cmts() if c["target"] == target and (c["status"] == "approved" or (c["author"] == voter and c["status"] == "pending"))]
+            "votes": counts("cmt:" + c["id"], voter, V, X), "pending": c["status"] != "approved", "mine": c["author"] == voter}
+           for c in _cmts() if c["target"] == target and (_cm_ok(c, X) or (c["author"] == voter and c["status"] in ("approved", "pending")))]
     rs = [c["rating"] for c in out if c.get("rating") and not c["pending"]]
     return {"items": sorted(out, key=lambda c: c["t"]), "rating": round(sum(rs) / len(rs), 1) if rs else None, "nratings": len(rs)}
 
@@ -261,3 +265,32 @@ def unban(ak):
     B = _bans(); B.discard(ak); store.put("social_bans", sorted(B))
 
 def admin_img(iid): return (store.get("wall_img", {}) or {}).get(iid)
+
+# ---------- usuwanie / anonimizacja autora ----------
+DELETED_NICK = "Usunięty użytkownik"
+def anonymise_author(ak):
+    """Usunięcie konta przez użytkownika: wpisy i komentarze zostają, ale bez nicku i powiązania z osobą; głosy zostają jako anonimowe."""
+    anon = "x:" + secrets.token_hex(8)
+    with _lock:
+        C = _cmts(); ch = False
+        for c in C:
+            if c["author"] == ak: c.update(author=anon, uid="", nick=DELETED_NICK); ch = True
+        if ch: store.put("comments", C)
+        P = _posts(); ch = False
+        for p in P:
+            if p["author"] == ak: p.update(author=anon, uid="", nick=DELETED_NICK); p.pop("agent", None); ch = True
+        if ch: store.put("wall_posts", P)
+        V = _votes(); ch = False
+        for t in V.values():
+            if ak in t: t[anon] = t.pop(ak); ch = True
+        if ch: store.put("votes", V)
+def purge_author(ak, ban=False):
+    """Usunięcie konta-bota przez właściciela: kasuje jego wpisy, komentarze i głosy."""
+    with _lock:
+        store.put("comments", [c for c in _cmts() if c["author"] != ak])
+        store.put("wall_posts", [p for p in _posts() if p["author"] != ak])
+        V = _votes()
+        for t in V.values(): t.pop(ak, None)
+        store.put("votes", V)
+        if ban:
+            b = _bans(); b.add(ak); store.put("social_bans", sorted(b))

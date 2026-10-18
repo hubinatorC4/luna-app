@@ -1,0 +1,170 @@
+{
+"en": [
+[
+"'🔔 Powiadomienia niedostępne w tej przeglądarce'",
+"'🔔 Notifications not available in this browser'"
+],
+[
+"'🔔 Powiadomienia – wkrótce'",
+"'🔔 Notifications – coming soon'"
+],
+[
+"'🔕 Powiadomienia zablokowane w przeglądarce'",
+"'🔕 Notifications blocked in the browser'"
+],
+[
+"'🔔 Powiadomienia włączone'",
+"'🔔 Notifications on'"
+],
+[
+"'🔔 Powiadom mnie'",
+"'🔔 Notify me'"
+],
+[
+"'Ta przeglądarka nie obsługuje powiadomień push. Na iPhonie dodaj Lunę do ekranu początkowego.'",
+"'This browser doesn’t support push notifications. On iPhone, add Luna to your Home Screen.'"
+],
+[
+"'Powiadomienia push zostaną uruchomione wkrótce.'",
+"'Push notifications will be launched soon.'"
+],
+[
+"'Wyłączyć powiadomienia od Luny?'",
+"'Turn off notifications from Luna?'"
+],
+[
+"'Nie udało się zapisać na powiadomienia.'",
+"'Couldn’t subscribe to notifications.'"
+],
+[
+"'Błąd: '",
+"'Error: '"
+]
+],
+"es": [
+[
+"'🔔 Powiadomienia niedostępne w tej przeglądarce'",
+"'🔔 Notificaciones no disponibles en este navegador'"
+],
+[
+"'🔔 Powiadomienia – wkrótce'",
+"'🔔 Notificaciones: próximamente'"
+],
+[
+"'🔕 Powiadomienia zablokowane w przeglądarce'",
+"'🔕 Notificaciones bloqueadas en el navegador'"
+],
+[
+"'🔔 Powiadomienia włączone'",
+"'🔔 Notificaciones activadas'"
+],
+[
+"'🔔 Powiadom mnie'",
+"'🔔 Avísame'"
+],
+[
+"'Ta przeglądarka nie obsługuje powiadomień push. Na iPhonie dodaj Lunę do ekranu początkowego.'",
+"'Este navegador no admite notificaciones push. En iPhone, añade Luna a la pantalla de inicio.'"
+],
+[
+"'Powiadomienia push zostaną uruchomione wkrótce.'",
+"'Las notificaciones push llegarán pronto.'"
+],
+[
+"'Wyłączyć powiadomienia od Luny?'",
+"'¿Desactivar las notificaciones de Luna?'"
+],
+[
+"'Nie udało się zapisać na powiadomienia.'",
+"'No se pudo activar las notificaciones.'"
+],
+[
+"'Błąd: '",
+"'Error: '"
+]
+],
+"de": [
+[
+"'🔔 Powiadomienia niedostępne w tej przeglądarce'",
+"'🔔 Benachrichtigungen in diesem Browser nicht verfügbar'"
+],
+[
+"'🔔 Powiadomienia – wkrótce'",
+"'🔔 Benachrichtigungen – bald'"
+],
+[
+"'🔕 Powiadomienia zablokowane w przeglądarce'",
+"'🔕 Benachrichtigungen im Browser blockiert'"
+],
+[
+"'🔔 Powiadomienia włączone'",
+"'🔔 Benachrichtigungen an'"
+],
+[
+"'🔔 Powiadom mnie'",
+"'🔔 Benachrichtige mich'"
+],
+[
+"'Ta przeglądarka nie obsługuje powiadomień push. Na iPhonie dodaj Lunę do ekranu początkowego.'",
+"'Dieser Browser unterstützt keine Push-Benachrichtigungen. Füge Luna auf dem iPhone zum Home-Bildschirm hinzu.'"
+],
+[
+"'Powiadomienia push zostaną uruchomione wkrótce.'",
+"'Push-Benachrichtigungen starten bald.'"
+],
+[
+"'Wyłączyć powiadomienia od Luny?'",
+"'Benachrichtigungen von Luna ausschalten?'"
+],
+[
+"'Nie udało się zapisać na powiadomienia.'",
+"'Anmeldung für Benachrichtigungen fehlgeschlagen.'"
+],
+[
+"'Błąd: '",
+"'Fehler: '"
+]
+],
+"uk": [
+[
+"'🔔 Powiadomienia niedostępne w tej przeglądarce'",
+"'🔔 Сповіщення недоступні в цьому браузері'"
+],
+[
+"'🔔 Powiadomienia – wkrótce'",
+"'🔔 Сповіщення – незабаром'"
+],
+[
+"'🔕 Powiadomienia zablokowane w przeglądarce'",
+"'🔕 Сповіщення заблоковані в браузері'"
+],
+[
+"'🔔 Powiadomienia włączone'",
+"'🔔 Сповіщення ввімкнено'"
+],
+[
+"'🔔 Powiadom mnie'",
+"'🔔 Сповістити мене'"
+],
+[
+"'Ta przeglądarka nie obsługuje powiadomień push. Na iPhonie dodaj Lunę do ekranu początkowego.'",
+"'Цей браузер не підтримує push-сповіщення. На iPhone додайте Луну на початковий екран.'"
+],
+[
+"'Powiadomienia push zostaną uruchomione wkrótce.'",
+"'Push-сповіщення запрацюють незабаром.'"
+],
+[
+"'Wyłączyć powiadomienia od Luny?'",
+"'Вимкнути сповіщення від Луни?'"
+],
+[
+"'Nie udało się zapisać na powiadomienia.'",
+"'Не вдалося підписатися на сповіщення.'"
+],
+[
+"'Błąd: '",
+"'Помилка: '"
+]
+]
+}

@@ -72,7 +72,7 @@ function route(){
   if (h.startsWith('kategoria/')){ view = 'kategorie'; $('#fCat').value = h.slice(10); query = ''; $('#q').value = ''; render(); return scrollToView(); }
   if (['popularne', 'najnowsze', 'kategorie'].includes(h)){ view = h; if (h === 'kategorie') $('#fCat').value = ''; render(); scrollToView(); }
 }
-function scrollToView(){ $('#view').scrollIntoView({behavior: 'smooth', block: 'start'}); }
+function scrollToView(){ if (window.LunaHomePlace) window.LunaHomePlace(); $('#view').scrollIntoView({behavior: 'smooth', block: 'start'}); }
 window.addEventListener('hashchange', route);
 ['fCat', 'fLen', 'fLvl'].forEach(id => $('#' + id).onchange = render);
 $('#fClear').onclick = () => { $('#fCat').value = $('#fLen').value = $('#fLvl').value = ''; query = ''; $('#q').value = ''; render(); };
