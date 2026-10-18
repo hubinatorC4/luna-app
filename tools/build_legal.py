@@ -20,7 +20,7 @@ body = """<main class="page legal">
 <p>Luna jest asystentką AI. Jej postać i głos zostały wygenerowane sztucznie. Porady Luny mają charakter edukacyjny i nie zastępują konsultacji z foniatrą ani logopedą.</p>
 
 <h2>§ 2. Wymóg pełnoletności (18+)</h2>
-<p>Z aplikacji mogą korzystać wyłącznie osoby pełnoletnie. Przy pierwszym uruchomieniu, przy zakładaniu konta oraz w formularzach zgłoszeniowych prosimy o podanie daty urodzenia i złożenie oświadczenia: „Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.”</p>
+<p>Z aplikacji mogą korzystać wyłącznie osoby pełnoletnie. Przy pierwszym uruchomieniu, przy zakładaniu konta oraz w formularzach zgłoszeniowych prosimy wyłącznie o potwierdzenie pełnoletności („Masz 18 lat?” – Tak/Nie; nie pytamy o datę urodzenia) i złożenie oświadczenia: „Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.”</p>
 <p>Jest to <b>wyłącznie oświadczenie użytkownika</b> – nie weryfikujemy wieku ani posiadania konta bankowego. Zapisujemy datę i godzinę złożenia oświadczenia. Osobom poniżej 18 lat uprzejmie odmawiamy dostępu.</p>
 
 <h2>§ 3. Konto</h2>

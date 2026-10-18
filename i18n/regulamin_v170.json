@@ -61,8 +61,8 @@
 "§ 9f. Tester and casting forms – 18+ verification"
 ],
 [
-"Zgłoszenia testerów i castingu wymagają potwierdzenia pełnoletności u zewnętrznego dostawcy (Stripe): dokumentem tożsamości (Stripe Identity) albo kartą płatniczą, bez obciążenia. Karta jest słabszym dowodem, dlatego łączymy ją z oświadczeniem o dacie urodzenia.",
-"Tester and casting applications require confirmation of adulthood with an external provider (Stripe): with an ID document (Stripe Identity) or with a bank card, without any charge. A card is weaker proof, so we combine it with a date-of-birth declaration."
+"Zgłoszenia testerów i castingu wymagają potwierdzenia pełnoletności u zewnętrznego dostawcy (Stripe): dokumentem tożsamości (Stripe Identity) albo kartą płatniczą, bez obciążenia. Karta jest słabszym dowodem, dlatego łączymy ją z potwierdzeniem „Mam 18 lat” (Tak). Nie pytamy o datę urodzenia.",
+"Tester and casting applications require confirmation of adulthood with an external provider (Stripe): with an ID document (Stripe Identity) or with a bank card, without any charge. A card is weaker proof, so we combine it with an “I am 18+” (Yes) confirmation. We never ask for a date of birth."
 ],
 [
 "Nie przechowujemy skanów dokumentów ani numerów kart – zapisujemy tylko wynik (18+ tak/nie), datę, metodę i identyfikator u dostawcy, a przy karcie markę i 4 ostatnie cyfry. Zgłoszenie bez weryfikacji pozostaje „oczekujące” i nie może zostać przyjęte.",
@@ -159,8 +159,8 @@
 "§ 9f. Formularios de testers y casting – verificación 18+"
 ],
 [
-"Zgłoszenia testerów i castingu wymagają potwierdzenia pełnoletności u zewnętrznego dostawcy (Stripe): dokumentem tożsamości (Stripe Identity) albo kartą płatniczą, bez obciążenia. Karta jest słabszym dowodem, dlatego łączymy ją z oświadczeniem o dacie urodzenia.",
-"Las solicitudes de testers y casting requieren confirmar la mayoría de edad con un proveedor externo (Stripe): con un documento de identidad (Stripe Identity) o con una tarjeta bancaria, sin cargo. La tarjeta es una prueba más débil, por eso la combinamos con la declaración de la fecha de nacimiento."
+"Zgłoszenia testerów i castingu wymagają potwierdzenia pełnoletności u zewnętrznego dostawcy (Stripe): dokumentem tożsamości (Stripe Identity) albo kartą płatniczą, bez obciążenia. Karta jest słabszym dowodem, dlatego łączymy ją z potwierdzeniem „Mam 18 lat” (Tak). Nie pytamy o datę urodzenia.",
+"Las solicitudes de testers y casting requieren confirmar la mayoría de edad con un proveedor externo (Stripe): con un documento de identidad (Stripe Identity) o con una tarjeta bancaria, sin cargo. La tarjeta es una prueba más débil, por eso la combinamos con la confirmación «Tengo 18 años» (Sí). Nunca pedimos la fecha de nacimiento."
 ],
 [
 "Nie przechowujemy skanów dokumentów ani numerów kart – zapisujemy tylko wynik (18+ tak/nie), datę, metodę i identyfikator u dostawcy, a przy karcie markę i 4 ostatnie cyfry. Zgłoszenie bez weryfikacji pozostaje „oczekujące” i nie może zostać przyjęte.",
@@ -257,8 +257,8 @@
 "§ 9f. Tester- und Casting-Formulare – 18+-Prüfung"
 ],
 [
-"Zgłoszenia testerów i castingu wymagają potwierdzenia pełnoletności u zewnętrznego dostawcy (Stripe): dokumentem tożsamości (Stripe Identity) albo kartą płatniczą, bez obciążenia. Karta jest słabszym dowodem, dlatego łączymy ją z oświadczeniem o dacie urodzenia.",
-"Bewerbungen als Tester und fürs Casting erfordern eine Bestätigung der Volljährigkeit bei einem externen Anbieter (Stripe): per Ausweis (Stripe Identity) oder per Bankkarte, ohne Belastung. Eine Karte ist ein schwächerer Nachweis, daher kombinieren wir sie mit der Angabe des Geburtsdatums."
+"Zgłoszenia testerów i castingu wymagają potwierdzenia pełnoletności u zewnętrznego dostawcy (Stripe): dokumentem tożsamości (Stripe Identity) albo kartą płatniczą, bez obciążenia. Karta jest słabszym dowodem, dlatego łączymy ją z potwierdzeniem „Mam 18 lat” (Tak). Nie pytamy o datę urodzenia.",
+"Bewerbungen als Tester und fürs Casting erfordern eine Bestätigung der Volljährigkeit bei einem externen Anbieter (Stripe): per Ausweis (Stripe Identity) oder per Bankkarte, ohne Belastung. Eine Karte ist ein schwächerer Nachweis, daher kombinieren wir sie mit der Bestätigung „Ich bin 18+“ (Ja). Nach dem Geburtsdatum fragen wir nie."
 ],
 [
 "Nie przechowujemy skanów dokumentów ani numerów kart – zapisujemy tylko wynik (18+ tak/nie), datę, metodę i identyfikator u dostawcy, a przy karcie markę i 4 ostatnie cyfry. Zgłoszenie bez weryfikacji pozostaje „oczekujące” i nie może zostać przyjęte.",
@@ -355,8 +355,8 @@
 "§ 9f. Форми тестувальників і кастингу – перевірка 18+"
 ],
 [
-"Zgłoszenia testerów i castingu wymagają potwierdzenia pełnoletności u zewnętrznego dostawcy (Stripe): dokumentem tożsamości (Stripe Identity) albo kartą płatniczą, bez obciążenia. Karta jest słabszym dowodem, dlatego łączymy ją z oświadczeniem o dacie urodzenia.",
-"Заявки тестувальників і на кастинг вимагають підтвердження повноліття у зовнішнього провайдера (Stripe): документом (Stripe Identity) або банківською карткою, без списання коштів. Картка – слабший доказ, тому поєднуємо її із заявою про дату народження."
+"Zgłoszenia testerów i castingu wymagają potwierdzenia pełnoletności u zewnętrznego dostawcy (Stripe): dokumentem tożsamości (Stripe Identity) albo kartą płatniczą, bez obciążenia. Karta jest słabszym dowodem, dlatego łączymy ją z potwierdzeniem „Mam 18 lat” (Tak). Nie pytamy o datę urodzenia.",
+"Заявки тестувальників і на кастинг вимагають підтвердження повноліття у зовнішнього провайдера (Stripe): документом (Stripe Identity) або банківською карткою, без списання коштів. Картка – слабший доказ, тому поєднуємо її з підтвердженням «Мені є 18» (Так). Дату народження ми не питаємо."
 ],
 [
 "Nie przechowujemy skanów dokumentów ani numerów kart – zapisujemy tylko wynik (18+ tak/nie), datę, metodę i identyfikator u dostawcy, a przy karcie markę i 4 ostatnie cyfry. Zgłoszenie bez weryfikacji pozostaje „oczekujące” i nie może zostać przyjęte.",
