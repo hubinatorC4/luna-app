@@ -102,6 +102,9 @@ def public(c):
                 img = o["image"] or auto_image(a["id"], k, o["id"])
                 o["placeholder"] = not img
                 o["image"] = img or (a["outfits"][0]["image"] if k != "outfits" and a["outfits"] and a["outfits"][0]["image"] else "") or auto_image(a["id"], "outfits", "koronkowa") or PLACEHOLDER
+            for o in a[k]:
+                if o["image"].endswith(".jpg") and os.path.exists(os.path.join(STATIC, o["image"].lstrip("/")[:-4] + "@2x.jpg")):
+                    o["image2x"] = o["image"][:-4] + "@2x.jpg"
         a["avatar"] = next((o["image"] for o in a["outfits"] if not o["placeholder"]), a["outfits"][0]["image"] if a["outfits"] else PLACEHOLDER)
     return c
 
@@ -121,11 +124,15 @@ def save(c):
 
 def save_upload(name, raw):
     ext = os.path.splitext(name or "")[1].lower()
-    if ext not in (".jpg", ".jpeg", ".png", ".webp"): raise ValueError("Dozwolone formaty: JPG, PNG, WEBP")
-    if len(raw) > 4 * 1024 * 1024: raise ValueError("Plik większy niż 4 MB")
     sig = raw[:12]
-    if not (sig.startswith(b"\xff\xd8") or sig.startswith(b"\x89PNG") or (sig[:4] == b"RIFF" and sig[8:12] == b"WEBP")):
-        raise ValueError("To nie jest prawidłowy obraz")
+    if ext == ".mp3":
+        if len(raw) > 6 * 1024 * 1024: raise ValueError("Plik MP3 większy niż 6 MB")
+        if not (sig.startswith(b"ID3") or sig[:1] == b"\xff"): raise ValueError("To nie jest prawidłowy plik MP3")
+    else:
+        if ext not in (".jpg", ".jpeg", ".png", ".webp"): raise ValueError("Dozwolone formaty: JPG, PNG, WEBP, MP3")
+        if len(raw) > 4 * 1024 * 1024: raise ValueError("Plik większy niż 4 MB")
+        if not (sig.startswith(b"\xff\xd8") or sig.startswith(b"\x89PNG") or (sig[:4] == b"RIFF" and sig[8:12] == b"WEBP")):
+            raise ValueError("To nie jest prawidłowy obraz")
     import secrets
     os.makedirs(UPLOADS, exist_ok=True)
     fn = secrets.token_hex(8) + (".jpg" if ext == ".jpeg" else ext)

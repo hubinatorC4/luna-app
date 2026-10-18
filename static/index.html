@@ -7,32 +7,44 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Luna">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="stylesheet" href="style.css">
 <title>Luna – trenerka głosu</title>
 </head>
 <body>
-<div class="bg" style="background-image:url(luna_portrait.jpg)"></div>
+<div class="bg"></div>
 <header class="top">
   <div class="brand">
-    <img src="avatar_round.png" alt="" class="mini">
+    <img src="avatar-256.jpg" srcset="avatar-256.jpg 1x, avatar-512.jpg 2x, avatar-1024.jpg 3x" alt="" class="mini">
     <div><h1 id="agentName">Luna</h1><small id="status">Twoja trenerka głosu</small></div>
   </div>
   <div class="actions">
     <label class="wake" title="Nasłuchiwanie słowa „Luna”">
       <input type="checkbox" id="wakeToggle"><span class="sw"></span><span class="lbl">Nasłuchiwanie</span>
     </label>
+    <button id="musicBtn" class="icon" aria-label="Muzyka" title="Muzyka">🎷</button>
     <button id="customBtn" class="icon" aria-label="Stwórz własną asystentkę" title="Stwórz własną asystentkę">✨</button>
     <button id="settingsBtn" class="icon" aria-label="Ustawienia">⚙</button>
   </div>
 </header>
 
 <div class="ai-label" role="note">🤖 <span id="aiLabelName">Luna</span> – asystentka AI (postać wygenerowana sztucznie)</div>
+<div id="musicPanel" class="musicpanel" hidden>
+  <div class="mrow"><label class="wake"><input type="checkbox" id="musicToggle"><span class="sw"></span><span class="lbl">Muzyka</span></label>
+    <button type="button" id="musicNext" class="mbtn" title="Następny utwór">⏭</button></div>
+  <label class="mvol">Głośność <input type="range" id="musicVol" min="0" max="1" step="0.01"></label>
+  <div class="mnow" id="musicNow">—</div>
+  <div class="mcredit" id="musicCredit"></div>
+</div>
 <section class="hero" id="hero">
   <div class="ring" id="ring">
-    <img src="avatar_round.png" alt="Luna" id="avatar">
+    <img src="avatar-512.jpg" srcset="avatar-512.jpg 1x, avatar-1024.jpg 2x" alt="Luna" id="avatar">
+    <canvas id="holoCanvas" aria-hidden="true"></canvas>
   </div>
+  <div class="holo-cone" aria-hidden="true"></div>
   <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
 </section>
 
@@ -74,6 +86,17 @@
       </label>
     </fieldset>
     <label class="row"><input type="checkbox" id="autoSpeak"> Czytaj odpowiedzi na głos</label>
+    <label class="row" id="holoRow"><input type="checkbox" id="holoChk"> Tryb hologram <span class="tag" id="holoTag"></span></label>
+    <fieldset class="timbre">
+      <legend>Twój profil</legend>
+      <label>Twoje imię (widoczne w czacie)<input type="text" id="u_name" maxlength="30" placeholder="np. Hubert"></label>
+      <div class="presets uav" id="u_presets"></div>
+      <div class="btns">
+        <label class="filebtn">📷 Wgraj zdjęcie<input type="file" id="u_upload" accept="image/*" hidden></label>
+        <button type="button" id="u_clear" class="ghost">Bez awatara</button>
+      </div>
+      <p class="hint">Zdjęcie jest przycinane do koła (256 px) i zostaje tylko na tym urządzeniu.</p>
+    </fieldset>
     <div class="btns">
       <button type="button" id="testVoice">▶ Posłuchaj próbki</button>
       <button type="button" id="resetBtn" class="ghost">Przywróć domyślne</button>
@@ -122,6 +145,9 @@
     <details><summary>Wygląd awatara</summary>
       <label>Kolor pierścienia<input type="color" id="adm_ring_color"></label>
       <label>Szybkość pulsowania: <b id="adm_pulse_v"></b><input type="range" id="adm_pulse_speed" min="0.4" max="4" step="0.1"></label>
+      <label class="row"><input type="checkbox" id="adm_holo_default"> Tryb hologram domyślnie włączony</label>
+      <label>Tryb hologram dostępny od planu
+        <select id="adm_holo_plan"><option value="podstawowa">Podstawowa (dla wszystkich)</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select></label>
     </details>
     <details id="catSection"><summary>Katalog postaci, strojów i planów</summary>
       <p class="hint">⚠️ Wgrywaj wyłącznie stonowane, nie-erotyczne obrazy (bez bielizny, prześwitów i nagości). Treści naruszające tę zasadę będą usuwane.</p>
@@ -148,6 +174,15 @@
         <button type="button" id="catReset" class="ghost">Domyślny katalog</button>
       </div>
       <p id="catMsg" class="hint"></p>
+    </details>
+    <details id="musSection"><summary>Muzyka w tle</summary>
+      <p class="hint">Tylko utwory z licencją pozwalającą na użycie w aplikacji (CC0, domena publiczna, CC BY z podaniem autora). Nigdy popularne utwory chronione prawem autorskim.</p>
+      <label>Domyślna głośność: <b id="adm_mvol_v"></b><input type="range" id="adm_mvol" min="0" max="1" step="0.01"></label>
+      <div id="musList" class="items"></div>
+      <div class="row3"><input type="text" id="musTitle" placeholder="Tytuł"><input type="text" id="musArtist" placeholder="Autor"><input type="text" id="musLic" placeholder="Licencja (np. CC0)"></div>
+      <input type="text" id="musSrc" placeholder="Źródło (URL strony z licencją)" style="width:100%;box-sizing:border-box;margin-top:6px">
+      <label class="filebtn">🎵 Wgraj MP3 i dodaj<input type="file" id="musFile" accept="audio/mpeg,.mp3" hidden></label>
+      <p class="hint">Zmiany zapisuje przycisk „Zapisz” na dole panelu.</p>
     </details>
     <details><summary>Eksport / import</summary>
       <div class="btns">
@@ -205,6 +240,9 @@
 <script src="app.js"></script>
 <script src="admin.js"></script>
 <script src="custom.js"></script>
+<script src="music.js"></script>
+<script src="profile.js"></script>
+<script src="holo.js"></script>
 <script src="admin-catalog.js"></script>
 </body>
 </html>

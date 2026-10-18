@@ -8,3 +8,4 @@ assets/
 *.mp4
 luna-app.zip
 data/
+!static/music/*.mp3

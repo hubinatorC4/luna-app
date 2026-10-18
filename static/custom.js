@@ -22,21 +22,29 @@ function image(){
 }
 function apply(){
   const img = image();
-  document.querySelectorAll('#avatar, .mini').forEach(el => { el.src = img || 'avatar_round.png'; el.classList.toggle('cat', !!img); });
-  const bg = $('.bg'); if (bg) bg.style.backgroundImage = 'url(' + (img || 'luna_portrait.jpg') + ')';
+  const two = u => u && /\.jpg$/.test(u) && !u.startsWith('data:') ? u.replace(/\.jpg$/, '@2x.jpg') : u;
+  const av = $('#avatar'), mini = $('.mini');
+  if (img){ av.removeAttribute('srcset'); mini.removeAttribute('srcset'); av.src = mini.src = img; if (two(img) !== img){ av.srcset = img + ' 1x, ' + two(img) + ' 2x'; mini.srcset = av.srcset; } }
+  else { av.src = 'avatar-512.jpg'; av.srcset = 'avatar-512.jpg 1x, avatar-1024.jpg 2x'; mini.src = 'avatar-256.jpg'; mini.srcset = 'avatar-256.jpg 1x, avatar-512.jpg 2x, avatar-1024.jpg 3x'; }
+  [av, mini].forEach(el => el.classList.toggle('cat', !!img));
+  const bg = $('.bg'); if (bg) bg.style.backgroundImage = img ? `image-set(url("${img}") 1x, url("${two(img)}") 2x)` : 'image-set(url("luna_portrait.webp") type("image/webp") 1x, url("luna_portrait@2x.webp") type("image/webp") 2x, url("luna_portrait.jpg") 1x)';
+  window.LunaRefreshAvatars && window.LunaRefreshAvatars();
   const n = name(); $('#agentName').textContent = n; $('#aiLabelName').textContent = n; document.title = n + ' – asystentka AI';
   const ring = has('premium') && C.ring; if (ring) document.documentElement.style.setProperty('--ring', ring);
   window.LunaSetWake && window.LunaSetWake((has('premium') && C.wake.trim()) || (agent() ? agent().wake_word : 'Luna'));
 }
 window.LunaName = name;
 window.LunaCustomApply = () => apply();
+window.LunaAvatarSrc = () => image() || 'avatar-256.jpg';
+window.LunaHas = plan => has(plan);
 window.LunaPersona = () => ({agent: agent() ? agent().id : 'luna', name: name(),
   tone: has('premium') ? C.tone : '', length: has('premium') ? C.length : ''});
 
 function card(o, kind, selected){
   const locked = !has(o.plan);
   const b = document.createElement('button'); b.type = 'button'; b.className = 'card' + (selected ? ' on' : '') + (locked ? ' locked' : '');
-  b.innerHTML = `<img src="${o.image || o.avatar}" alt="" loading="lazy"><span>${o.name}</span>` +
+  const im1 = o.image || o.avatar, im2 = o.image2x;
+  b.innerHTML = `<img src="${im1}"${im2 ? ` srcset="${im1} 1x, ${im2} 2x"` : ''} alt="" loading="lazy"><span>${o.name}</span>` +
     (locked ? `<em>🔒 ${PLAN_NAME[o.plan]}</em>` : (o.placeholder ? '<em class="soon">wkrótce</em>' : ''));
   b.onclick = () => {
     if (locked) { alert('Ta opcja jest dostępna w planie ' + PLAN_NAME[o.plan] + '.'); return; }

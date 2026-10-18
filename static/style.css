@@ -105,3 +105,42 @@ dialog textarea,dialog input[type=text]{width:100%;box-sizing:border-box;margin-
 #admin .itemrow img{width:44px;height:44px;border-radius:8px;object-fit:cover;object-position:50% 18%}
 #admin .itemrow input,#admin .itemrow select{background:#241810;color:var(--text);border:1px solid rgba(240,160,64,.3);border-radius:8px;padding:6px}
 #admin .itemrow .del{background:none;border:none;color:#ff8a7a;font-size:16px;cursor:pointer}
+.musicpanel{position:fixed;top:calc(58px + env(safe-area-inset-top));right:10px;z-index:20;width:min(86vw,300px);background:#170f0a;border:1px solid rgba(240,160,64,.4);border-radius:14px;padding:10px 12px;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+.musicpanel[hidden]{display:none}
+.mrow{display:flex;justify-content:space-between;align-items:center}
+.mbtn{background:#241810;border:1px solid rgba(240,160,64,.4);color:var(--amber2);border-radius:10px;padding:4px 10px;font-size:16px;cursor:pointer}
+.mvol{display:block;font-size:12px;color:var(--muted);margin:8px 0}.mvol input{width:100%;accent-color:var(--amber)}
+.mnow{font-size:13px;color:var(--amber2)}.mcredit{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.35}.mcredit a{color:var(--amber2)}
+#musicBtn.on{box-shadow:0 0 10px var(--amber);border-color:var(--amber)}
+/* ---- wiadomości z awatarami ---- */
+.msgrow{display:flex;gap:8px;align-items:flex-end;max-width:92%}
+.msgrow.luna{align-self:flex-start}.msgrow.me{align-self:flex-end;flex-direction:row-reverse}
+.msgrow .msg{max-width:100%}
+.mav{width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:50% 18%;flex:0 0 30px;border:1.5px solid var(--amber);image-rendering:auto}
+.mav.luna{border-color:var(--ring);box-shadow:0 0 6px color-mix(in srgb,var(--ring) 60%,transparent)}
+.presets.uav{grid-template-columns:repeat(auto-fill,minmax(44px,1fr))}
+.presets.uav button{padding:2px;border-radius:50%;aspect-ratio:1}
+.presets.uav img{width:100%;height:100%;border-radius:50%;display:block;object-fit:cover}
+#settings input[type=text]{width:100%;box-sizing:border-box;margin-top:6px;background:#241810;color:var(--text);border:1px solid rgba(240,160,64,.3);border-radius:10px;padding:8px}
+#settings .filebtn{display:inline-block;flex:1;text-align:center;padding:10px;border-radius:12px;border:1px dashed rgba(240,160,64,.5);color:var(--amber2);font-size:14px;cursor:pointer}
+.ring img,.mini,.mav,.card img{image-rendering:auto;backface-visibility:hidden}
+/* ---- tryb hologram ---- */
+.hero{position:relative}
+.ring{position:relative}
+#holoCanvas{position:absolute;left:50%;top:50%;width:180%;height:180%;transform:translate(-50%,-50%);pointer-events:none;display:none}
+.holo-cone{display:none}
+body.holo #holoCanvas{display:block}
+body.holo .ring{background:conic-gradient(from 0deg,#0a5560,#4ff8ff,#d8ffff,#4ff8ff,#0a5560);box-shadow:0 0 30px rgba(80,250,255,.45);animation:holoBob 4s ease-in-out infinite}
+body.holo .ring img{filter:sepia(.55) hue-rotate(140deg) saturate(1.5) brightness(1.02) contrast(1.08);opacity:.9;animation:holoFlicker 5s steps(1) infinite}
+body.holo .ring::after{content:"";position:absolute;inset:4px;border-radius:50%;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(120,255,255,.12) 0 1px,transparent 1px 4px);animation:holoScan 3s linear infinite;mix-blend-mode:screen}
+body.holo .holo-cone{display:block;width:150px;height:46px;margin-top:-8px;background:radial-gradient(ellipse at 50% 100%,rgba(90,255,250,.55),rgba(90,255,250,.08) 55%,transparent 70%);filter:blur(1px)}
+body.holo .holo-cone::before{content:"";display:block;width:90px;height:8px;margin:38px auto 0;border-radius:50%;background:rgba(120,255,255,.7);box-shadow:0 0 18px 6px rgba(90,255,250,.5)}
+body.holo .mini,body.holo .mav.luna{filter:sepia(1) hue-rotate(140deg) saturate(2) brightness(1.1);border-color:#4ff8ff}
+body.holo.speaking .ring{animation:holoBob 4s ease-in-out infinite,glow var(--pulse) ease-in-out infinite}
+body.holo.listening .ring{background:conic-gradient(from 0deg,color-mix(in srgb,var(--ring) 55%,#000),var(--ring),color-mix(in srgb,var(--ring) 35%,#fff),var(--ring),color-mix(in srgb,var(--ring) 55%,#000))}
+@keyframes holoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes holoScan{from{background-position:0 0}to{background-position:0 40px}}
+@keyframes holoFlicker{0%,100%{opacity:.9;transform:none}47%{opacity:.9}48%{opacity:.65;transform:translateX(2px)}49%{opacity:.92;transform:translateX(-1px)}50%{opacity:.9;transform:none}83%{opacity:.8}84%{opacity:.9}}
+@media (prefers-reduced-motion: reduce){body.holo .ring,body.holo .ring img,body.holo .ring::after{animation:none!important}}
+@media (max-width:440px){.wake .lbl{display:none}.brand small{font-size:11px;display:block;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.actions{gap:6px}.icon{width:34px;height:34px;font-size:16px}}
+.toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;background:#241810;border:1px solid var(--amber);color:var(--text);padding:10px 14px;border-radius:14px;font-size:14px;box-shadow:0 8px 30px rgba(0,0,0,.6)}.toast button{background:var(--amber);color:#1b0f06;border:none;border-radius:10px;padding:5px 10px;font-weight:600;margin-left:4px;cursor:pointer}

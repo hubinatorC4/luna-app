@@ -18,6 +18,7 @@ FFMPEG = _ffmpeg()
 import knowledge
 import catalog, base64
 
+VERSION = "1.1.0"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -68,7 +69,8 @@ DEFAULTS = {
     "kb_topics": [],
     "rules": [],
     "voice_defaults": {"voice": "pl-PL-ZofiaNeural", "pitch": -2.6, "rate": -8, "warmth": 4.5, "volume": -27, "spanish": True},
-    "ui": {"ring_color": "#2ee66b", "pulse_speed": 1.4},
+    "ui": {"ring_color": "#2ee66b", "pulse_speed": 1.4, "holo_default": False, "holo_plan": "podstawowa"},
+    "music": {"volume": 0.25, "tracks": json.load(open(os.path.join(ROOT, "static", "music", "playlist.json"), encoding="utf-8"))},
 }
 _cfg_lock = threading.Lock()
 
@@ -108,7 +110,15 @@ def sanitize(new):
     ui = new.get("ui") if isinstance(new.get("ui"), dict) else {}
     col = str(ui.get("ring_color", "")).strip()
     c["ui"] = {"ring_color": col if re.fullmatch(r"#[0-9a-fA-F]{6}", col) else DEFAULTS["ui"]["ring_color"],
-               "pulse_speed": _num(ui.get("pulse_speed"), 0.4, 4, DEFAULTS["ui"]["pulse_speed"])}
+               "pulse_speed": _num(ui.get("pulse_speed"), 0.4, 4, DEFAULTS["ui"]["pulse_speed"]),
+               "holo_default": bool(ui.get("holo_default", False)),
+               "holo_plan": ui.get("holo_plan") if ui.get("holo_plan") in ("podstawowa", "premium", "pro") else "podstawowa"}
+    m = new.get("music") if isinstance(new.get("music"), dict) else {}
+    tr = m.get("tracks") if isinstance(m.get("tracks"), list) else DEFAULTS["music"]["tracks"]
+    c["music"] = {"volume": _num(m.get("volume"), 0, 1, DEFAULTS["music"]["volume"]),
+        "tracks": [{"title": str(t.get("title", ""))[:120], "artist": str(t.get("artist", ""))[:120], "url": str(t.get("url", ""))[:300],
+                    "source": str(t.get("source", ""))[:400], "license": str(t.get("license", ""))[:80]}
+                   for t in tr[:50] if isinstance(t, dict) and re.fullmatch(r"/(music|uploads)/[\w\-.]+\.mp3", str(t.get("url", ""))) and t.get("license")]}
     return c
 
 def load_cfg():
@@ -372,7 +382,7 @@ class H(SimpleHTTPRequestHandler):
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tts(q)
         if u.path == "/api/config":
-            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui")})
+            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music")})
         if u.path == "/api/admin/config":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
@@ -384,12 +394,12 @@ class H(SimpleHTTPRequestHandler):
         if u.path.startswith("/uploads/"):
             fn = os.path.basename(u.path)
             fp = os.path.join(catalog.UPLOADS, fn)
-            if not re.fullmatch(r"[0-9a-f]{16}\.(jpg|png|webp)", fn) or not os.path.exists(fp): return self._json({"error": "not found"}, 404)
-            b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp"}[fn.rsplit(".", 1)[1]]
+            if not re.fullmatch(r"[0-9a-f]{16}\.(jpg|png|webp|mp3)", fn) or not os.path.exists(fp): return self._json({"error": "not found"}, 404)
+            b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
             self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
         if u.path == "/api/health":
-            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled()})
+            return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled(), "version": VERSION})
         return super().do_GET()
     def do_POST(self):
         u = urlparse(self.path)

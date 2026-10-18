@@ -18,8 +18,16 @@ function scroll(){ chat.scrollTop = chat.scrollHeight; }
 function addMsg(text, who){
   const d = document.createElement('div'); d.className = 'msg ' + who; d.textContent = text;
   if (who === 'luna'){ const b = document.createElement('button'); b.className='play'; b.textContent='▶ odsłuchaj'; b.onclick=()=>speak(text); d.appendChild(b); }
-  chat.appendChild(d); scroll(); return d;
+  const side = who.split(' ')[0], row = document.createElement('div'); row.className = 'msgrow ' + side;
+  const av = document.createElement('img'); av.className = 'mav ' + side; av.alt = '';
+  const src = side === 'luna' ? (window.LunaAvatarSrc ? window.LunaAvatarSrc() : 'avatar-256.jpg') : (window.UserAvatarSrc ? window.UserAvatarSrc() : '');
+  if (src) av.src = src; else av.style.visibility = 'hidden';
+  row.append(av, d); chat.appendChild(row); scroll(); return row;
 }
+window.LunaRefreshAvatars = () => document.querySelectorAll('.mav').forEach(im => {
+  const src = im.classList.contains('luna') ? (window.LunaAvatarSrc ? window.LunaAvatarSrc() : 'avatar-256.jpg') : (window.UserAvatarSrc ? window.UserAvatarSrc() : '');
+  if (src){ im.src = src; im.style.visibility = ''; } else im.style.visibility = 'hidden';
+});
 
 /* ---------- Głos ---------- */
 function setSpeaking(on){ speaking = on; document.body.classList.toggle('speaking', on); if(on) setStatus('Luna mówi…'); else setStatus(wakeOn ? 'Nasłuchuję słowa „Luna”…' : 'Twoja trenerka głosu'); }
@@ -187,5 +195,22 @@ window.LunaApplyConfig = c => {
 fetch('/api/config').then(r => r.json()).then(window.LunaApplyConfig).catch(()=>{});
 if (history.length){ history.forEach(h => addMsg(h.content, h.role === 'user' ? 'me' : 'luna')); }
 else addMsg(CFG.greeting, 'luna greet');
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* ---------- Aktualizacje (PWA) ---------- */
+function updateToast(reg){
+  if (document.getElementById('updToast')) return;
+  const t = document.createElement('div'); t.id = 'updToast'; t.className = 'toast';
+  t.innerHTML = '✨ Dostępna nowa wersja – <button type="button">odśwież</button>';
+  t.querySelector('button').onclick = () => { window.__lunaUpd = true; if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING'); else location.reload(); };
+  document.body.appendChild(t);
+}
+if ('serviceWorker' in navigator){
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (window.__lunaUpd && !reloading){ reloading = true; location.reload(); } });
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    if (reg.waiting && navigator.serviceWorker.controller) updateToast(reg);
+    reg.addEventListener('updatefound', () => { const w = reg.installing; w && w.addEventListener('statechange', () => { if (w.state === 'installed' && navigator.serviceWorker.controller) updateToast(reg); }); });
+    const check = () => reg.update().catch(() => {});
+    setInterval(check, 30 * 60 * 1000); document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
+  }).catch(() => {});
+}
 })();
