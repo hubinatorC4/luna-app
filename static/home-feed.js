@@ -67,7 +67,7 @@ function placeAll(){ if (placedAll) return; placedAll = true; while (Q.length) a
 window.LunaHomePlace = placeAll;
 function collapse(el){
   if (!el.classList || !el.classList.contains('hfcard') || el.dataset.col) return; el.dataset.col = 1;
-  requestAnimationFrame(() => { if (el.scrollHeight < 900) return; el.classList.add('hfclamp');
+  requestAnimationFrame(() => { if (el.scrollHeight < 900 || el.querySelector('form')) return; el.classList.add('hfclamp');
     const b = document.createElement('button'); b.type = 'button'; b.className = 'hfmore'; b.textContent = T.more; b.setAttribute('aria-expanded', 'false');
     b.onclick = () => { const o = el.classList.toggle('open'); b.textContent = o ? T.less : T.more; b.setAttribute('aria-expanded', o); if (!o) el.scrollIntoView({block: 'start'}); };
     el.appendChild(b); });
