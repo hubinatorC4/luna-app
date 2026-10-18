@@ -257,7 +257,7 @@ $('#testVoice').onclick = () => speak('Hola, cariño. Słyszę cię. Mów szczer
 function openAdmin(){ window.LunaAdmin && window.LunaAdmin.open(); }
 
 /* ---------- Start ---------- */
-const CFG = {greeting:'Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.', wake_reply:'Słyszę cię, cariño. Jestem Luna, sztucznie stworzona asystentka AI.', ai_tag:'Luna, asystentka AI', chat_notice:'Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.'};
+const CFG = {greeting:'Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Pomagam mężczyznom i kobietom lepiej się rozmawiać – przez samą mowę: głośność, barwę, ton, tempo i intonację. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.', wake_reply:'Słyszę cię, cariño. Jestem Luna, sztucznie stworzona asystentka AI.', ai_tag:'Luna, asystentka AI', chat_notice:'Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.'};
 window.LunaApplyConfig = c => {
   Object.assign(CFG, c);
   const g = document.querySelector('.msg.greet'); if (g) g.firstChild.textContent = CFG.greeting;

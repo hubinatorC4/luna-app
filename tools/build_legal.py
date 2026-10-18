@@ -4,15 +4,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from site_common import HEAD, FOOT, VER
 S = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
 act = {k: "" for k in ("a_butik", "a_test", "a_join", "a_face", "a_sup", "a_wall")}
-DISC = [("Polski", "Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet."),
-        ("English", "Luna is an AI assistant for learning to speak and working with your voice. The product is in no way intended to sexualise women."),
-        ("Español", "Luna es una asistente de IA para aprender a hablar y trabajar la voz. El producto no pretende en modo alguno sexualizar a las mujeres."),
-        ("Deutsch", "Luna ist eine KI-Assistentin zum Sprechenlernen und für die Arbeit mit der Stimme. Das Produkt zielt in keiner Weise darauf ab, Frauen zu sexualisieren."),
-        ("Українська", "Луна — це ШІ-асистентка для навчання мовлення та роботи з голосом. Продукт жодним чином не має на меті сексуалізацію жінок.")]
+DISC = [("Polski", "Luna to asystentka AI, której celem jest lepsza rozmowa między mężczyznami i kobietami – skupia się na samej mowie: głośności, barwie, tonie, tempie i intonacji. Produkt w żaden sposób nie ma na celu seksualizacji kobiet."),
+        ("English", "Luna is an AI assistant whose purpose is better communication between men and women – she focuses on speech itself: volume, timbre, tone, tempo and intonation. The product is in no way intended to sexualise women."),
+        ("Español", "Luna es una asistente de IA cuyo objetivo es mejorar la comunicación entre hombres y mujeres: se centra en el habla en sí, es decir, en el volumen, el timbre, el tono, el ritmo y la entonación. El producto no pretende en modo alguno sexualizar a las mujeres."),
+        ("Deutsch", "Luna ist eine KI-Assistentin, deren Ziel eine bessere Kommunikation zwischen Männern und Frauen ist – sie konzentriert sich auf das Sprechen selbst: Lautstärke, Klangfarbe, Tonfall, Tempo und Intonation. Das Produkt zielt in keiner Weise darauf ab, Frauen zu sexualisieren."),
+        ("Українська", "Луна — ШІ-асистентка, мета якої — краще спілкування між чоловіками й жінками: вона зосереджується на самому мовленні — гучності, тембрі, тоні, темпі та інтонації. Продукт жодним чином не має на меті сексуалізацію жінок.")]
 body = """<main class="page legal">
 <h1>Regulamin aplikacji „Luna mówi jak jest”</h1>
 <p class="hint">Obowiązuje od 18.10.2026 r. Dotyczy strony https://luna-voice-coach.onrender.com, aplikacji webowej (PWA) oraz aplikacji na Androida (com.lunamowijakjest.app).</p>
-<p class="disclaimer" data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</p>
+<p class="disclaimer" data-disclaimer>Luna to asystentka AI, której celem jest lepsza rozmowa między mężczyznami i kobietami – skupia się na samej mowie: głośności, barwie, tonie, tempie i intonacji. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</p>
 <div class="card"><b>Zastrzeżenie w 5 językach</b><ul>""" + "".join(f"<li lang=\"{l[:2].lower() if l != 'Українська' else 'uk'}\"><b>{l}:</b> {t}</li>" for l, t in DISC) + """</ul></div>
 
 <h2>§ 1. Usługodawca i charakter projektu</h2>

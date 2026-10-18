@@ -2,11 +2,11 @@
 (() => {
 const T = {
   disclaimer: {
-    pl: 'Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.',
-    en: 'Luna is an AI assistant for learning to speak and working with your voice. The product is in no way intended to sexualise women.',
-    es: 'Luna es una asistente de IA para aprender a hablar y trabajar la voz. El producto no pretende en modo alguno sexualizar a las mujeres.',
-    de: 'Luna ist eine KI-Assistentin zum Sprechenlernen und für die Arbeit mit der Stimme. Das Produkt zielt in keiner Weise darauf ab, Frauen zu sexualisieren.',
-    uk: 'Луна — це ШІ-асистентка для навчання мовлення та роботи з голосом. Продукт жодним чином не має на меті сексуалізацію жінок.'},
+    pl: 'Luna to asystentka AI, której celem jest lepsza rozmowa między mężczyznami i kobietami – skupia się na samej mowie: głośności, barwie, tonie, tempie i intonacji. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.',
+    en: 'Luna is an AI assistant whose purpose is better communication between men and women – she focuses on speech itself: volume, timbre, tone, tempo and intonation. The product is in no way intended to sexualise women.',
+    es: 'Luna es una asistente de IA cuyo objetivo es mejorar la comunicación entre hombres y mujeres: se centra en el habla en sí, es decir, en el volumen, el timbre, el tono, el ritmo y la entonación. El producto no pretende en modo alguno sexualizar a las mujeres.',
+    de: 'Luna ist eine KI-Assistentin, deren Ziel eine bessere Kommunikation zwischen Männern und Frauen ist – sie konzentriert sich auf das Sprechen selbst: Lautstärke, Klangfarbe, Tonfall, Tempo und Intonation. Das Produkt zielt in keiner Weise darauf ab, Frauen zu sexualisieren.',
+    uk: 'Луна — ШІ-асистентка, мета якої — краще спілкування між чоловіками й жінками: вона зосереджується на самому мовленні — гучності, тембрі, тоні, темпі та інтонації. Продукт жодним чином не має на меті сексуалізацію жінок.'},
   fan: {
     pl: 'Luna mówi jak jest to projekt fanowski – i taki zostanie, słowo Luny! Wspieraj nas zawsze, gdziekolwiek jesteś. 💚',
     en: 'Luna Tells It Like It Is is a fan project – and it will stay that way, Luna’s word of honour! Support us always, wherever you are. 💚',

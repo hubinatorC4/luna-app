@@ -88,7 +88,7 @@ TOPICS = [
  (["glos meski", "jak facet", "mezczyzn"],
   ["Męski, ciepły głos to nie bas za wszelką cenę, tylko spokój i oparcie. Mów z brzucha, kończ zdania w dół i nie przepraszaj tonem za to, co mówisz. To jest naprawdę atrakcyjne."]),
  (["kim jestes", "jak masz na imie", "kto ty", "przedstaw"],
-  ["Jestem Luna, Twoja trenerka głosu, cariño. Pomagam z barwą, oddechem, tempem i tym, żeby Twój głos brzmiał ciepło i pewnie. Zapytaj mnie o cokolwiek o głosie."]),
+  ["Jestem Luna, asystentka AI – w 100% sztuczna inteligencja, cariño. Mój cel to lepsza rozmowa między mężczyznami i kobietami, a skupiam się głównie na samej mowie: głośności, barwie, tonie, tempie i intonacji. Zapytaj mnie o cokolwiek o swoim głosie."]),
  (["czesc", "hej", "witaj", "dzien dobry", "dobry wieczor", "hola", "siema"],
   ["Hola, cariño. Jestem tu i słucham. O co chcesz zapytać, o barwę, oddech czy o to, jak brzmieć pewniej?"]),
  (["dzieki", "dziekuje", "super", "swietnie"],
