@@ -668,6 +668,13 @@ def _help_prices():
     P = CFG["pricing"]["plans"]; return {"premium": P["premium"]["pln"].replace(".", ","), "pro": P["pro"]["pln"].replace(".", ",")}
 helpbot.PRICES = _help_prices
 
+class _NullBody:
+    def __init__(self, w): self._w = w
+    def write(self, b): return len(b)
+    def flush(self):
+        try: self._w.flush()
+        except Exception: pass
+
 class H(SimpleHTTPRequestHandler):
     def __init__(self, *a, **k): super().__init__(*a, directory=STATIC, **k)
     def log_message(self, fmt, *args): sys.stderr.write("%s %s\n" % (security.ip_hash(self.address_string()), security.redact(fmt % args)))
@@ -681,6 +688,14 @@ class H(SimpleHTTPRequestHandler):
         for c in getattr(self, "_cookies", []): self.send_header("Set-Cookie", c)
         self._cookies = []
         super().end_headers()
+        if getattr(self, "_head_only", False):   # HEAD: nagłówki jak dla GET, bez treści
+            self.wfile = _NullBody(self.wfile)
+    def do_HEAD(self):
+        # HEAD zwraca to samo co GET (status, przekierowania, Content-Type) – wcześniej /download/luna.apk dawał 404, a /download 301 na listing
+        self._head_only = True
+        real = self.wfile
+        try: self.do_GET()
+        finally: self.wfile = real; self._head_only = False
     def _pid_plan(self, pid):
         r = profiles._P().get(pid)
         return self._owner_plan(r["uid"]) if r else None
