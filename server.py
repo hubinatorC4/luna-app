@@ -1726,9 +1726,10 @@ class H(SimpleHTTPRequestHandler):
                     lang = lang or seo.map_lang(self._cookie("luna_lang")) or seo.accept_lang(self.headers.get("Accept-Language"))
                     if lang == "pl": lang = ""
                     self._vary_lang = True
-                doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, lang, notify.PUBLIC_URL.rstrip("/"))
+                rl = i18n_ext.legal_render_lang(u.path, lang)   # dokumenty prawne w językach pakietu: przejrzana wersja angielska + notka
+                doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, rl, notify.PUBLIC_URL.rstrip("/"))
                 doc = forms18_routes.trust_link(doc, u.path)   # link „Bezpieczeństwo i anonimowość” w stopce (tłumaczony niżej)
-                doc = i18n_pages.legal_note(i18n_pages.apply(doc, u.path, lang), u.path, lang)
+                doc = i18n_pages.legal_note(i18n_pages.apply(doc, u.path, rl), u.path, lang)
                 doc = i18n_ext.finish(doc, u.path, lang)   # pakiet językowy: lang/dir, skrypty z bazą „en”, i18n-ext.js, czcionki
                 pid = parse_qs(u.query).get("post", [""])[0]
                 if u.path == "/scianka.html" and re.fullmatch(r"[0-9a-f]{12}|off-\d{1,3}", pid or ""):

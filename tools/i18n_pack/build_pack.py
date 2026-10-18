@@ -81,7 +81,7 @@ def build(lang):
         if x is None:
             x = C.get(en_q)
             if x is not None and lang == "pt": x = pt_pt(x)
-        st["all"] += 1; leg_tot += legal
+        st["all"] += 1; leg_tot += legal; st["ui_all"] += (not legal)
         if x is None: st["brak"] += 1; continue
         why = "" if src == "glosariusz" else check(en_q, x, lang)
         if why:
@@ -89,7 +89,7 @@ def build(lang):
             if len(bad_ex) < 40: bad_ex.append([en[:120], x[:120], why])
             continue
         if norm(x) == norm(en) and re.search(r"[a-z]{3}", BRAND.sub("", en)): st["identyczne"] += 1
-        st["ok"] += 1; st[src] += 1; leg_ok += legal
+        st["ok"] += 1; st[src] += 1; leg_ok += legal; st["ui_ok"] += (not legal)
         x = x.replace("Hubinator❤️", "Hubinator❤️")
         page_only = all(o.startswith("json:") and not o.startswith("json:js_") for o in row["o"])
         tgt = server if (page_only or legal) else client
@@ -100,12 +100,12 @@ def build(lang):
             pats.append([k, v])
     H = {k: v for k, v in client.items() if "<" in k}
     os.makedirs(os.path.join(R, "static", "lang"), exist_ok=True); os.makedirs(os.path.join(R, "i18n", "ext"), exist_ok=True)
-    meta = {"lang": lang, "bcp": i18n_ext.bcp(lang), "dir": i18n_ext.direction(lang), "source": "MADLAD-400 3B (MT, lokalnie) + glosariusz ręczny",
+    meta = {"lang": lang, "bcp": i18n_ext.bcp(lang), "dir": i18n_ext.direction(lang), "source": "MADLAD-400 3B (MT, lokalnie) + glosariusz ręczny", "status": "beta",
             "review": "glosariusz: ręcznie; reszta: szkic maszynowy – wymaga przeglądu native speakera"}
     json.dump({"meta": meta, "t": client, "h": H, "p": pats}, open(os.path.join(R, "static", "lang", lang + ".json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     json.dump(server, open(os.path.join(R, "i18n", "ext", lang + ".json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     cov = {"lang": lang, "name": i18n_ext.META[lang][1], "tier": i18n_ext.META[lang][5], "keys": st["all"], "ok": st["ok"], "pct": round(100 * st["ok"] / max(1, st["all"]), 1),
-           "legal_pct": round(100 * leg_ok / max(1, leg_tot), 1), "glossary": st["glosariusz"], "mt": st["mt"], "missing": st["brak"], "same_as_en": st["identyczne"],
+           "ui_keys": st["ui_all"], "ui_ok": st["ui_ok"], "ui_pct": round(100 * st["ui_ok"] / max(1, st["ui_all"]), 1), "legal_pct": round(100 * leg_ok / max(1, leg_tot), 1), "legal_policy": "EN (legal docs only in 5 reviewed languages)", "glossary": st["glosariusz"], "mt": st["mt"], "missing": st["brak"], "same_as_en": st["identyczne"],
            "rejected": dict(bad), "rejected_examples": bad_ex[:12], "phases": C.get("__phase__", [])}
     return cov
 if __name__ == "__main__":
@@ -114,5 +114,5 @@ if __name__ == "__main__":
     allc = json.load(open(out_p)) if os.path.exists(out_p) else {}
     for l in langs:
         c = build(l); allc[l] = c
-        print(f"{l:6} {c['pct']:5}%  ok={c['ok']}/{c['keys']} legal={c['legal_pct']}% rej={c['rejected']} brak={c['missing']}")
+        print(f"{l:6} UI {c['ui_pct']:5}% ({c['ui_ok']}/{c['ui_keys']})  all {c['pct']:5}%  ok={c['ok']}/{c['keys']} legal={c['legal_pct']}% rej={c['rejected']} brak={c['missing']}")
     json.dump(allc, open(out_p, "w", encoding="utf-8"), ensure_ascii=False, indent=1)

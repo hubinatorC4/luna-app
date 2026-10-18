@@ -3,6 +3,7 @@
 try { const r = new URLSearchParams(location.search).get('ref'); if (r && /^[a-z0-9]{5,12}$/.test(r)) localStorage.setItem('luna.ref', r); } catch(e){}
 const L0 = [['pl', '🇵🇱', 'Polski'], ['en', '🇬🇧', 'English'], ['es', '🇪🇸', 'Español'], ['de', '🇩🇪', 'Deutsch'], ['uk', '🇺🇦', 'Українська']];
 /* Pakiet językowy: [kod, flaga, nazwa natywna, nazwa po polsku, nazwa po angielsku, grupa] – wybór pogrupowany i z wyszukiwarką */
+const BASE5 = ['pl', 'en', 'es', 'de', 'uk'];   /* języki z przejrzanym tłumaczeniem; reszta = tłumaczenie beta (maszynowe) */
 const ALLL = [['pl','🇵🇱','Polski','polski','Polish','c'],['en','🇬🇧','English','angielski','English','w'],['es','🇪🇸','Español','hiszpański','Spanish','w'],['de','🇩🇪','Deutsch','niemiecki','German','w'],['uk','🇺🇦','Українська','ukraiński','Ukrainian','e'],
  ['fr','🇫🇷','Français','francuski','French','w'],['it','🇮🇹','Italiano','włoski','Italian','w'],['pt','🇵🇹','Português (Portugal)','portugalski (Portugalia)','Portuguese (Portugal)','w'],['pt-br','🇧🇷','Português (Brasil)','portugalski (Brazylia)','Portuguese (Brazil)','w'],['nl','🇳🇱','Nederlands','niderlandzki','Dutch','w'],
  ['cs','🇨🇿','Čeština','czeski','Czech','c'],['sk','🇸🇰','Slovenčina','słowacki','Slovak','c'],['hu','🇭🇺','Magyar','węgierski','Hungarian','c'],['ro','🇷🇴','Română','rumuński','Romanian','c'],
@@ -17,9 +18,9 @@ const GR = {pl: {w: 'Europa Zachodnia', c: 'Europa Środkowa', n: 'Europa Półn
  es: {w: 'Europa occidental', c: 'Europa central', n: 'Europa del Norte y Bálticos', s: 'Europa del Sur y Balcanes', e: 'Europa del Este', m: 'Oriente Medio', a: 'Asia'},
  de: {w: 'Westeuropa', c: 'Mitteleuropa', n: 'Nordeuropa & Baltikum', s: 'Südeuropa & Balkan', e: 'Osteuropa', m: 'Naher Osten', a: 'Asien'},
  uk: {w: 'Західна Європа', c: 'Центральна Європа', n: 'Північна Європа та Балтія', s: 'Південна Європа та Балкани', e: 'Східна Європа', m: 'Близький Схід', a: 'Азія'}};
-const PICK = {pl: ['Język', 'Szukaj języka…', 'Nic nie znalazłam – spróbuj inaczej 🙂', 'Tłumaczenie maszynowe – sprawdzamy je z ludźmi'], en: ['Language', 'Search languages…', 'Nothing found – try another spelling 🙂', 'Machine translation – being reviewed by humans'],
- es: ['Idioma', 'Buscar idioma…', 'No encontré nada, prueba otra forma 🙂', 'Traducción automática, en revisión humana'], de: ['Sprache', 'Sprache suchen…', 'Nichts gefunden – versuch es anders 🙂', 'Maschinelle Übersetzung – wird von Menschen geprüft'],
- uk: ['Мова', 'Пошук мови…', 'Нічого не знайшла – спробуйте інакше 🙂', 'Машинний переклад – перевіряємо з людьми']};
+const PICK = {pl: ['Język', 'Szukaj języka…', 'Nic nie znalazłam – spróbuj inaczej 🙂', 'Tłumaczenie beta (maszynowe) – może zawierać błędy', 'tłumaczenie beta'], en: ['Language', 'Search languages…', 'Nothing found – try another spelling 🙂', 'Beta (machine) translation – may contain errors', 'Beta translation'],
+ es: ['Idioma', 'Buscar idioma…', 'No encontré nada, prueba otra forma 🙂', 'Traducción beta (automática): puede contener errores', 'traducción beta'], de: ['Sprache', 'Sprache suchen…', 'Nichts gefunden – versuch es anders 🙂', 'Beta-Übersetzung (maschinell) – kann Fehler enthalten', 'Beta-Übersetzung'],
+ uk: ['Мова', 'Пошук мови…', 'Нічого не знайшла – спробуйте інакше 🙂', 'Бета-переклад (машинний) – може містити помилки', 'бета-переклад']};
 const APP = location.pathname === '/app' || location.pathname === '/index.html' || document.documentElement.hasAttribute('data-app');
 const q = new URLSearchParams(location.search).get('lang');
 let saved = null; try { saved = localStorage.getItem('luna.lang'); } catch(e){}
@@ -47,16 +48,16 @@ function picker(){
   const tt = x => (window.LunaI18n ? window.LunaI18n.t(x) : x);
   const me = ALLL.find(x => x[0] === cur) || ALLL[0];
   const b = document.createElement('button'); b.type = 'button'; b.className = 'lswitch lpick-btn'; b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-label', 'Język / Language: ' + me[2]);
-  b.innerHTML = `<span aria-hidden="true">🌐</span> <span class="lpick-cur"></span>`; b.querySelector('.lpick-cur').textContent = me[2];
+  b.innerHTML = `<span aria-hidden="true">🌐</span> <span class="lpick-cur"></span>`; b.querySelector('.lpick-cur').textContent = me[2]; if (!BASE5.includes(cur)){ const bb = document.createElement('span'); bb.className = 'lpick-beta'; bb.textContent = 'beta'; bb.title = tt(ui[4]); b.appendChild(bb); }
   let box = null;
   const close = () => { if (box){ box.remove(); box = null; b.setAttribute('aria-expanded', 'false'); b.focus(); } };
   b.onclick = () => {
     if (box) return close();
     box = document.createElement('div'); box.className = 'lpick'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Język / Language'); box.setAttribute('translate', 'no');
-    const ext = !['pl', 'en', 'es', 'de', 'uk'].includes(cur);
+    const ext = !['pl', 'en', 'es', 'de', 'uk'].includes(cur); const betaT = ext ? tt(ui[4]) : ui[4];
     box.innerHTML = `<div class="lpick-h"><b>🌐 ${ext ? tt(ui[0]) : ui[0]}</b><button type="button" class="lpick-x" aria-label="×">×</button></div>
       <input type="search" class="lpick-q" autocomplete="off" spellcheck="false" placeholder="${ext ? tt(ui[1]) : ui[1]} / Search…" aria-label="${ui[1]}">
-      <div class="lpick-list" role="listbox"></div><p class="lpick-note">${ext ? tt(ui[3]) : ''}</p>`;
+      <div class="lpick-list" role="listbox"></div><p class="lpick-note"><span class="lpick-beta">beta</span> ${ext ? tt(ui[3]) : ui[3]}</p>`;
     const list = box.querySelector('.lpick-list'), q = box.querySelector('.lpick-q');
     const draw = () => {
       const v = q.value.trim().toLowerCase(); const items = ALLL.filter(x => ON.includes(x[0]) && (!v || [x[0], x[2], x[3], x[4]].some(y => y.toLowerCase().includes(v))));
@@ -64,7 +65,7 @@ function picker(){
       let h = '';
       for (const g of ['c', 'w', 'n', 's', 'e', 'm', 'a']){
         const gi = items.filter(x => x[5] === g); if (!gi.length) continue;
-        h += `<div class="lpick-g"><span class="lpick-gh">${ext ? tt(GR.en[g]) : gr[g]}</span>` + gi.map(x => `<button type="button" role="option" class="lpick-i${x[0] === cur ? ' on' : ''}" data-l="${x[0]}" lang="${x[0] === 'zh' ? 'zh-Hans' : x[0] === 'pt-br' ? 'pt-BR' : x[0]}" aria-selected="${x[0] === cur}"><span class="lpick-f" aria-hidden="true">${x[1]}</span><span class="lpick-n">${x[2]}</span><small lang="${cur === 'pl' ? 'pl' : 'en'}">${cur === 'pl' ? x[3] : x[4]}</small></button>`).join('') + '</div>';
+        h += `<div class="lpick-g"><span class="lpick-gh">${ext ? tt(GR.en[g]) : gr[g]}</span>` + gi.map(x => `<button type="button" role="option" class="lpick-i${x[0] === cur ? ' on' : ''}" data-l="${x[0]}" lang="${x[0] === 'zh' ? 'zh-Hans' : x[0] === 'pt-br' ? 'pt-BR' : x[0]}" aria-selected="${x[0] === cur}"><span class="lpick-f" aria-hidden="true">${x[1]}</span><span class="lpick-n">${x[2]}</span>${BASE5.includes(x[0]) ? '' : `<span class="lpick-beta" title="${betaT}">beta</span>`}<small lang="${cur === 'pl' ? 'pl' : 'en'}">${cur === 'pl' ? x[3] : x[4]}</small></button>`).join('') + '</div>';
       }
       list.innerHTML = h;
     };

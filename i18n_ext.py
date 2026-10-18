@@ -5,7 +5,7 @@ Jak to działa:
  • Dla języka X spoza bazowej piątki serwer składa stronę jak dla „en”, a słownik static/lang/X.json (klucz = angielski tekst, wartość = X)
    podmienia teksty: po stronie serwera (pary pl→X zbudowane z par pl→en) i w przeglądarce (static/i18n-ext.js – napisy tworzone przez JS).
  • Brak tłumaczenia danego napisu → angielski (nigdy pusty klucz).
- • Polska wersja regulaminu i polityki prywatności jest jedyną wiążącą; tłumaczenia prawne to szkic maszynowy z oznaczeniem DRAFT.
+ • Regulamin, polityka prywatności i zasady bitew: tylko 5 przejrzanych języków; w językach pakietu wersja angielska + notka (wiążąca wersja PL, EN referencyjna).
 Właściciel serwisu występuje wyłącznie jako Hubinator❤️ (bez prawdziwych danych osobowych)."""
 import json, os, re
 R = os.path.dirname(os.path.abspath(__file__))
@@ -84,46 +84,53 @@ def pairs(en_pairs, lang):
         else: out.append([pl, tr(en, lang)])
     return out
 
-# Notka prawna – DRAFT + wiążąca wersja polska (po polsku i w danym języku)
+# Dokumenty prawne (regulamin, polityka prywatności, zasady bitew) są tylko w 5 przejrzanych językach (pl/en/es/de/uk).
+# W językach pakietu strona jest renderowana po angielsku (bez tłumaczenia maszynowego – <main lang="en" data-no-i18n>),
+# a nad treścią stoi krótka notka w języku użytkownika: brak wersji w tym języku, wiążąca jest wersja polska (PL), angielska (EN) – referencyjna.
+LEGAL_PATHS = ("/regulamin.html", "/privacy.html", "/zasady-bitew.html")
 LEGAL = {
- "fr": "Traduction automatique provisoire. Seule la version polonaise est juridiquement contraignante.",
- "it": "Bozza di traduzione automatica. Solo la versione polacca è giuridicamente vincolante.",
- "pt": "Rascunho de tradução automática. Apenas a versão polaca é juridicamente vinculativa.",
- "pt-br": "Rascunho de tradução automática. Somente a versão em polonês tem validade jurídica.",
- "nl": "Concept van een machinevertaling. Alleen de Poolse versie is juridisch bindend.",
- "cs": "Koncept strojového překladu. Právně závazná je pouze polská verze.",
- "sk": "Koncept strojového prekladu. Právne záväzná je iba poľská verzia.",
- "ro": "Ciornă de traducere automată. Doar versiunea în limba polonă este obligatorie din punct de vedere juridic.",
- "hu": "Gépi fordítás tervezete. Jogilag kizárólag a lengyel változat kötelező érvényű.",
- "sv": "Utkast till maskinöversättning. Endast den polska versionen är juridiskt bindande.",
- "no": "Utkast til maskinoversettelse. Bare den polske versjonen er juridisk bindende.",
- "da": "Udkast til maskinoversættelse. Kun den polske version er juridisk bindende.",
- "fi": "Konekäännöksen luonnos. Vain puolankielinen versio on oikeudellisesti sitova.",
- "el": "Πρόχειρη αυτόματη μετάφραση. Νομικά δεσμευτική είναι μόνο η πολωνική έκδοση.",
- "bg": "Чернова на машинен превод. Правно обвързваща е само полската версия.",
- "hr": "Nacrt strojnog prijevoda. Pravno je obvezujuća samo poljska verzija.",
- "sr": "Нацрт машинског превода. Правно обавезујућа је само пољска верзија.",
- "lt": "Mašininio vertimo juodraštis. Teisiškai privaloma tik lenkiška versija.",
- "lv": "Mašīntulkojuma melnraksts. Juridiski saistoša ir tikai poļu valodas versija.",
- "et": "Masintõlke mustand. Õiguslikult siduv on ainult poolakeelne versioon.",
- "tr": "Makine çevirisi taslağıdır. Yalnızca Lehçe sürüm hukuken bağlayıcıdır.",
- "ru": "Черновик машинного перевода. Юридическую силу имеет только польская версия.",
- "ar": "مسودة ترجمة آلية. النسخة البولندية وحدها هي الملزمة قانونيًا.",
- "he": "טיוטת תרגום מכונה. רק הגרסה הפולנית מחייבת מבחינה משפטית.",
- "hi": "मशीनी अनुवाद का मसौदा। केवल पोलिश संस्करण ही कानूनी रूप से बाध्यकारी है।",
- "id": "Draf terjemahan mesin. Hanya versi bahasa Polandia yang mengikat secara hukum.",
- "vi": "Bản nháp dịch máy. Chỉ phiên bản tiếng Ba Lan có giá trị pháp lý ràng buộc.",
- "th": "ร่างคำแปลด้วยเครื่อง มีเพียงฉบับภาษาโปแลนด์เท่านั้นที่มีผลผูกพันทางกฎหมาย",
- "ja": "機械翻訳の下書きです。法的拘束力を持つのはポーランド語版のみです。",
- "ko": "기계 번역 초안입니다. 법적 구속력은 폴란드어 원문에만 있습니다.",
- "zh": "机器翻译草稿。仅波兰语版本具有法律约束力。",
+ "fr": "Non disponible dans votre langue – affiché en anglais. Seule la version polonaise (PL) fait foi ; l’anglais (EN) sert de référence.",
+ "it": "Non disponibile nella tua lingua – mostrato in inglese. Fa fede solo la versione polacca (PL); l’inglese (EN) è di riferimento.",
+ "pt": "Não disponível no seu idioma – apresentado em inglês. Apenas a versão polaca (PL) é juridicamente vinculativa; o inglês (EN) serve de referência.",
+ "pt-br": "Não disponível no seu idioma – exibido em inglês. Somente a versão em polonês (PL) tem validade jurídica; o inglês (EN) serve de referência.",
+ "nl": "Niet beschikbaar in jouw taal – getoond in het Engels. Alleen de Poolse versie (PL) is juridisch bindend; het Engels (EN) dient als referentie.",
+ "cs": "Není k dispozici ve vašem jazyce – zobrazeno v angličtině. Právně závazná je pouze polská verze (PL); angličtina (EN) slouží pro orientaci.",
+ "sk": "Nie je dostupné vo vašom jazyku – zobrazené v angličtine. Právne záväzná je iba poľská verzia (PL); angličtina (EN) slúži na orientáciu.",
+ "ro": "Indisponibil în limba ta – afișat în engleză. Doar versiunea în polonă (PL) are forță juridică; engleza (EN) este de referință.",
+ "hu": "Az Ön nyelvén nem érhető el – angolul jelenik meg. Jogilag csak a lengyel változat (PL) kötelező; az angol (EN) tájékoztató jellegű.",
+ "sv": "Inte tillgängligt på ditt språk – visas på engelska. Endast den polska versionen (PL) är juridiskt bindande; engelska (EN) är en referens.",
+ "no": "Ikke tilgjengelig på ditt språk – vises på engelsk. Bare den polske versjonen (PL) er juridisk bindende; engelsk (EN) er til referanse.",
+ "da": "Ikke tilgængelig på dit sprog – vises på engelsk. Kun den polske version (PL) er juridisk bindende; engelsk (EN) er til reference.",
+ "fi": "Ei saatavilla kielelläsi – näytetään englanniksi. Vain puolankielinen versio (PL) on oikeudellisesti sitova; englanninkielinen (EN) on viitteellinen.",
+ "el": "Δεν είναι διαθέσιμο στη γλώσσα σας – εμφανίζεται στα αγγλικά. Νομικά δεσμευτική είναι μόνο η πολωνική έκδοση (PL)· η αγγλική (EN) είναι για αναφορά.",
+ "bg": "Не е налично на вашия език – показва се на английски. Правно обвързваща е само полската версия (PL); английската (EN) е за справка.",
+ "hr": "Nije dostupno na vašem jeziku – prikazano na engleskom. Pravno je obvezujuća samo poljska verzija (PL); engleska (EN) služi kao referenca.",
+ "sr": "Није доступно на вашем језику – приказано на енглеском. Правно обавезујућа је само пољска верзија (PL); енглеска (EN) служи као референца.",
+ "lt": "Jūsų kalba neprieinama – rodoma anglų kalba. Teisiškai privaloma tik lenkiška versija (PL); angliška (EN) – informacinė.",
+ "lv": "Nav pieejams jūsu valodā – parādīts angļu valodā. Juridiski saistoša ir tikai poļu versija (PL); angļu (EN) ir atsaucei.",
+ "et": "Teie keeles pole saadaval – kuvatakse inglise keeles. Õiguslikult siduv on ainult poolakeelne versioon (PL); ingliskeelne (EN) on teadmiseks.",
+ "tr": "Dilinizde mevcut değil – İngilizce gösteriliyor. Yalnızca Lehçe sürüm (PL) hukuken bağlayıcıdır; İngilizce (EN) bilgi amaçlıdır.",
+ "ru": "Недоступно на вашем языке – показано на английском. Юридическую силу имеет только польская версия (PL); английская (EN) – справочная.",
+ "ar": "غير متوفر بلغتك – معروض بالإنجليزية. النسخة البولندية (PL) وحدها الملزمة قانونيًا؛ والإنجليزية (EN) للاطلاع فقط.",
+ "he": "לא זמין בשפה שלך – מוצג באנגלית. רק הגרסה הפולנית (PL) מחייבת מבחינה משפטית; האנגלית (EN) לעיון בלבד.",
+ "hi": "आपकी भाषा में उपलब्ध नहीं है – अंग्रेज़ी में दिखाया गया है। केवल पोलिश संस्करण (PL) कानूनी रूप से बाध्यकारी है; अंग्रेज़ी (EN) केवल संदर्भ के लिए है।",
+ "id": "Tidak tersedia dalam bahasa Anda – ditampilkan dalam bahasa Inggris. Hanya versi bahasa Polandia (PL) yang mengikat secara hukum; bahasa Inggris (EN) sebagai referensi.",
+ "vi": "Chưa có bằng ngôn ngữ của bạn – hiển thị bằng tiếng Anh. Chỉ bản tiếng Ba Lan (PL) có giá trị pháp lý; bản tiếng Anh (EN) để tham khảo.",
+ "th": "ยังไม่มีในภาษาของคุณ – แสดงเป็นภาษาอังกฤษ ฉบับภาษาโปแลนด์ (PL) เท่านั้นที่มีผลผูกพันทางกฎหมาย ส่วนภาษาอังกฤษ (EN) ใช้เพื่ออ้างอิง",
+ "ja": "お使いの言語では提供されていないため、英語で表示しています。法的拘束力を持つのはポーランド語版（PL）のみで、英語版（EN）は参考訳です。",
+ "ko": "사용 중인 언어로는 제공되지 않아 영어로 표시됩니다. 법적 구속력은 폴란드어판(PL)에만 있으며, 영어판(EN)은 참고용입니다.",
+ "zh": "暂无您所用语言的版本，现以英文显示。仅波兰语版本（PL）具有法律约束力，英文版本（EN）仅供参考。",
 }
+def legal_render_lang(path, lang):
+    """Język treści dokumentu prawnego: języki pakietu → „en” (przejrzana wersja), bazowa piątka bez zmian."""
+    return "en" if is_ext(lang) and path in LEGAL_PATHS else lang
 def legal_note(doc, path, lang):
-    if path not in ("/regulamin.html", "/privacy.html") or not is_ext(lang): return doc
-    pl_url = path   # bez ?lang → wersja polska
-    note = (f'<p class="hint legalnote legaldraft" role="note"><b>DRAFT – wymaga weryfikacji</b> · 🌐 {LEGAL.get(lang, "")}<br>'
-            f'<span lang="pl">Wersja polska jest jedyną wiążącą prawnie.</span> <a href="{pl_url}?lang=pl" lang="pl">Polski (wiążący) →</a></p>')
-    return re.sub(r"(</h1>)", r"\1" + note.replace("\\", "\\\\"), doc, count=1)
+    if path not in LEGAL_PATHS or not is_ext(lang): return doc
+    note = (f'<p class="hint legalnote legalen" role="note" lang="{bcp(lang)}" dir="{direction(lang)}" data-no-i18n>🌐 {LEGAL.get(lang, "")} '
+            f'<a href="{path}?lang=pl" lang="pl" hreflang="pl">Polski (PL) →</a> · <a href="{path}?lang=en" lang="en" hreflang="en">English (EN) →</a></p>')
+    doc = re.sub(r"<main\b([^>]*)>", lambda m: "<main" + m.group(1) + ' lang="en" dir="ltr" data-no-i18n>', doc, count=1) if "<main" in doc else \
+          re.sub(r"(<h1\b)", r'<div lang="en" dir="ltr" data-no-i18n>\1', doc, count=1).replace("</body>", "</div></body>", 1)
+    return re.sub(r"(</h1>)", lambda m: m.group(1) + note, doc, count=1)
 
 CSS = '<link rel="stylesheet" href="/i18n-ext.css?v=1">'
 _SCRIPT = re.compile(r'(<script\b[^>]*\bsrc="(/?[\w./-]+\.js))(\?[^"]*)?"')

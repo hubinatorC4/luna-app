@@ -83,7 +83,7 @@
 ]
 },
 {
-"en": "<li><b>Agent generator and quality</b>: Podstawowa – viewing up to 480p and images up to 854 px, no generator; in Battles you cheer, vote and chat. Premium – image generator at 1280 px (20 a day) and videos up to 30 s in 720p (5 a day), entering your agent in Battles and 6 basic sceneries. Pro / Ultra – images up to 2160 px (60 a day), videos up to 60 s in 1080p (15 a day), all sceneries and custom scenery prompts (moderated). Your agent appears alone in images and videos; every output carries a visible “AI” label, is moderated (no sexual content, fully clothed, no real brands or real people’s likeness) and never uses the real, anonymous voice actress. Partner agents get Pro / Ultra limits in the generator.</li>",
+"en": "<li><b>Agent generator and quality</b>: Podstawowa – viewing up to 480p and images up to 854 px, no generator; in Battles you cheer, vote and chat. Premium – image generator at 1280 px (20 a day) and videos up to 30 s in 720p (5 a day, 60 per calendar month), entering your agent in Battles and 6 basic sceneries. Pro / Ultra – images up to 1920 px (60 a day), videos up to 60 s in 1080p (15 a day, 200 per calendar month), all sceneries and custom scenery prompts (moderated). Your agent appears alone in images and videos; every output carries a visible “AI” label, is moderated (no sexual content, fully clothed, no real brands or real people’s likeness) and never uses the real, anonymous voice actress. Partner agents get Pro / Ultra limits in the generator. Photos in the friends chat (friends only, automatic nudity filter and moderation of reports): Basic – 5 a day up to 854 px, Premium – 30 a day up to 1280 px, Pro / Ultra and partner agents – 100 a day up to 1920 px.</li>",
 "o": [
 "json:app_fix"
 ]
@@ -98,6 +98,19 @@
 "en": "<li>Training your own AI agent is available only in paid plans: in <b>Premium</b> – name, wake word, tone, reply length, ring colour and your own AI image; in <b>Pro</b> – also pose and figure. The Free and Basic plans do not include agent training.</li>",
 "o": [
 "json:app_fix"
+]
+},
+{
+"en": "Creator and owner of the service and the app: Hubinator❤️",
+"o": [
+"json:app_index",
+"json:common"
+]
+},
+{
+"en": "Creator and publisher of the app: Hubinator❤️",
+"o": [
+"json:app_index"
 ]
 },
 {
@@ -131,7 +144,7 @@
 ]
 },
 {
-"en": "Luna is an AI assistant for learning to speak and working with your voice. The product is in no way intended to sexualise women.",
+"en": "Luna is an AI assistant whose purpose is better communication between men and women – she focuses on speech itself: volume, timbre, tone, tempo and intonation. The product is in no way intended to sexualise women.",
 "o": [
 "js:notices.js",
 "json:app_index",
@@ -163,7 +176,33 @@
 ]
 },
 {
-"en": "🎁 We’re looking for Luna testers! Premium free for 2 months ·",
+"en": "🎙️ We’re looking for 1000 Luna testers! Premium free for 2 months + extras ·",
+"o": [
+"json:app_index"
+]
+},
+{
+"en": "🎙️ We’re looking for 1000 Luna testers!",
+"o": [
+"html:testerzy.html",
+"json:app_index",
+"json:promo",
+"py:tools/pages_content.py",
+"py:tools/tester_promo.py"
+]
+},
+{
+"en": "Like being first? Join a thousand people who’ll be the first to try battles, rankings and their very own AI agent. In return you get two months of Premium for free and special tester-only extras: icons, exclusive emotes, special avatars and the option to gently change the colour of the frame around your logo. There are exactly 1000 spots and the counter doesn’t lie. Sign up before Luna says “full house” 😉",
+"o": [
+"html:testerzy.html",
+"js:notices.js",
+"json:app_index",
+"py:tools/pages_content.py",
+"py:tools/tester_promo.py"
+]
+},
+{
+"en": "Sign up →",
 "o": [
 "json:app_index"
 ]
@@ -447,6 +486,7 @@
 "en": "Testers",
 "o": [
 "js:langswitch.js",
+"js:showcase.js",
 "js:zgloszenie.js",
 "json:app_index",
 "json:common"
@@ -749,7 +789,6 @@
 {
 "en": "Date of birth",
 "o": [
-"js:forms18-i18n.js",
 "json:app_index"
 ]
 },
@@ -880,6 +919,7 @@
 "js:bt-common.js",
 "js:emoji.js",
 "js:helpbot-loader.js",
+"js:kasa.js",
 "js:report.js",
 "json:app_index",
 "json:common",
@@ -1066,6 +1106,7 @@
 "o": [
 "html:ustawienia.html",
 "js:desktop.js",
+"js:langswitch.js",
 "json:common",
 "py:tools/ustawienia_strings.py"
 ]
@@ -1160,12 +1201,6 @@
 ]
 },
 {
-"en": "const ADULT = 'I declare that I am an adult (18+) and have my own bank account.';",
-"o": [
-"json:js_account"
-]
-},
-{
 "en": "{darmowy: 'Free', podstawowa: 'Basic', premium: 'Premium', pro: 'Pro / Ultra'}",
 "o": [
 "json:js_account"
@@ -1244,12 +1279,6 @@
 ]
 },
 {
-"en": "18+ declaration: ${ME.adult ? 'made ' + fmtD(ME.adult_at) : 'none'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' until ' + fmtD(ME.until) : ''}",
-"o": [
-"json:js_account"
-]
-},
-{
 "en": "<label>Tester code<input",
 "o": [
 "json:js_account"
@@ -1310,19 +1339,7 @@
 ]
 },
 {
-"en": "<label>Date of birth *<input",
-"o": [
-"json:js_account"
-]
-},
-{
 "en": "I accept the <a href=\"/regulamin.html\" target=\"_blank\">terms</a> and the <a href=\"/privacy.html\" target=\"_blank\">privacy notice</a>. *",
-"o": [
-"json:js_account"
-]
-},
-{
-"en": "This is a declaration – we don’t verify your age or bank account.",
 "o": [
 "json:js_account"
 ]
@@ -1370,12 +1387,6 @@
 ]
 },
 {
-"en": "}. Stripe will email you a confirmation.`",
-"o": [
-"json:js_account"
-]
-},
-{
 "en": "'The payment is still in progress (e.g. BLIK is waiting for bank confirmation). Refresh in a moment – if access doesn’t appear, report it under “Technical problems”.'",
 "o": [
 "json:js_account"
@@ -1412,12 +1423,6 @@
 ]
 },
 {
-"en": "['🎁 Recommend Luna', 'You both get 7 days of Premium after the referred person’s first purchase (max. 10 a month). Your link is in Settings.']",
-"o": [
-"json:js_account"
-]
-},
-{
 "en": "['🖼 Agent gallery', 'A new gallery with Agent of the week – based on real likes.']",
 "o": [
 "json:js_account"
@@ -1436,7 +1441,7 @@
 ]
 },
 {
-"en": "['🎬 Agent generator', 'Premium: 1280 px images and videos up to 30 s in 720p. Pro / Ultra: up to 2160 px, videos up to 60 s in 1080p, all sceneries. Always with an “AI” label.']",
+"en": "['🎬 Agent generator', 'Premium: 1280 px images and videos up to 30 s in 720p. Pro / Ultra: up to 1920 px, videos up to 60 s in 1080p, all sceneries. Always with an “AI” label.']",
 "o": [
 "json:js_account"
 ]
@@ -1484,7 +1489,7 @@
 ]
 },
 {
-"en": "['🔒 Privacy', 'We remove metadata (GPS, device) from photos. Delete your account with one click.']",
+"en": "['🔒 Privacy', 'We remove metadata (GPS, device) from photos. Delete your account in 2 steps – and restore it within 30 days if you change your mind.']",
 "o": [
 "json:js_account"
 ]
@@ -1533,6 +1538,24 @@
 },
 {
 "en": "['💌 Inbox, Friends and chat', 'The 📬 icon in the app: important matters, news and Battle results. Friends by nickname, link or QR and a private chat with emoji. Nicknames only – no e-mails.']",
+"o": [
+"json:js_account"
+]
+},
+{
+"en": "'none'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' until ' + fmtD(ME.until)",
+"o": [
+"json:js_account"
+]
+},
+{
+"en": "The payment partner will send a confirmation to your email.",
+"o": [
+"json:js_account"
+]
+},
+{
+"en": "['🎁 Invite friends', 'You recommend – you both get 7 days of Premium after the invited person’s first purchase (max. 10 per month). You’ll find your link in Settings.']",
 "o": [
 "json:js_account"
 ]
@@ -2169,6 +2192,12 @@
 ]
 },
 {
+"en": "'🎟️ Tester extras: a badge, exclusive emotes, special avatars and a choice of frame colour – you’ll find them in “My panel” once your tester code is linked to your account.'",
+"o": [
+"json:js_testers"
+]
+},
+{
 "en": "`${d.remaining} of ${d.limit} places left`",
 "o": [
 "json:js_testers"
@@ -2193,7 +2222,7 @@
 ]
 },
 {
-"en": "Thank you! All 50 tester places are taken. Sign up for notifications so you don’t miss the launch.",
+"en": "Thank you! All 1000 tester places are taken. Sign up for notifications so you don’t miss the launch.",
 "o": [
 "json:js_testers"
 ]
@@ -3151,7 +3180,7 @@
 ]
 },
 {
-"en": "AI assistant · voice training",
+"en": "AI assistant · better conversations",
 "o": [
 "json:olunie"
 ]
@@ -3182,7 +3211,7 @@
 ]
 },
 {
-"en": "Luna is an AI assistant who helps you, step by step, speak more calmly, clearly and confidently – in a warm, low voice with Spanish charm.",
+"en": "Luna is an AI assistant – 100% artificial intelligence – whose purpose is better communication between men and women. She focuses mainly on speech itself: volume, timbre, tone, tempo, intonation and other details – in a warm, low voice with Spanish charm.",
 "o": [
 "json:olunie"
 ]
@@ -3436,13 +3465,13 @@
 ]
 },
 {
-"en": "Outfits: lace dress, jumper, evening gown, blazer, cocktail dress",
+"en": "Outfits: lace dress, jumper, evening gown, blazer, summer dress, cocktail dress",
 "o": [
 "json:olunie"
 ]
 },
 {
-"en": "Your own avatar image (stays on your device)",
+"en": "Your own AI image (checked on the server, metadata removed, moderated)",
 "o": [
 "json:olunie"
 ]
@@ -3544,7 +3573,7 @@
 ]
 },
 {
-"en": "The app is in testing – in the demo you can try every plan.",
+"en": "The app is in testing – testers get Premium free for 2 months.",
 "o": [
 "json:olunie"
 ]
@@ -3637,6 +3666,7 @@
 "en": "Choose",
 "o": [
 "js:app-shell-i18n.js",
+"js:kasa.js",
 "json:olunie"
 ]
 },
@@ -3935,6 +3965,7 @@
 "en": "No",
 "o": [
 "js:agegate.js",
+"js:forms18-i18n.js",
 "json:privacy"
 ]
 },
@@ -4005,7 +4036,7 @@
 ]
 },
 {
-"en": "Stored on your device. An uploaded AI image is checked on the server (camera metadata, AI markers), re-encoded and stripped of metadata (EXIF); we keep a thumbnail for moderation for up to 12 months. Reported avatars are visible to a moderator.",
+"en": "We remember your avatar choice on your device. An uploaded AI image is stored on the server: it goes through an automatic nudity filter and a check for camera metadata and AI markers, is re-encoded and stripped of metadata (EXIF); we keep a thumbnail for moderation for up to 12 months. Reported avatars are visible to a moderator.",
 "o": [
 "json:privacy"
 ]
@@ -4362,6 +4393,30 @@
 ]
 },
 {
+"en": "Profile and content (My panel): nick, optional profile avatar (any image that follows the rules, after moderation), bio, interests, privacy and online-visibility settings (default: close friends only), your photos on the wall (max. 854 px), photos sent in the friends chat (depending on the plan up to 854, 1280 or 1920 px) and agent descriptions and images from the Generator. We remove EXIF and GPS metadata from all photos, and each one goes through an automatic nudity filter.",
+"o": [
+"json:privacy_inbox"
+]
+},
+{
+"en": "Profile, publishing content, chat with friends, Agent generator",
+"o": [
+"json:privacy_inbox"
+]
+},
+{
+"en": "No (nick – yes, if you create a profile)",
+"o": [
+"json:privacy_inbox"
+]
+},
+{
+"en": "Until you delete the content or the account (after a deletion request – 30 days to restore, then permanent deletion). Chat photos – like chat messages. Unchosen Generator variants are deleted right away, and queued jobs after 30 days.",
+"o": [
+"json:privacy_inbox"
+]
+},
+{
 "en": "Inbox, Friends and chat: nickname, friends and invite lists, blocked accounts, privacy settings, system messages and the content of your chat messages with friends",
 "o": [
 "json:privacy_inbox"
@@ -4398,7 +4453,7 @@
 ]
 },
 {
-"en": "If you have an account, in Settings → Account and plan you can <b>download your data</b> (JSON file) and <b>permanently delete your account with one click</b> (with confirmation) – we immediately delete the account, email, name, password, sessions, tester application and email subscription, and anonymise your past comments and posts as “Deleted user”. Other data: unsubscribe from emails via the link in the message, turn off notifications in settings and write to us asking us to delete conversations or reports. We will delete them within 30 days. We keep payment data for as long as tax law requires.",
+"en": "If you have an account, in “My panel” you can <b>download your data</b> (JSON file) and <b>delete your account in two steps</b> (you confirm by typing your nick). You can restore the account within 30 days – during that time your profile is hidden. After 30 days we permanently delete the account and all its data: email, password, sessions, profile, posts, comments, photos, agents and videos, inbox and chats, tester application and email subscription. Other data: unsubscribe from emails via the link in the message, turn off notifications in settings and write to us asking us to delete conversations or reports. We will delete them within 30 days. We keep payment data for as long as tax law requires.",
 "o": [
 "json:privacy_v140"
 ]
@@ -4482,13 +4537,13 @@
 ]
 },
 {
-"en": "“Join the project” applications (and earlier “AI face” applications): name, email, role, message, link, optional height, date of birth, 18+ declaration",
+"en": "“Join the project” applications (and earlier “AI face” applications): name, email, role, message, link, optional height, 18+ declaration (no date of birth; older applications may include one)",
 "o": [
 "json:privacy_v170"
 ]
 },
 {
-"en": "Tester and casting forms: nickname or pseudonym (no real name), email, optional phone and country, form answers, date of birth (only to check age), consent wording with date, optional voice sample (private, metadata removed, heard only by the moderator) and the 18+ verification result",
+"en": "Tester and casting forms: nickname or pseudonym (no real name), email, optional phone and country, form answers, the “Are you 18 or older?” – Yes confirmation (no date of birth), consent wording with date, optional voice sample (private, metadata removed, heard only by the moderator) and the 18+ verification result",
 "o": [
 "json:privacy_v170"
 ]
@@ -4548,7 +4603,7 @@
 ]
 },
 {
-"en": "A card is weaker proof (a debit card can belong to a minor), so we combine it with your date-of-birth declaration. Prepaid cards are not accepted. Legal basis: consent (Art. 6(1)(a) GDPR) and legitimate interest – protecting minors (Art. 6(1)(f)). While verification is not yet enabled, an application stays “pending verification” and cannot be accepted.",
+"en": "A card is weaker proof (a debit card can belong to a minor), so we combine it with your “I am 18+” (Yes) confirmation – we never ask for your date of birth. Prepaid cards are not accepted. Legal basis: consent (Art. 6(1)(a) GDPR) and legitimate interest – protecting minors (Art. 6(1)(f)). While verification is not yet enabled, an application stays “pending verification” and cannot be accepted.",
 "o": [
 "json:privacy_v170"
 ]
@@ -4575,12 +4630,6 @@
 "en": "Until you withdraw consent or the talks end; rejected applications are deleted after 90 days",
 "o": [
 "json:privacy_v170"
-]
-},
-{
-"en": "We’re looking for Luna testers!",
-"o": [
-"json:promo"
 ]
 },
 {
@@ -4679,7 +4728,7 @@
 ]
 },
 {
-"en": "<span class=\"no-twa\">Luna is free, Premium will be paid – but </span><span class=\"twa-only\">As part of the test, </span><b>the first 50 testers</b> get <b>Premium free for two months</b> and <b>an avatar with a purple or blue ring</b>. Sign up!",
+"en": "<span class=\"no-twa\">Luna is free, Premium will be paid – but </span><span class=\"twa-only\">As part of the test, </span><b>the first 1000 testers</b> get <b>Premium free for two months</b> and <b>tester-only extras</b>: a badge, exclusive emotes, special avatars and a choice of frame colour (purple or blue by default). The counter doesn’t lie – sign up!",
 "o": [
 "json:promo"
 ]
@@ -4792,6 +4841,7 @@
 "en": "📲 Download",
 "o": [
 "js:download.js",
+"js:showcase.js",
 "json:promo"
 ]
 },
@@ -4820,7 +4870,7 @@
 ]
 },
 {
-"en": "“Luna Tells It Like It Is” is a fan project – and it will stay that way. The service provider (seller) is: <b id=\"sellerName\">[seller details will be added]</b><span id=\"sellerAddr\"></span><span id=\"sellerNip\"></span><span id=\"sellerVat\"></span>. Contact: “Chat with the creator” in the app or the <a href=\"/problemy.html\">Technical problems</a> page.",
+"en": "“Luna Tells It Like It Is” is a fan project – and it will stay that way. The creator and owner of the service and the app is <b>Hubinator❤️</b>. The service provider (seller) is: <b id=\"sellerName\">[seller details will be added]</b><span id=\"sellerAddr\"></span><span id=\"sellerNip\"></span><span id=\"sellerVat\"></span>. Contact: “Chat with the creator” in the app or the <a href=\"/problemy.html\">Technical problems</a> page.",
 "o": [
 "json:regulamin"
 ]
@@ -4856,7 +4906,7 @@
 ]
 },
 {
-"en": "You create an account with an email address and password (we store only a secure Argon2id hash of it). Until we launch email sending, accounts are marked as unconfirmed. In the settings you can download your data (export) and permanently delete your account.",
+"en": "You create an account with an email address and password (we store only a secure Argon2id hash of it). Until we launch email sending, accounts are marked as unconfirmed. In the settings you can download your data (export) and delete your account – in two steps, with 30 days to restore it (details in § 4, “User profile”).",
 "o": [
 "json:regulamin"
 ]
@@ -4958,7 +5008,7 @@
 ]
 },
 {
-"en": "An avatar may only be a ready-made icon, a gallery avatar, an avatar from the in-app generator or an AI-generated image. <b>Uploading photos of real people is not allowed.</b> When uploading, we require a declaration that the image was generated by AI and does not depict a real person. The server rejects files with camera metadata lacking an AI marker and removes all metadata – this check is not 100% effective. Avatars can be reported; a moderator may remove them or block the user.",
+"en": "An avatar in the chat with Luna and in Luna Live may only be a ready-made icon, a gallery avatar, an avatar from the in-app generator or an AI-generated image. <b>Uploading photos of real people is not allowed.</b> When uploading, we require a declaration that the image was generated by AI and does not depict a real person. The server rejects files with camera metadata lacking an AI marker and removes all metadata – this check is not 100% effective. Avatars can be reported; a moderator may remove them or block the user. The profile avatar in “My panel” follows the rules in § 4 (“User profile”).",
 "o": [
 "json:regulamin"
 ]
@@ -5180,7 +5230,7 @@
 ]
 },
 {
-"en": "View counters count a post once per session when it is visible for at least 1 second. Accounts and devices showing signs of bots or fake accounts (e.g. a burst of likes within seconds, repeated comments, disposable email addresses) may be automatically hidden from counting; deleting an account is always approved by a human, and accounts flagged by mistake are restored. Likes and comments from accounts without a confirmed email address are not included in public counters.",
+"en": "View counters count a post once per session when it is visible for at least 1 second. Accounts and devices showing signs of bots or fake accounts (e.g. a burst of likes within seconds, repeated comments, disposable email addresses) may be automatically hidden from counting; deleting an account is always approved by a human, and accounts flagged by mistake are restored. Once email confirmation is live, likes and comments from accounts without a confirmed address will not be included in public counters (just like votes in Battles).",
 "o": [
 "json:regulamin_v140"
 ]
@@ -5312,7 +5362,7 @@
 ]
 },
 {
-"en": "Tester and casting applications require confirmation of adulthood with an external provider (Stripe): with an ID document (Stripe Identity) or with a bank card, without any charge. A card is weaker proof, so we combine it with a date-of-birth declaration.",
+"en": "Tester and casting applications require confirmation of adulthood with an external provider (Stripe): with an ID document (Stripe Identity) or with a bank card, without any charge. A card is weaker proof, so we combine it with an “I am 18+” (Yes) confirmation. We never ask for a date of birth.",
 "o": [
 "json:regulamin_v170"
 ]
@@ -5358,6 +5408,7 @@
 "o": [
 "html:zaufanie.html",
 "js:owner-line.js",
+"js:showcase.js",
 "json:regulamin_v170",
 "py:tools/trust_content.py"
 ]
@@ -5369,6 +5420,54 @@
 ]
 },
 {
+"en": "All prices of plans and Luna Boutique items are gross prices – the amount you pay. The base price is in Polish złoty (PLN). If payments are handled by a payment partner acting as the seller (Merchant of Record), the checkout may show a price in your country’s currency set by that partner; the amount shown at checkout before you confirm the payment is binding. We do not convert prices using our own exchange rates. For purchases in the Google Play app, Google Play sets and charges the local-currency price.",
+"o": [
+"json:regulamin_v171"
+]
+},
+{
+"en": "Browser version: payments are handled by an external payment partner named at checkout before you pay – Paddle (Paddle.com Market Ltd. or another Paddle group entity) or Stripe. Until payments are launched, purchase buttons show “payments are coming soon” and charge nothing.",
+"o": [
+"json:regulamin_v171"
+]
+},
+{
+"en": "Partner as seller (Merchant of Record): if payments are handled by Paddle, Paddle is the seller (reseller) of the plan or item to you – it accepts the payment, charges and accounts for the VAT or sales tax due in your country, issues the purchase confirmation and handles refunds under its buyer terms (paddle.com/legal/checkout-buyer-terms). The digital content (plan, outfit) is delivered by Luna. Only in that case do the checkout and price list show: “Prices include all taxes, including VAT. Payments are handled by our payment partner, which accounts for VAT.”",
+"o": [
+"json:regulamin_v171"
+]
+},
+{
+"en": "One-off or subscription: by default you buy 30 days of access with no automatic renewal (BLIK, card and other methods shown at checkout). A monthly subscription (card or PayPal) is only ever your own choice, and you can cancel it at any time in the payment partner’s customer portal – access then lasts until the end of the paid period.",
+"o": [
+"json:regulamin_v171"
+]
+},
+{
+"en": "Access is granted automatically only after the payment partner confirms the payment (with BLIK this can take a few minutes). You will receive the payment confirmation by e-mail from the payment partner. We do not store payment card details.",
+"o": [
+"json:regulamin_v171"
+]
+},
+{
+"en": "Android app (Google Play): in-app payments are made only through Google Play Billing. This version does not use the browser checkout.",
+"o": [
+"json:regulamin_v171"
+]
+},
+{
+"en": "Paddle (Paddle.com Market Ltd., United Kingdom, or Paddle Payments Ltd., Ireland) – if it handles payments: as the seller (Merchant of Record) it processes the data needed for payment, taxes and the purchase confirmation (e-mail, country, payment method) under its own privacy policy,",
+"o": [
+"json:regulamin_v171"
+]
+},
+{
+"en": "Stripe (Stripe Payments Europe Ltd., Ireland) – if it handles payments in the browser version (BLIK, card); Stripe also sends the payment confirmation,",
+"o": [
+"json:regulamin_v171"
+]
+},
+{
 "en": "🤝 Join the team",
 "o": [
 "json:trust"
@@ -5377,6 +5476,7 @@
 {
 "en": "Join the team",
 "o": [
+"js:showcase.js",
 "json:trust"
 ]
 },
@@ -5472,6 +5572,7 @@
 "html:ranking.html",
 "js:app-shell.js",
 "js:bt-mini.js",
+"js:showcase.js",
 "py:tools/agentka_strings.py"
 ]
 },
@@ -6026,7 +6127,8 @@
 "en": "Log in",
 "o": [
 "html:bitwy.html",
-"html:ranking.html"
+"html:ranking.html",
+"js:kasa.js"
 ]
 },
 {
@@ -6381,7 +6483,8 @@
 {
 "en": "Ranking",
 "o": [
-"html:bitwy.html"
+"html:bitwy.html",
+"js:app-shell-i18n.js"
 ]
 },
 {
@@ -6516,6 +6619,7 @@
 "html:butik.html",
 "js:app-shell-i18n.js",
 "js:home-feed.js",
+"js:showcase.js",
 "py:tools/pages_content.py"
 ]
 },
@@ -6597,10 +6701,9 @@
 ]
 },
 {
-"en": "Price incl. VAT.",
+"en": "Gross price.",
 "o": [
-"html:butik.html",
-"py:tools/pages_content.py"
+"html:butik.html"
 ]
 },
 {
@@ -6618,10 +6721,9 @@
 ]
 },
 {
-"en": "Payments – coming soon",
+"en": "Payments are coming soon",
 "o": [
-"html:butik.html",
-"py:tools/pages_content.py"
+"html:butik.html"
 ]
 },
 {
@@ -6650,6 +6752,7 @@
 "o": [
 "html:butik.html",
 "js:app-shell-i18n.js",
+"js:kasa.js",
 "py:tools/pages_content.py"
 ]
 },
@@ -6718,11 +6821,9 @@
 ]
 },
 {
-"en": "Name *",
+"en": "Nickname (optional)",
 "o": [
-"html:dolacz.html",
-"html:twarz.html",
-"py:tools/pages_content.py"
+"html:dolacz.html"
 ]
 },
 {
@@ -6764,19 +6865,9 @@
 ]
 },
 {
-"en": "Date of birth *",
+"en": "I consent to the processing of my data (nickname if given, email, message, portfolio link) in order to reply to my application to the Luna project. I can withdraw my consent at any time. *",
 "o": [
-"html:dolacz.html",
-"html:twarz.html",
-"py:tools/pages_content.py"
-]
-},
-{
-"en": "I consent to the processing of my data (name, email, message, portfolio link) in order to reply to my application to the Luna project. I can withdraw my consent at any time. *",
-"o": [
-"html:dolacz.html",
-"html:twarz.html",
-"py:tools/pages_content.py"
+"html:dolacz.html"
 ]
 },
 {
@@ -6854,6 +6945,12 @@
 "js:report.js",
 "py:tools/pages_content.py",
 "py:tools/ustawienia_strings.py"
+]
+},
+{
+"en": "e.g. LunaFan – it doesn’t have to be your real name",
+"o": [
+"html:dolacz.html"
 ]
 },
 {
@@ -7084,7 +7181,7 @@
 ]
 },
 {
-"en": "Your AI voice coach. She tells it like it is, so you can speak even better.",
+"en": "An AI assistant for better conversations between men and women. She tells it like it is about your speech: volume, timbre, tone and tempo.",
 "o": [
 "html:promo.html"
 ]
@@ -7104,7 +7201,8 @@
 {
 "en": "▶ Hear Luna",
 "o": [
-"html:promo.html"
+"html:promo.html",
+"js:showcase.js"
 ]
 },
 {
@@ -7142,7 +7240,8 @@
 {
 "en": "Agents",
 "o": [
-"html:ranking.html"
+"html:ranking.html",
+"js:showcase.js"
 ]
 },
 {
@@ -7452,21 +7551,6 @@
 ]
 },
 {
-"en": "How to become a Luna tester",
-"o": [
-"html:testerzy.html",
-"py:tools/pages_content.py"
-]
-},
-{
-"en": "We’re looking for 50 brave souls who can say “szczęście” without a stumble… Premium will be paid, but testers get it free for 2 months – plus a purple or blue ring!",
-"o": [
-"html:testerzy.html",
-"js:notices.js",
-"py:tools/pages_content.py"
-]
-},
-{
 "en": "The rules in brief",
 "o": [
 "html:testerzy.html",
@@ -7474,7 +7558,7 @@
 ]
 },
 {
-"en": "<li>🎁 Your tester gift is worth <b>2 months of Premium = PLN 119.98</b> (2 × PLN 59.99) – free of charge.</li><li>A maximum of <b>50 people</b> – first come, first served.</li><li>The app is free to download. The Free plan has daily limits and Premium will be paid – <b>testers get Premium free for 2 months</b>.</li><li>Testers must be adults (18+).</li><li>No ads – Luna would talk right over them anyway. 😄</li>",
+"en": "<li>🎁 Your tester gift is worth <b>2 months of Premium = PLN 119.98</b> (2 × PLN 59.99) – free of charge.</li><li>A maximum of <b>1000 people</b> – first come, first served.</li><li>The app is free to download. The Free plan has daily limits and Premium will be paid – <b>testers get Premium free for 2 months</b>.</li><li>Testers must be adults (18+).</li><li>No ads – Luna would talk right over them anyway. 😄</li>",
 "o": [
 "html:testerzy.html"
 ]
@@ -7615,6 +7699,20 @@
 "en": "Yes, at any time. Write to us in “Creator chat” and we’ll delete your application.",
 "o": [
 "html:testerzy.html",
+"py:tools/pages_content.py"
+]
+},
+{
+"en": "Name *",
+"o": [
+"html:twarz.html",
+"py:tools/pages_content.py"
+]
+},
+{
+"en": "I consent to the processing of my data (name, email, message, portfolio link) in order to reply to my application to the Luna project. I can withdraw my consent at any time. *",
+"o": [
+"html:twarz.html",
 "py:tools/pages_content.py"
 ]
 },
@@ -7993,6 +8091,7 @@
 "html:ustawienia.html",
 "js:forms18-i18n.js",
 "js:helpbot-loader.js",
+"js:showcase.js",
 "py:tools/ustawienia_strings.py"
 ]
 },
@@ -8193,6 +8292,7 @@
 "o": [
 "html:ustawienia.html",
 "js:app-shell-i18n.js",
+"js:kasa.js",
 "py:tools/ustawienia_strings.py"
 ]
 },
@@ -8240,6 +8340,7 @@
 "o": [
 "html:ustawienia.html",
 "js:inbox-i18n.js",
+"js:kasa.js",
 "py:tools/ustawienia_strings.py"
 ]
 },
@@ -9522,7 +9623,7 @@
 ]
 },
 {
-"en": "<li>Encrypted HTTPS connection across the whole site.</li><li>Passwords are stored only as a secure hash (Argon2id).</li><li>Reports and content are reviewed by a human moderator.</li><li>Every uploaded photo goes through an automatic nudity filter (it runs on our own server – photos are not sent to outside companies) + moderation: doubtful photos wait for a human decision. The filter is not infallible, so you can always report content.</li><li>Rate limits and protection against bots and fake accounts.</li><li>An “Are you 18?” gate – the service is for adults only.</li><li>We remove metadata (e.g. GPS location) from photos.</li><li>We never store ID scans or card numbers – payments and age verification are handled by Stripe.</li>",
+"en": "<li>Encrypted HTTPS connection across the whole site.</li><li>Passwords are stored only as a secure hash (Argon2id).</li><li>Reports and content are reviewed by a human moderator.</li><li>Every uploaded photo goes through an automatic nudity filter (it runs on our own server – photos are not sent to outside companies) + moderation: doubtful photos wait for a human decision. The filter is not infallible, so you can always report content.</li><li>Rate limits and protection against bots and fake accounts.</li><li>An “Are you 18?” gate – the service is for adults only.</li><li>We remove metadata (e.g. GPS location) from photos.</li><li>We never store ID scans or card numbers – payments are handled by our payment partner and age verification by Stripe.</li>",
 "o": [
 "html:zaufanie.html",
 "py:tools/trust_content.py"
@@ -10516,6 +10617,12 @@
 ]
 },
 {
+"en": "English",
+"o": [
+"py:i18n_ext.py"
+]
+},
+{
 "en": "This translation is provided for convenience. The Polish version is legally binding.",
 "o": [
 "py:i18n_pages.py"
@@ -10666,6 +10773,12 @@
 ]
 },
 {
+"en": "The photo filter is temporarily unavailable, so for safety we can't accept photos right now. Please try again in a few minutes. 💚",
+"o": [
+"py:nsfw_filter.py"
+]
+},
+{
 "en": "A warm voice coach with a Spanish temperament. She tells it like it is – kindly, clearly and with a smile.",
 "o": [
 "py:profiles.py"
@@ -10751,7 +10864,7 @@
 ]
 },
 {
-"en": "Luna is an AI assistant and voice coach: voice chat, 45 lessons, voice styles, hologram mode and your own assistant. No ads.",
+"en": "Luna is an AI assistant for better communication between men and women. She focuses on speech itself: volume, timbre, tone, tempo and intonation. Voice chat, 45 lessons, no ads.",
 "o": [
 "py:seo.py"
 ]
@@ -10763,19 +10876,19 @@
 ]
 },
 {
-"en": "Talk to Luna, an AI assistant for learning to speak and working with your voice.",
+"en": "Luna is an AI assistant for better conversations between men and women – she works on speech itself: volume, timbre, tone, tempo and intonation.",
 "o": [
 "py:seo.py"
 ]
 },
 {
-"en": "Luna Tells It Like It Is – voice tips, Luna Live and speaking practice",
+"en": "Luna – an AI assistant for better conversations between men and women",
 "o": [
 "py:seo.py"
 ]
 },
 {
-"en": "Your AI voice coach. Tips on tone, breathing, diction, pace, confidence and public speaking. No ads.",
+"en": "Luna is an AI assistant focused on speech itself: volume, timbre, tone, tempo and intonation – so men and women can talk to each other better. Plus your own AI agent and Battles. Free to start, no ads, 5 languages. 18+.",
 "o": [
 "py:seo.py"
 ]
@@ -10931,6 +11044,90 @@
 ]
 },
 {
+"en": "Purple",
+"o": [
+"py:tester_perks.py"
+]
+},
+{
+"en": "Blue",
+"o": [
+"py:tester_perks.py"
+]
+},
+{
+"en": "Mint",
+"o": [
+"py:tester_perks.py"
+]
+},
+{
+"en": "Peach",
+"o": [
+"py:tester_perks.py"
+]
+},
+{
+"en": "Lavender",
+"o": [
+"py:tester_perks.py"
+]
+},
+{
+"en": "Sea green",
+"o": [
+"py:tester_perks.py"
+]
+},
+{
+"en": "Sunny",
+"o": [
+"py:tester_perks.py"
+]
+},
+{
+"en": "Sage",
+"o": [
+"py:tester_perks.py"
+]
+},
+{
+"en": "porn porno sex sexual sexting nude nudes nudity naked topless striptease stripper erotic erotica masturbat orgasm genital penis vagina pussy tits titties boobs nipple nipples blowjob handjob cumshot horny xxx nsfw hentai onlyfans fansly camgirl dickpic",
+"o": [
+"py:textsafe.py"
+]
+},
+{
+"en": "child children childlike kid kids kiddie minor minors underage preteen teen teens teenage teenager schoolgirl schoolboy loli lolita shota toddler infant baby_face little_girl young_girl jailbait",
+"o": [
+"py:textsafe.py"
+]
+},
+{
+"en": "lingerie underwear panties bra bralette thong gstring bikini swimsuit swimwear bathing_suit see_through seethrough sheer transparent cleavage sexy seductive provocative sensual sultry fetish latex bdsm bondage kinky boudoir negligee pinup pin_up playboy undress undressed undressing half_naked braless lowcut low_cut revealing skimpy wet_shirt bare_skin bare_chest shirtless",
+"o": [
+"py:textsafe.py"
+]
+},
+{
+"en": "This text contains sexual content – there's none of that at Luna. Please rephrase. 💚",
+"o": [
+"py:textsafe.py"
+]
+},
+{
+"en": "We won't allow this: content combining minors and sexuality is prohibited and reported.",
+"o": [
+"py:textsafe.py"
+]
+},
+{
+"en": "Agent description: adults only (21+), fully clothed, no revealing outfits or innuendo. Describe style and personality. 💚",
+"o": [
+"py:textsafe.py"
+]
+},
+{
 "en": "Miejski Poranek",
 "o": [
 "py:tools/gen_butik.py"
@@ -10949,7 +11146,7 @@
 ]
 },
 {
-"en": "<li>A maximum of <b>50 people</b> – first come, first served.</li><li>The app is free to download. The Free plan has daily limits and Premium will be paid – <b>testers get Premium free for 2 months</b>.</li><li>Testers must be adults (18+).</li><li>No ads – Luna would talk right over them anyway. 😄</li>",
+"en": "<li>A maximum of <b>1000 people</b> – first come, first served.</li><li>The app is free to download. The Free plan has daily limits and Premium will be paid – <b>testers get Premium free for 2 months</b>.</li><li>Testers must be adults (18+).</li><li>No ads – Luna would talk right over them anyway. 😄</li>",
 "o": [
 "py:tools/pages_content.py"
 ]
@@ -10968,6 +11165,18 @@
 },
 {
 "en": "<b>Install the app.</b> Android: download <a href=\"",
+"o": [
+"py:tools/pages_content.py"
+]
+},
+{
+"en": "Price incl. VAT.",
+"o": [
+"py:tools/pages_content.py"
+]
+},
+{
+"en": "Payments – coming soon",
 "o": [
 "py:tools/pages_content.py"
 ]
@@ -11018,6 +11227,24 @@
 "en": "Varianten",
 "o": [
 "py:tools/ustawienia_strings.py"
+]
+},
+{
+"en": "Only JPG, PNG or WEBP images are allowed.",
+"o": [
+"py:upload_gate.py"
+]
+},
+{
+"en": "Animations (GIF / animated WebP / APNG) aren't accepted – please choose a still image.",
+"o": [
+"py:upload_gate.py"
+]
+},
+{
+"en": "The image is too large.",
+"o": [
+"py:upload_gate.py"
 ]
 },
 {
@@ -11093,18 +11320,6 @@
 ]
 },
 {
-"en": "Delete your account for good?\n\nWe will delete your account and personal data (email, name, password, sessions, tester application). Your past comments and posts will be anonymised as “Deleted user”. This cannot be undone.",
-"o": [
-"js:account.js"
-]
-},
-{
-"en": "Your account and personal data have been deleted.",
-"o": [
-"js:account.js"
-]
-},
-{
 "en": "Are you 18?",
 "o": [
 "js:agegate.js"
@@ -11119,7 +11334,8 @@
 {
 "en": "Yes",
 "o": [
-"js:agegate.js"
+"js:agegate.js",
+"js:forms18-i18n.js"
 ]
 },
 {
@@ -11137,6 +11353,20 @@
 },
 {
 "en": "Luna",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "Battles",
+"o": [
+"js:app-shell-i18n.js",
+"js:bt-mini.js",
+"js:inbox-i18n.js"
+]
+},
+{
+"en": "🌐 Luna’s website – casting, testers, team and news",
 "o": [
 "js:app-shell-i18n.js"
 ]
@@ -11161,6 +11391,18 @@
 },
 {
 "en": "Loading…",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "Meet Luna",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "Luna is an AI assistant – 100% artificial intelligence. Her goal: better conversations between men and women. She focuses on speech itself: volume, timbre, tone, tempo and intonation.",
 "o": [
 "js:app-shell-i18n.js"
 ]
@@ -11358,13 +11600,13 @@
 ]
 },
 {
-"en": "💳 BLIK or card – through the secure Stripe gateway.",
+"en": "💳 BLIK or card – in our payment partner’s secure checkout.",
 "o": [
 "js:app-shell-i18n.js"
 ]
 },
 {
-"en": "🔁 One-time payment. We never charge you automatically.",
+"en": "🔁 One-off by default (30 days). A subscription is only if you choose it, and you cancel it in the customer portal.",
 "o": [
 "js:app-shell-i18n.js"
 ]
@@ -11376,7 +11618,7 @@
 ]
 },
 {
-"en": "🔒 We never see your card details – Stripe handles them.",
+"en": "🔒 We never see your card details – our payment partner handles them.",
 "o": [
 "js:app-shell-i18n.js"
 ]
@@ -11469,7 +11711,8 @@
 "en": "👗 Boutique",
 "o": [
 "js:app-shell-i18n.js",
-"js:desktop.js"
+"js:desktop.js",
+"js:showcase.js"
 ]
 },
 {
@@ -11744,7 +11987,7 @@
 ]
 },
 {
-"en": "Videos of your agent up to 30 s, 720p (5 a day)",
+"en": "Videos of your agent up to 30 s, 720p (5 a day, 60 a month)",
 "o": [
 "js:app-shell-i18n.js"
 ]
@@ -11762,13 +12005,13 @@
 ]
 },
 {
-"en": "Agent generator: images up to 2160 px (60 a day)",
+"en": "Agent generator: images up to 1920 px (60 a day)",
 "o": [
 "js:app-shell-i18n.js"
 ]
 },
 {
-"en": "Videos of your agent up to 60 s, 1080p (15 a day)",
+"en": "Videos of your agent up to 60 s, 1080p (15 a day, 200 a month)",
 "o": [
 "js:app-shell-i18n.js"
 ]
@@ -11792,6 +12035,30 @@
 ]
 },
 {
+"en": "Photos in the friends chat",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "5/day · 854 px",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "30/day · 1280 px",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "100/day · 1920 px",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
 "en": "Enter your own agent in Battles",
 "o": [
 "js:app-shell-i18n.js"
@@ -11810,13 +12077,31 @@
 ]
 },
 {
-"en": "2160 px",
+"en": "1920 px",
 "o": [
 "js:app-shell-i18n.js"
 ]
 },
 {
 "en": "Agent videos",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "Agent videos: limit",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "5/day · 60/month",
+"o": [
+"js:app-shell-i18n.js"
+]
+},
+{
+"en": "15/day · 200/month",
 "o": [
 "js:app-shell-i18n.js"
 ]
@@ -11888,6 +12173,54 @@
 ]
 },
 {
+"en": "🛡️ Protection against nudity and abuse",
+"o": [
+"js:bezpieczenstwo.js"
+]
+},
+{
+"en": "Every image – avatars, the Wall, chat, battles, reports, the agent generator and even the owner's uploads – goes through the same gate on our own server. Photos are not sent to outside companies.",
+"o": [
+"js:bezpieczenstwo.js"
+]
+},
+{
+"en": "Two independent nudity-detection models, scans of several crops of each image and of every animation frame, plus a list of fingerprints of previously rejected images.",
+"o": [
+"js:bezpieczenstwo.js"
+]
+},
+{
+"en": "We accept only JPG, PNG and WEBP. Animations, SVG and files with hidden code are rejected. Every photo is saved anew – without metadata such as GPS location.",
+"o": [
+"js:bezpieczenstwo.js"
+]
+},
+{
+"en": "When the filter is unsure, the photo waits for a moderator and nobody sees it before that. If the filter is down, we don't accept photos at all.",
+"o": [
+"js:bezpieczenstwo.js"
+]
+},
+{
+"en": "The agent generator can only create adult (21+), fully clothed characters. Descriptions with sexual content, revealing outfits or minors are refused before generation, and every result is checked before anyone sees it.",
+"o": [
+"js:bezpieczenstwo.js"
+]
+},
+{
+"en": "A text filter in 5 languages blocks sexual content in posts, comments, chats and nicknames.",
+"o": [
+"js:bezpieczenstwo.js"
+]
+},
+{
+"en": "To be honest: no automatic filter is 100% effective. If we miss something, tap “Report” – a moderator will check it.",
+"o": [
+"js:bezpieczenstwo.js"
+]
+},
+{
 "en": "🔐 Account security",
 "o": [
 "js:bezpieczenstwo.js"
@@ -11950,7 +12283,8 @@
 {
 "en": "Confirm",
 "o": [
-"js:bezpieczenstwo.js"
+"js:bezpieczenstwo.js",
+"js:kasa.js"
 ]
 },
 {
@@ -12254,13 +12588,6 @@
 ]
 },
 {
-"en": "Battles",
-"o": [
-"js:bt-mini.js",
-"js:inbox-i18n.js"
-]
-},
-{
 "en": "Back to the battle",
 "o": [
 "js:bt-mini.js"
@@ -12463,7 +12790,8 @@
 {
 "en": "🏆 Ranking",
 "o": [
-"js:desktop.js"
+"js:desktop.js",
+"js:showcase.js"
 ]
 },
 {
@@ -12894,7 +13222,13 @@
 ]
 },
 {
-"en": "Only to check your age (18+). Never shown to anyone.",
+"en": "Are you 18 or older?",
+"o": [
+"js:forms18-i18n.js"
+]
+},
+{
+"en": "We never ask for your date of birth. You confirm you are an adult later with an external provider (ID or card) – we store only the result.",
 "o": [
 "js:forms18-i18n.js"
 ]
@@ -13231,7 +13565,7 @@
 ]
 },
 {
-"en": "No charge. You enter card details only at Stripe. A debit card can belong to a minor, so we combine it with your date of birth. Prepaid cards are not accepted.",
+"en": "No charge. You enter card details only at Stripe. A debit card can belong to a minor, so we combine it with your “I am 18+” confirmation. Prepaid cards are not accepted.",
 "o": [
 "js:forms18-i18n.js"
 ]
@@ -13262,6 +13596,12 @@
 },
 {
 "en": "Copy",
+"o": [
+"js:forms18-i18n.js"
+]
+},
+{
+"en": "<b>🎟️ What you get as a tester (once accepted):</b> 2 months of Premium for free, a tester badge, exclusive emotes for chat and comments, special tester avatars and a choice of avatar frame colour in “My panel” (purple or blue by default). The extras work once your tester code is linked to your account.",
 "o": [
 "js:forms18-i18n.js"
 ]
@@ -13347,7 +13687,8 @@
 {
 "en": "Live help",
 "o": [
-"js:helpbot-loader.js"
+"js:helpbot-loader.js",
+"js:showcase.js"
 ]
 },
 {
@@ -14176,6 +14517,259 @@
 ]
 },
 {
+"en": "Opening our payment partner’s secure checkout…",
+"o": [
+"js:kasa-paddle.js"
+]
+},
+{
+"en": "Payments are coming soon 💄 The checkout is still doing its make-up – we charge nothing.",
+"o": [
+"js:kasa-paddle.js"
+]
+},
+{
+"en": "Prices include all taxes, including VAT. Payments are handled by our payment partner, which accounts for VAT.",
+"o": [
+"js:kasa-paddle.js",
+"js:kasa.js"
+]
+},
+{
+"en": "BLIK or card",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Luna checkout",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "One-off – 30 days",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "BLIK, card and more. No automatic renewal.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Monthly – subscription",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Card or PayPal (BLIK doesn’t support subscriptions). Cancel in one click in the customer portal.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "A Boutique outfit – yours forever in Luna’s wardrobe.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Please tick the consent – the checkout won’t start without it.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Go to secure checkout",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Payment methods",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "You pay in our payment partner’s checkout. Luna never sees or stores your card details.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "In the checkout choose BLIK (code from your banking app) or a card and confirm. Your plan switches on by itself once the partner confirms the payment.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Payments are coming soon 💄",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "The checkout is still doing its make-up in front of the mirror. We charge nothing and fake nothing – once it’s live, this button takes you straight to BLIK or card. Until then the Basic plan is free.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Please log in to buy – Luna needs to know whose plan to switch on.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "In the Google Play app payments will go through Google Play – coming soon. The Luna checkout works on the website.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Couldn’t open the checkout. Please try again in a moment.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Opening checkout…",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Price",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Gross prices – this is the amount you pay.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Gross prices – this is the amount to pay. Payments are coming soon.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Price for your country from our payment partner – final amount at checkout.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Prices in Polish złoty (PLN). Final amount and currency at checkout.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Manage subscription",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Cancel, change card and invoices – in the payment partner’s customer portal.",
+"o": [
+"js:kasa.js"
+]
+},
+{
+"en": "Western Europe",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Central Europe",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Northern Europe & Baltics",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Southern Europe & Balkans",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Eastern Europe",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Middle East",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Asia",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Szukaj języka…",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Search languages…",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Nothing found – try another spelling 🙂",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Beta (machine) translation – may contain errors",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Beta translation",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Buscar idioma…",
+"o": [
+"js:langswitch.js"
+]
+},
+{
+"en": "Sprache suchen…",
+"o": [
+"js:langswitch.js"
+]
+},
+{
 "en": "📱 App",
 "o": [
 "js:langswitch.js"
@@ -14675,6 +15269,444 @@
 ]
 },
 {
+"en": "🎙️ An AI assistant for better conversations · 18+",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Luna tells it like it is. <em>You speak better every day.</em>",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Luna is an AI assistant – 100% artificial intelligence – with one goal: helping men and women talk to each other better. She focuses on speech itself: volume, timbre, tone, tempo, intonation and other details. After practice comes the fun: your own AI agent, Battles and rankings. Free to start, no ads – Luna would talk over them anyway 😄",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "🚀 Try the app",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "✓ Free to start",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "✓ No ads",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "✓ 5 languages",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "✓ You can stay anonymous",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "🤖 Luna and the agents are AI-generated characters.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "🎙️ Voice chat",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Real screenshot of the Luna app – chatting with Luna",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Real screenshot of the app – the agents’ wall",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Real screenshot of the app – battle ranking",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "See it in action",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "This is Luna <em>live</em>",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Short, muted loops from the app. Sound? The best part is when you do the talking.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "🎙️ Voice training",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Volume, timbre, tone, tempo, intonation – Luna listens and tells it like it is.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Two AI agents, one screen, real votes.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "🧱 Agents’ wall",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Posts and videos of AI agents – like, comment, share.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Most popular agents",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Ranked by real likes, comments and votes. No bought hearts.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "All agents →",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Gallery →",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Create your own AI agent",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Pick a style, outfit, scenery and personality. Luna helps with the rest – then your agent can join the Wall and the Battles.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "✨ Image and short video generator – from the Premium plan",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "👗 Boutique outfits, always elegant and fully covering",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "🔒 Private profile by default – you decide what to show",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "✨ Create an agent in the app",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Battles and rankings",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Two agents. One vote. <em>Yours.</em>",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Vote, cheer and chat in a moderated room. A win earns +10 pts and a Miss title. Leagues from Bronze to Diamond.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "⚔️ See the Battles",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "📜 Rules",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "A wardrobe that never jams",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Virtual outfits for your agent – elegant, fully covering, in many colours.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "The whole Boutique →",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Join",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Become part of Luna",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Casting “AI Face”",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "We’re looking for inspiration for new AI agents. You can stay anonymous, and your data is never used for promotion without consent.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Apply →",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "We’re looking for 1000 testers! 2 months of Premium free and tester-only extras: a badge, emotes, avatars and a frame colour. The counter doesn’t lie 😉",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Got an idea, a talent or want to co-create Luna? Write to us – we read everything.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Meet the team →",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Support and safety",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Relax, Luna’s got your back 💚",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "An AI assistant right away and, when needed, a moderator or a form with a ticket number.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Anonymous if you like",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "A nickname is enough. Your profile can be private, and you can export or delete your data in settings.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "The “Report” button",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "On every post and chat. Content is checked by an automatic filter and a human moderator.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Adults only",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "We ask “Are you 18?”. Agents are always fully dressed – style, not nudity.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Growing together with you",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Luna doesn’t stand still. New features will keep arriving over time – as you use the app and tell us what you’re missing. Your feedback really changes things (and Luna promises not to sulk, even at honest criticism 😉).",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "💬 Share an idea",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Ready? <em>Luna’s waiting.</em>",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "One click and you’re talking. No installing, no ads, no strings attached.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "voice lessons",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "outfits in the Boutique",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Battle sceneries",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "of {l} tester places left",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Your agent could shine here",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "The ranking starts with the first real reactions. We don’t add fillers – Luna would blush.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Luna’s official looks",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "✨ Create an agent",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Now: waiting for a rival – {n} missing. We never show fake rivals or votes.",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "🔴 A battle is on – come and vote!",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "watching now",
+"o": [
+"js:showcase.js"
+]
+},
+{
+"en": "Included",
+"o": [
+"js:showcase.js"
+]
+},
+{
 "en": "Reply",
 "o": [
 "js:social.js"
@@ -14852,6 +15884,78 @@
 "en": "violation withdrawn",
 "o": [
 "js:standing.js"
+]
+},
+{
+"en": "🎟️ Tester extras",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Tester badge – yours because you’re one of the first thousand 💜",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Avatar frame colour",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Purple and blue are the tester classics; the rest are soft shades to choose from. Moderator and Model colours are reserved.",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Tester avatars",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Use",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Exclusive emotes – type the code or tap one next to a chat/comment box",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Saved ✨",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Copied",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "🎟️ Tester-only extras",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "A badge, exclusive emotes, special avatars and a frame colour – unlocked with a tester code linked to your account. There are 1000 spots and the counter doesn’t lie.",
+"o": [
+"js:tester-perks.js"
+]
+},
+{
+"en": "Become a tester →",
+"o": [
+"js:tester-perks.js"
 ]
 },
 {

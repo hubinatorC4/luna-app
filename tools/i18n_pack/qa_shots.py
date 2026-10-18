@@ -6,7 +6,7 @@ B = sys.argv[1]; LANGS = sys.argv[2:]
 OUT = "/workspace/shots/final_1910/jezyki"; os.makedirs(OUT, exist_ok=True)
 R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 EN = {x["en"].strip() for x in json.load(open(os.path.join(R, "i18n/catalog/source_en.json")))}
-PAGES = [("home", "/"), ("app", "/app"), ("bitwy", "/bitwy.html"), ("butik", "/butik.html"), ("regulamin", "/regulamin.html"), ("ustawienia", "/ustawienia.html")]
+PAGES = [("home", "/"), ("app", "/app"), ("bitwy", "/bitwy.html"), ("butik", "/butik.html"), ("regulamin", "/regulamin.html"), ("privacy", "/privacy.html"), ("testerzy", "/testerzy.html"), ("ustawienia", "/ustawienia.html")]
 INIT = """try{localStorage.setItem('luna.age',JSON.stringify({adult:true,at:1760000000}));localStorage.setItem('luna.age18',JSON.stringify({yes:true,at:Date.now()}));
 document.cookie='luna_age18=1; path=/';localStorage.setItem('luna.app.onb','1');localStorage.setItem('luna.seenVer','9.9.9');localStorage.setItem('luna.payNotice','1');}catch(e){}"""
 PROBE = r"""(EN) => {
@@ -36,6 +36,10 @@ with sync_playwright() as p:
                 r["errors"] = errs[:]; errs.clear()
                 f = f"{OUT}/{lang}_{name}_{vp}.png"; pg.screenshot(path=f, full_page=False)
                 res[f"{lang}/{name}"] = r
+                if name == "home":   # wybór języka z etykietą beta
+                    try:
+                        pg.click(".lpick-btn", timeout=4000); time.sleep(0.6); pg.screenshot(path=f"{OUT}/{lang}_picker_{vp}.png"); pg.keyboard.press("Escape")
+                    except Exception as e: errs.append("picker " + str(e)[:60])
                 print(lang, name, r["lang"], r["dir"], "tot", r["tot"], "pl", r["npl"], "en", r["nen"], "overflow", r["scrollW"] > r["w"] + 2, r["over"][:2], r["errors"][:2], flush=True)
             ctx.close()
     br.close()

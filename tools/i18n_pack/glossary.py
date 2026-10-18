@@ -7,7 +7,7 @@ K = [
  "Luna just cheers you on 💚", "Your rights", "Open Luna",
  "Tips", "Boutique", "Wall", "Agents gallery", "Testers", "Join the project", "AI Face", "Support Luna", "Terms", "Privacy", "Help", "App", "Chat with the creator",
  "Luna Tells It Like It Is", "tells it like it is",
- "Language", "Search languages…", "Nothing found – try another spelling 🙂", "Machine translation – being reviewed by humans",
+ "Language", "Search languages…", "Nothing found – try another spelling 🙂", "Beta (machine) translation – may contain errors",
  "Western Europe", "Central Europe", "Northern Europe & Baltics", "Southern Europe & Balkans", "Eastern Europe", "Middle East", "Asia", "Close",
 ]
 G = {
@@ -198,4 +198,11 @@ G = {
  "语言", "搜索语言…", "没有找到——换个写法试试 🙂", "机器翻译——正在由人工审核",
  "西欧", "中欧", "北欧和波罗的海", "南欧和巴尔干", "东欧", "中东", "亚洲", "关闭"],
 }
+# Uczciwy opis: tłumaczenie maszynowe w wersji beta (bez obietnicy przeglądu przez ludzi, dopóki go nie ma) + etykieta „beta” w wyborze języka
+_NOTE = {'fr': 'Traduction bêta (automatique) – peut contenir des erreurs', 'it': 'Traduzione beta (automatica) – può contenere errori', 'pt': 'Tradução beta (automática) – pode conter erros', 'pt-br': 'Tradução beta (automática) – pode conter erros', 'nl': 'Bètavertaling (machinaal) – kan fouten bevatten', 'cs': 'Beta překlad (strojový) – může obsahovat chyby', 'sk': 'Beta preklad (strojový) – môže obsahovať chyby', 'ro': 'Traducere beta (automată) – poate conține erori', 'hu': 'Béta fordítás (gépi) – hibákat tartalmazhat', 'sv': 'Betaöversättning (maskinell) – kan innehålla fel', 'no': 'Betaoversettelse (maskinell) – kan inneholde feil', 'da': 'Betaoversættelse (maskinel) – kan indeholde fejl', 'fi': 'Beetakäännös (konekäännös) – voi sisältää virheitä', 'el': 'Μετάφραση beta (αυτόματη) – μπορεί να περιέχει λάθη', 'bg': 'Бета превод (машинен) – може да съдържа грешки', 'hr': 'Beta prijevod (strojni) – može sadržavati pogreške', 'sr': 'Бета превод (машински) – може садржати грешке', 'lt': 'Beta vertimas (mašininis) – gali būti klaidų', 'lv': 'Beta tulkojums (mašīntulkojums) – var saturēt kļūdas', 'et': 'Beetatõlge (masintõlge) – võib sisaldada vigu', 'tr': 'Beta çeviri (makine) – hata içerebilir', 'ru': 'Бета-перевод (машинный) – возможны ошибки', 'ar': 'ترجمة تجريبية (آلية) – قد تحتوي على أخطاء', 'he': 'תרגום בטא (מכונה) – עלול להכיל שגיאות', 'hi': 'बीटा अनुवाद (मशीनी) – इसमें त्रुटियाँ हो सकती हैं', 'id': 'Terjemahan beta (mesin) – mungkin mengandung kesalahan', 'vi': 'Bản dịch beta (máy) – có thể có lỗi', 'th': 'คำแปลเบต้า (แปลด้วยเครื่อง) – อาจมีข้อผิดพลาด', 'ja': 'ベータ版翻訳（機械翻訳）– 誤りが含まれる場合があります', 'ko': '베타 번역(기계 번역) – 오류가 있을 수 있습니다', 'zh': '测试版翻译（机器翻译）– 可能有错误'}
+_BETA = {'fr': 'Traduction bêta', 'it': 'Traduzione beta', 'pt': 'Tradução beta', 'pt-br': 'Tradução beta', 'nl': 'Bètavertaling', 'cs': 'Beta překlad', 'sk': 'Beta preklad', 'ro': 'Traducere beta', 'hu': 'Béta fordítás', 'sv': 'Betaöversättning', 'no': 'Betaoversettelse', 'da': 'Betaoversættelse', 'fi': 'Beetakäännös', 'el': 'Μετάφραση beta', 'bg': 'Бета превод', 'hr': 'Beta prijevod', 'sr': 'Бета превод', 'lt': 'Beta vertimas', 'lv': 'Beta tulkojums', 'et': 'Beetatõlge', 'tr': 'Beta çeviri', 'ru': 'Бета-перевод', 'ar': 'ترجمة تجريبية', 'he': 'תרגום בטא', 'hi': 'बीटा अनुवाद', 'id': 'Terjemahan beta', 'vi': 'Bản dịch beta', 'th': 'คำแปลเบต้า', 'ja': 'ベータ版翻訳', 'ko': '베타 번역', 'zh': '测试版翻译'}
+_i = K.index("Beta (machine) translation – may contain errors")
+for _l in G: G[_l][_i] = _NOTE[_l]
+K.append("Beta translation")
+for _l in G: G[_l].append(_BETA[_l])
 for l, v in G.items(): assert len(v) == len(K), (l, len(v))

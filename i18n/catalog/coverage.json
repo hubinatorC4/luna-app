@@ -1,0 +1,44 @@
+{
+ "fr": {
+  "lang": "fr",
+  "name": "Français",
+  "tier": 1,
+  "keys": 2476,
+  "ok": 2229,
+  "pct": 90.0,
+  "ui_keys": 2235,
+  "ui_ok": 2229,
+  "ui_pct": 99.7,
+  "legal_pct": 0.0,
+  "legal_policy": "EN (legal docs only in 5 reviewed languages)",
+  "glossary": 32,
+  "mt": 2197,
+  "missing": 244,
+  "same_as_en": 114,
+  "rejected": {
+   "nsfw-śmieci": 1,
+   "placeholder": 2
+  },
+  "rejected_examples": [
+   [
+    "<li><b>AI agent profiles</b>: Luna’s profile is public; your agent’s profile stays private until you make it public. Bio",
+    "<li><b>Profils d'agents d'IA</b>: Le profil de Luna est public; le profil de votre agent reste privé jusqu’à ce que vous",
+    "nsfw-śmieci"
+   ],
+   [
+    "💎 {plan} plan is active",
+    "💎 {Le plan est actif",
+    "placeholder"
+   ],
+   [
+    "Serious violations: {n} of 3",
+    "Violations graves : 4 071 sur 3",
+    "placeholder"
+   ]
+  ],
+  "phases": [
+   "ui",
+   "ui"
+  ]
+ }
+}

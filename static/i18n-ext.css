@@ -52,3 +52,6 @@ html[data-luna-lang] :is(.pill,.chip,button){min-width:0;max-width:100%}
 .lpick-none,.lpick-note{color:#aaa;font-size:12.5px;margin:6px}
 .lpick-note:empty{display:none}
 .legaldraft{border:1px dashed #FF9A3C;border-radius:14px;padding:10px 12px;background:rgba(255,154,60,.08)}
+.lpick-beta{display:inline-block;font-size:10px;line-height:1;padding:3px 6px;border-radius:999px;border:1px solid rgba(255,154,60,.6);color:#FFB36B;text-transform:uppercase;letter-spacing:.4px;margin-inline-start:6px;vertical-align:middle}
+.lpick-i .lpick-beta{margin-inline-start:0}
+.legalnote.legalen{border:1px dashed #3DDC97;border-radius:14px;padding:10px 12px;background:rgba(61,220,151,.07)}
