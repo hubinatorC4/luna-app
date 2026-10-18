@@ -122,4 +122,6 @@ E = [
 ["Podgląd awatara", "Avatar preview", "Vista previa del avatar", "Avatar-Vorschau", "Попередній перегляд аватара"],
 ["Zamknij", "Close", "Cerrar", "Schließen", "Закрити"],
 ["Twoja wiadomość…", "Your message…", "Tu mensaje…", "Deine Nachricht…", "Ваше повідомлення…"],
+["✨ Co nowego", "✨ What’s new", "✨ Novedades", "✨ Neuigkeiten", "✨ Що нового"],
+["Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.", "We reply as soon as someone is available – always within 30 days.", "Respondemos en cuanto haya alguien disponible, siempre en menos de 30 días.", "Wir antworten, sobald jemand verfügbar ist – immer innerhalb von 30 Tagen.", "Відповідаємо, щойно хтось буде на зв’язку, – завжди протягом 30 днів."],
 ]

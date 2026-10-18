@@ -19,7 +19,7 @@ const toast = t => { const el = $('#toast'); el.textContent = t; el.hidden = fal
 
 /* ---------- osadzone strony ---------- */
 const SITE_CSS = `header.top{display:none!important}`;
-const FRAME_CSS = `.sitefoot,footer.sitefoot,.hb-fab,.hb-win,.lswitch,.apk-btn,.apk-hint,.dl-sec,#pobierz,.wallpage>.hero,.appfoot .fan,.appfoot>p:last-child{display:none!important}
+const FRAME_CSS = `table{display:block;max-width:100%;overflow-x:auto}.sitefoot,footer.sitefoot,.hb-fab,.hb-win,.lswitch,.apk-btn,.apk-hint,.dl-sec,#pobierz,.wallpage>.hero,.appfoot .fan,.appfoot>p:last-child{display:none!important}
 body{padding-bottom:24px!important;font-size:17px}body.site{padding-top:0!important}
 .app-sup{margin:0 0 16px}.app-sup .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.app-sup .acts .btn{flex:1 1 140px;width:auto}.app-sup .x{float:right;background:none;border:0;color:inherit;opacity:.6;font-size:18px;cursor:pointer}`;
 function route(href){

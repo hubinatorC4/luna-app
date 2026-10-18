@@ -16,6 +16,7 @@ def _ffmpeg():
         return "ffmpeg"
 FFMPEG = _ffmpeg()
 import knowledge
+import api_i18n
 import catalog, base64
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
 from datetime import datetime, timedelta
@@ -1070,7 +1071,7 @@ class H(SimpleHTTPRequestHandler):
                 if re.fullmatch(r"https://[\w.-]+/[\w@./?=&%-]*", v): L[k] = v
             return self._json({"links": L})
         if u.path == "/api/config":
-            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live", "free", "pay_notice", "app", "features")})
+            return self._json(api_i18n.config({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live", "free", "pay_notice", "app", "features")}, api_i18n.req_lang(u.query, self.headers)))
         if u.path == "/api/admin/config":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
@@ -1081,7 +1082,7 @@ class H(SimpleHTTPRequestHandler):
                 if CFG["pricing"]["show"] and pl["id"] in CFG["pricing"]["plans"]:
                     pr = CFG["pricing"]["plans"][pl["id"]]
                     pl["prices"] = dict(pr) if CFG["pricing"]["foreign"] else {"pln": pr["pln"]}
-            return self._json(pub)
+            return self._json(api_i18n.catalog(pub, api_i18n.req_lang(u.query, self.headers)))
         if u.path == "/api/admin/catalog":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"catalog": CAT, "public": catalog.public(CAT), "plans": catalog.PLAN_IDS, "tones": list(TONES)})
@@ -1136,7 +1137,8 @@ class H(SimpleHTTPRequestHandler):
             try: since = int(q.get("since", 0) or 0)
             except Exception: since = 0
             st = liveroom.public_state(since, mod=token_ok(self.headers.get("X-Admin-Token")))
-            st.update(viewers=n, sched=sched(), help=HELP, ai_label="Luna – asystentka AI (postać wygenerowana sztucznie)")
+            lg = api_i18n.req_lang(u.query, self.headers)
+            st.update(viewers=n, sched=api_i18n.sched(sched(), lg), help=HELP, ai_label=api_i18n.t("Luna – asystentka AI (postać wygenerowana sztucznie)", lg))
             return self._json(st)
         if u.path.startswith("/api/live-room/audio/"):
             fn = os.path.basename(u.path)

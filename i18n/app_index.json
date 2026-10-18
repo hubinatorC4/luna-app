@@ -487,6 +487,14 @@
 [
 "Twoja wiadomość…",
 "Your message…"
+],
+[
+"✨ Co nowego",
+"✨ What’s new"
+],
+[
+"Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.",
+"We reply as soon as someone is available – always within 30 days."
 ]
 ],
 "es": [
@@ -977,6 +985,14 @@
 [
 "Twoja wiadomość…",
 "Tu mensaje…"
+],
+[
+"✨ Co nowego",
+"✨ Novedades"
+],
+[
+"Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.",
+"Respondemos en cuanto haya alguien disponible, siempre en menos de 30 días."
 ]
 ],
 "de": [
@@ -1467,6 +1483,14 @@
 [
 "Twoja wiadomość…",
 "Deine Nachricht…"
+],
+[
+"✨ Co nowego",
+"✨ Neuigkeiten"
+],
+[
+"Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.",
+"Wir antworten, sobald jemand verfügbar ist – immer innerhalb von 30 Tagen."
 ]
 ],
 "uk": [
@@ -1957,6 +1981,14 @@
 [
 "Twoja wiadomość…",
 "Ваше повідомлення…"
+],
+[
+"✨ Co nowego",
+"✨ Що нового"
+],
+[
+"Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.",
+"Відповідаємо, щойно хтось буде на зв’язку, – завжди протягом 30 днів."
 ]
 ]
 }

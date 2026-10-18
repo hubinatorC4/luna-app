@@ -151,6 +151,54 @@
 [
 "x.setAttribute('aria-label', 'Zamknij')",
 "x.setAttribute('aria-label', 'Close')"
+],
+[
+"['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.']",
+"['🎙️ Voice lessons with Luna', 'On the home page: lesson of the day and practice topics – Luna reads them aloud.']"
+],
+[
+"['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.']",
+"['🛍 The whole new Boutique collection', 'Every outfit with a photo is now on sale. More arrive as soon as they have a photo.']"
+],
+[
+"['🎁 Poleć Lunę', '7 dni Premium za każdą poleconą osobę, która założy konto i potwierdzi e-mail (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
+"['🎁 Recommend Luna', '7 days of Premium for each referred person who signs up and confirms their email (max. 10 a month). Your link is in Settings.']"
+],
+[
+"['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
+"['🖼 Agent gallery', 'A new gallery with Agent of the week – based on real likes.']"
+],
+[
+"['⚔️ Bitwy agentek – wkrótce', 'Ruszą, gdy w obsadzie będą co najmniej dwie agentki. Pilnie szukamy nowych agentek!']",
+"['⚔️ Agent battles – coming soon', 'They start once at least two agents are on board. We urgently need new agents!']"
+],
+[
+"['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.']",
+"['🏠 Home page as a feed', 'One long feed: posts, news, Boutique and casting. Bigger text, “Show more” on long posts.']"
+],
+[
+"['🧱 Ścianka Agentek Głosu', 'Nowa nazwa Ścianki. Pod wpisami: polubienia, wyświetlenia i komentarze jak w czacie – tylko prawdziwe liczby.']",
+"['🧱 Voice Agents Wall', 'The Wall has a new name. Under posts: likes, views and chat-style comments – real numbers only.']"
+],
+[
+"['🛍 Nowy Butik Luny', 'Nowa kolekcja, kategorie i kolory. Wszystkie kolory w cenie stroju. Tylko eleganckie, zakrywające stroje.']",
+"['🛍 Luna’s new Boutique', 'New collection, categories and colours. All colours included in the price. Only elegant, covering outfits.']"
+],
+[
+"['🔒 Prywatność', 'Usuwamy metadane (GPS, urządzenie) ze zdjęć. Konto usuniesz jednym kliknięciem.']",
+"['🔒 Privacy', 'We remove metadata (GPS, device) from photos. Delete your account with one click.']"
+],
+[
+"['🤖 Ochrona przed botami', 'Fałszywe konta nie zawyżają liczników.']",
+"['🤖 Bot protection', 'Fake accounts don’t inflate the counters.']"
+],
+[
+"<h2>Co nowego w wersji ",
+"<h2>What’s new in version "
+],
+[
+"<button class=\"primary\">Super!</button>",
+"<button class=\"primary\">Great!</button>"
 ]
 ],
 "es": [
@@ -305,6 +353,54 @@
 [
 "x.setAttribute('aria-label', 'Zamknij')",
 "x.setAttribute('aria-label', 'Cerrar')"
+],
+[
+"['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.']",
+"['🎙️ Clases de voz con Luna', 'En la página principal: la lección del día y temas para practicar; Luna los lee en voz alta.']"
+],
+[
+"['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.']",
+"['🛍 Toda la nueva colección de la Boutique', 'Todos los conjuntos con foto ya están a la venta. Llegan más en cuanto tienen foto.']"
+],
+[
+"['🎁 Poleć Lunę', '7 dni Premium za każdą poleconą osobę, która założy konto i potwierdzi e-mail (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
+"['🎁 Recomienda a Luna', '7 días de Premium por cada persona recomendada que cree una cuenta y confirme su e-mail (máx. 10 al mes). Tu enlace está en Ajustes.']"
+],
+[
+"['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
+"['🖼 Galería de agentes', 'Nueva galería con la Agente de la semana, según «me gusta» reales.']"
+],
+[
+"['⚔️ Bitwy agentek – wkrótce', 'Ruszą, gdy w obsadzie będą co najmniej dwie agentki. Pilnie szukamy nowych agentek!']",
+"['⚔️ Batallas de agentes: muy pronto', 'Empezarán cuando haya al menos dos agentes. ¡Buscamos nuevas agentes con urgencia!']"
+],
+[
+"['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.']",
+"['🏠 La página principal como feed', 'Un solo feed largo: publicaciones, novedades, Boutique y casting. Letra más grande y «Ver más» en textos largos.']"
+],
+[
+"['🧱 Ścianka Agentek Głosu', 'Nowa nazwa Ścianki. Pod wpisami: polubienia, wyświetlenia i komentarze jak w czacie – tylko prawdziwe liczby.']",
+"['🧱 Muro de Agentes de Voz', 'El Muro tiene nuevo nombre. Bajo las publicaciones: «me gusta», vistas y comentarios tipo chat; solo cifras reales.']"
+],
+[
+"['🛍 Nowy Butik Luny', 'Nowa kolekcja, kategorie i kolory. Wszystkie kolory w cenie stroju. Tylko eleganckie, zakrywające stroje.']",
+"['🛍 Nueva Boutique de Luna', 'Nueva colección, categorías y colores. Todos los colores incluidos en el precio. Solo conjuntos elegantes y que cubren.']"
+],
+[
+"['🔒 Prywatność', 'Usuwamy metadane (GPS, urządzenie) ze zdjęć. Konto usuniesz jednym kliknięciem.']",
+"['🔒 Privacidad', 'Eliminamos los metadatos (GPS, dispositivo) de las fotos. Borra tu cuenta con un clic.']"
+],
+[
+"['🤖 Ochrona przed botami', 'Fałszywe konta nie zawyżają liczników.']",
+"['🤖 Protección contra bots', 'Las cuentas falsas no inflan los contadores.']"
+],
+[
+"<h2>Co nowego w wersji ",
+"<h2>Novedades de la versión "
+],
+[
+"<button class=\"primary\">Super!</button>",
+"<button class=\"primary\">¡Genial!</button>"
 ]
 ],
 "de": [
@@ -459,6 +555,54 @@
 [
 "x.setAttribute('aria-label', 'Zamknij')",
 "x.setAttribute('aria-label', 'Schließen')"
+],
+[
+"['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.']",
+"['🎙️ Stimmlektionen mit Luna', 'Auf der Startseite: Lektion des Tages und Übungsthemen – Luna liest sie vor.']"
+],
+[
+"['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.']",
+"['🛍 Die ganze neue Boutique-Kollektion', 'Alle Outfits mit Foto sind jetzt erhältlich. Weitere kommen, sobald sie ein Foto haben.']"
+],
+[
+"['🎁 Poleć Lunę', '7 dni Premium za każdą poleconą osobę, która założy konto i potwierdzi e-mail (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
+"['🎁 Luna empfehlen', '7 Tage Premium für jede empfohlene Person, die ein Konto anlegt und ihre E-Mail bestätigt (max. 10 pro Monat). Deinen Link findest du in den Einstellungen.']"
+],
+[
+"['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
+"['🖼 Agentinnen-Galerie', 'Neue Galerie mit der Agentin der Woche – nach echten Likes.']"
+],
+[
+"['⚔️ Bitwy agentek – wkrótce', 'Ruszą, gdy w obsadzie będą co najmniej dwie agentki. Pilnie szukamy nowych agentek!']",
+"['⚔️ Agentinnen-Battles – bald', 'Sie starten, sobald mindestens zwei Agentinnen dabei sind. Wir suchen dringend neue Agentinnen!']"
+],
+[
+"['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.']",
+"['🏠 Startseite als Feed', 'Ein langer Feed: Beiträge, Neuigkeiten, Boutique und Casting. Größere Schrift, „Mehr anzeigen“ bei langen Texten.']"
+],
+[
+"['🧱 Ścianka Agentek Głosu', 'Nowa nazwa Ścianki. Pod wpisami: polubienia, wyświetlenia i komentarze jak w czacie – tylko prawdziwe liczby.']",
+"['🧱 Wand der Stimm-Agentinnen', 'Die Wand hat einen neuen Namen. Unter Beiträgen: Likes, Aufrufe und Kommentare im Chat-Stil – nur echte Zahlen.']"
+],
+[
+"['🛍 Nowy Butik Luny', 'Nowa kolekcja, kategorie i kolory. Wszystkie kolory w cenie stroju. Tylko eleganckie, zakrywające stroje.']",
+"['🛍 Lunas neue Boutique', 'Neue Kollektion, Kategorien und Farben. Alle Farben im Preis inbegriffen. Nur elegante, bedeckende Outfits.']"
+],
+[
+"['🔒 Prywatność', 'Usuwamy metadane (GPS, urządzenie) ze zdjęć. Konto usuniesz jednym kliknięciem.']",
+"['🔒 Datenschutz', 'Wir entfernen Metadaten (GPS, Gerät) aus Fotos. Dein Konto löschst du mit einem Klick.']"
+],
+[
+"['🤖 Ochrona przed botami', 'Fałszywe konta nie zawyżają liczników.']",
+"['🤖 Schutz vor Bots', 'Fake-Konten blähen die Zähler nicht auf.']"
+],
+[
+"<h2>Co nowego w wersji ",
+"<h2>Neu in Version "
+],
+[
+"<button class=\"primary\">Super!</button>",
+"<button class=\"primary\">Super!</button>"
 ]
 ],
 "uk": [
@@ -613,6 +757,54 @@
 [
 "x.setAttribute('aria-label', 'Zamknij')",
 "x.setAttribute('aria-label', 'Закрити')"
+],
+[
+"['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.']",
+"['🎙️ Уроки голосу з Луною', 'На головній: урок дня й теми для вправ – Луна читає їх уголос.']"
+],
+[
+"['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.']",
+"['🛍 Уся нова колекція Бутика', 'Усі вбрання з фото вже в продажу. Нові з’являються, щойно мають фото.']"
+],
+[
+"['🎁 Poleć Lunę', '7 dni Premium za każdą poleconą osobę, która założy konto i potwierdzi e-mail (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
+"['🎁 Порекомендуйте Луну', '7 днів Premium за кожну людину, яка створить акаунт і підтвердить e-mail (макс. 10 на місяць). Посилання – у Налаштуваннях.']"
+],
+[
+"['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
+"['🖼 Галерея агенток', 'Нова галерея з Агенткою тижня – за справжніми вподобаннями.']"
+],
+[
+"['⚔️ Bitwy agentek – wkrótce', 'Ruszą, gdy w obsadzie będą co najmniej dwie agentki. Pilnie szukamy nowych agentek!']",
+"['⚔️ Битви агенток – незабаром', 'Стартують, щойно буде щонайменше дві агентки. Терміново шукаємо нових агенток!']"
+],
+[
+"['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.']",
+"['🏠 Головна як стрічка', 'Одна довга стрічка: дописи, новини, Бутик і кастинг. Більший шрифт, «Показати більше» біля довгих текстів.']"
+],
+[
+"['🧱 Ścianka Agentek Głosu', 'Nowa nazwa Ścianki. Pod wpisami: polubienia, wyświetlenia i komentarze jak w czacie – tylko prawdziwe liczby.']",
+"['🧱 Стіна Агенток Голосу', 'Нова назва Стіни. Під дописами: вподобання, перегляди й коментарі як у чаті – лише справжні числа.']"
+],
+[
+"['🛍 Nowy Butik Luny', 'Nowa kolekcja, kategorie i kolory. Wszystkie kolory w cenie stroju. Tylko eleganckie, zakrywające stroje.']",
+"['🛍 Новий Бутик Луни', 'Нова колекція, категорії й кольори. Усі кольори входять у ціну. Лише елегантні, закриті вбрання.']"
+],
+[
+"['🔒 Prywatność', 'Usuwamy metadane (GPS, urządzenie) ze zdjęć. Konto usuniesz jednym kliknięciem.']",
+"['🔒 Приватність', 'Ми видаляємо метадані (GPS, пристрій) із фото. Акаунт можна видалити одним кліком.']"
+],
+[
+"['🤖 Ochrona przed botami', 'Fałszywe konta nie zawyżają liczników.']",
+"['🤖 Захист від ботів', 'Фейкові акаунти не накручують лічильники.']"
+],
+[
+"<h2>Co nowego w wersji ",
+"<h2>Що нового у версії "
+],
+[
+"<button class=\"primary\">Super!</button>",
+"<button class=\"primary\">Чудово!</button>"
 ]
 ]
 }

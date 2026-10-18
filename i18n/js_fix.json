@@ -1,0 +1,26 @@
+{
+"en": [
+[
+"if (/oraz:$/.test(f))",
+"if (/:$/.test(f))"
+]
+],
+"es": [
+[
+"if (/oraz:$/.test(f))",
+"if (/:$/.test(f))"
+]
+],
+"de": [
+[
+"if (/oraz:$/.test(f))",
+"if (/:$/.test(f))"
+]
+],
+"uk": [
+[
+"if (/oraz:$/.test(f))",
+"if (/:$/.test(f))"
+]
+]
+}
