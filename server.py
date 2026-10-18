@@ -925,17 +925,9 @@ class H(SimpleHTTPRequestHandler):
                         self._set_sid(sid, accounts.SESSION_DAYS * 86400); return self._json({"ok": True, "csrf": csrf2, "ended": max(0, n - 1)})
                     accounts.totp_disable(usr["uid"], data.get("password"), data.get("code")); return self._json({"ok": True})
                 except ValueError as e: return self._json({"error": str(e)}, 400)
-            if p == "/api/account/delete":
-                if not livechat.rate_ok("del:" + ip, 3, 20): return self._json({"error": "Za dużo prób."}, 429)
-                try: referral.forget(usr["uid"])
-                except Exception: pass
-                if usr.get("pw") and data.get("password") and not accounts.check_pw(usr["pw"], str(data.get("password"))): return self._json({"error": "Nieprawidłowe hasło."}, 400)
-                try: inbox.delete_user(usr["uid"])
-                except Exception as e: sys.stderr.write("inbox delete %s\n" % type(e).__name__)
-                try: accounts.delete(usr["uid"], data.get("password") or None); profiles.delete_owner(usr["uid"]); userprof.delete(usr["uid"]); presence.delete(usr["uid"]); agentgen.delete_owner(usr["uid"])
-                except ValueError as e: return self._json({"error": str(e)}, 400)
-                social.anonymise_author("u:" + usr["uid"]); antibot.forget("u:" + usr["uid"])
-                self._set_sid("", 0); return self._json({"ok": True})
+            if p == "/api/account/delete":  # dawne natychmiastowe usuwanie wyłączone – jedyna droga: 2 kroki + 30 dni na przywrócenie
+                return self._json({"error": "Konto usuwasz w 2 krokach w „Mój panel” (Ustawienia), a przez 30 dni możesz je przywrócić.",
+                                   "gone": True, "use": "/api/account/delete-request", "settings": "/ustawienia.html#del"}, 410)
             if p == "/api/account/delete-request":
                 if not livechat.rate_ok("dr:" + ip, 5, 30): return self._json({"error": "Za dużo prób."}, 429)
                 try: at = userprof.request_delete(usr["uid"], data.get("nick"), usr.get("name", ""))

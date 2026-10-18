@@ -48,7 +48,7 @@ DEFAULT = [
    "Sonido: comprueba el volumen del teléfono y que «Leer respuestas en voz alta» esté activado en Ajustes. El timbre, el ritmo y el volumen de Luna se cambian en los ajustes de voz. Después de cada respuesta también puedes valorar la voz 👍/👎; nos ayuda muchísimo.",
    "Ton: Prüfe die Lautstärke deines Handys und ob in den Einstellungen „Antworten vorlesen“ aktiviert ist. Klang, Tempo und Lautstärke von Luna änderst du in den Stimmeinstellungen. Nach jeder Antwort kannst du die Stimme mit 👍/👎 bewerten – das hilft uns sehr.",
    "Звук: перевірте гучність телефона і чи ввімкнено в Налаштуваннях «Читати відповіді вголос». Тембр, темп і гучність Луни можна змінити в налаштуваннях голосу. Після кожної відповіді можна також оцінити голос 👍/👎 — це нам дуже допомагає."),
- F("konto", "konto logowanie hasło zalogować rejestracja 18 pełnoletni account login password sign up cuenta contraseña konto anmelden passwort обліковий вхід пароль",
+ F("konto", "konto logowanie hasło hasła zalogować rejestracja 18 pełnoletni account login password sign up cuenta contraseña konto anmelden passwort обліковий вхід пароль",
    "Konto zakładasz w Ustawieniach → Konto i plan (e-mail i hasło, a potem jedno pytanie: „Masz 18 lat?” – bez podawania daty urodzenia). Luna jest wyłącznie dla osób pełnoletnich. Nigdy nie wpisuj hasła w czacie – ja też o nie nie poproszę. Jeśli konto jest zablokowane po kilku nieudanych próbach, odczekaj 15 minut.",
    "You create an account in Settings → Account and plan (email and password, then one question: “Are you 18?” – no date of birth needed). Luna is for adults only. Never type your password into a chat – I will never ask for it. If your account is locked after several failed attempts, wait 15 minutes.",
    "La cuenta se crea en Ajustes → Cuenta y plan (correo y contraseña, y luego una pregunta: «¿Tienes 18 años?», sin fecha de nacimiento). Luna es solo para personas adultas. Nunca escribas tu contraseña en un chat: yo nunca te la pediré. Si la cuenta se bloquea tras varios intentos fallidos, espera 15 minutos.",
@@ -104,7 +104,7 @@ DEFAULT = [
    "Luna dice las cosas como son es un proyecto de fans, y así seguirá, ¡palabra de Luna! 💚 Si quieres ayudar, visita /dolacz.html.",
    "Luna sagt, wie es ist, ist ein Fanprojekt – und bleibt es, Ehrenwort von Luna! 💚 Wenn du helfen möchtest, schau auf /dolacz.html vorbei.",
    "Луна каже як є — фанатський проєкт, і таким він залишиться, слово Луни! 💚 Якщо хочете допомогти, зазирніть на /dolacz.html."),
- F("usuniecie", "usunąć dane usunięcie konta rodo eksport moje dane delete data gdpr export borrar datos eliminar cuenta löschen daten dsgvo видалити дані",
+ F("usuniecie", "usunąć usuń usunięcie konto dane rodo eksport moje dane delete deletion account gdpr export borrar datos eliminar cuenta löschen konto daten dsgvo видалити видалення обліковий дані",
    "Swoje dane pobierzesz w „Mój panel”. Tam też usuniesz konto w 2 krokach (wpisujesz swój nick), a przez 30 dni możesz je przywrócić – potem usuwamy wszystko na zawsze. Pozostałe dane usuniemy na prośbę w ciągu 30 dni. Szczegóły: /privacy.html.",
    "Download your data in “My panel”. That’s also where you delete your account in 2 steps (you type your nick); you can restore it within 30 days – after that everything is deleted for good. We’ll delete any other data on request within 30 days. Details: /privacy.html.",
    "Descarga tus datos en «Mi panel». Allí también eliminas la cuenta en 2 pasos (escribes tu nick) y puedes restaurarla durante 30 días; después lo borramos todo para siempre. Cualquier otro dato lo borraremos a petición en un plazo de 30 días. Detalles: /privacy.html.",
@@ -141,9 +141,25 @@ PRICE_LINE = {"pl": " Ceny: Premium {premium} zł, Pro {pro} zł (za 30 dni).", 
 HIDDEN_LINE = {"pl": " Ceny pojawią się w Cenniku po publikacji.", "en": " Prices will appear in the Prices tab once published.", "es": " Los precios aparecerán en la pestaña Precios cuando se publiquen.",
                "de": " Die Preise erscheinen nach der Veröffentlichung im Tab „Preise“.", "uk": " Ціни з’являться в розділі «Ціни» після публікації."}
 
+# Wersja poprawionych odpowiedzi domyślnych. Zapisane w panelu FAQ (help_faq) starsze niż KB_REV nie mogą przywrócić
+# nieaktualnych treści: dla kluczy z CORRECTED wygrywa wersja z kodu. Każda odpowiedź z nieaktualną frazą (STALE_RE) też.
+KB_REV = 2
+CORRECTED = {"konto", "platnosci", "usuniecie"}
+STALE_RE = re.compile(r"2160\s*px|dat[aęy] urodzenia|date of birth|fecha de nacimiento|geburtsdatum|дат[аиу] народження|jednym klikni|one click|un solo clic|einem klick|одним клац", re.I)
+_DEF = {e["id"]: e for e in DEFAULT}
+
+def _fresh(e):
+    d = _DEF.get(e.get("id")) if isinstance(e, dict) else None
+    if not d: return e
+    hit = lambda x: any(STALE_RE.search(str(a or "")) for a in (x.get("answers") or {}).values())
+    stale = hit(e) and not hit(d)
+    if stale or (e["id"] in CORRECTED and int(e.get("rev") or 0) < KB_REV): return d
+    return e
+
 def kb():
     v = store.get("help_faq", None)
-    return v if isinstance(v, list) and v else DEFAULT
+    if not (isinstance(v, list) and v): return DEFAULT
+    return [_fresh(e) for e in v if isinstance(e, dict)]
 
 def norm(s):
     s = unicodedata.normalize("NFKD", str(s).lower().replace("ł", "l"))
@@ -207,6 +223,6 @@ def save_kb(items):
         if not isinstance(e, dict) or not re.fullmatch(r"[\w\-]{2,30}", str(e.get("id", ""))): continue
         ans = {l: re.sub(r"[<>]", "", str((e.get("answers") or {}).get(l, "")))[:1200] for l in LANGS}
         if not ans["pl"]: continue
-        out.append({"id": e["id"], "keywords": str(e.get("keywords", ""))[:600], "answers": ans,
+        out.append({"id": e["id"], "rev": KB_REV, "keywords": str(e.get("keywords", ""))[:600], "answers": ans,
                     "chip": {l: re.sub(r"[<>]", "", str((e.get("chip") or {}).get(l, "")))[:40] for l in LANGS} if e.get("chip") else {}})
     store.put("help_faq", out); return out

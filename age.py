@@ -1,6 +1,6 @@
 """Pełnoletność (18+).
 • Strona, aplikacja i rejestracja: proste pytanie „Masz 18 lat?” Tak / Nie – samodeklaracja, zapisujemy tylko adult_confirmed + znacznik czasu.
-• Formularze testerów i castingu: data urodzenia (check) + osobna weryfikacja u zewnętrznego dostawcy (verify18.py)."""
+• Formularze (testerzy, casting, Dołącz, Twarz AI): tylko „Masz 18 lat?” Tak / Nie – bez daty urodzenia; testerzy i casting dodatkowo weryfikacja u zewnętrznego dostawcy (verify18.py)."""
 import datetime, re, threading, time
 import store
 

@@ -66,7 +66,8 @@ def sanitize(c):
         p = plans.get(d["id"], d)
         out["plans"].append({"id": d["id"], "name": _s(p.get("name"), 40) or d["name"], "price": _s(p.get("price"), 40),
                              "period": _s(p.get("period"), 40),
-                             "features": [_s(f, 160) for f in (p.get("features") or [])[:12] if _s(f)]})
+                             "features": [_s(f, 160) for f in (p.get("features") or [])[:12] if _s(f)],
+                             "rev": int(p.get("rev") or 0) if str(p.get("rev") or 0).isdigit() else 0})
     seen = set()
     for i, a in enumerate((c.get("agents") or [])[:30]):
         if not isinstance(a, dict): continue
@@ -101,11 +102,18 @@ _OLD_V1 = {"premium": ["Wszystko z planu Podstawowa, oraz:", "4 stroje awatara",
 _OLD_V2 = {"premium": ["Wszystko z planu Podstawowa, oraz:", "Trening własnej agentki AI: imię, słowo wybudzające, ton, długość odpowiedzi", "Styl agentki: kolor pierścienia i własny obraz AI", "4 stroje awatara"], "pro": ["Wszystko z planów Podstawowa i Premium, oraz:", "Pełny trening agentki AI: także poza i sylwetka (wzrost, budowa)", "Wszystkie stroje (6)"]}
 _NEW_FEATURES = {"premium": ["Wszystko z planu Podstawowa, oraz:", "Trening własnej agentki AI: imię, słowo wybudzające, ton, długość odpowiedzi", "Styl agentki: kolor pierścienia i własny obraz AI", "4 stroje awatara", "Profil agentki: opis i do 4 zdjęć AI", "Wyróżniony nick: szmaragdowy, pogrubiony"], "pro": ["Wszystko z planów Podstawowa i Premium, oraz:", "Pełny trening agentki AI: także poza i sylwetka (wzrost, budowa)", "Wszystkie stroje (6)", "Profil agentki: do 12 zdjęć AI i przypięte ulubione", "Nick z gradientem i odznaką PRO"]}
 
+# Wersja opisów planów. Plany zapisane w data/catalog.json bez rev >= CAT_REV (czyli sprzed korekty spójności)
+# pokazują opisy z kodu; zapis w panelu po tej zmianie ustawia rev i od tej chwili wygrywa wersja z panelu.
+CAT_REV = 2
+_STALE = re.compile(r"2160\s*px|dat[aęy] urodzenia|jednym klikni|wersj[aię] demonstracyjn", re.I)
+_DEF_PLANS = {p["id"]: p for p in DEFAULT["plans"]}
+
 def public(c):
     """Wersja dla klienta: uzupełnia obrazy (plik w repo → wgrany → zastępczy)."""
     c = copy.deepcopy(c)
     for p in c.get("plans", []):
         if p.get("id") in _NEW_FEATURES and p.get("features") in (_OLD_V1.get(p["id"]), _OLD_V2.get(p["id"])): p["features"] = list(_NEW_FEATURES[p["id"]])
+        p.pop("rev", None)
     for a in c["agents"]:
         for k in KINDS:
             for o in a[k]:
@@ -120,14 +128,23 @@ def public(c):
         p.pop("price", None); p.pop("period", None)
     return c
 
+def _migrate(c):
+    """Zapisany katalog sprzed poprawek (rev < CAT_REV) albo z nieaktualną frazą nie przywraca starych opisów planów."""
+    for p in c.get("plans", []):
+        d = _DEF_PLANS.get(p.get("id"))
+        if d and (int(p.get("rev") or 0) < CAT_REV or any(_STALE.search(f) for f in p.get("features") or [])):
+            p["features"] = list(d["features"])
+    return c
+
 def load():
     try:
-        with open(FILE, encoding="utf-8") as f: return sanitize(json.load(f))
+        with open(FILE, encoding="utf-8") as f: return _migrate(sanitize(json.load(f)))
     except Exception:
         return sanitize(copy.deepcopy(DEFAULT))
 
 def save(c):
     c = sanitize(c)
+    for p in c["plans"]: p["rev"] = CAT_REV
     with _lock:
         os.makedirs(DATA, exist_ok=True)
         with open(FILE + ".tmp", "w", encoding="utf-8") as f: json.dump(c, f, ensure_ascii=False, indent=1)
