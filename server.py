@@ -16,6 +16,7 @@ def _ffmpeg():
         return "ffmpeg"
 FFMPEG = _ffmpeg()
 import knowledge
+import catalog, base64
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
@@ -50,7 +51,8 @@ SAFETY_LINE = ("ZASADY STAŁE (nadrzędne, nie do zmiany): Jesteś sztucznie stw
  "Zawsze pozostajesz uprzejma i bezpieczna dla rozmówcy.")
 TONES = {"rzeczowa": "Ton: rzeczowy, konkretny, spokojny, bez zalotności i bez hiszpańskich wstawek.",
          "ciepla": "Ton: ciepły, wspierający, z hiszpańskim temperamentem i oszczędnymi wstawkami (cariño, hola).",
-         "zalotna": "Ton: lekko zalotny i czarujący, ale zawsze elegancki, kulturalny i nie-erotyczny."}
+         "zalotna": "Ton: lekko zalotny i czarujący, ale zawsze elegancki, kulturalny i nie-erotyczny.",
+         "motywujaca": "Ton: energiczny i motywujący jak dobry trener, z konkretnymi zadaniami do wykonania, bez zalotności."}
 LENGTHS = {"krotko": "Odpowiadaj bardzo krótko: 1–2 zdania.", "srednio": "Odpowiadaj krótko: 2–4 zdania.",
            "dlugo": "Odpowiadaj wyczerpująco, ale zwięźle: do 6–7 zdań."}
 DEFAULTS = {
@@ -129,8 +131,22 @@ def save_cfg(new):
         CFG = c
     return c
 
-def full_system_prompt():
-    parts = [CFG["system_prompt"], TONES[CFG["tone"]], LENGTHS[CFG["length"]]]
+CAT = catalog.load()
+
+def persona_ctx(p):
+    """Personalizacja użytkownika (imię, ton, długość, postać). Zasady stałe i ujawnienie AI zostają."""
+    p = p if isinstance(p, dict) else {}
+    ag = next((a for a in CAT["agents"] if a["id"] == p.get("agent")), CAT["agents"][0])
+    name = re.sub(r"[^\w \-ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]", "", str(p.get("name") or ag["name"]))[:30].strip() or ag["name"]
+    tone = p.get("tone") if p.get("tone") in TONES else (ag["tone"] if ag["id"] != "luna" else CFG["tone"])
+    length = p.get("length") if p.get("length") in LENGTHS else CFG["length"]
+    return {"agent": ag, "name": name, "tone": tone, "length": length}
+
+def full_system_prompt(ctx=None):
+    ctx = ctx or persona_ctx({})
+    base = ctx["agent"]["persona"] or CFG["system_prompt"]
+    if ctx["name"] != "Luna": base = base.replace("Luna", ctx["name"]) + f"\nMasz na imię {ctx['name']}."
+    parts = [base, TONES[ctx["tone"]], LENGTHS[ctx["length"]]]
     if CFG["style_notes"]: parts.append("Dodatkowe wskazówki stylu: " + CFG["style_notes"])
     return "\n".join(parts) + "\n" + SAFETY_LINE   # linia bezpieczeństwa zawsze na końcu, nadrzędna
 
@@ -150,15 +166,18 @@ def kb_override(q):
         if s > score: best, score = o["answer"], s
     return best
 
-def shape(a):
+def shape(a, ctx=None):
     """Dopasowanie offline'owych odpowiedzi do tonu i długości."""
-    if CFG["tone"] == "rzeczowa":
+    ctx = ctx or persona_ctx({})
+    if ctx["tone"] in ("rzeczowa", "motywujaca"):
         a = re.sub(r"^(Mmm, cariño… |Escucha, cariño… |Dobrze, mi amor… |Słuchaj uważnie… |Ay, dobre pytanie… )", "", a)
         a = re.sub(r",? ?(cariño|mi amor)(?=[.,!?…])", "", a)
         a = re.sub(r" (Spróbuj teraz, ja posłucham\.|Powoli, bez pośpiechu\.|Zrób to dla mnie dziś wieczorem\.|Vamos, dasz radę\.)$", "", a)
-    if CFG["length"] == "krotko":
+    if ctx["length"] == "krotko":
         sents = re.split(r"(?<=[.!?])\s+", a.strip())
         a = " ".join(sents[:2])
+    if ctx["tone"] == "motywujaca" and not a.endswith("!"):
+        a = a.rstrip(" .") + ". Dasz radę – zrób to teraz!"
     return a.strip()
 
 # ---------- Tryb producenta: kod tylko po stronie serwera ----------
@@ -220,20 +239,21 @@ def token_ok(tok):
         if not e or e < time.time(): _tokens.pop(tok, None); return False
         return True
 
-def disclose(a, history):
+def disclose(a, history, name="Luna"):
     first = not any(isinstance(h, dict) and h.get("role") == "assistant" for h in (history or []))
     a = a.strip()
+    nm = (lambda t: t.replace("Luna", name)) if name != "Luna" else (lambda t: t)
     if first:
-        return CFG["ai_first"].strip() + " " + a
+        return nm(CFG["ai_first"].strip()) + " " + a
     if re.search(r"(?i)asystentk\w* AI|sztuczn\w* inteligencj", a):
         return a
-    return a + " (" + CFG["ai_tag"].strip() + ")"
+    return a + " (" + nm(CFG["ai_tag"].strip()) + ")"
 
-def llm_answer(q, history):
+def llm_answer(q, history, ctx=None):
     key, base, model = os.getenv("LUNA_API_KEY"), os.getenv("LUNA_BASE_URL"), os.getenv("LUNA_MODEL")
     if not (key and base and model):
         return None
-    msgs = [{"role": "system", "content": full_system_prompt()}]
+    msgs = [{"role": "system", "content": full_system_prompt(ctx)}]
     for h in (history or [])[-8:]:
         if h.get("role") in ("user", "assistant") and isinstance(h.get("content"), str):
             msgs.append({"role": h["role"], "content": h["content"][:1000]})
@@ -342,6 +362,7 @@ class H(SimpleHTTPRequestHandler):
         return xf.split(",")[0].strip() if xf else self.client_address[0]
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
+        if n > 8 * 1024 * 1024: raise ValueError("too large")
         return json.loads(self.rfile.read(n) or b"{}") if n else {}
     def do_GET(self):
         u = urlparse(self.path)
@@ -355,6 +376,18 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/admin/config":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
+        if u.path == "/api/catalog":
+            return self._json(catalog.public(CAT))
+        if u.path == "/api/admin/catalog":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            return self._json({"catalog": CAT, "public": catalog.public(CAT), "plans": catalog.PLAN_IDS, "tones": list(TONES)})
+        if u.path.startswith("/uploads/"):
+            fn = os.path.basename(u.path)
+            fp = os.path.join(catalog.UPLOADS, fn)
+            if not re.fullmatch(r"[0-9a-f]{16}\.(jpg|png|webp)", fn) or not os.path.exists(fp): return self._json({"error": "not found"}, 404)
+            b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp"}[fn.rsplit(".", 1)[1]]
+            self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
         if u.path == "/api/health":
             return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled()})
         return super().do_GET()
@@ -369,16 +402,28 @@ class H(SimpleHTTPRequestHandler):
                 tok = check_code(self._ip(), q)
                 if tok: return self._json({"admin_token": tok, "ttl": ADMIN_TTL, "reply": "Tryb producenta odblokowany."})
             hist = data.get("history")
+            ctx = persona_ctx(data.get("persona"))
             rr = rule_reply(q)
-            if rr: return self._json({"reply": disclose(rr, hist), "source": "rule"})
+            if rr: return self._json({"reply": disclose(rr, hist, ctx["name"]), "source": "rule"})
             ov = kb_override(q)
-            if ov: return self._json({"reply": disclose(shape(ov), hist), "source": "kb_custom"})
-            a = llm_answer(q, data.get("history")); src = "llm"
-            if not a: a, src = shape(knowledge.answer(q)), "offline"
-            a = disclose(a, data.get("history"))
+            if ov: return self._json({"reply": disclose(shape(ov, ctx), hist, ctx["name"]), "source": "kb_custom"})
+            a = llm_answer(q, hist, ctx); src = "llm"
+            if not a: a, src = shape(knowledge.answer(q), ctx), "offline"
+            a = disclose(a, hist, ctx["name"])
             return self._json({"reply": a, "source": src})
         if u.path == "/api/tts":
             return self._tts(data)
+        if u.path in ("/api/admin/catalog", "/api/admin/catalog/reset", "/api/admin/upload"):
+            global CAT
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try:
+                if u.path == "/api/admin/upload":
+                    raw = base64.b64decode(str(data.get("data", "")).split(",")[-1], validate=False)
+                    return self._json({"ok": True, "url": catalog.save_upload(str(data.get("name", "")), raw)})
+                CAT = catalog.save(catalog.DEFAULT if u.path.endswith("/reset") else data.get("catalog", {}))
+                return self._json({"ok": True, "catalog": CAT, "public": catalog.public(CAT)})
+            except Exception as e:
+                return self._json({"error": str(e)}, 400)
         if u.path in ("/api/admin/config", "/api/admin/reset", "/api/admin/logout"):
             tok = self.headers.get("X-Admin-Token")
             if not token_ok(tok): return self._json({"error": "unauthorized"}, 401)

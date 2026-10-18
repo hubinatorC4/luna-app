@@ -17,17 +17,18 @@
 <header class="top">
   <div class="brand">
     <img src="avatar_round.png" alt="" class="mini">
-    <div><h1>Luna</h1><small id="status">Twoja trenerka głosu</small></div>
+    <div><h1 id="agentName">Luna</h1><small id="status">Twoja trenerka głosu</small></div>
   </div>
   <div class="actions">
     <label class="wake" title="Nasłuchiwanie słowa „Luna”">
       <input type="checkbox" id="wakeToggle"><span class="sw"></span><span class="lbl">Nasłuchiwanie</span>
     </label>
+    <button id="customBtn" class="icon" aria-label="Stwórz własną asystentkę" title="Stwórz własną asystentkę">✨</button>
     <button id="settingsBtn" class="icon" aria-label="Ustawienia">⚙</button>
   </div>
 </header>
 
-<div class="ai-label" role="note">🤖 Luna – asystentka AI (postać wygenerowana sztucznie)</div>
+<div class="ai-label" role="note">🤖 <span id="aiLabelName">Luna</span> – asystentka AI (postać wygenerowana sztucznie)</div>
 <section class="hero" id="hero">
   <div class="ring" id="ring">
     <img src="avatar_round.png" alt="Luna" id="avatar">
@@ -122,6 +123,32 @@
       <label>Kolor pierścienia<input type="color" id="adm_ring_color"></label>
       <label>Szybkość pulsowania: <b id="adm_pulse_v"></b><input type="range" id="adm_pulse_speed" min="0.4" max="4" step="0.1"></label>
     </details>
+    <details id="catSection"><summary>Katalog postaci, strojów i planów</summary>
+      <p class="hint">⚠️ Wgrywaj wyłącznie stonowane, nie-erotyczne obrazy (bez bielizny, prześwitów i nagości). Treści naruszające tę zasadę będą usuwane.</p>
+      <h3 class="sub">Plany</h3>
+      <div id="catPlans"></div>
+      <h3 class="sub">Postacie</h3>
+      <label>Wybierz postać<select id="catAgentSel"></select></label>
+      <div id="catAgent"></div>
+      <div class="btns">
+        <button type="button" id="catAddAgent">＋ Nowa postać</button>
+        <button type="button" id="catDelAgent" class="ghost">Usuń postać</button>
+      </div>
+      <h3 class="sub">Dodaj strój / pozę / sylwetkę</h3>
+      <div class="row3">
+        <select id="catKind"><option value="outfits">Strój</option><option value="poses">Poza</option><option value="bodies">Sylwetka</option></select>
+        <input type="text" id="catItemName" placeholder="Nazwa">
+        <select id="catItemPlan"><option value="podstawowa">Podstawowa</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select>
+      </div>
+      <label class="filebtn">🖼 Wybierz obraz i dodaj<input type="file" id="catItemFile" accept="image/jpeg,image/png,image/webp" hidden></label>
+      <div class="btns">
+        <button type="button" id="catSave" class="primary">Zapisz katalog</button>
+        <button type="button" id="catExport">⬇ Eksportuj katalog</button>
+        <label class="filebtn">⬆ Importuj katalog<input type="file" id="catImport" accept=".json,application/json" hidden></label>
+        <button type="button" id="catReset" class="ghost">Domyślny katalog</button>
+      </div>
+      <p id="catMsg" class="hint"></p>
+    </details>
     <details><summary>Eksport / import</summary>
       <div class="btns">
         <button type="button" id="admExport">⬇ Eksportuj JSON</button>
@@ -137,8 +164,47 @@
     </div>
   </form>
 </dialog>
+<dialog id="custom">
+  <form method="dialog">
+    <h2>✨ Stwórz własną asystentkę</h2>
+    <div class="planbar">
+      <label>Twój plan
+        <select id="c_plan"><option value="podstawowa">Podstawowa</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select></label>
+      <p class="hint">Wersja demonstracyjna – wybór planu nie pobiera płatności.</p>
+    </div>
+    <details open><summary>Postać</summary><div class="grid" id="c_agents"></div></details>
+    <details open><summary>Strój</summary><div class="grid" id="c_outfits"></div></details>
+    <details><summary>Poza <span class="tag">Pro / Ultra</span></summary><div class="grid" id="c_poses"></div></details>
+    <details><summary>Sylwetka <span class="tag">Pro / Ultra</span></summary><p class="hint">Wzrost i budowa – wybór spośród gotowych, stonowanych wariantów.</p><div class="grid" id="c_bodies"></div></details>
+    <details><summary>Osobowość <span class="tag">Premium</span></summary>
+      <div class="lockable" data-plan="premium">
+        <label>Imię asystentki<input type="text" id="c_name" maxlength="30" placeholder="Luna"></label>
+        <label>Słowo wybudzające<input type="text" id="c_wake" maxlength="30" placeholder="Luna"></label>
+        <label>Ton
+          <select id="c_tone"><option value="">Domyślny</option><option value="rzeczowa">Rzeczowa</option><option value="ciepla">Ciepła</option><option value="zalotna">Zalotna (subtelna, kulturalna)</option><option value="motywujaca">Motywująca</option></select></label>
+        <label>Długość odpowiedzi
+          <select id="c_length"><option value="">Domyślna</option><option value="krotko">Krótko</option><option value="srednio">Średnio</option><option value="dlugo">Dłużej</option></select></label>
+      </div>
+    </details>
+    <details><summary>Wygląd <span class="tag">Premium</span></summary>
+      <div class="lockable" data-plan="premium">
+        <label>Kolor pierścienia<input type="color" id="c_ring"></label>
+        <label class="filebtn">🖼 Wgraj własny obraz awatara<input type="file" id="c_upload" accept="image/*" hidden></label>
+        <button type="button" class="add" id="c_upload_clear">Usuń własny obraz</button>
+        <p class="hint">Obraz zostaje tylko na tym urządzeniu. Wgrywaj wyłącznie stonowane obrazy – bez treści erotycznych.</p>
+      </div>
+    </details>
+    <div class="btns">
+      <button type="button" id="c_voice">🎚 Barwa głosu</button>
+      <button type="button" id="c_reset" class="ghost">Przywróć Lunę</button>
+      <button value="ok" class="primary">Gotowe</button>
+    </div>
+  </form>
+</dialog>
 <audio id="player" preload="auto"></audio>
 <script src="app.js"></script>
 <script src="admin.js"></script>
+<script src="custom.js"></script>
+<script src="admin-catalog.js"></script>
 </body>
 </html>

@@ -68,7 +68,7 @@ async function ask(q){
   const t = addMsg('Luna myśli…', 'luna typing'); t.querySelector('.play')?.remove();
   let reply;
   try {
-    const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:q, history})});
+    const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:q, history, persona: window.LunaPersona ? window.LunaPersona() : undefined})});
     const d = await r.json();
     if (d.admin_token){ // kod producenta: nie zapisujemy wiadomości, nie pokazujemy jej
       mine.remove(); t.remove();
@@ -87,7 +87,14 @@ $('#composer').addEventListener('submit', e => { e.preventDefault(); const q = i
 /* ---------- Rozpoznawanie mowy / słowo „Luna” ---------- */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let rec = null, wakeOn = false, mode = 'idle', recRunning = false, paused = false, awaitTimer = null;
-const WAKE = /(^|[^a-ząćęłńóśźż])(ł|l)un(a|o|ie|y)?(?![a-ząćęłńóśźż])/i;
+let WAKE = /(^|[^a-ząćęłńóśźż])(ł|l)un(a|o|ie|y)?(?![a-ząćęłńóśźż])/i;
+window.LunaSetWake = word => {
+  word = (word || 'Luna').trim().toLowerCase();
+  if (word === 'luna') { WAKE = /(^|[^a-ząćęłńóśźż])(ł|l)un(a|o|ie|y)?(?![a-ząćęłńóśźż])/i; return; }
+  const esc = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const stem = esc.length > 3 && /[aeiouy]$/.test(esc) ? esc.slice(0, -1) + '[a-ząęóy]?' : esc;
+  WAKE = new RegExp('(^|[^a-ząćęłńóśźż])' + stem + '(?![a-ząćęłńóśźż])', 'i');
+};
 
 function makeRec(){
   const r = new SR(); r.lang = 'pl-PL'; r.continuous = true; r.interimResults = true; r.maxAlternatives = 1;
@@ -118,7 +125,7 @@ async function onResult(ev){
       if (!m) continue;
       const rest = text.slice(m.index + m[0].length).replace(/^[\s,.!?:;-]+/, '').trim();
       if (rest.split(/\s+/).filter(Boolean).length >= 2){ await ask(rest); }
-      else { const ack = CFG.wake_reply; addMsg(ack, 'luna'); await speak(ack); setAwaitQuestion(); }
+      else { const ack = window.LunaName && window.LunaName() !== 'Luna' ? CFG.wake_reply.replace(/Luna/g, window.LunaName()) : CFG.wake_reply; addMsg(ack, 'luna'); await speak(ack); setAwaitQuestion(); }
     }
   }
 }
@@ -174,6 +181,7 @@ window.LunaApplyConfig = c => {
   const g = document.querySelector('.msg.greet'); if (g) g.firstChild.textContent = CFG.greeting;
   const n = $('#chatNotice'); if (n){ n.textContent = CFG.chat_notice || ''; n.hidden = !CFG.chat_notice; }
   if (CFG.ui){ document.documentElement.style.setProperty('--ring', CFG.ui.ring_color); document.documentElement.style.setProperty('--pulse', CFG.ui.pulse_speed + 's'); }
+  window.LunaCustomApply && window.LunaCustomApply();
   if (CFG.voice_defaults && !localStorage.getItem('luna.settings')){ Object.assign(DEF, CFG.voice_defaults); Object.assign(S, CFG.voice_defaults); }
 };
 fetch('/api/config').then(r => r.json()).then(window.LunaApplyConfig).catch(()=>{});
