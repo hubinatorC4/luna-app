@@ -1,0 +1,54 @@
+/* Pakiet językowy: czcionki dla pism spoza łacinki/cyrylicy (Noto, SIL OFL 1.1 – static/fonts/i18n/OFL-Noto.txt, hostowane u nas),
+   kierunek RTL (ar, he) przez właściwości logiczne, odporność na dłuższe słowa (de, fi, hu…) i wybór języka z wyszukiwarką. */
+@font-face{font-family:"Noto Sans Arabic";font-weight:400 700;font-display:swap;src:url(/fonts/i18n/noto-arabic.woff2) format("woff2");unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200F}
+@font-face{font-family:"Noto Sans Hebrew";font-weight:400 700;font-display:swap;src:url(/fonts/i18n/noto-hebrew.woff2) format("woff2");unicode-range:U+0590-05FF,U+FB1D-FB4F}
+@font-face{font-family:"Noto Sans Devanagari";font-weight:400 700;font-display:swap;src:url(/fonts/i18n/noto-devanagari.woff2) format("woff2");unicode-range:U+0900-097F,U+A8E0-A8FF,U+1CD0-1CFF,U+20B9}
+@font-face{font-family:"Noto Sans Thai";font-weight:400 700;font-display:swap;src:url(/fonts/i18n/noto-thai.woff2) format("woff2");unicode-range:U+0E00-0E7F}
+@font-face{font-family:"Noto Sans JP";font-weight:400 700;font-display:swap;src:url(/fonts/i18n/noto-jp.woff2) format("woff2");unicode-range:U+3000-30FF,U+3400-4DBF,U+4E00-9FFF,U+F900-FAFF,U+FF00-FFEF}
+@font-face{font-family:"Noto Sans KR";font-weight:400 700;font-display:swap;src:url(/fonts/i18n/noto-kr.woff2) format("woff2");unicode-range:U+1100-11FF,U+3000-303F,U+3130-318F,U+AC00-D7AF,U+FF00-FFEF}
+@font-face{font-family:"Noto Sans SC";font-weight:400 700;font-display:swap;src:url(/fonts/i18n/noto-sc.woff2) format("woff2");unicode-range:U+3000-303F,U+3400-4DBF,U+4E00-9FFF,U+F900-FAFF,U+FF00-FFEF}
+html:lang(ar){--font-ui:"Noto Sans Arabic","Nunito",system-ui,sans-serif;--font-display:"Noto Sans Arabic","Playfair Display",serif}
+html:lang(he){--font-ui:"Noto Sans Hebrew","Nunito",system-ui,sans-serif;--font-display:"Noto Sans Hebrew","Playfair Display",serif}
+html:lang(hi){--font-ui:"Noto Sans Devanagari","Nunito",system-ui,sans-serif;--font-display:"Noto Sans Devanagari","Playfair Display",serif}
+html:lang(th){--font-ui:"Noto Sans Thai","Nunito",system-ui,sans-serif;--font-display:"Noto Sans Thai","Playfair Display",serif}
+html:lang(ja){--font-ui:"Nunito","Noto Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif;--font-display:"Noto Sans JP","Hiragino Sans",sans-serif}
+html:lang(ko){--font-ui:"Nunito","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;--font-display:"Noto Sans KR",sans-serif}
+html:lang(zh-Hans){--font-ui:"Nunito","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;--font-display:"Noto Sans SC","PingFang SC",sans-serif}
+html:lang(ja) body,html:lang(zh-Hans) body{line-break:strict;word-break:normal}
+html:lang(ko) body{word-break:keep-all}
+html:lang(th) body,html:lang(hi) body,html:lang(ar) body{line-height:1.6}
+html:lang(ja) h1,html:lang(ja) h2,html:lang(ko) h1,html:lang(ko) h2,html:lang(zh-Hans) h1,html:lang(zh-Hans) h2,html:lang(ar) h1,html:lang(ar) h2,html:lang(he) h1,html:lang(hi) h1,html:lang(th) h1{letter-spacing:0!important;font-style:normal}
+/* dłuższe słowa (fi, hu, de, nl…) – bez rozpychania przycisków i kart */
+html[data-luna-lang] :is(button,.pill,.chip,.tab,nav a,h1,h2,h3,.card,label){overflow-wrap:anywhere;hyphens:auto}
+html[data-luna-lang] :is(.pill,.chip,button){min-width:0;max-width:100%}
+/* RTL: lustrzany układ dla elementów z fizycznymi stronami */
+[dir=rtl] body{text-align:start}
+[dir=rtl] :is(.lead,.card,p,li,h1,h2,h3,label,summary){text-align:start}
+[dir=rtl] :is(ul,ol){padding-inline-start:1.4em;padding-inline-end:0}
+[dir=rtl] .own-line{text-align:right}
+[dir=rtl] :is(.arrow,.chev,.back,[data-flip]){transform:scaleX(-1)}
+[dir=rtl] input,[dir=rtl] textarea{text-align:start}
+[dir=rtl] input[type=email],[dir=rtl] input[type=url],[dir=rtl] input[type=tel]{direction:ltr;text-align:end}
+[dir=rtl] .lswitch.floating{right:auto;left:8px}
+[dir=rtl] .hb-fab{right:auto!important;left:16px!important}
+[dir=rtl] .hb-win{right:auto!important;left:12px!important}
+/* wybór języka */
+.lpick-btn{display:inline-flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lpick{position:fixed;z-index:2147483000;inset-block-start:64px;inset-inline-end:12px;width:min(380px,calc(100vw - 24px));max-height:min(72vh,620px);display:flex;flex-direction:column;
+  background:#141418;color:#eee;border:1px solid rgba(61,220,151,.35);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.55);padding:12px;animation:lpick-in .18s ease-out}
+@keyframes lpick-in{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.lpick{animation:none}}
+.lpick-h{display:flex;justify-content:space-between;align-items:center;margin:0 4px 8px}
+.lpick-x{background:none;border:0;color:#aaa;font-size:24px;line-height:1;cursor:pointer;padding:2px 8px;border-radius:10px}
+.lpick-q{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:14px;border:1px solid #333;background:#0d0d10;color:#fff;font-size:15px;margin-bottom:8px}
+.lpick-list{overflow:auto;flex:1;padding-inline-end:2px}
+.lpick-g{margin:6px 0 10px}
+.lpick-gh{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:#3DDC97;margin:4px 6px}
+.lpick-i{display:flex;align-items:center;gap:10px;width:100%;text-align:start;background:none;border:0;color:#eee;padding:8px 10px;border-radius:12px;cursor:pointer;font-size:15px}
+.lpick-i:hover,.lpick-i:focus-visible{background:rgba(61,220,151,.12);outline:none}
+.lpick-i.on{background:rgba(61,220,151,.2);font-weight:700}
+.lpick-i small{margin-inline-start:auto;color:#999;font-size:12px}
+.lpick-f{font-size:18px;width:24px;text-align:center}
+.lpick-none,.lpick-note{color:#aaa;font-size:12.5px;margin:6px}
+.lpick-note:empty{display:none}
+.legaldraft{border:1px dashed #FF9A3C;border-radius:14px;padding:10px 12px;background:rgba(255,154,60,.08)}

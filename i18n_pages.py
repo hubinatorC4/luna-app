@@ -2,6 +2,7 @@
 Wpis z „<” – zamiana fragmentu HTML; wpis z „~” – zamiana podciągu; pozostałe – cały węzeł tekstowy lub wartość atrybutu.
 Pliki JS z listy JS dostają ?lang=xx i podmianę napisów (strony publiczne i aplikacja /app)."""
 import json, os, re
+import i18n_ext
 D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "i18n")
 PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "/regulamin.html": ["app_fix", "regulamin_bitwy", "regulamin_v143", "regulamin_v140", "regulamin", "common"],
          "/privacy.html": ["privacy_inbox", "privacy_v140", "privacy", "common", "app_fix"], "/o-lunie.html": ["app_fix", "olunie", "common"], "/galeria.html": ["common"], "/bitwy.html": ["common"], "/ranking.html": ["common"],
@@ -24,7 +25,7 @@ def _rules(names, lang):
     key = (tuple(names), lang)
     if key in _c: return _c[key]
     pairs = []
-    for n in names: pairs += _load(n).get(lang, [])
+    for n in names: pairs += _load(n).get(lang) or (i18n_ext.pairs(_load(n).get("en", []), lang) if i18n_ext.is_ext(lang) else [])
     pairs.sort(key=lambda p: -len(p[0]))
     out = []
     for pl, tr in pairs:
@@ -47,11 +48,15 @@ def apply(doc, path, lang):
                 body = r[1].sub(lambda m, t=r[3]: m.group(1) + t + m.group(2), body)
                 body = r[2].sub(lambda m, t=r[3]: m.group(1) + t.replace('"', "&quot;") + '"', body)
         doc = head + body
-    if path in JS_ON:
+    if path in JS_ON and not i18n_ext.is_ext(lang):   # języki pakietu: ?lang=X dla wszystkich skryptów dopisuje i18n_ext.finish
         doc = re.sub(r'(<script src="/?(' + "|".join(re.escape(k) for k in JS) + r')(\?[^"]*)?)"', lambda m: m.group(1) + ("&" if m.group(3) else "?") + "lang=" + lang + '"', doc)
     return doc
 def js(name, src, lang):
     n = JS.get(name)
+    if i18n_ext.is_ext(lang):   # najpierw pl→en (jak dla angielskiego), potem baza „en” dla słowników w JS; X robi i18n-ext.js
+        if n:
+            for pl, tr in sorted([x for k in (n if isinstance(n, list) else [n]) for x in _load(k).get("en", [])], key=lambda p: -len(p[0])): src = src.replace(pl, tr)
+        return i18n_ext.pivot_js(name, src)
     if not n or not lang or lang == "pl": return src
     pairs = [x for k in (n if isinstance(n, list) else [n]) for x in _load(k).get(lang, [])]
     for pl, tr in sorted(pairs, key=lambda p: -len(p[0])): src = src.replace(pl, tr)
@@ -61,12 +66,18 @@ LEGAL_NOTE = {"en": "This translation is provided for convenience. The Polish ve
               "de": "Diese Übersetzung dient der Orientierung. Rechtlich verbindlich ist die polnische Fassung.",
               "uk": "Цей переклад надано для зручності. Юридичну силу має польська версія."}
 def legal_note(doc, path, lang):
+    if i18n_ext.is_ext(lang): return i18n_ext.legal_note(doc, path, lang)
     if path in ("/regulamin.html", "/privacy.html") and lang in LEGAL_NOTE:
         doc = re.sub(r"(</h1>)", r'\1<p class="hint legalnote">🌐 ' + LEGAL_NOTE[lang] + "</p>", doc, count=1)
     return doc
 def library(lib, lang):
     """Biblioteka porad w danym języku (tłumaczenia z i18n/library.json); brak tłumaczenia = oryginał."""
     T = _load("library").get(lang) if lang and lang != "pl" else None
+    if not T and i18n_ext.is_ext(lang):
+        E = _load("library").get("en")
+        if E:
+            tt = lambda v: [i18n_ext.tr(x, lang) for x in v] if isinstance(v, list) else i18n_ext.tr(v, lang)
+            T = {"levels": {k: tt(v) for k, v in E["levels"].items()}, "cats": {k: tt(v) for k, v in E["cats"].items()}, "items": {k: tt(v) for k, v in E["items"].items()}}
     if not T: return lib
     lv = {k: T["levels"].get(v, v) for k, v in lib["levels"].items()}
     cats = [dict(c, name=T["cats"].get(c["name"], (c["name"], c["desc"]))[0], desc=T["cats"].get(c["name"], (c["name"], c["desc"]))[1]) for c in lib["cats"]]

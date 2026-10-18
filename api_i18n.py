@@ -5,10 +5,13 @@ LANGS = ("en", "es", "de", "uk")
 
 def req_lang(query, headers):
     """Język z ?lang= albo z adresu strony, która wywołała API (Referer, ta sama domena)."""
-    lg = parse_qs(query).get("lang", [""])[0][:2]
+    lg = parse_qs(query).get("lang", [""])[0][:5]
     if not lg:
-        try: lg = parse_qs(urlparse(headers.get("Referer", "")).query).get("lang", [""])[0][:2]
+        try: lg = parse_qs(urlparse(headers.get("Referer", "")).query).get("lang", [""])[0][:5]
         except Exception: lg = ""
+    import i18n_ext
+    if i18n_ext.is_ext(lg): return "en"   # pakiet językowy: dane z API po angielsku, tłumaczy i18n-ext.js
+    lg = lg[:2]
     return lg if lg in LANGS else ""
 
 # [pl, en, es, de, uk]

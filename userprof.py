@@ -269,9 +269,11 @@ def due_deletions(now=None):
     return [u for u, r in _P().items() if r.get("delete_at") and r["delete_at"] <= now]
 
 def lang_of(uid):
+    import i18n_ext
     l = (_P().get(uid) or {}).get("lang", "")
-    return l if l in ("pl", "en", "es", "de", "uk") else ""
+    return l if l in ("pl", "en", "es", "de", "uk") or i18n_ext.is_ext(l) else ""
 def set_lang(uid, l):
-    if l not in ("pl", "en", "es", "de", "uk"): raise ValueError("Nieznany język.")
+    import i18n_ext
+    if l not in ("pl", "en", "es", "de", "uk") and not i18n_ext.is_ext(l): raise ValueError("Nieznany język.")
     with _lock:
         P = _P(); r = P.get(uid) or {}; r["lang"] = l; P[uid] = r; store.put("user_profiles", P)

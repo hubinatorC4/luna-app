@@ -25,6 +25,7 @@ import forms18_routes
 import nsfw_filter
 import reports_routes, reports, team, tester_perks
 import moderator
+import i18n_ext
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox, support
 from datetime import datetime, timedelta
 try:
@@ -1384,6 +1385,13 @@ class H(SimpleHTTPRequestHandler):
             if p == "/api/admin/avatars": return self._json({"items": avatars.admin_list()})
             return self._json({"log": security.audit_list()})
         return None
+    def _asset_lang(self, u):
+        """Język dla pliku JS: ?lang= → ?lang= strony (Referer) → ciasteczko luna_lang (tylko gdy strona nie miała ?lang)."""
+        lg = parse_qs(u.query).get("lang", [""])[0]
+        if lg: return lg
+        try: rq = parse_qs(urlparse(self.headers.get("Referer", "")).query).get("lang", [""])[0]
+        except Exception: rq = ""
+        return rq or (self._cookie("luna_lang") or "")
     def do_GET(self):
         u = urlparse(self.path)
         if u.path == "/api/internal/kv-handover":
@@ -1709,7 +1717,7 @@ class H(SimpleHTTPRequestHandler):
             fp = os.path.join(STATIC, u.path.lstrip("/"))
             if os.path.isfile(os.path.realpath(fp)) and os.path.realpath(fp).startswith(os.path.realpath(STATIC)):
                 lang = parse_qs(u.query).get("lang", [""])[0]
-                lang = lang if lang in seo.LANGS else ""
+                lang = lang if lang in seo.LANGS or i18n_ext.is_ext(lang) else ""
                 if not lang:
                     # pierwsze wyświetlenie bez migania: wybór z konta → ciasteczko (ręczny wybór flagi) → Accept-Language → pl
                     try:
@@ -1721,6 +1729,7 @@ class H(SimpleHTTPRequestHandler):
                 doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, lang, notify.PUBLIC_URL.rstrip("/"))
                 doc = forms18_routes.trust_link(doc, u.path)   # link „Bezpieczeństwo i anonimowość” w stopce (tłumaczony niżej)
                 doc = i18n_pages.legal_note(i18n_pages.apply(doc, u.path, lang), u.path, lang)
+                doc = i18n_ext.finish(doc, u.path, lang)   # pakiet językowy: lang/dir, skrypty z bazą „en”, i18n-ext.js, czcionki
                 pid = parse_qs(u.query).get("post", [""])[0]
                 if u.path == "/scianka.html" and re.fullmatch(r"[0-9a-f]{12}|off-\d{1,3}", pid or ""):
                     po = social.get_post(pid)
@@ -1760,8 +1769,19 @@ class H(SimpleHTTPRequestHandler):
                 self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
                 if NOIDX: self.send_header("X-Robots-Tag", "noindex, follow")
                 self.send_header("Content-Language", lang or "pl"); self.send_header("Vary", "Accept-Language, Cookie"); self.end_headers(); self.wfile.write(b); return
+        if u.path.endswith(".js") and u.path.count("/") == 1 and os.path.basename(u.path) not in i18n_pages.JS:
+            lg = self._asset_lang(u)
+            fp = os.path.join(STATIC, u.path.lstrip("/"))
+            if i18n_ext.is_ext(lg) and os.path.isfile(fp) and os.path.basename(u.path) not in i18n_ext.NO_PIVOT:
+                b = i18n_ext.pivot_js(os.path.basename(u.path), open(fp, encoding="utf-8").read()).encode()
+                self.send_response(200); self.send_header("Content-Type", "text/javascript; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
+                self.send_header("Cache-Control", "no-cache"); self.send_header("Vary", "Cookie"); self.end_headers(); self.wfile.write(b); return
         if u.path.endswith(".js") and os.path.basename(u.path) in i18n_pages.JS and u.path.count("/") == 1:
-            lg = parse_qs(u.query).get("lang", [""])[0]
+            lg = self._asset_lang(u)
+            if i18n_ext.is_ext(lg):
+                b = i18n_pages.js(os.path.basename(u.path), open(os.path.join(STATIC, u.path.lstrip("/")), encoding="utf-8").read(), lg).encode()
+                self.send_response(200); self.send_header("Content-Type", "text/javascript; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
+                self.send_header("Cache-Control", "no-cache"); self.send_header("Vary", "Cookie"); self.end_headers(); self.wfile.write(b); return
             if lg in seo.LANGS and lg != "pl":
                 b = i18n_pages.js(os.path.basename(u.path), open(os.path.join(STATIC, u.path.lstrip("/")), encoding="utf-8").read(), lg).encode()
                 self.send_response(200); self.send_header("Content-Type", "text/javascript; charset=utf-8"); self.send_header("Content-Length", str(len(b)))

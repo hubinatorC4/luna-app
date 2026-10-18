@@ -187,7 +187,11 @@ const SHEETS = {
     <div class="st-btns"><a class="st-btn" href="/znajomi.html">☆ ${esc(T('on_star'))}</a></div>`,
   blocked: () => `<h2>${esc(T('r_blocked'))}</h2><div id="bList">${P.settings.blocked.length ? P.settings.blocked.map(b => `<div class="st-post"><p>${esc(b.nick)}</p><button type="button" class="st-btn" data-unb="${esc(b.nick)}">${esc(T('unblk'))}</button></div>`).join('') : `<p class="hint">${esc(T('blk_none'))}</p>`}</div>
     <label for="bNick">${esc(T('blk_ph'))}</label><input type="text" id="bNick" maxlength="24"><div class="st-btns"><button type="button" id="bGo">${esc(T('blk_b'))}</button></div>`,
-  lang: () => `<h2>${esc(T('r_lang'))}</h2>${[['pl', '🇵🇱 Polski'], ['en', '🇬🇧 English'], ['es', '🇪🇸 Español'], ['de', '🇩🇪 Deutsch'], ['uk', '🇺🇦 Українська']].map(([k, n]) => `<label class="st-chk"><input type="radio" name="lg" value="${k}" ${lang() === k ? 'checked' : ''}> <span>${n}</span></label>`).join('')}`,
+  lang: () => { const cur = document.documentElement.getAttribute('data-luna-lang') || lang(); const base = [['pl', '🇵🇱 Polski'], ['en', '🇬🇧 English'], ['es', '🇪🇸 Español'], ['de', '🇩🇪 Deutsch'], ['uk', '🇺🇦 Українська']];
+    const all = window.LunaLangPicker ? window.LunaLangPicker.list() : []; const ext = all.find(x => x[0] === cur && !base.some(b => b[0] === cur));
+    if (ext) base.push([ext[0], ext[1] + ' ' + ext[2]]);   /* pakiet językowy: bieżący język spoza piątki też jako zaznaczona opcja */
+    return `<h2>${esc(T('r_lang'))}</h2>${base.map(([k, n]) => `<label class="st-chk"><input type="radio" name="lg" value="${k}" ${cur === k ? 'checked' : ''}> <span>${n}</span></label>`).join('')}` +
+      (all.length > 5 ? `<p><button type="button" class="pill ghost" data-lpick-open>🌐 ${all.length}+ · ${esc(T('r_lang'))} …</button></p>` : ''); },
   del: () => `<h2>${esc(T('r_del'))}</h2><p>${esc(T('del_1'))}</p><div class="st-btns"><button type="button" class="st-btn danger" id="d1">${esc(T('del_next'))}</button></div>
     <div id="d2" hidden><label for="dNick">${esc(T('del_2'))} <b>${esc(P.profile.nick)}</b></label><input type="text" id="dNick" autocomplete="off"><div class="st-btns"><button type="button" class="st-btn danger" id="dGo">${esc(T('del_go'))}</button></div></div>`,
 };
@@ -322,8 +326,8 @@ const BIND = {
   invite: S => S.querySelectorAll('[name=inv]').forEach(i => i.onchange = async () => { try { await api('/api/friends/prefs', {invites: i.value}, true); FP.invites = i.value; toast(T('saved'), '💚'); } catch(e){ toast(e.message, '⚠️'); } }),
   blocked: S => { S.querySelector('#bGo').onclick = async () => { if (await saveSet({block: S.querySelector('#bNick').value})) sheet('blocked'); };
     S.querySelectorAll('[data-unb]').forEach(b => b.onclick = async () => { if (await saveSet({unblock: b.dataset.unb})) sheet('blocked'); }); },
-  lang: S => S.querySelectorAll('[name=lg]').forEach(i => i.onchange = () => { try { localStorage.setItem('luna.lang', i.value); } catch(e){}
-    document.cookie = 'luna_lang=' + i.value + ';path=/;max-age=31536000;samesite=lax'; api('/api/me/lang', {lang: i.value}).catch(() => {}); const u = new URL(location.href); u.searchParams.set('lang', i.value); location.href = u; }),
+  lang: S => { const ob = S.querySelector('[data-lpick-open]'); if (ob) ob.onclick = () => window.LunaLangPicker && window.LunaLangPicker.open(); S.querySelectorAll('[name=lg]').forEach(i => i.onchange = () => { try { localStorage.setItem('luna.lang', i.value); } catch(e){}
+    document.cookie = 'luna_lang=' + i.value + ';path=/;max-age=31536000;samesite=lax'; api('/api/me/lang', {lang: i.value}).catch(() => {}); const u = new URL(location.href); u.searchParams.set('lang', i.value); location.href = u; }); },
   del: S => { S.querySelector('#d1').onclick = () => { S.querySelector('#d2').hidden = false; S.querySelector('#dNick').focus(); };
     S.querySelector('#dGo').onclick = async () => { try { const r = await api('/api/account/delete-request', {nick: S.querySelector('#dNick').value}, true); P.settings.delete_at = r.delete_at; sheet(''); delBanner(); } catch(e){ toast(e.message, '⚠️'); } }; },
 };

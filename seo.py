@@ -2,7 +2,11 @@
 import html, json, os, re
 LANGS = ("pl", "en", "es", "de", "uk")
 ALIAS = {"ru": "en", "be": "en"}   # rosyjski/białoruski → angielski (decyzja właściciela); pozostałe nieobsługiwane → pl
+import i18n_ext
+ALL_LANGS = i18n_ext.ALL   # bazowe 5 + pakiet językowy (i18n_ext.enabled() decyduje, które są włączone)
 def map_lang(code):
+    x = i18n_ext.norm(code)
+    if x: return x
     c = str(code or "").strip().lower().replace("_", "-").split("-")[0]
     return c if c in LANGS else ALIAS.get(c, "")
 def accept_lang(header):
@@ -92,6 +96,7 @@ except Exception:
 def alternates(base, path):
     p = "/" if path in ("", "/index.html") else path
     links = [f'<link rel="alternate" hreflang="{l}" href="{base}{p}?lang={l}">' for l in LANGS]
+    links += [f'<link rel="alternate" hreflang="{i18n_ext.bcp(l)}" href="{base}{p}?lang={l}">' for l in i18n_ext.enabled()]
     links.append(f'<link rel="alternate" hreflang="x-default" href="{base}{p}">')
     return "\n".join(links)
 
@@ -131,8 +136,11 @@ DESKTOP = '<link rel="stylesheet" href="/desktop.css?v=d2">\n<script src="/deskt
 def localize(doc, path, lang, base):
     p = "/" if path in ("", "/index.html") else path
     meta = PAGES.get(p, {}).get(lang) if lang else None
+    if not meta and i18n_ext.is_ext(lang) and PAGES.get(p, {}).get("en"):
+        meta = tuple(i18n_ext.tr(x, lang) for x in PAGES[p]["en"])
     l = lang or "pl"
-    doc = re.sub(r'<html lang="[a-z]{2}"', f'<html lang="{l}"', doc, count=1)
+    doc = re.sub(r'<html lang="[a-z]{2}"', f'<html lang="{i18n_ext.bcp(l)}"', doc, count=1)
+    OGL.setdefault(l, i18n_ext.OGL.get(l, "en_GB"))
     if meta:
         t, d = (html.escape(x, quote=True) for x in meta)
         doc = re.sub(r"<title>.*?</title>", f"<title>{t}</title>", doc, count=1, flags=re.S)
@@ -162,9 +170,9 @@ def localize(doc, path, lang, base):
 def sitemap(base):
     out = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
     for p in [x for x in PAGES if x not in ("/privacy.html", "/regulamin.html", "/promo.html")]:
-        alts = "".join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{base}{p}?lang={l}"/>' for l in LANGS) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{base}{p}"/>'
+        alts = "".join(f'<xhtml:link rel="alternate" hreflang="{i18n_ext.bcp(l)}" href="{base}{p}?lang={l}"/>' for l in LANGS + i18n_ext.enabled()) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{base}{p}"/>'
         out.append(f"<url><loc>{base}{p}</loc>{alts}</url>")
-        for l in LANGS: out.append(f"<url><loc>{base}{p}?lang={l}</loc>{alts}</url>")
+        for l in LANGS + i18n_ext.enabled(): out.append(f"<url><loc>{base}{p}?lang={l}</loc>{alts}</url>")
     out.append("</urlset>")
     return "\n".join(out)
 
