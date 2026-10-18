@@ -123,3 +123,20 @@ a{transition:color var(--t) var(--ease)}
 .bt-champ::before{content:"🏆";position:absolute;left:-6px;top:-10px;width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:var(--luna-surface);box-shadow:var(--luna-glow-orange);font-size:18px}
 @media (prefers-reduced-motion:reduce){.toast,.pay-banner,#newsDlg,.bt-champ{animation:none!important}}
 .toast[hidden],.pay-banner[hidden]{display:none!important}
+
+/* v1.6.6 – status online (wspólne): zielona kropka na awatarze + etykieta */
+.on-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#3DDC97;box-shadow:0 0 0 2px #121018,0 0 8px #3ddc9799;margin-right:6px;vertical-align:middle}
+.av-on-w{position:relative;display:inline-block;flex:none;line-height:0}
+.av-dot{position:absolute;right:2%;bottom:2%;width:24%;height:24%;min-width:11px;min-height:11px;max-width:26px;max-height:26px;border-radius:50%;background:#3DDC97;box-shadow:0 0 0 3px #121018,0 0 10px #3ddc9799}
+.ph-pr{margin:4px 0;color:#b9b6c6;font-weight:600}.ph-pr.on{color:#7fe8b9}
+
+/* v1.6.6 – szybkie, „miękkie” zachowanie: przejścia stron (View Transitions, fallback = zwykła nawigacja), natychmiastowa reakcja na dotyk, szkielety */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.18s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+.pill,.btn,.st-row,.act,.ib-btn,.wl-f button,.dy-cta{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.pill:active,.btn:active,.st-row:active,.act:active,.ib-btn:active,.wl-f button:active{transform:scale(.97)}
+.skel{display:block;border-radius:12px;background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.11) 50%,rgba(255,255,255,.05) 75%);background-size:300% 100%;animation:luna-skel 1.3s ease-in-out infinite}
+.skel-card{padding:14px;margin:0 0 14px;border-radius:var(--luna-r-card,22px)}.skel-row{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.skel-av{width:44px;height:44px;border-radius:50%;flex:none}.skel-l{height:12px;margin:8px 0;width:100%}.skel-media{aspect-ratio:1/1;width:100%;border-radius:18px;margin-bottom:10px}
+@keyframes luna-skel{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}

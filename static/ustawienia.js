@@ -6,7 +6,7 @@ const esc = x => String(x ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '
 const D = JSON.parse(document.getElementById('i18n').textContent);
 const lang = () => (document.documentElement.lang || 'pl').slice(0, 2);
 const T = k => (Object.assign({}, D.pl, D[lang()] || {}))[k] || k;
-const F = (k, o) => T(k).replace(/\{(\w)\}/g, (_, x) => o[x] ?? '');
+const F = (k, o) => T(k).replace(/\{(\w+)\}/g, (_, x) => o[x] ?? '');
 const INBOX = '/skrzynka.html', FRIENDS = '/znajomi.html', PRIV = '/znajomi.html#prywatnosc';  // trasy Skrzynki/Znajomych (inbox.py / inbox.js)
 let ME = null, CSRF = '', P = null, open = '', FP = {};
 const api = async (u, body, csrf) => {
@@ -32,8 +32,8 @@ const ROWS = [
   ['g_cont', [['wall', '🧱', 'r_wall'], ['photos', '🖼️', 'r_photos'], ['add', '📷', 'r_add', 'h_add'], ['agents', '✨', 'r_agents', '', 'link:/agentka.html?id=me'], ['gen', '🎬', 'r_gen', 'h_gen']]],
   ['g_soc', [['friends', '🤝', 'r_friends', '', 'link:' + FRIENDS], ['inbox', '✉️', 'r_inbox', '', 'link:' + INBOX], ['battles', '⚔️', 'r_battles', 'h_battles', 'link:/bitwy.html']]],
   ['g_not', [['n_battles', '🏆', 'n_battles', '', 'ntoggle'], ['n_friends', '🤝', 'n_friends', '', 'ntoggle'], ['n_messages', '💬', 'n_messages', '', 'ntoggle'], ['n_updates', '🆕', 'n_updates', '', 'ntoggle']]],
-  ['g_priv', [['hide', '🙈', 'r_hide', '', 'toggle'], ['invite', '📨', 'r_invite'], ['blocked', '⛔', 'r_blocked', '', 'link:' + PRIV], ['export', '⬇️', 'r_export', '', 'link:/api/account/export']]],
-  ['g_more', [['lang', '🌍', 'r_lang'], ['help', '🛟', 'r_help', '', 'link:/problemy.html'], ['modmsg', '💬', 'r_mod', 'h_mod', 'link:/ustawienia.html?pomoc=formularz'], ['terms', '📜', 'r_terms', '', 'link:/regulamin.html'], ['logout', '🚪', 'r_logout']]],
+  ['g_priv', [['hide', '🙈', 'r_hide', '', 'toggle'], ['invite', '📨', 'r_invite'], ['online', '🟢', 'r_online'], ['blocked', '⛔', 'r_blocked', '', 'link:' + PRIV], ['export', '⬇️', 'r_export', '', 'link:/api/account/export']]],
+  ['g_more', [['bubbles', '💭', 'r_bubbles', 'h_bubbles', 'toggle'], ['lang', '🌍', 'r_lang'], ['help', '🛟', 'r_help', '', 'link:/problemy.html'], ['modmsg', '💬', 'r_mod', 'h_mod', 'link:/ustawienia.html?pomoc=formularz'], ['terms', '📜', 'r_terms', '', 'link:/regulamin.html'], ['logout', '🚪', 'r_logout']]],
   ['', [['del', '🗑️', 'r_del', '', 'danger']]],
 ];
 function rowHTML([id, ic, k, h, kind]){
@@ -42,10 +42,12 @@ function rowHTML([id, ic, k, h, kind]){
   let on = false, sub = h ? T(h) : '';
   if (id === 'pub') on = !!P.profile.public;
   if (id === 'hide') on = !!P.profile.hide_rank;
+  if (id === 'bubbles') on = P.settings.bubbles !== false;
   if (kind === 'ntoggle') on = id === 'n_battles' && FP.battles !== undefined ? FP.battles : !!(P.settings.notif || {})[id.slice(2)];
   if (id === 'gen' && !(P.caps.gen > 0)) sub = `<span class="st-lockb">${esc(T('gen_lock'))}</span>`;
   if (id === 'plan') sub = esc(F('plan_now', {p: P.plan_name}));
   if (id === 'invite') sub = esc(T(FP.invites === 'none' ? 'inv_no' : 'inv_all'));
+  if (id === 'online') sub = esc(T('on_' + (FP.online || 'close')));
   const inner = `<span class="st-ic" aria-hidden="true">${ic}</span><span class="st-tx"><b>${esc(T(k))}</b>${sub ? `<small>${sub.startsWith('<span') ? sub : esc(sub)}</small>` : ''}</span>` +
     (id === 'inbox' ? '<span class="st-badge" id="stUnread" hidden></span>' : '') + (tog ? '<span class="sw" aria-hidden="true"></span>' : '<span class="st-chev" aria-hidden="true">›</span>');
   const cls = 'st-row' + (kind === 'danger' ? ' danger' : '');
@@ -57,7 +59,7 @@ function rowHTML([id, ic, k, h, kind]){
 function draw(){
   const pr = P.profile, c = P.completion || {pct: 0};
   const tier = P.tier ? ` nk-${P.tier}` : '';
-  $('#stApp').innerHTML = `
+  $('#stApp').removeAttribute('aria-busy'); $('#stApp').innerHTML = `
   <section class="st-head" id="stHead">
     <img class="st-av" src="${esc(avatarURL())}" alt="" width="72" height="72">
     <div class="st-who"><div class="st-nick nk${tier}">${esc(pr.nick || '—')}</div>
@@ -100,6 +102,8 @@ async function onRow(r, e){
   if (kind === 'toggle' || kind === 'ntoggle'){
     const on = r.getAttribute('aria-checked') !== 'true';
     if (id === 'n_battles'){ try { await api('/api/friends/prefs', {battles: on, lang: lang()}, true); } catch(e){} }  // wyniki bitew: ta sama preferencja co w Znajomych/Skrzynce
+    if (id === 'bubbles'){ try { localStorage.setItem('luna.dymki', on ? '1' : '0'); } catch(e){}  // Dymki Luny: localStorage + konto
+      if (await saveSet({bubbles: on})) r.setAttribute('aria-checked', on); return; }
     const ok = kind === 'ntoggle' ? await saveSet({notif: {[id.slice(2)]: on}}) : await save(id === 'pub' ? {public: on} : {hide_rank: on});
     if (ok) r.setAttribute('aria-checked', on); return;
   }
@@ -150,22 +154,10 @@ const SHEETS = {
     <label for="aText">${esc(T('add_text'))}</label><textarea id="aText" maxlength="500"></textarea>
     <p class="hint">${esc(T('add_decl'))}</p>${chk('own', 'd_own')}${chk('no_nudity', 'd_nud')}${chk('no_minors', 'd_min')}${chk('consent', 'd_con')}${chk('no_brands', 'd_brand')}
     <div class="st-btns"><button type="button" class="primary" id="aGo">${esc(T('add_go'))}</button></div>`,
-  gen: () => {
-    if (!(P.caps.gen > 0)) return `<h2>${esc(T('r_gen'))}</h2><p class="st-lockb">${esc(T('gen_lock'))}</p><div class="st-btns"><a class="st-btn primary" href="/app#plany">${esc(T('plans_b'))}</a></div>`;
-    if (!P.agent) return `<h2>${esc(T('r_gen'))}</h2><p>${esc(T('no_agent'))}</p><div class="st-btns"><a class="st-btn primary" href="/agentka.html?id=me">${esc(T('r_agents'))}</a></div>`;
-    const g = P.gen;
-    return `<h2>${esc(T('r_gen'))}</h2><p class="hint">${esc(T('gen_only'))}</p>${P.partner ? `<p class="hint">${esc(T('partner'))}</p>` : ''}
-    <h3>${esc(T('gen_img'))} · ${g.px >= 1920 ? 1920 : g.px} px</h3>
-    <label for="gBase">${esc(T('gen_base'))}</label><select id="gBase">${g.bases.map(b => `<option value="${b.id}" ${b.ok ? '' : 'disabled'}>${esc(b.id.replace(/_/g, ' '))}${b.ok ? '' : ' 🔒'}</option>`).join('')}</select>
-    <label for="gCrop">${esc(T('gen_crop'))}</label><select id="gCrop">${['portret', 'kwadrat', 'szeroki'].map(k => `<option value="${k}">${esc(T('crop_' + k))}</option>`).join('')}</select>
-    <p class="hint" id="gUsed">${esc(F('gen_used', {u: g.used, l: g.limit}))}</p>
-    <div class="st-btns"><button type="button" class="primary" id="gGo">${esc(T('gen_go'))}</button></div><div id="gOut"></div>
-    <h3>${esc(T('gen_vid'))}</h3>
-    <label for="vSecs" id="vSecsL"></label><input type="range" id="vSecs" min="6" step="1" style="width:100%">
-    <label for="vScene">${esc(T('gen_scene'))}</label><select id="vScene"></select>
-    <label for="vCustom">${esc(T('gen_custom'))}</label><input type="text" id="vCustom" maxlength="120">
-    <div class="st-btns"><button type="button" class="primary" id="vGo">${esc(T('gen_vgo'))}</button></div><div id="vJobs"></div>`; },
+  gen: () => `<h2>${esc(T('r_gen'))}</h2><div id="gWrap"><div class="skel skel-l" style="height:120px;border-radius:20px"></div></div>`,
   invite: () => `<h2>${esc(T('r_invite'))}</h2>${['all', 'none'].map(v => `<label class="st-chk"><input type="radio" name="inv" value="${v}" ${(FP.invites || 'all') === v ? 'checked' : ''}> <span>${esc(T(v === 'all' ? 'inv_all' : 'inv_no'))}</span></label>`).join('')}`,
+  online: () => `<h2>${esc(T('r_online'))}</h2>${['all', 'close', 'nobody'].map(v => `<label class="st-chk"><input type="radio" name="onl" value="${v}" ${(FP.online || 'close') === v ? 'checked' : ''}> <span>${esc(T('on_' + v))}</span></label>`).join('')}<p class="hint">${esc(T('on_hint'))}</p>
+    <div class="st-btns"><a class="st-btn" href="/znajomi.html">☆ ${esc(T('on_star'))}</a></div>`,
   blocked: () => `<h2>${esc(T('r_blocked'))}</h2><div id="bList">${P.settings.blocked.length ? P.settings.blocked.map(b => `<div class="st-post"><p>${esc(b.nick)}</p><button type="button" class="st-btn" data-unb="${esc(b.nick)}">${esc(T('unblk'))}</button></div>`).join('') : `<p class="hint">${esc(T('blk_none'))}</p>`}</div>
     <label for="bNick">${esc(T('blk_ph'))}</label><input type="text" id="bNick" maxlength="24"><div class="st-btns"><button type="button" id="bGo">${esc(T('blk_b'))}</button></div>`,
   lang: () => `<h2>${esc(T('r_lang'))}</h2>${[['pl', '🇵🇱 Polski'], ['en', '🇬🇧 English'], ['es', '🇪🇸 Español'], ['de', '🇩🇪 Deutsch'], ['uk', '🇺🇦 Українська']].map(([k, n]) => `<label class="st-chk"><input type="radio" name="lg" value="${k}" ${lang() === k ? 'checked' : ''}> <span>${n}</span></label>`).join('')}`,
@@ -201,29 +193,64 @@ const BIND = {
     try { await api('/api/wall/post', {text: S.querySelector('#aText').value || '📷', image: await readFile(f), img_kind: 'user', user_decl: decl, lang: lang()});
       toast(T('add_ok'), '🕊️'); sheet('photos'); } catch(e){ toast(e.message, '⚠️'); } }; },
   gen: async S => {
-    if (!S.querySelector('#gGo')) return;
-    S.querySelector('#gGo').onclick = async () => { try {
-      const r = await api('/api/agent/generate', {base: S.querySelector('#gBase').value, crop: S.querySelector('#gCrop').value});
-      P.agent.own = r.h; P.gen.used = r.used; S.querySelector('#gUsed').textContent = F('gen_used', {u: r.used, l: r.limit});
-      S.querySelector('#gOut').innerHTML = `<figure style="margin:10px 0;position:relative"><img src="${esc(r.url)}" alt="" style="width:100%;border-radius:20px"><span class="ai-badge" style="position:absolute;top:10px;right:10px">AI</span><figcaption class="hint">${r.px} px</figcaption></figure>`;
-      toast(T('saved'), '✨'); } catch(e){ toast(e.message, '🔒'); } };
-    const [sc, vl] = await Promise.all([api('/api/sceneries?lang=' + lang()), api('/api/agent/videos')]);
-    const L = vl.limits || {max_s: 30}, rng = S.querySelector('#vSecs'); rng.max = L.max_s; rng.value = Math.min(15, L.max_s);
-    const lab = () => { S.querySelector('#vSecsL').textContent = F('gen_secs', {s: rng.value, m: L.max_s}); }; rng.oninput = lab; lab();
-    S.querySelector('#vScene').innerHTML = sc.items.map(x => `<option value="${x.id}" ${x.ok ? '' : 'disabled'}>${esc(x.title)}${x.ok ? '' : ' 🔒 Pro / Ultra'}</option>`).join('');
-    const cu = S.querySelector('#vCustom'); if (!sc.custom){ cu.disabled = true; cu.placeholder = '🔒 Pro / Ultra'; }
-    const jobs = items => { S.querySelector('#vJobs').innerHTML = items.map(j => `<div class="st-job">${j.status === 'ready' ? `<video src="${esc(j.url)}" poster="${esc(j.poster)}" controls playsinline preload="none"></video>` : '<span aria-hidden="true">🎬</span>'}
-      <span>${esc(j.status === 'running' ? F('job_running', {p: j.progress}) : T('job_' + j.status))} · ${j.secs} s · ${esc(j.q)}p <span class="ai-badge">AI</span></span></div>`).join(''); };
-    jobs(vl.items || []);
-    let poll = null; const watch = () => { clearInterval(poll); poll = setInterval(async () => { if (open !== 'gen') return clearInterval(poll);
-      const r = await api('/api/agent/videos'); jobs(r.items); const busy = r.items.find(j => j.status === 'queued' || j.status === 'running');
-      if (!busy){ clearInterval(poll); if (r.items[0] && r.items[0].status === 'ready') toast(T('job_ready'), '🎬'); } }, 2500); };
-    if ((vl.items || []).some(j => j.status === 'queued' || j.status === 'running')) watch();
-    S.querySelector('#vGo').onclick = async () => { try {
-      const d = {seconds: +rng.value, scene: S.querySelector('#vScene').value}; if (cu.value.trim()) d.custom = cu.value.trim();
-      const r = await api('/api/agent/video', d); toast(T(r.status === 'review' ? 'job_review' : 'job_queued'), '🎬'); jobs((await api('/api/agent/videos')).items); watch();
-    } catch(e){ toast(e.message, '🔒'); } };
+    // Generator z opisu (t429u/t430u): proste wybory → „Stwórz moją agentkę AI” → warianty → wybór → sprawdzenie → profil gotowy. Bez wgrywania zdjęć i bez edytora.
+    const W = S.querySelector('#gWrap'); let G, sel = {spec: ['diction']}, pickSet = new Set(), poll = null;
+    const steps = n => `<ol class="g-steps" aria-label="${esc(T('r_gen'))}">${T('g_steps').map((x, i) => `<li class="${i + 1 < n ? 'done' : i + 1 === n ? 'cur' : ''}"${i + 1 === n ? ' aria-current="step"' : ''}><span>${i + 1 < n ? '✓' : i + 1}</span>${esc(x)}</li>`).join('')}</ol>`;
+    const chips = (k, multi) => `<fieldset class="g-f"><legend>${esc(T('g_' + k))}</legend><div class="g-chips">${G.options[k].map(o => { const on = multi ? (sel[k] || []).includes(o.id) : sel[k] === o.id;
+      return `<button type="button" class="g-chip${on ? ' on' : ''}" aria-pressed="${on}" data-k="${k}" data-v="${o.id}"${multi ? ' data-m="1"' : ''}>${esc(o.label)}</button>`; }).join('')}</div></fieldset>`;
+    const capsTxt = () => F('g_caps', {px: G.caps.px, s: G.caps.video_s, p: G.caps.video_p, u: G.caps.used, l: G.caps.per_day});
+    const vidBox = () => { const im = G.state && G.state.img, v = G.state && G.state.vid;
+      if (!im || im.status !== 'done') return `<h3>🎬 ${esc(T('g_vid_h'))}</h3><p class="hint">${esc(T('g_vid_need'))}</p>`;
+      let body = `<p class="hint">${esc(F('g_vid_cap', {n: 3, s: G.caps.video_s, p: G.caps.video_p}))}</p>`;
+      if (v && v.status === 'waiting' && !v.engine) body += `<p class="g-note">${esc(T('g_vid_wait'))}</p>`;
+      else if (v && v.status === 'variants') body += `<div class="g-grid">${v.variants.map(x => `<button type="button" class="g-var" data-vv="${x.id}"><video src="${esc(x.url)}" muted playsinline preload="metadata"></video><span class="ai-badge">AI</span></button>`).join('')}</div>`;
+      const busy = v && ['waiting', 'generating', 'checking'].includes(v.status);
+      return `<h3>🎬 ${esc(T('g_vid_h'))}</h3>${body}<div class="st-btns"><button type="button" class="primary g-big" id="gVid"${busy ? ' disabled' : ''}>🎬 ${esc(T('g_vid_go'))}</button></div>`; };
+    const draw = () => {
+      if (G.locked) { W.innerHTML = `<div class="g-teaser">${steps(1)}<p class="st-lockb">${esc(T('gen_lock'))}</p><p class="hint">${esc(T('g_safe'))}</p><div class="st-btns"><a class="st-btn primary" href="/app#plany">${esc(T('plans_b'))}</a></div></div>`; return; }
+      const im = G.state && G.state.img, st = im ? im.status : 'new';
+      let h = `${G.partner ? `<p class="hint">${esc(T('partner'))}</p>` : ''}`;
+      if (!im || st === 'rejected' || st === 'failed' || st === 'new' || st === 'draft'){
+        h += steps(1) + (st === 'rejected' ? `<p class="g-note">${esc(T('g_rej'))}</p>` : '') +
+          chips('hair') + chips('eyes') + chips('style') + chips('outfit') + chips('personality') + chips('voice') + chips('spec', true) +
+          `<label for="gName">${esc(T('g_name'))}</label><input type="text" id="gName" maxlength="24" autocomplete="off">
+           <label for="gDesc">${esc(T('g_desc'))}</label><textarea id="gDesc" maxlength="200" rows="2" placeholder="${esc(T('g_desc_ph'))}"></textarea>
+           <p class="hint">🛡️ ${esc(T('g_safe'))}</p><p class="hint">${esc(capsTxt())}</p>
+           <div class="st-btns"><button type="button" class="primary g-big" id="gGo">✨ ${esc(T('g_go'))}</button></div>`;
+      } else if (st === 'waiting' || st === 'generating'){
+        h += steps(2) + `<div class="g-wait"><span class="g-orb" aria-hidden="true"></span><p>${esc(st === 'waiting' && !im.engine ? T('g_wait') : T('g_working'))}</p></div><p class="hint">${esc(T('g_purge'))}</p>`;
+      } else if (st === 'variants'){
+        h += steps(3) + `<p class="hint">${esc(T('g_pick'))}</p><div class="g-grid">${im.variants.map(x => `<button type="button" class="g-var${pickSet.has(x.id) ? ' on' : ''}" aria-pressed="${pickSet.has(x.id)}" data-pv="${x.id}"><img src="${esc(x.url)}" alt="" loading="lazy"><span class="ai-badge">AI</span><i class="g-tick" aria-hidden="true">✓</i></button>`).join('')}</div>
+          <div class="st-btns"><button type="button" class="primary g-big" id="gPick"${pickSet.size ? '' : ' disabled'}>${esc(T('g_pick_go'))}</button></div><p class="hint">${esc(T('g_purge'))}</p>`;
+      } else if (st === 'checking'){
+        h += steps(4) + `<div class="g-wait"><span class="g-orb" aria-hidden="true"></span><p>${esc(T('g_check'))}</p></div>`;
+      } else if (st === 'done'){
+        h += steps(5) + `<p class="g-ok">${esc(T('g_done'))}</p><div class="st-btns"><a class="st-btn primary" href="/agentka.html?id=me">${esc(T('g_view'))}</a><button type="button" class="st-btn" id="gNew">${esc(T('g_new'))}</button></div>`;
+      }
+      W.innerHTML = h + (G.state ? vidBox() : '');
+      W.querySelectorAll('.g-chip').forEach(b => b.onclick = () => { const k = b.dataset.k, v = b.dataset.v;
+        if (b.dataset.m){ const a = sel[k] || []; sel[k] = a.includes(v) ? a.filter(x => x !== v) : (a.length >= 3 ? a : a.concat(v)); } else sel[k] = sel[k] === v ? '' : v;
+        const nm = W.querySelector('#gName')?.value, ds = W.querySelector('#gDesc')?.value; draw(); if (nm) W.querySelector('#gName').value = nm; if (ds) W.querySelector('#gDesc').value = ds; W.querySelector(`[data-k="${k}"][data-v="${v}"]`)?.focus(); });
+      const go = W.querySelector('#gGo'); if (go) go.onclick = async () => { go.disabled = true; go.classList.add('busy');
+        try { const r = await api('/api/agent/gen', Object.assign({}, sel, {name: W.querySelector('#gName').value, desc: W.querySelector('#gDesc').value}), true);
+          G.state = G.state || {}; G.state.img = r.job; draw(); watch(); toast(r.job.engine ? T('g_working') : '⏳', '✨'); } catch(e){ toast(e.message, '⚠️'); go.disabled = false; go.classList.remove('busy'); } };
+      W.querySelectorAll('[data-pv]').forEach(b => b.onclick = () => { const v = b.dataset.pv; if (pickSet.has(v)) pickSet.delete(v); else if (pickSet.size < 4) pickSet.add(v); draw(); });
+      const pk = W.querySelector('#gPick'); if (pk) pk.onclick = async () => { pk.disabled = true;
+        try { const r = await api('/api/agent/gen/pick', {job: G.state.img.id, ids: [...pickSet]}, true); G.state.img = r.job; pickSet.clear(); draw(); watch(); } catch(e){ toast(e.message, '⚠️'); pk.disabled = false; } };
+      const nw = W.querySelector('#gNew'); if (nw) nw.onclick = () => { G.state.img = null; draw(); };
+      const gv = W.querySelector('#gVid'); if (gv) gv.onclick = async () => { gv.disabled = true;
+        try { const r = await api('/api/agent/gen/video', {}, true); G.state.vid = r.job; draw(); watch(); } catch(e){ toast(e.message, '⚠️'); gv.disabled = false; } };
+    };
+    const watch = () => { clearInterval(poll); poll = setInterval(async () => { if (open !== 'gen') return clearInterval(poll);
+      const busy = s => s && ['generating', 'checking'].includes(s.status) || (s && s.status === 'waiting' && s.engine);
+      if (!busy(G.state.img) && !busy(G.state.vid)) return clearInterval(poll);
+      try { const g = await api('/api/agent/gen?lang=' + lang()); const was = G.state.img && G.state.img.status; G = g; draw();
+        if (was !== (g.state.img || {}).status && (g.state.img || {}).status === 'variants') toast(T('g_pick'), '🎨'); } catch(e){} }, 4000); };
+    try { G = await api('/api/agent/gen?lang=' + lang()); } catch(e){ W.innerHTML = `<p class="hint">${esc(e.message)}</p>`; return; }
+    const d = G.state && G.state.img && G.state.img.draft; if (d) sel = Object.assign({spec: ['diction']}, d);
+    draw(); watch();
   },
+  online: S => S.querySelectorAll('[name=onl]').forEach(i => i.onchange = async () => { try { await api('/api/friends/prefs', {online: i.value}, true); FP.online = i.value; toast(T('saved'), '💚'); } catch(e){ toast(e.message, '⚠️'); } }),
   invite: S => S.querySelectorAll('[name=inv]').forEach(i => i.onchange = async () => { try { await api('/api/friends/prefs', {invites: i.value}, true); FP.invites = i.value; toast(T('saved'), '💚'); } catch(e){ toast(e.message, '⚠️'); } }),
   blocked: S => { S.querySelector('#bGo').onclick = async () => { if (await saveSet({block: S.querySelector('#bNick').value})) sheet('blocked'); };
     S.querySelectorAll('[data-unb]').forEach(b => b.onclick = async () => { if (await saveSet({unblock: b.dataset.unb})) sheet('blocked'); }); },
@@ -251,8 +278,9 @@ async function reload(){ P = await api('/api/me/profile'); if (!P.login) draw();
 (async () => {
   try { const a = await api('/api/account/me'); ME = a.user; CSRF = a.csrf || ''; } catch(e){}
   try { P = await api('/api/me/profile'); } catch(e){ P = {login: true}; }
+  try { if (P.settings && P.settings.bubbles !== undefined) localStorage.setItem('luna.dymki', P.settings.bubbles === false ? '0' : '1'); } catch(e){}
   if (P.login || !ME){ $('#stApp').innerHTML = `<div class="st-sheet"><p>${esc(T('login'))}</p><div class="st-btns"><a class="st-btn primary" href="/app#konto">${esc(T('login_b'))}</a></div></div>`; return; }
-  try { const f = await api('/api/friends/settings'); FP = {invites: f.keys.invites.value, battles: !!f.keys.battles.value}; } catch(e){}
+  try { const f = await api('/api/friends/settings'); FP = {invites: f.keys.invites.value, battles: !!f.keys.battles.value, online: (f.keys.online || {}).value || 'close'}; } catch(e){}
   draw();
   window.addEventListener('luna-lang', () => { if (P && !P.login) draw(); });
 })();

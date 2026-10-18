@@ -16,6 +16,7 @@ def _ffmpeg():
         return "ffmpeg"
 FFMPEG = _ffmpeg()
 import knowledge
+import presence, agentgen
 import api_i18n
 import textutil
 import catalog, base64, training, profiles, nicktier, partners, agentwall, quality, userprof, agentvideo, battle_categories
@@ -30,7 +31,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.6.5"
+VERSION = "1.6.6"
 STATIC_CACHE = re.compile(r"\.(webp|avif|jpe?g|png|ico|svg|woff2)$")
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -663,7 +664,7 @@ def _purge_deleted():
         profiles.delete_owner(uid); agentvideo.delete_owner(uid); social.purge_author("u:" + uid); antibot.forget("u:" + uid)
         try: battles.set_privacy(uid, False)
         except Exception: pass
-        userprof.delete(uid)
+        userprof.delete(uid); presence.delete(uid); agentgen.delete_owner(uid)
 
 def _bg_loop():
     n = 0
@@ -677,6 +678,11 @@ def _bg_loop():
         if n % 3600 == 30:
             try: _purge_deleted()
             except Exception as e: print("purge error", repr(e)[:200], file=sys.stderr)
+            try: agentgen.purge()   # zadania Generatora starsze niż 30 dni (z wariantami) są usuwane
+            except Exception as e: print("agentgen purge", repr(e)[:200], file=sys.stderr)
+        if n % 60 == 5:
+            try: agentgen.tick()
+            except Exception as e: print("agentgen tick", repr(e)[:200], file=sys.stderr)
         if n % 60 == 0:
             try: run_reminders()
             except Exception as e: print("reminder error", repr(e)[:200], file=sys.stderr)
@@ -759,7 +765,11 @@ class H(SimpleHTTPRequestHandler):
     def _set_sid(self, sid, max_age):
         self._cookies = getattr(self, "_cookies", []) + [f"luna_sid={sid}; Path=/; Max-Age={max_age}; HttpOnly; Secure; SameSite=Lax"]
     def _acct(self):
-        return accounts.session(self._cookie("luna_sid"))
+        a = accounts.session(self._cookie("luna_sid"))
+        if a:
+            try: presence.touch(a[0]["uid"])  # heartbeat: last_seen najwyżej raz na 60 s
+            except Exception: pass
+        return a
     def _dataurl(self, url):
         m = re.fullmatch(r"data:image/(png|jpeg);base64,(.+)", str(url or ""), re.S)
         if not m: return self._json({"error": "not found"}, 404)
@@ -905,7 +915,7 @@ class H(SimpleHTTPRequestHandler):
                 if usr.get("pw") and data.get("password") and not accounts.check_pw(usr["pw"], str(data.get("password"))): return self._json({"error": "Nieprawidłowe hasło."}, 400)
                 try: inbox.delete_user(usr["uid"])
                 except Exception as e: sys.stderr.write("inbox delete %s\n" % type(e).__name__)
-                try: accounts.delete(usr["uid"], data.get("password") or None); profiles.delete_owner(usr["uid"]); userprof.delete(usr["uid"])
+                try: accounts.delete(usr["uid"], data.get("password") or None); profiles.delete_owner(usr["uid"]); userprof.delete(usr["uid"]); presence.delete(usr["uid"]); agentgen.delete_owner(usr["uid"])
                 except ValueError as e: return self._json({"error": str(e)}, 400)
                 social.anonymise_author("u:" + usr["uid"]); antibot.forget("u:" + usr["uid"])
                 self._set_sid("", 0); return self._json({"ok": True})
@@ -1393,6 +1403,31 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/admin/videos":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"items": agentvideo.admin_list()})
+        if u.path == "/api/admin/agentgen":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            return self._json({"items": agentgen.admin_list()})
+        if u.path == "/api/agent/gen":
+            # Generator z opisu: stan zadania (Opis → Warianty → Wybór → Sprawdzenie → Profil gotowy), opcje i limity planu
+            pl, uid = self._plan(); gp = self._gen_plan(pl, uid); c = quality.caps(gp); lg = api_i18n.req_lang(u.query, self.headers) or "pl"
+            L = agentvideo.limits(gp)
+            return self._json({"login": not uid, "plan": pl, "gen_plan": gp, "partner": gp != pl, "locked": not plans.has(gp, "premium"),
+                               "lock": quality.lock("premium", "gen") if not plans.has(gp, "premium") else None,
+                               "caps": {"px": c["gen_px"], "per_day": c["gen"], "used": quality.gen_used(uid) if uid else 0, "video_s": (L or {}).get("max_s", 0), "video_p": (L or {}).get("label", "")},
+                               "options": agentgen.options(lg), "state": agentgen.state(uid) if uid else None})
+        m = re.fullmatch(r"/api/agent/gen/vid/([0-9a-f]{12})\.mp4", u.path)
+        if m:
+            _pl, vu = self._plan(); fp = agentgen.vid_path(m.group(1), vu)
+            if not fp: return self._json({"error": "not found"}, 404)
+            b = open(fp, "rb").read()
+            self.send_response(200); self.send_header("Content-Type", "video/mp4"); self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "private, max-age=3600"); self.end_headers(); self.wfile.write(b); return
+        m = re.fullmatch(r"/api/agent/gen/img/([0-9a-f]{12})\.jpg", u.path)
+        if m:
+            _pl, vu = self._plan(); i = agentgen.img_for(m.group(1), vu)
+            if not i: return self._json({"error": "not found"}, 404)
+            b = base64.b64decode(i["b"])
+            self.send_response(200); self.send_header("Content-Type", "image/png" if i.get("ext") == "png" else "image/jpeg"); self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "private, max-age=3600"); self.end_headers(); self.wfile.write(b); return
         m = re.fullmatch(r"/api/agent/video/([0-9a-f]{12})\.(mp4|jpg)", u.path)
         if m:
             pl, uid = self._plan(); fp, err = agentvideo.file_for(m.group(1), m.group(2), uid, pl)
@@ -1695,6 +1730,28 @@ class H(SimpleHTTPRequestHandler):
                 return self._json({"ok": True, **r})
             except PermissionError as e: return self._json({"error": str(e)}, 429)
             except ValueError as e: return self._json({"error": str(e)}, 400)
+        if u.path in ("/api/admin/agentgen", "/api/admin/agent/real"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try:
+                if u.path.endswith("/real"):  # tylko przy potwierdzonej współpracy (umowa + zgoda) – flaga real_person na agentce
+                    return self._json(profiles.admin_real_photo(str(data.get("pid", "")), data.get("data"), data.get("agreement")))
+                agentgen.moderate(str(data.get("job", "")), [str(x) for x in (data.get("approve") or [])], lambda ou: self._gen_plan(self._owner_plan(ou), ou))
+                return self._json({"ok": True, "items": agentgen.admin_list()})
+            except PermissionError as e: return self._json({"error": str(e)}, 403)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+        if u.path in ("/api/agent/gen", "/api/agent/gen/pick", "/api/agent/gen/video"):
+            pl, uid = self._plan()
+            if not uid: return self._json({"error": "Zaloguj się.", "login": True}, 401)
+            if not livechat.rate_ok("agen:" + uid, 20, 600): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
+            gp = self._gen_plan(pl, uid)
+            try:
+                if u.path.endswith("/pick"): return self._json({"ok": True, "job": agentgen.pick(uid, str(data.get("job", "")), [str(x) for x in (data.get("ids") or [])][:8])})
+                r, err = (agentgen.submit_video(uid, gp, None) if u.path.endswith("/video") else agentgen.submit(uid, gp, data))
+                if err: return self._json(err, 402)
+                try: _mod_push("Generator agentek: nowe zadanie", r["kind"])
+                except Exception: pass
+                return self._json({"ok": True, "job": r})
+            except ValueError as e: return self._json({"error": str(e)}, 400)
         if u.path == "/api/admin/videos":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             try: agentvideo.admin_action(str(data.get("id", "")), data.get("action"))
@@ -1711,7 +1768,8 @@ class H(SimpleHTTPRequestHandler):
             if not uid: return self._json({"error": "Zaloguj się.", "login": True}, 401)
             if not livechat.rate_ok("me:" + uid, 30, 600): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
             try:
-                if u.path == "/api/agent/generate":
+                if u.path == "/api/agent/generate":  # v1.6.6: zastąpione Generatorem z opisu (bez gotowych zdjęć Luny jako „generacji”)
+                    return self._json({"error": "Generator działa teraz z opisu: Mój panel → Generator agentek.", "moved": "/ustawienia.html#gen"}, 410)
                     r, err = profiles.generate(uid, self._gen_plan(pl, uid), str(data.get("base", "")), str(data.get("crop", "portret")))
                     if err: return self._json(err, 402)
                     return self._json({"ok": True, **r})
@@ -1734,7 +1792,8 @@ class H(SimpleHTTPRequestHandler):
             if not uid: return self._json({"error": "Zaloguj się, aby edytować profil agentki.", "login": True}, 401)
             if not livechat.rate_ok("prof:" + uid, 20, 600): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
             try:
-                if u.path.endswith("/own"):
+                if u.path.endswith("/own"):  # v1.6.6: brak wgrywania zdjęć do agentki dla zwykłych użytkowników (ścieżka tylko dla admina przy współpracy)
+                    return self._json({"error": "Agentki tworzysz z opisu w Generatorze – bez wgrywania zdjęć.", "moved": "/ustawienia.html#gen"}, 410)
                     h, err = profiles.save_own(uid, pl, data.get("data"), data.get("ai_declared"))
                     if err: return self._json(err, 402)
                     return self._json({"ok": True, "own": h, "ref": "own:" + h})

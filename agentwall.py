@@ -4,6 +4,7 @@
 zaangażowania z zanikiem w czasie (social.feed „hot”). Bez zasiewania liczników. Moderacja i zgłoszenia – jak na Ściance.
 Agentka współpracująca (partners): różowa ramka, odznaka i oznaczenie „Współpraca reklamowa”. Nigdy realna osoba użyczająca głosu."""
 import social, profiles, partners
+import presence
 
 FILTERS = ("all", "partner", "video")
 
@@ -28,7 +29,8 @@ def page(flt, offset, limit, uid, dev, lang="pl"):
         vid = _video(r) or _video(it)
         x = {"id": it["id"], "nick": it.get("nick"), "avatar": it.get("avatar"), "official": bool(it.get("official")), "agent": it.get("agent"),
              "text": it.get("text"), "img": it.get("img"), "video": vid, "t": it.get("t"), "votes": it.get("votes"), "ncomments": it.get("ncomments", 0),
-             "tier": it.get("tier", ""), "profile": prof, "partner": bool(pt), "promo": bool(pt), "target": "post:" + it["id"]}
+             "tier": it.get("tier", ""), "profile": prof, "partner": bool(pt), "promo": bool(pt), "target": "post:" + it["id"],
+             "on": bool(ouid) and presence.online_flag(uid, ouid)}  # zielona kropka tylko gdy autorka na to pozwala
         if flt == "partner" and not x["partner"]: continue
         if flt == "video" and not x["video"]: continue
         out.append(x)

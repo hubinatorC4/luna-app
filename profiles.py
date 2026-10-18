@@ -43,6 +43,7 @@ def _photo_url(ref, pid=""):
     if k == "b":
         i = butik.item(v); return (i.get("image_worn") or i.get("image")) if i else None
     if k == "own" and pid: return f"/api/agent/profile/img/{pid}.jpg?v={v[:8]}"
+    if k == "g" and re.fullmatch(r"[0-9a-f]{12}", v): return f"/api/agent/gen/img/{v}.jpg"   # obraz z Generatora (po moderacji)
     return None
 
 def options(plan, items, pid, has_own):
@@ -97,7 +98,7 @@ def save(uid, plan, items, d):
         ph = d.get("photos", r["photos"]); ph = [str(x) for x in ph] if isinstance(ph, list) else []
         ph = list(dict.fromkeys(ph))
         own = r.get("own", "")
-        bad = [x for x in ph if not _allowed(x, plan, items, own)]
+        bad = [x for x in ph if not (_allowed(x, plan, items, own) or (x.startswith("g:") and x[2:] in (r.get("gen_imgs") or [])))]
         if bad: raise ValueError("Tego zdjęcia nie można dodać w Twoim planie.")
         if len(ph) > limit(plan): return None, dict(lock("pro") if plan != "pro" else {"error": "too_many"}, max=limit(plan),
                                                      message=f"W planie {plans.NAMES[plan]} profil ma do {limit(plan)} zdjęć.")
@@ -219,7 +220,13 @@ def view(pid, lang="pl", viewer=None, owner_uid=None, owner_plan=None):
     return {"id": pid, "official": False, "ai": True, "name": r["name"], "bio": r["bio"] if plans.has(pl, "premium") else "", "tags": r["tags"],
             "exercise": r["exercise"], "photos": [{"ref": p, "url": _photo_url(p, pid)} for p in ph], "pinned": pin,
             "likes": c["up"], "liked": c["mine"] == 1, "target": t, "public": bool(r.get("public")), "mine": is_owner,
-            "battles": battle_stats(pid, r["uid"]), "partner": partners.get(r["uid"]), "tier": pl if pl in ("premium", "pro") else "plain"}
+            "battles": battle_stats(pid, r["uid"]), "partner": partners.get(r["uid"]), "tier": pl if pl in ("premium", "pro") else "plain",
+            "pr": _pr(owner_uid, r["uid"])}  # status online twórczyni – tylko gdy jej ustawienie prywatności na to pozwala (presence.can_see)
+
+def _pr(viewer, uid):
+    try:
+        import presence; return presence.status(viewer, uid)
+    except Exception: return None
 
 def public_ids():
     return [k for k, v in _P().items() if v.get("public") and not v.get("hidden")]
@@ -240,3 +247,46 @@ def delete_owner(uid):
         if not pid: return
         P = _P(); P.pop(pid, None); I = _imgs(); I.pop(pid, None)
         store.put("agent_profiles", P); store.put("agent_profile_owner", O); store.put("agent_profile_img", I)
+
+
+AUTO_NAMES = ("Mira", "Ola", "Iga", "Nela", "Zoe", "Ada", "Lena", "Maja", "Ina", "Tola")
+def create_from_gen(uid, plan, draft, img_ids):
+    """Generator z opisu (krok 5): agentka z automatycznym profilem – imię, 1–3 specjalizacje, krótkie bio – i zatwierdzonymi obrazami AI.
+    Możliwości profilu wynikają z planu właścicielki (limit zdjęć, przypięte itd.); profil startuje jako prywatny."""
+    import agentgen as G
+    sp = [G.OPTS["spec"][x]["pl"] for x in draft.get("spec", [])][:3]
+    pers = G.OPTS["personality"].get(draft.get("personality") or "", {}).get("pl", "")
+    voice = G.OPTS["voice"].get(draft.get("voice") or "", {}).get("pl", "")
+    with _lock:
+        P = _P(); O = _owners(); pid = O.get(uid); r = P.get(pid) if pid else None
+        if not r:
+            pid = secrets.token_hex(5); r = {"id": pid, "uid": uid, "t": int(time.time()), "public": False, "photos": [], "pinned": "", "tags": [], "bio": "", "exercise": "", "name": ""}
+            O[uid] = pid; store.put("agent_profile_owner", O)
+        nm = draft.get("name") or r.get("name") or AUTO_NAMES[int(hashlib.sha1((uid + pid).encode()).hexdigest(), 16) % len(AUTO_NAMES)]
+        bio = (pers.capitalize() + " trenerka AI" if pers else "Trenerka AI") + (": " + ", ".join(sp) if sp else "") + "." + (f" Głos: {voice}." if voice else "")
+        gi = list(dict.fromkeys((r.get("gen_imgs") or []) + list(img_ids)))[-24:]
+        ph = ["g:" + v for v in img_ids]   # profil z Generatora: tylko zatwierdzone obrazy AI tej agentki
+        r.update(name=nm[:NAME_LEN], bio=bio[:BIO_LEN], tags=sp, photos=ph[:limit(plan)], gen_imgs=gi, from_gen=True, edited=int(time.time()))
+        P[pid] = r; store.put("agent_profiles", P)
+    return pid
+
+def admin_real_photo(pid, data_url, agreement):
+    """TYLKO admin: agentka na podstawie zdjęć PRAWDZIWEJ osoby – wyłącznie przy potwierdzonej współpracy (partnerka/casting,
+    podpisana umowa i zgoda). Flaga real_person + numer umowy na agentce. Zwykli użytkownicy nie mają tej ścieżki."""
+    import partners
+    agreement = re.sub(r"[^\w./ -]", "", str(agreement or ""))[:60]
+    if len(agreement) < 3: raise ValueError("Podaj numer podpisanej umowy / zgody.")
+    with _lock:
+        P = _P(); r = P.get(pid)
+        if not r: raise ValueError("Nie ma takiej agentki.")
+        if not partners.is_partner(r["uid"]): raise PermissionError("Najpierw nadaj status współpracy (partnerka / casting).")
+    m = re.fullmatch(r"data:image/(png|jpeg|webp);base64,(.+)", str(data_url or ""), re.S)
+    if not m: raise ValueError("Wgraj JPG, PNG lub WEBP.")
+    out, ext = imgsafe.reencode(base64.b64decode(m.group(2)), max_px=2160, max_in=12 * 1024 * 1024, quality=2)
+    h = hashlib.sha1(out).hexdigest()[:10]
+    with _lock:
+        I = _imgs(); I[pid] = {"b": base64.b64encode(out).decode(), "ext": ext, "h": h, "t": int(time.time()), "ai": False, "real_person": True}; store.put("agent_profile_img", I)
+        P = _P(); r = P[pid]; r["own"] = h; r["real_person"] = True; r["agreement"] = agreement
+        if "own:" + h not in r["photos"]: r["photos"] = ["own:" + h] + r["photos"]
+        P[pid] = r; store.put("agent_profiles", P)
+    return {"ok": True, "own": h}

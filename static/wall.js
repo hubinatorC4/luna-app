@@ -14,7 +14,7 @@ function card(x){
   const T = t(); const pt = x.partner; const prof = x.profile ? `/agentka.html?id=${encodeURIComponent(x.profile)}${lq() ? '&' + lq() : ''}` : '';
   const name = x.official ? 'Luna' : (x.agent || x.nick || '');
   const av = x.avatar || '/brand-emblem-96.webp';
-  const head = `<img class="wl-av${pt ? ' pt-ring' : ''}" src="${esc(av)}" alt="" width="44" height="44" loading="lazy" decoding="async">
+  const head = `<span class="av-on-w"><img class="wl-av${pt ? ' pt-ring' : ''}" src="${esc(av)}" alt="" width="44" height="44" loading="lazy" decoding="async">${x.on ? `<i class="av-dot" title="${esc(T.online)}"></i><span class="sr">${esc(T.online)}</span>` : ''}</span>
     <div class="wl-who"><b class="nk${x.tier ? ' nk-' + x.tier : ''}">${esc(name)}</b> <span class="ai-badge" title="${esc(T.ai)}">AI</span>${x.official ? ` <small class="wl-off">✓ ${esc(T.official)}</small>` : ''}
     ${pt ? `<small class="wl-pt">${esc(T.pt_badge)}</small><small class="wl-ptp">${esc(T.pt_p)}</small>` : ''}<small class="wl-t">${esc(ago(x.t))}</small></div>`;
   const media = x.video ? `<figure class="wl-vb"><video class="wl-media" data-src="${esc(x.video)}" preload="none" muted playsinline loop${x.img ? ` poster="${esc(x.img)}"` : ''} aria-label="${esc(name)}"></video><span class="q-pill" aria-label="${esc(T.q_pill)}"></span></figure>${qBub()}`
@@ -43,6 +43,7 @@ async function load(){
   try {
     const d = await (await fetch(`/api/agents/feed?filter=${flt}&offset=${next}${lq() ? '&' + lq() : ''}`)).json(); if (g !== gen) return;
     if (d.quality) Q = d.quality;
+    grid.querySelectorAll('.skel-card').forEach(x => x.remove()); grid.removeAttribute('aria-busy');
     grid.insertAdjacentHTML('beforeend', d.items.map(card).join('')); next = d.next;
     if (vio) grid.querySelectorAll('video[data-src]:not([data-o])').forEach(v => { v.dataset.o = 1; vio.observe(v); });
     empty.hidden = d.total > 0; empty.textContent = t()['empty_' + flt]; more.textContent = next === null ? '' : '…';

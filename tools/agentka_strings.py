@@ -51,4 +51,8 @@ S = {
 "err": ["Nie udało się zapisać.", "Could not save.", "No se pudo guardar.", "Speichern fehlgeschlagen.", "Не вдалося зберегти."],
 }
 L = ["pl", "en", "es", "de", "uk"]
+S["gen_only"] = ["Obrazy agentki powstają w Generatorze z opisu – bez wgrywania zdjęć.", "Agent images are made in the Generator from a description – no photo uploads.", "Las imágenes de la agente se crean en el Generador a partir de una descripción, sin subir fotos.", "Bilder der Agentin entstehen im Generator aus einer Beschreibung – ohne Foto-Upload.", "Зображення агентки створюються в Генераторі з опису – без завантаження фото."]
+S["gen_go"] = ["Stwórz moją agentkę AI", "Create my AI agent", "Crear mi agente IA", "Meine KI-Agentin erstellen", "Створити мою ШІ-агентку"]
+S["online"] = ["Online", "Online", "En línea", "Online", "Онлайн"]
+S["ago"] = ["Aktywna/y {n} min temu", "Active {n} min ago", "Activo/a hace {n} min", "Vor {n} Min. aktiv", "Активність {n} хв тому"]
 def dicts(): return {l: {k: v[i] for k, v in S.items()} for i, l in enumerate(L)}

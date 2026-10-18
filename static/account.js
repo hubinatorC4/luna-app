@@ -159,6 +159,9 @@ fetch('/api/config').then(r => r.json()).then(c => {
   const b = banner('💳 ' + pn.text, 'info'); b.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('luna.payNotice', pn.t); } catch(e){} });
 }).catch(() => {});
 const NEWS = [
+  ['🟢 Status online i bliscy znajomi', 'Gwiazdka ☆ przy znajomym = bliski znajomy. Ty decydujesz, kto widzi, że jesteś online: wszyscy, tylko bliscy albo nikt (domyślnie: bliscy). Zablokowani nie widzą nic.'],
+  ['💭 Dymki Luny', 'Czasem podpowiem coś obok mojego awatara – krótko, raz na stronę i znikam po 5 s. Wyłączysz mnie w Mój panel (nie obrażę się… bardzo).'],
+  ['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.'],
   ['⚙️ Mój panel', 'Profil, plan i jakość, Twoje treści, powiadomienia i prywatność w jednym miejscu – z wyszukiwarką i krótkim przewodnikiem. Tylko nick, bez imienia i nazwiska.'],
   ['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 2160 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.'],
   ['📷 Twoje zdjęcia na wallu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.'],
@@ -188,8 +191,8 @@ window.LunaNews = () => {
   if (!d){ d = document.createElement('dialog'); d.id = 'newsDlg'; d.className = 'news';
     d.innerHTML = '<h2>Co nowego w wersji 1.6.4</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
     document.body.appendChild(d); }
-  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.5'); } catch(e){}
+  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.6'); } catch(e){}
 };
-try { if (localStorage.getItem('luna.seenVer') !== '1.6.5' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
+try { if (localStorage.getItem('luna.seenVer') !== '1.6.6' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-news]')){ e.preventDefault(); window.LunaNews(); } });
 })();

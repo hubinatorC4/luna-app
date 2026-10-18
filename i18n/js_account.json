@@ -1,6 +1,18 @@
 {
 "en": [
 [
+"['🟢 Status online i bliscy znajomi', 'Gwiazdka ☆ przy znajomym = bliski znajomy. Ty decydujesz, kto widzi, że jesteś online: wszyscy, tylko bliscy albo nikt (domyślnie: bliscy). Zablokowani nie widzą nic.']",
+"['🟢 Online status and close friends', 'Star ☆ a friend to make them a close friend. You decide who sees you’re online: everyone, close friends only or nobody (default: close friends). Blocked people see nothing.']"
+],
+[
+"['💭 Dymki Luny', 'Czasem podpowiem coś obok mojego awatara – krótko, raz na stronę i znikam po 5 s. Wyłączysz mnie w Mój panel (nie obrażę się… bardzo).']",
+"['💭 Luna’s bubbles', 'Now and then I’ll drop a tip next to my avatar – short, once per page, gone in 5 s. Turn me off in My panel (I won’t be offended… much).']"
+],
+[
+"['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.']",
+"['🎵 Luna’s quiet music', 'New original jazz tracks behind the chat – off by default, quiet (15%), paused during voice chat and in the background. Agent videos now land in your Inbox, and the wall shows video quality.']"
+],
+[
 "const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';",
 "const ADULT = 'I declare that I am an adult (18+) and have my own bank account.';"
 ],
@@ -254,6 +266,18 @@
 ]
 ],
 "es": [
+[
+"['🟢 Status online i bliscy znajomi', 'Gwiazdka ☆ przy znajomym = bliski znajomy. Ty decydujesz, kto widzi, że jesteś online: wszyscy, tylko bliscy albo nikt (domyślnie: bliscy). Zablokowani nie widzą nic.']",
+"['🟢 Estado en línea y amigos cercanos', 'Marca a un amigo con la estrella ☆ para hacerlo amigo cercano. Tú decides quién ve que estás en línea: todos, solo cercanos o nadie (por defecto: cercanos). Las personas bloqueadas no ven nada.']"
+],
+[
+"['💭 Dymki Luny', 'Czasem podpowiem coś obok mojego awatara – krótko, raz na stronę i znikam po 5 s. Wyłączysz mnie w Mój panel (nie obrażę się… bardzo).']",
+"['💭 Burbujas de Luna', 'De vez en cuando te dejaré un consejo junto a mi avatar: breve, una vez por página y desaparezco en 5 s. Me desactivas en Mi panel (no me ofenderé… mucho).']"
+],
+[
+"['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.']",
+"['🎵 Música suave de Luna', 'Nuevas piezas de jazz originales de fondo en el chat: desactivadas por defecto, bajito (15 %), en pausa durante la conversación por voz y en segundo plano. Los vídeos de agentes llegan al Buzón y el muro muestra la calidad del vídeo.']"
+],
 [
 "const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';",
 "const ADULT = 'Declaro que soy mayor de edad (18+) y tengo una cuenta bancaria propia.';"
@@ -509,6 +533,18 @@
 ],
 "de": [
 [
+"['🟢 Status online i bliscy znajomi', 'Gwiazdka ☆ przy znajomym = bliski znajomy. Ty decydujesz, kto widzi, że jesteś online: wszyscy, tylko bliscy albo nikt (domyślnie: bliscy). Zablokowani nie widzą nic.']",
+"['🟢 Online-Status und enge Freunde', 'Mit dem Stern ☆ wird jemand zur engen Freundschaft. Du entscheidest, wer sieht, dass du online bist: alle, nur enge Freunde oder niemand (Standard: enge Freunde). Blockierte sehen nichts.']"
+],
+[
+"['💭 Dymki Luny', 'Czasem podpowiem coś obok mojego awatara – krótko, raz na stronę i znikam po 5 s. Wyłączysz mnie w Mój panel (nie obrażę się… bardzo).']",
+"['💭 Lunas Sprechblasen', 'Ab und zu gebe ich neben meinem Avatar einen Tipp – kurz, einmal pro Seite, nach 5 s weg. Abschalten in Mein Bereich (ich bin nicht beleidigt … kaum).']"
+],
+[
+"['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.']",
+"['🎵 Lunas leise Musik', 'Neue, eigene Jazz-Stücke im Chat-Hintergrund – standardmäßig aus, leise (15 %), Pause beim Sprachchat und im Hintergrund. Agentinnen-Videos landen im Postfach, die Wand zeigt die Videoqualität.']"
+],
+[
 "const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';",
 "const ADULT = 'Ich erkläre, dass ich volljährig (18+) bin und ein eigenes Bankkonto habe.';"
 ],
@@ -762,6 +798,18 @@
 ]
 ],
 "uk": [
+[
+"['🟢 Status online i bliscy znajomi', 'Gwiazdka ☆ przy znajomym = bliski znajomy. Ty decydujesz, kto widzi, że jesteś online: wszyscy, tylko bliscy albo nikt (domyślnie: bliscy). Zablokowani nie widzą nic.']",
+"['🟢 Статус онлайн і близькі друзі', 'Зірочка ☆ біля друга = близький друг. Ви вирішуєте, хто бачить, що ви онлайн: усі, лише близькі або ніхто (типово: близькі). Заблоковані не бачать нічого.']"
+],
+[
+"['💭 Dymki Luny', 'Czasem podpowiem coś obok mojego awatara – krótko, raz na stronę i znikam po 5 s. Wyłączysz mnie w Mój panel (nie obrażę się… bardzo).']",
+"['💭 Бульбашки Луни', 'Іноді підкажу щось біля свого аватара – коротко, раз на сторінку, і зникну за 5 с. Вимкнути можна в Моя панель (я не ображуся… майже).']"
+],
+[
+"['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.']",
+"['🎵 Тиха музика Луни', 'Нові оригінальні джазові треки у фоні чату – типово вимкнені, тихо (15 %), пауза під час голосової розмови та у фоні. Відео агенток надходять у Скриньку, а на стіні видно якість відео.']"
+],
 [
 "const ADULT = 'Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.';",
 "const ADULT = 'Заявляю, що я повнолітня особа (18+) і маю власний банківський рахунок.';"

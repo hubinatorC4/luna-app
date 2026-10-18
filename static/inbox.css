@@ -101,3 +101,11 @@ html.in-app .ibpage{padding-top:8px}
 .ib-phact{display:flex;gap:6px;flex-wrap:wrap;margin:6px 2px 0}.ib-phact .ib-btn{min-height:36px;font-size:13px;padding:6px 12px}
 .ib-hold{display:block;padding:8px 10px;font-size:14px;opacity:.9}
 @media (prefers-reduced-motion:reduce){.ib-ph img{transition:none}}
+
+/* v1.6.6 status online + bliski znajomy */
+.on-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#3DDC97;box-shadow:0 0 0 2px #121018,0 0 8px #3ddc9799;margin-right:5px;vertical-align:middle}
+.ib-av{position:relative}.ib-av.on::after{content:"";position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;background:#3DDC97;box-shadow:0 0 0 2.5px #121018}
+.ib-pr{display:block;color:#b9b6c6}.ib-pr.on{color:#7fe8b9;font-weight:700}
+.ib-pn{display:flex;flex-direction:column;line-height:1.25}
+.ib-star{min-width:44px;min-height:44px;border-radius:999px;font-size:20px;line-height:1;color:#ffcf66;padding:0 10px}
+.ib-star.on{background:#ffcf6622;box-shadow:0 0 0 1px #ffcf6655 inset}

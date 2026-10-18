@@ -20,7 +20,8 @@ S = {
 "add": ["Dodaj wpis na Ściance", "Post on the Wall", "Publicar en el Muro", "Auf der Wand posten", "Додати допис на Стіні"],
 "ai": ["Postać AI", "AI character", "Personaje de IA", "KI-Figur", "Персонаж ШІ"],
 "more": ["…", "…", "…", "…", "…"],
-"q_more": ["Oglądaj w 1080p z Pro", "Watch in 1080p with Pro", "Mira en 1080p con Pro", "In 1080p mit Pro ansehen", "Дивіться в 1080p з Pro"],
+"q_more": ["Ostrzej niż dykcja Luny? Oglądaj w 1080p z Pro", "Sharper than Luna’s diction? Watch in 1080p with Pro", "¿Más nítido que la dicción de Luna? Mira en 1080p con Pro", "Schärfer als Lunas Aussprache? In 1080p mit Pro ansehen", "Чіткіше за дикцію Луни? Дивіться в 1080p з Pro"],
+"online": ["Online", "Online", "En línea", "Online", "Онлайн"],
 "q_close": ["Zamknij", "Close", "Cerrar", "Schließen", "Закрити"],
 "q_pill": ["Jakość wideo", "Video quality", "Calidad de vídeo", "Videoqualität", "Якість відео"],
 }

@@ -182,11 +182,11 @@ def _work():
         except Exception as e:
             _upd(jid, status="failed", error=str(e)[:200])
 
-READY_T = {"pl": ("🎬 Film Twojej agentki jest gotowy", "{s} s · {q}p · znak „AI”. Obejrzyj go w Mój panel → Generator agentek."),
-           "en": ("🎬 Your agent’s video is ready", "{s} s · {q}p · “AI” label. Watch it in My panel → Agent generator."),
-           "es": ("🎬 El vídeo de tu agente está listo", "{s} s · {q}p · marca «AI». Míralo en Mi panel → Generador de agentes."),
-           "de": ("🎬 Das Video deiner Agentin ist fertig", "{s} s · {q}p · „AI“-Zeichen. Ansehen unter Mein Bereich → Agentinnen-Generator."),
-           "uk": ("🎬 Відео вашої агентки готове", "{s} с · {q}p · позначка «AI». Перегляньте в Моя панель → Генератор агенток.")}
+READY_T = {"pl": ("🎬 Film Twojej agentki jest gotowy", "{s} s · {q}p · ze znakiem „AI”. Popcorn opcjonalny – film czeka w Mój panel → Generator agentek."),
+           "en": ("🎬 Your agent’s video is ready", "{s} s · {q}p · with the “AI” label. Popcorn optional – it’s waiting in My panel → Agent generator."),
+           "es": ("🎬 El vídeo de tu agente está listo", "{s} s · {q}p · con la marca «AI». Palomitas opcionales: te espera en Mi panel → Generador de agentes."),
+           "de": ("🎬 Das Video deiner Agentin ist fertig", "{s} s · {q}p · mit „AI“-Zeichen. Popcorn optional – es wartet unter Mein Bereich → Agentinnen-Generator."),
+           "uk": ("🎬 Відео вашої агентки готове", "{s} с · {q}p · з позначкою «AI». Попкорн за бажанням – відео чекає в Моя панель → Генератор агенток.")}
 def _notify_ready(j):
     """Gotowy film → wiadomość w Skrzynce (kategoria Ważne, tłumaczona przy odczycie) + push, jeśli włączony."""
     try:

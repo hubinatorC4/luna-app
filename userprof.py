@@ -132,8 +132,13 @@ def public_view(nick, viewer_uid=None):
             if av.startswith("up:") and not avatar_img(uid, viewer_uid): av = ""
             return {"nick": g["nick"], "avatar": av, "uref": uid[:8] if av.startswith("up:") else "",
                     "bio": g["bio"] if g["show_bio"] else "", "interests": g["interests"] if g["show_interests"] else [],
-                    "links": g["links"] if g["show_links"] else [], "mine": viewer_uid == uid}
+                    "links": g["links"] if g["show_links"] else [], "mine": viewer_uid == uid, "pr": _pr(viewer_uid, uid)}
     return {"missing": True}
+
+def _pr(viewer, uid):
+    try:
+        import presence; return presence.status(viewer, uid)
+    except Exception: return None
 
 def uid_by_short(s):
     return next((u for u in _P() if u[:8] == s), None)
@@ -150,7 +155,9 @@ def settings(uid):
     r = _P().get(uid) or {}
     n = r.get("notif") or {}
     return {"notif": {k: bool(n.get(k, True)) for k in NOTIF_TYPES}, "invite": r.get("invite", "all"),
-            "blocked": [{"nick": x} for x in (r.get("blocked") or [])], "delete_at": r.get("delete_at", 0)}
+            "blocked": [{"nick": x} for x in (r.get("blocked") or [])], "delete_at": r.get("delete_at", 0),
+            "bubbles": r.get("bubbles", True) is not False,
+            "online_vis": r.get("online_vis") if r.get("online_vis") in ("all", "close", "nobody") else "close"}
 def notif_on(uid, kind):
     """Przełączniki z Mój panel → Powiadomienia (domyślnie włączone). Bramkują wysyłkę push: friends, messages, updates."""
     if not uid: return True
@@ -161,6 +168,8 @@ def save_settings(uid, d):
         if isinstance(d.get("notif"), dict):
             n = r.get("notif") or {}; n.update({k: d["notif"][k] is True for k in NOTIF_TYPES if k in d["notif"]}); r["notif"] = n
         if d.get("invite") in INVITE: r["invite"] = d["invite"]
+        if d.get("bubbles") in (True, False): r["bubbles"] = d["bubbles"]  # Dymki Luny
+        if d.get("online_vis") in ("all", "close", "nobody"): r["online_vis"] = d["online_vis"]  # Kto widzi, że jestem online
         if "block" in d or "unblock" in d:
             B = list(r.get("blocked") or [])
             if d.get("block"):

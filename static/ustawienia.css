@@ -40,3 +40,30 @@
 #stToast[hidden]{display:none}#stToast .toast-ic{font-size:22px}
 @media (prefers-reduced-motion:reduce){#stToast{animation:none}}
 .st-head{align-items:flex-start}.st-tourb{margin-top:10px;min-height:44px;padding:8px 16px;font-size:14px}
+/* v1.6.6 – prosty Generator agentek z opisu */
+.g-steps{display:flex;gap:4px;list-style:none;padding:0;margin:4px 0 16px;counter-reset:s;overflow-x:auto}
+.g-steps li{flex:1;min-width:58px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;color:#a9a5b8;text-align:center;position:relative}
+.g-steps li span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.07);font-weight:800;font-size:13px;transition:background .2s,transform .2s}
+.g-steps li.done span{background:#3DDC97;color:#0d1a14}.g-steps li.cur span{background:linear-gradient(135deg,#B388FF,#4DD0E1);color:#120f1a;transform:scale(1.1)}
+.g-steps li.cur{color:#f3f3f6;font-weight:700}
+.g-f{border:0;padding:0;margin:0 0 12px}.g-f legend{font-weight:700;margin-bottom:6px;padding:0}
+.g-chips{display:flex;flex-wrap:wrap;gap:8px}
+.g-chip{min-height:44px;padding:0 16px;border-radius:999px;border:0;background:rgba(255,255,255,.07);color:#ece9f5;font:inherit;font-weight:600;cursor:pointer;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:background .15s,box-shadow .15s,transform .12s;-webkit-tap-highlight-color:transparent}
+.g-chip:active{transform:scale(.96)}.g-chip.on{background:rgba(61,220,151,.18);box-shadow:inset 0 0 0 2px #3DDC97;color:#fff}
+.g-big{width:100%;min-height:56px;font-size:17px;border-radius:999px}.g-big.busy{opacity:.7}
+.g-note{padding:14px 16px;border-radius:22px;background:rgba(179,136,255,.12);box-shadow:inset 0 0 0 1px rgba(179,136,255,.3);line-height:1.45}
+.g-wait{display:flex;gap:14px;align-items:center;padding:16px;border-radius:22px;background:rgba(255,255,255,.05)}
+.g-orb{flex:none;width:44px;height:44px;border-radius:50%;background:conic-gradient(from 0deg,#B388FF,#4DD0E1,#3DDC97,#B388FF);animation:g-spin 2.4s linear infinite;
+  -webkit-mask:radial-gradient(circle,transparent 11px,#000 12px);mask:radial-gradient(circle,transparent 11px,#000 12px)}
+@keyframes g-spin{to{transform:rotate(360deg)}}
+.g-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}
+.g-var{position:relative;padding:0;border:0;border-radius:20px;overflow:hidden;background:#1d1a26;cursor:pointer;aspect-ratio:3/4;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .15s,box-shadow .15s}
+.g-var img,.g-var video{width:100%;height:100%;object-fit:cover;display:block}.g-var .ai-badge{position:absolute;top:8px;right:8px}
+.g-var.on{box-shadow:0 0 0 3px #3DDC97,0 8px 24px rgba(61,220,151,.25)}.g-var:active{transform:scale(.97)}
+.g-tick{position:absolute;left:8px;top:8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#3DDC97;color:#0d1a14;font-style:normal;font-weight:900;opacity:0;transform:scale(.6);transition:opacity .15s,transform .2s cubic-bezier(.34,1.56,.64,1)}
+.g-var.on .g-tick{opacity:1;transform:none}
+.g-ok{padding:14px 16px;border-radius:22px;background:rgba(61,220,151,.12);box-shadow:inset 0 0 0 1px rgba(61,220,151,.35)}
+.g-teaser .g-steps{opacity:.55;filter:saturate(.4)}
+@media (prefers-reduced-motion:reduce){.g-orb{animation:none}.g-chip,.g-var,.g-tick,.g-steps li span{transition:none}}
+.g-grid .g-var{border-radius:20px!important;min-height:0;width:100%}

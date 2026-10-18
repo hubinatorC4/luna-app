@@ -15,6 +15,7 @@ Magazyn: tabela luna_kv (Postgres przy DATABASE_URL, inaczej data/kv.json) – k
   dm_reports  – zgłoszenia (tylko kopia zgłoszonej wiadomości albo samo zgłoszenie konta)
   ib_bt_done  – bitwy, o których wynikach już powiadomiono"""
 import hashlib, re, secrets, threading, time
+import presence
 import store, accounts, social, nicktier, partners, livechat, notify, textutil
 
 _lock = threading.RLock()
@@ -118,7 +119,7 @@ def prefs(uid):
         import battles; bt = battles.notify_on(uid)  # jedno źródło prawdy: ustawienie powiadomień o wyniku z Bitew (bt_notify)
     except Exception: bt = bool(p.get("battles", False))
     return {"invites": p.get("invites", "all"), "receipts": bool(p.get("receipts", True)), "battles": bool(bt),
-            "security": bool(p.get("security", True)), "push": bool(p.get("push", True))}
+            "security": bool(p.get("security", True)), "push": bool(p.get("push", True)), "online": presence.vis(uid)}
 def _pair(a, b): return "-".join(sorted((a, b)))
 def _want(uid, kind):
     try:
@@ -306,7 +307,7 @@ def accept(uid, other):
 def _unlink(uid, other, block=False):
     with _lock:
         fa, fb = _fr(uid), _fr(other)
-        for k in ("friends", "in", "out"): fa[k].pop(other, None); fb[k].pop(uid, None)
+        for k in ("friends", "in", "out", "close"): fa.setdefault(k, {}).pop(other, None); fb.setdefault(k, {}).pop(uid, None)
         k = _pair(uid, other); fa["unread"].pop(k, None); fb["unread"].pop(k, None)
         if block: fa["blocked"][other] = int(time.time())
         _save_fr(uid, fa); _save_fr(other, fb)
@@ -323,6 +324,15 @@ def friend_act(uid, p, action, reason=""):
     if action == "report":
         _report(uid, other, None, reason); return {"status": "reported"}
     if action == "request": return request(uid, other)
+    if action in ("close", "unclose"):  # ⭐ „Bliski znajomy” – tylko dla znajomych; decyduje, kto widzi status online
+        with _lock:
+            f = _fr(uid)
+            if other not in f["friends"]: raise PermissionError("Tylko znajomych można oznaczyć jako bliskich.")
+            c = f.setdefault("close", {})
+            if action == "close": c[other] = int(time.time())
+            else: c.pop(other, None)
+            _save_fr(uid, f)
+        return {"status": "friends", "close": action == "close"}
     raise ValueError("bad action")
 
 def friends(uid, base=""):
@@ -331,7 +341,7 @@ def friends(uid, base=""):
     fl = []
     for x, t in sorted(f["friends"].items(), key=lambda kv: -kv[1]):
         c = person(x, A); k = _pair(uid, x)
-        c.update(since=t, unread=int(f["unread"].get(k, 0)), last=(f.get("last") or {}).get(k))
+        c.update(since=t, unread=int(f["unread"].get(k, 0)), last=(f.get("last") or {}).get(k), close=x in (f.get("close") or {}), pr=presence.status(uid, x))
         fl.append(c)
     fl.sort(key=lambda c: -((c.get("last") or {}).get("t") or c["since"]))
     tok = _invite_tok(uid); me = person(uid, A)
@@ -345,6 +355,7 @@ def set_prefs(uid, d):
         for k, allowed in PREF_KEYS.items():
             if k in d and d[k] in allowed and d[k] is not None: f["prefs"][k] = d[k]
         _save_fr(uid, f)
+    if d.get("online") in presence.VIS: presence.set_vis(uid, d["online"])
     if d.get("battles") in (True, False):
         try:
             import battles; battles.set_notify(uid, d["battles"], str(d.get("lang") or "pl")[:2])
@@ -383,7 +394,7 @@ def dm_list(uid, p, since=0):
     out = [dict({"id": m["id"], "mine": m["f"] == uid, "text": m["x"], "t": m["t"]},
                 **({"photo": True, "hold": bool(m.get("hold")), "auto": bool(m.get("ar")), "w": m.get("w"), "h": m.get("h")} if m.get("img") else {}))
            for m in M if m["id"] > since and m["id"] not in hid and not m.get("rm")]
-    return {"items": out, "last": last, "seen": seen, "peer": person(other), "receipts": pa["receipts"] and pb["receipts"]}
+    return {"items": out, "last": last, "seen": seen, "peer": dict(person(other), pr=presence.status(uid, other)), "receipts": pa["receipts"] and pb["receipts"]}
 
 def dm_send(uid, p, text):
     other = uid_of(p); _need_friend(uid, other)
@@ -683,7 +694,8 @@ def handle_get(h, u):
     if p == "/api/friends/settings":
         f = friends(uid, base)
         return h._json({"keys": {"invites": {"value": f["prefs"]["invites"], "options": ["all", "none"]}, "receipts": {"value": f["prefs"]["receipts"]},
-                                 "battles": {"value": f["prefs"]["battles"]}, "security": {"value": f["prefs"]["security"]}, "push": {"value": f["prefs"]["push"]}},
+                                 "battles": {"value": f["prefs"]["battles"]}, "security": {"value": f["prefs"]["security"]}, "push": {"value": f["prefs"]["push"]},
+                                 "online": {"value": f["prefs"]["online"], "options": list(presence.VIS)}},
                         "blocked": f["blocked"], "routes": {"inbox": "/skrzynka.html", "friends": "/znajomi.html", "privacy": "/znajomi.html#prywatnosc"}})
     if p == "/api/friends/invite":
         tok = (q.get("t") or [""])[0]; o = invite_owner(tok)

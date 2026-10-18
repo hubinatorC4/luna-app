@@ -3,7 +3,7 @@
 const $ = s => document.querySelector(s);
 const a = new Audio(); a.preload = 'none';
 let tracks = [], M = Object.assign({on: false, vol: null, i: 0}, JSON.parse(localStorage.getItem('luna.music') || '{}'));
-let duck = false, defVol = 0.25;
+let duck = false, defVol = 0.15;  // v1.6.6: ciche tło ~15 %, domyślnie WYŁ.
 const save = () => localStorage.setItem('luna.music', JSON.stringify(M));
 const vol = () => (M.vol ?? defVol);
 function setVol(){ const target = vol() * (duck ? 0.12 : 1); fade(target); }
@@ -25,6 +25,11 @@ $('#musicNext').onclick = () => { load(M.i + 1); if (M.on) play(); };
 $('#musicVol').oninput = e => { M.vol = parseFloat(e.target.value); save(); setVol(); };
 // wyciszanie, gdy asystentka mówi lub słucha
 new MutationObserver(() => { const d = document.body.classList.contains('speaking') || document.body.classList.contains('listening'); if (d !== duck){ duck = d; if (!a.paused) setVol(); } })
+  .observe(document.body, {attributes: true, attributeFilter: ['class']});
+// v1.6.6: pauza (z wyciszeniem) gdy karta jest w tle albo trwa nagrywanie / rozmowa głosowa / trening – i wznowienie po
+let held = false; const hold = h => { if (h === held || !M.on) return; held = h; if (h) stop(); else play(); };
+document.addEventListener('visibilitychange', () => hold(document.hidden || document.body.classList.contains('convo') || document.body.classList.contains('listening')));
+new MutationObserver(() => hold(document.hidden || document.body.classList.contains('convo') || document.body.classList.contains('listening')))
   .observe(document.body, {attributes: true, attributeFilter: ['class']});
 // przeglądarki blokują autoodtwarzanie – wznawiamy po pierwszym dotknięciu
 document.addEventListener('pointerdown', () => { if (M.on && a.paused) play(); }, {once: true});

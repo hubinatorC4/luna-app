@@ -26,7 +26,10 @@ const fmtT = t => { const s = Date.now() / 1000 - t; const rtf = new Intl.Relati
   if (s < 7 * 86400) return rtf.format(-Math.round(s / 86400), 'day'); return new Date(t * 1000).toLocaleDateString(lang); };
 const clock = t => new Date(t * 1000).toLocaleTimeString(lang, {hour: '2-digit', minute: '2-digit'});
 const nk = p => `<span class="nk${p.tier ? ' nk-' + p.tier : ''}">${esc(p.nick)}</span>${p.partner ? ` <span class="ib-pt" title="${esc(T.partner)}" aria-label="${esc(T.partner)}">💖</span>` : ''}`;
-const av = p => `<span class="ib-av${p.partner ? ' partner' : ''}${p.tier ? ' t-' + p.tier : ''}" aria-hidden="true">${esc(p.ini || '?')}</span>`;
+const av = p => `<span class="ib-av${p.partner ? ' partner' : ''}${p.tier ? ' t-' + p.tier : ''}${p.pr && p.pr.on ? ' on' : ''}" aria-hidden="true">${esc(p.ini || '?')}</span>`;
+// status online (serwer zwraca pr tylko gdy osoba na to pozwala): {on:true} albo {min:X} ≤ 60
+const prTxt = p => !p.pr ? '' : p.pr.on ? T.online : T.ago.replace('{n}', p.pr.min);
+const prHtml = p => p.pr ? `<small class="ib-pr${p.pr.on ? ' on' : ''}">${p.pr.on ? '<i class="on-dot" aria-hidden="true"></i>' : ''}${esc(prTxt(p))}</small>` : '';
 
 /* ---------- szkielet ---------- */
 function frame(){
@@ -100,10 +103,10 @@ function rowBtns(p, kind){
   if (kind === 'in') return `<button class="ib-btn primary" data-f="accept">${esc(T.accept)}</button><button class="ib-btn" data-f="decline">${esc(T.decline)}</button><button class="ib-btn danger" data-f="block">${esc(T.block)}</button>`;
   if (kind === 'out') return `<button class="ib-btn" data-f="cancel">${esc(T.cancel)}</button>`;
   if (kind === 'blocked') return `<button class="ib-btn" data-f="unblock">${esc(T.unblock)}</button>`;
-  return `<button class="ib-btn primary" data-f="chat">💬 ${esc(T.write)}${p.unread ? ` <b class="ib-badge">${p.unread}</b>` : ''}</button>
+  return `<button class="ib-btn ib-star${p.close ? ' on' : ''}" data-f="${p.close ? 'unclose' : 'close'}" aria-pressed="${p.close ? 'true' : 'false'}" aria-label="${esc(p.close ? T.close_rm : T.close_add)}" title="${esc(T.close_h)}">${p.close ? '★' : '☆'}</button><button class="ib-btn primary" data-f="chat">💬 ${esc(T.write)}${p.unread ? ` <b class="ib-badge">${p.unread}</b>` : ''}</button>
     <details class="ib-more"><summary aria-label="${esc(T.more)}">⋯</summary><div><button class="ib-btn" data-f="remove">${esc(T.remove)}</button><button class="ib-btn danger" data-f="block">${esc(T.block)}</button><button class="ib-btn danger" data-f="report">${esc(T.report)}</button></div></details>`;
 }
-const row = (p, kind) => `<li class="ib-fr" data-pid="${p.pid}">${av(p)}<span class="ib-fn">${nk(p)}${kind === 'friends' ? `<small>${p.last ? esc(p.last.x) : esc(T.since) + ' ' + new Date(p.since * 1000).toLocaleDateString(lang)}</small>` : ''}</span><span class="ib-fa">${rowBtns(p, kind)}</span></li>`;
+const row = (p, kind) => `<li class="ib-fr" data-pid="${p.pid}">${av(p)}<span class="ib-fn">${nk(p)}${kind === 'friends' ? `${prHtml(p)}<small>${p.last ? esc(p.last.x) : esc(T.since) + ' ' + new Date(p.since * 1000).toLocaleDateString(lang)}</small>` : ''}</span><span class="ib-fa">${rowBtns(p, kind)}</span></li>`;
 async function renderFriends(){
   const host = $('#pn-friends');
   let f; try { f = await loadFriends(); } catch(e){ host.innerHTML = `<p class="ib-empty">${esc(e.message)}</p>`; return; }
@@ -133,7 +136,7 @@ async function fAct(pid, a){
   if (a === 'block' && !confirm(T.q_block)) return;
   if (a === 'report'){ if (!confirm(T.q_report)) return; reason = prompt(T.reason_ph) || ''; }
   try { await api('/api/friends/act', {pid, action: a, reason});
-    toast({report: T.reported, block: T.blocked_ok, remove: T.removed_ok}[a] || '✓'); refreshUnread();
+    toast({report: T.reported, block: T.blocked_ok, remove: T.removed_ok, close: '★ ' + T.close_h, unclose: '☆ ' + T.close_off}[a] || '✓'); refreshUnread();
     if (tab === 'privacy') renderPrivacy(); else renderFriends(); } catch(e){ toast(e.message); }
 }
 
@@ -162,7 +165,7 @@ async function openChat(pid){
 }
 function draw(d){
   if (!chat) return;
-  $('#chatPeer').innerHTML = av(d.peer) + nk(d.peer);
+  $('#chatPeer').innerHTML = av(d.peer) + `<span class="ib-pn">${nk(d.peer)}${prHtml(d.peer)}</span>`;
   const log = $('#chatLog');
   if (!chat.last && !d.items.length) log.innerHTML = `<li class="ib-empty">${esc(T.chat_empty)}</li>`;
   if (d.items.length){ const e = log.querySelector('.ib-empty'); if (e) e.remove(); }
@@ -232,11 +235,15 @@ async function renderPrivacy(){
     <fieldset class="ib-card"><legend>${esc(T.pv_inv)}</legend>
       <label class="ib-rad"><input type="radio" name="inv" value="all" ${P.invites === 'all' ? 'checked' : ''}> ${esc(T.pv_all)}</label>
       <label class="ib-rad"><input type="radio" name="inv" value="none" ${P.invites === 'none' ? 'checked' : ''}> ${esc(T.pv_none)}</label></fieldset>
+    <fieldset class="ib-card"><legend>🟢 ${esc(T.pv_online)}</legend>
+      ${['all', 'close', 'nobody'].map(v => `<label class="ib-rad"><input type="radio" name="onl" value="${v}" ${P.online === v ? 'checked' : ''}> ${esc(T['pv_on_' + v])}</label>`).join('')}
+      <p class="ib-mut">${esc(T.pv_on_s)}</p></fieldset>
     <div class="ib-card">${tg('receipts', T.pv_receipts, T.pv_receipts_s)}${tg('battles', T.pv_battles, T.pv_battles_s)}${tg('security', T.pv_security)}${tg('push', T.pv_push)}</div>
     <div class="ib-card"><h2>🚫 ${esc(T.pv_blocked)}</h2>${f.blocked.length ? `<ul class="ib-frs">${f.blocked.map(p => row(p, 'blocked')).join('')}</ul>` : `<p class="ib-empty">${esc(T.pv_noblocked)}</p>`}</div>
     <div class="ib-card"><h2>📦 ${esc(T.pv_data)}</h2><p class="ib-mut">${esc(T.pv_data_p)}</p><a class="ib-btn" href="/api/account/export" download>${esc(T.pv_export)}</a></div>`;
   const save = async d => { try { await api('/api/friends/prefs', d); toast(T.pv_saved); } catch(e){ toast(e.message); } };
   host.querySelectorAll('[name=inv]').forEach(r => r.onchange = () => save({invites: r.value}));
+  host.querySelectorAll('[name=onl]').forEach(r => r.onchange = () => save({online: r.value}));
   host.querySelectorAll('[data-p]').forEach(c => c.onchange = () => save({[c.dataset.p]: c.checked}));
   host.querySelectorAll('[data-f]').forEach(b => b.onclick = () => fAct(b.closest('[data-pid]').dataset.pid, b.dataset.f));
 }

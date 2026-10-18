@@ -20,8 +20,9 @@ function draw(){
   if (V.battles && (V.battles.cats || []).length){ const lg = (document.documentElement.lang || 'pl').slice(0, 2); st.push(`<span class="ph-cats">${V.battles.cats.map(c => `<span class="ph-cat">${c.emoji} ${c.rank ? `<b>#${c.rank}</b> ` : ''}${esc(c.name[lg] || c.name.pl)}</span>`).join('')}</span>`); }
   const P = V.partner;
   host.innerHTML = `<section class="card ph-head${P ? ' partner' : ''}">
-    ${main ? `<img class="ph-main${P ? ' pt-ring' : ''}" src="${esc(main.url)}" alt="${esc(V.name)}" width="160" height="160">` : ''}
+    ${main ? `<span class="av-on-w"><img class="ph-main${P ? ' pt-ring' : ''}" src="${esc(main.url)}" alt="${esc(V.name)}" width="160" height="160">${V.pr && V.pr.on ? '<i class="av-dot" aria-hidden="true"></i>' : ''}</span>` : ''}
     <div><h1><span class="nk ${tier}">${esc(V.name)}</span> <span class="ai-badge" title="${esc(T.ainote)}">AI</span></h1>
+      ${V.pr ? `<p class="ph-pr${V.pr.on ? ' on' : ''}">${V.pr.on ? '<i class="on-dot" aria-hidden="true"></i>' + esc(T.online) : esc(T.ago.replace('{n}', V.pr.min))}</p>` : ''}
       ${V.official ? `<p class="ph-off">✓ ${esc(T.official)}</p>` : ''}${P ? `<p class="ph-pt">${esc(T.pt_badge)}</p>` : ''}
       ${V.tags && V.tags.length ? `<p class="ph-tags">${V.tags.map(x => `<span>${esc(x)}</span>`).join('')}</p>` : ''}</div></section>
     ${P ? `<section class="card ph-ptinfo"><span class="ad-tag">${esc(T.pt_ad)}</span><p class="pt-h">${esc(T.pt_h)}</p><p>${esc(T.pt_p)}</p>${P.campaigns && P.campaigns.length ? `<h3>${esc(T.pt_c)}</h3><ul>${P.campaigns.map(c => `<li>${esc(c)}</li>`).join('')}</ul>` : ''}</section>` : ''}
@@ -68,9 +69,7 @@ function editor(){
     <label>${esc(T.f_ex)}<input id="e_ex" maxlength="120" value="${esc(E.exercise)}"></label>
     <h3>${esc(T.f_ph)} <small id="e_cnt"></small></h3><p class="small">${esc(T.f_ph_p)}</p><div class="ph-opts" id="e_opts">${opts}</div>
     <label>${esc(T.f_pin)}${C.pin ? `<select id="e_pin"></select>` : ` <span class="lkinl">${esc(T.pin_lock)}</span>`}</label>
-    <h3>${esc(T.f_own)}</h3><p class="small">${esc(T.own_p)}</p>
-    <label class="chk"><input type="checkbox" id="e_decl"> ${esc(T.own_decl)}</label>
-    <label class="pill ghost upl">${esc(T.own_b)}<input type="file" id="e_file" accept="image/png,image/jpeg,image/webp" hidden></label>
+    <h3>${esc(T.f_own)}</h3><p class="small">${esc(T.gen_only)}</p><p><a class="pill ghost" href="/ustawienia.html#gen">✨ ${esc(T.gen_go)}</a></p>
     <label class="chk pub"><input type="checkbox" id="e_pub"${E.public ? ' checked' : ''}> ${esc(T.f_pub)}</label>
     <p class="small" id="e_pubnote"${E.public ? ' hidden' : ''}>${esc(T.pub_off)}</p>
     <p><button type="button" class="pill primary" id="e_save">${esc(T.save)}</button> ${ME.id ? `<a class="pill ghost" href="/agentka.html?id=${esc(ME.id)}${lq() ? '&' + lq() : ''}">${esc(T.view)}</a>` : ''}</p>
@@ -87,7 +86,7 @@ function editor(){
     const r = await fetch('/api/agent/profile', {method: 'POST', headers: H(), body: JSON.stringify(body)}); const d = await r.json().catch(() => ({}));
     $('#e_msg').textContent = r.ok ? T.saved : (d.message || d.error || T.err); if (r.ok) load();
   };
-  $('#e_file').onchange = async e => {
+  if ($('#e_file')) $('#e_file').onchange = async e => {
     const f = e.target.files[0]; e.target.value = ''; if (!f) return;
     if (!$('#e_decl').checked){ $('#e_msg').textContent = T.own_decl; return; }
     const rd = new FileReader(); rd.onload = async () => {
