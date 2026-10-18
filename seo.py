@@ -27,11 +27,11 @@ PAGES = {
        "es": ("Luna dice las cosas como son – tu entrenadora de voz con IA", "Habla con Luna, una asistente de IA para aprender a hablar y trabajar la voz."),
        "de": ("Luna sagt, wie es ist – deine KI-Stimmtrainerin", "Sprich mit Luna, einer KI-Assistentin zum Sprechenlernen und für die Arbeit mit der Stimme."),
        "uk": ("Луна каже як є – твоя ШІ-тренерка голосу", "Розмовляйте з Луною — ШІ-асистенткою для навчання мовлення та роботи з голосом.")},
- "/promo.html": {"pl": ("Luna mówi jak jest – porady głosowe, Luna Live i trening wypowiedzi", "Twoja trenerka głosu AI. Porady: barwa, oddech, dykcja, tempo, pewność siebie i wystąpienia. Bez reklam."),
-       "en": ("Luna Tells It Like It Is – voice tips, Luna Live and speaking practice", "Your AI voice coach. Tips on tone, breathing, diction, pace, confidence and public speaking. No ads."),
-       "es": ("Luna dice las cosas como son – consejos de voz, Luna Live y práctica oral", "Tu entrenadora de voz con IA: timbre, respiración, dicción, ritmo, seguridad y hablar en público. Sin anuncios."),
-       "de": ("Luna sagt, wie es ist – Stimmtipps, Luna Live und Sprechtraining", "Deine KI-Stimmtrainerin: Klangfarbe, Atmung, Aussprache, Tempo, Selbstsicherheit und Auftreten. Keine Werbung."),
-       "uk": ("Луна каже як є – поради для голосу, Luna Live і тренування мовлення", "Твоя ШІ-тренерка голосу: тембр, дихання, дикція, темп, упевненість і публічні виступи. Без реклами.")},
+ "/promo.html": {"pl": ("Luna – aplikacja z asystentką AI: trening głosu, własna agentka i Bitwy agentek", "Trenuj głos z Luną, stwórz własną agentkę AI i walcz w Bitwach o tytuł Miss. Za darmo na start, bez reklam, 5 języków. 18+."),
+       "en": ("Luna – AI assistant app: voice training, your own agent and Agent Battles", "Train your voice with Luna, create your own AI agent and compete in Battles for the Miss title. Free to start, no ads, 5 languages. 18+."),
+       "es": ("Luna – app con asistente de IA: entrenamiento de voz, tu propia agente y Batallas", "Entrena tu voz con Luna, crea tu propia agente de IA y compite en Batallas por el título de Miss. Gratis para empezar, sin anuncios, 5 idiomas. 18+."),
+       "de": ("Luna – App mit KI-Assistentin: Stimmtraining, eigene Agentin und Agentinnen-Battles", "Trainiere deine Stimme mit Luna, erstelle deine eigene KI-Agentin und kämpfe in Battles um den Miss-Titel. Kostenlos starten, keine Werbung, 5 Sprachen. 18+."),
+       "uk": ("Луна – застосунок з ШІ-асистенткою: тренування голосу, власна агентка і Битви агенток", "Тренуй голос з Луною, створи власну ШІ-агентку і змагайся в Битвах за титул Міс. Безкоштовний старт, без реклами, 5 мов. 18+.")},
  "/galeria.html": {"pl": ("Galeria agentek – Luna mówi jak jest", "Luna i agentki AI ze Ścianki Agentek Głosu. Agentka tygodnia według prawdziwych polubień."),
        "en": ("Agents gallery – Luna Tells It Like It Is", "Luna and AI agents from the Voice Agents’ Wall. Agent of the week by real likes."),
        "es": ("Galería de agentes – Luna dice las cosas como son", "Luna y las agentes de IA del Muro de las Agentes de Voz. Agente de la semana según «me gusta» reales."),
@@ -126,7 +126,7 @@ def jsonld(base, lang, app=True):
 
 # v1.6.6: wersja na komputer (tylko ≥1024 px) – wszystkie strony serwisu poza aplikacją i panelem
 NO_DESKTOP = ("/index.html", "/app.html", "/panel.html", "/app", "/admin-support.html")
-DESKTOP = '<link rel="stylesheet" href="/desktop.css?v=d1">\n<script src="/desktop.js?v=d1" defer></script>\n'
+DESKTOP = '<link rel="stylesheet" href="/desktop.css?v=d2">\n<script src="/desktop.js?v=d2" defer></script>\n'
 
 def localize(doc, path, lang, base):
     p = "/" if path in ("", "/index.html") else path
@@ -140,6 +140,7 @@ def localize(doc, path, lang, base):
         doc = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{t}">', doc)
         if 'og:title' not in doc: doc = doc.replace("</title>", f'</title>\n<meta property="og:title" content="{t}">', 1)
         if 'name="description"' not in doc: doc = doc.replace("</title>", f'</title>\n<meta name="description" content="{d}">', 1)
+        doc = re.sub(r'<meta property="og:description" content="[^"]*">', '', doc)   # bez podwójnego og:description
         doc = doc.replace("</title>", f'</title>\n<meta property="og:description" content="{d}"><meta property="og:locale" content="{OGL[l]}">', 1)
     canon = f"{base}{'/' if p == '/promo.html' else p}" + (f"?lang={lang}" if lang else "")
     if p in OGIMG: doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{OGIMG[p]}">', doc, count=1)

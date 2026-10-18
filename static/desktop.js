@@ -159,15 +159,15 @@ function railOn(){
   }
   tb = hf.querySelector(':scope > .tester-banner');
   if (tb && !tb.hidden){ tbAnchor = tb.nextElementSibling; rail.prepend(tb); }
-  const hero = hf.querySelector(':scope > .star-hero');
+  const hero = hf.querySelector(':scope > .sc') || hf.querySelector(':scope > .star-hero');   /* v1.7: kolumna obok Ścianki, pod wizytówką */
   hf.insertBefore(rail, hero ? hero.nextElementSibling : hf.firstElementChild);
   span();
 }
 function span(){
   if (!rail || !rail.isConnected) return;
-  let n = 0, seen = false;
-  [...hf.children].forEach(el => { if (el === rail){ seen = true; return; } if (seen && getComputedStyle(el).display !== 'none') n++; });
-  rail.style.gridRow = `2 / span ${Math.max(1, n)}`;
+  let n = 0, before = 0, seen = false;
+  [...hf.children].forEach(el => { if (el === rail){ seen = true; return; } const vis = getComputedStyle(el).display !== 'none'; if (!vis) return; if (seen) n++; else before++; });
+  rail.style.gridRow = `${before + 1} / span ${Math.max(1, n)}`;
 }
 function railOff(){
   if (!rail) return;

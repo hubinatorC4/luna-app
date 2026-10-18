@@ -83,7 +83,7 @@
   .homebody main.hf>*{grid-column:1;min-width:0}
   .homebody main.hf>.star-hero{grid-column:1/-1}
   .homebody main.hf>.tester-banner{grid-column:1/-1}
-  .homebody main.hf>.dsk-rail{display:flex;flex-direction:column;gap:16px;grid-column:2;grid-row:2/span 20;position:sticky;top:calc(var(--dsk-hdr) + 16px);max-height:calc(100vh - var(--dsk-hdr) - 32px);overflow:auto;scrollbar-width:thin;scrollbar-color:#3a302a transparent;padding:2px}
+  .homebody main.hf>.dsk-rail{display:flex;flex-direction:column;gap:16px;grid-column:2;position:sticky;top:calc(var(--dsk-hdr) + 16px);max-height:calc(100vh - var(--dsk-hdr) - 32px);overflow:auto;scrollbar-width:thin;scrollbar-color:#3a302a transparent;padding:2px}
   /* hero na całą szerokość, 2 kolumny */
   .homebody .star-hero{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;padding:28px 36px 28px 28px}
   .homebody .sh-stage{aspect-ratio:16/11;max-height:520px;width:100%}

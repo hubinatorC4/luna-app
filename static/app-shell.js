@@ -1,4 +1,4 @@
-/* Luna – aplikacja v1.4: dolne menu (Ścianka, Luna, Butik, Premium, Więcej), wprowadzenie, wskazówki, ceny i płatności.
+/* Luna – aplikacja v1.7: dolne menu (Ścianka, Luna, Bitwy, Ranking, Więcej; Butik i Premium w „Więcej”), wprowadzenie, wskazówki, ceny i płatności.
    Ścianka (strona główna), Luna i Butik to te same strony co w serwisie (to samo API, te same polubienia, komentarze i liczniki) – osadzone bez nagłówka strony. */
 (() => {
 const LS = ['pl', 'en', 'es', 'de', 'uk'];
@@ -21,7 +21,7 @@ const toast = t => { const el = $('#toast'); el.textContent = t; el.hidden = fal
 
 /* ---------- osadzone strony ---------- */
 const SITE_CSS = `header.top{display:none!important}`;
-const FRAME_CSS = `table{display:block;max-width:100%;overflow-x:auto}.sitefoot,footer.sitefoot,.hb-fab,.hb-win,.lswitch,.apk-btn,.apk-hint,.dl-sec,#pobierz,.wallpage>.hero,.appfoot .fan,.appfoot>p:last-child{display:none!important}
+const FRAME_CSS = `table{display:block;max-width:100%;overflow-x:auto}.tester-strip,#testerBanner,.tester-banner,.recruit-pin,.trust-card,.team-card,.dsk-rail,.sitefoot,footer.sitefoot,.hb-fab,.hb-win,.lswitch,.apk-btn,.apk-hint,.dl-sec,#pobierz,.wallpage>.hero,.appfoot .fan,.appfoot>p:last-child{display:none!important}
 body{padding-bottom:24px!important;font-size:17px}body.site{padding-top:0!important}
 .app-sup{margin:0 0 16px}.app-sup .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.app-sup .acts .btn{flex:1 1 140px;width:auto}.app-sup .x{float:right;background:none;border:0;color:inherit;opacity:.6;font-size:18px;cursor:pointer}`;
 function route(href){
@@ -34,6 +34,8 @@ function route(href){
   if (p === '/app' || p === '/index.html'){ show('luna'); if (u.hash === '#live') frameOf('luna', '#live'); return true; }
   if (p === '/' || p === '/promo.html' || p === '/agentki.html'){ if (/^#(plany|cennik|plans)$/.test(u.hash)) show('plans'); else if (p === '/promo.html') openPage(p + u.search + u.hash); else show('feed'); return true; }
   if (p === '/butik.html'){ show('butik'); if (u.hash) frameOf('butik', u.hash); return true; }
+  if (p === '/bitwy.html'){ show('bitwy'); if (u.hash) frameOf('bitwy', u.hash); return true; }
+  if (p === '/ranking.html'){ show('ranking'); if (u.hash) frameOf('ranking', u.hash); return true; }
   if (p === '/scianka.html' && !u.searchParams.get('post')){ show('feed'); return true; }
   if (p === '/app.html'){ const t = (u.hash || '').slice(1); if (TABS.includes(t)) show(t); return true; }
   if (/\.html$/.test(p) && !p.startsWith('/api/')){ openPage(p + u.search + u.hash); return true; }
@@ -56,7 +58,7 @@ function prep(fr, tab){
     if (u.origin === location.origin && u.pathname === fr.contentWindow.location.pathname && u.hash) return;
     if (route(a.href)) e.preventDefault();
   }, true);
-  if (tab === 'feed') supportCard(d);
+  /* v1.7: bez kart promocyjnych w aplikacji – promocja jest na stronie */
   if (tab === 'luna') capsCard(d);
 }
 /* „Co potrafi Luna”: 5 prawdziwych funkcji, każda otwiera właściwe miejsce */
@@ -107,14 +109,15 @@ function openPage(path){
 }
 
 /* ---------- zakładki ---------- */
-const TABS = ['feed', 'luna', 'butik', 'plans', 'more'];
+const TABS = ['feed', 'luna', 'bitwy', 'ranking', 'butik', 'plans', 'more'];  /* dolne menu: Ścianka, Luna, Bitwy, Ranking, Więcej; Butik i Premium – z „Więcej” */
 let cur = null, prevTab = null;
 function show(tab){
   if (tab !== 'page' && !TABS.includes(tab)) tab = 'feed';
   if (cur && cur !== 'page') prevTab = cur;
   cur = tab;
   document.querySelectorAll('.panel').forEach(p => p.hidden = p.id !== 'p-' + tab);
-  document.querySelectorAll('#tabbar button').forEach(b => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-current', on ? 'page' : 'false'); });
+  const navTab = (tab === 'butik' || tab === 'plans') ? 'more' : tab;
+  document.querySelectorAll('#tabbar button').forEach(b => { const on = b.dataset.tab === navTab; b.classList.toggle('on', on); b.setAttribute('aria-current', on ? 'page' : 'false'); });
   const host = $('#p-' + tab);
   if (host.dataset.frame) frameOf(tab);
   if (tab === 'plans' && !host.dataset.ready) renderPlans();
@@ -255,10 +258,11 @@ function renderMore(){
   const host = $('#p-more'); host.dataset.ready = '1';
   host.innerHTML = `<div class="wrapc">
     <h1 class="t">${esc(T.more_h)}</h1>
+    <ul class="menu"><li><button type="button" data-go-tab="butik"><span>👗 ${esc(T.tab_butik)}<small>${esc(T.tip.butik || '')}</small></span></button></li>
+      <li><button type="button" data-go-tab="plans"><span>💎 ${esc(T.tab_plans)}<small>${esc(T.tip.plans || '')}</small></span></button></li></ul>
     <ul class="menu"><li><button type="button" data-chat><span>${esc(T.help_h)}<small>${esc(T.help_s)}</small></span></button></li>
       <li><button type="button" data-support="chat"><span>${esc(SUP[0])}<small>${esc(SUP[1])}</small></span></button></li>
       <li><a href="/problemy.html" data-page>${esc(T.problems)}</a></li>
-      <li><a href="/twarz.html#castForm" data-page><span>${esc(T.cast)}<small>${esc(T.cast_s)}</small></span></a></li>
       <li data-bt><a href="/bitwy.html"><span>${esc(BT[0])}<small>${esc(BT[1])}</small></span></a></li>
       <li data-bt><a href="/ranking.html" data-page><span>${esc(RK[0])}<small>${esc(RK[1])}</small></span></a></li>
       <li data-bt><a href="/zasady-bitew.html" data-page><span>${esc(ZB[0])}<small>${esc(ZB[1])}</small></span></a></li>
@@ -267,11 +271,13 @@ function renderMore(){
     ${T.how.map(([h, p]) => `<details class="more"><summary>${esc(h)}</summary><p>${esc(p)}</p></details>`).join('')}
     <ul class="menu"><li><button type="button" id="replay">${esc(T.replay)}</button></li></ul>
     <h2 class="t" style="font-size:22px">${esc(T.links_h)}</h2>
-    <ul class="menu">${T.links.map(([h, l]) => `<li><a href="${h}" data-page>${esc(l)}</a></li>`).join('')}
+    <ul class="menu">${T.links.filter(([h]) => h === '/live.html').map(([h, l]) => `<li><a href="${h}" data-page>${esc(l)}</a></li>`).join('')}
+      <li><a href="${withLang('/')}" target="_blank" rel="noopener">${esc(T.site_link)}</a></li>
       <li><a href="/regulamin.html" data-page>📄 ${esc(T.terms)}</a></li><li><a href="/privacy.html" data-page>🔒 ${esc(T.privacy)}</a></li></ul>
     <p class="small" style="text-align:center">${esc(T.foot)}</p></div>`;
   host.querySelectorAll('a[data-page]').forEach(a => a.onclick = e => { e.preventDefault(); openPage(a.getAttribute('href')); });
   host.querySelector('[data-chat]').onclick = () => route('/app#live');
+  host.querySelectorAll('[data-go-tab]').forEach(b => b.onclick = () => show(b.dataset.goTab));
   $('#replay').onclick = () => { show('feed'); onboarding(); };
 }
 
