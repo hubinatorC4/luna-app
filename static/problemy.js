@@ -21,6 +21,7 @@ f.onsubmit = async e => {
 };
 $('#stForm').onsubmit = async e => {
   e.preventDefault(); const id = e.target.id.value.trim().toUpperCase(); const out = $('#stOut');
+  if (!id){ out.textContent = dict().st_none; try { e.target.id.focus(); } catch(x){} return; }   // QA: puste pole nie wysyła zapytania (było 404 w konsoli)
   let k = ''; try { k = JSON.parse(localStorage.getItem('luna.tickets') || '{}')[id] || ''; } catch(x){}
   const r = await fetch('/api/tickets/status?id=' + encodeURIComponent(id) + '&k=' + encodeURIComponent(k));
   const d = await r.json(); out.textContent = r.ok ? `${d.id}: ${d.status}${d.reply ? ' – ' + d.reply : ''}` : dict().st_none;
