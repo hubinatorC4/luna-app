@@ -231,11 +231,21 @@ def bt_agent_data(eid):
     return {"id": eid, "name": p["name"], "img": p["img"], "stats": {"pts": p["pts"], "wins": p["wins"], "pos": p["pos"]}, "official": bool(p.get("official")), "partner": False}
 
 # ---------- trasy HTTP ----------
-REDIRECTS = {
-    "/casting": "/twarz.html?" + urlencode({"utm_source": "video", "utm_medium": "social", "utm_campaign": "casting"}),
-    "/zapros": "/app#konto",
-    "/glosuj": "/bitwy.html?" + urlencode({"utm_source": "share", "utm_medium": "link", "utm_campaign": "glosuj"}),
+# Krótkie linki: cel, domyślne utm_* (dodawane TYLKO gdy przychodzący link nie ma żadnego utm_*), fragment.
+_SHORT = {
+    "/casting": ("/twarz.html", {"utm_source": "video", "utm_medium": "social", "utm_campaign": "casting"}, ""),
+    "/zapros": ("/app", {}, "#konto"),
+    "/glosuj": ("/bitwy.html", {"utm_source": "share", "utm_medium": "link", "utm_campaign": "glosuj"}, ""),
 }
+REDIRECTS = {k: v[0] + ("?" + urlencode(v[1]) if v[1] else "") + v[2] for k, v in _SHORT.items()}
+
+def short_location(path, query=""):
+    """Przekazuje dalej przychodzący query string (np. utm_* z TikToka); domyślne utm_* tylko, gdy brak własnych. Bez duplikatów."""
+    from urllib.parse import parse_qsl
+    dest, defaults, frag = _SHORT[path]
+    q = [(k, v) for k, v in parse_qsl(query or "", keep_blank_values=True)][:30]
+    if not any(k.lower().startswith("utm_") for k, _ in q): q += list(defaults.items())
+    return dest + ("?" + urlencode(q) if q else "") + frag
 
 def _send(h, code, body, ctype, cache="public, max-age=600"):
     h.send_response(code); h.send_header("Content-Type", ctype); h.send_header("Content-Length", str(len(body)))
@@ -246,8 +256,7 @@ def handle_get(h, u, owner_plan=None):
     """Zwraca True, gdy żądanie obsłużone: /og/battle/<bid>.jpg, /og/agent/<pid>.jpg, /og/bt/<eid>.jpg, krótkie linki."""
     p = u.path.rstrip("/") or "/"
     if p in REDIRECTS:
-        loc = REDIRECTS[p]
-        if u.query and "#" not in loc: loc += ("&" if "?" in loc else "?") + u.query
+        loc = short_location(p, u.query)
         h.send_response(302); h.send_header("Location", loc); h.send_header("Content-Length", "0"); h.end_headers(); return True
     m = re.fullmatch(r"/og/(battle|agent|bt)/([0-9a-z]{4,12})\.jpg", u.path)
     if not m: return False
