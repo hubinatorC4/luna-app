@@ -165,31 +165,7 @@ $('#autoSpeak').onchange = e => { S.autoSpeak = e.target.checked; save(); };
 $('#resetBtn').onclick = () => { const w = S.wake; S = Object.assign({}, DEF, {wake:w}); save(); renderSettings(); };
 $('#testVoice').onclick = () => speak('Hola, cariño. Mów szczerze, cicho i powoli, a twój głos będzie niższy i cieplejszy.');
 
-/* ---------- Start ---------- */
 function openAdmin(){ window.LunaAdmin && window.LunaAdmin.open(); }
-
-/* ---------- Start ---------- */
-/* ---------- Tryb producenta ---------- */
-const adm = $('#admin'), F = ['system_prompt','greeting','wake_reply','ai_first','ai_tag'];
-const admTok = () => sessionStorage.getItem('luna.admin');
-function admMsg(t, bad){ const m = $('#admMsg'); m.textContent = t; m.style.color = bad ? '#ff8a7a' : '#7dffa8'; }
-async function admFetch(path, body){
-  const r = await fetch(path, {method: body ? 'POST' : 'GET', headers:{'Content-Type':'application/json','X-Admin-Token':admTok()||''}, body: body ? JSON.stringify(body) : undefined});
-  if (r.status === 401){ sessionStorage.removeItem('luna.admin'); adm.close(); addMsg('Sesja producenta wygasła. Wpisz kod ponownie.', 'luna'); throw new Error('401'); }
-  const d = await r.json(); if (!r.ok) throw new Error(d.error || r.status); return d;
-}
-function fillAdmin(c){ F.forEach(k => $('#adm_'+k).value = c[k] || ''); $('#adm_kb').value = JSON.stringify(c.kb_overrides || [], null, 1); }
-async function openAdmin(){
-  try { const d = await admFetch('/api/admin/config'); fillAdmin(d.config); admMsg(''); adm.showModal(); } catch(e){}
-}
-$('#admSave').onclick = async () => {
-  let kb; try { kb = JSON.parse($('#adm_kb').value || '[]'); } catch(e){ return admMsg('Błędny JSON w bazie odpowiedzi.', true); }
-  const config = {kb_overrides: kb}; F.forEach(k => config[k] = $('#adm_'+k).value);
-  try { const d = await admFetch('/api/admin/config', {config}); fillAdmin(d.config); Object.assign(CFG, d.config); admMsg('Zapisano ✔'); } catch(e){ admMsg('Błąd zapisu: ' + e.message, true); }
-};
-$('#admReset').onclick = async () => { if (!confirm('Przywrócić domyślne instrukcje Luny?')) return;
-  try { const d = await admFetch('/api/admin/reset', {}); fillAdmin(d.config); Object.assign(CFG, d.config); admMsg('Przywrócono domyślne ✔'); } catch(e){ admMsg('Błąd: ' + e.message, true); } };
-$('#admLogout').onclick = async () => { try { await admFetch('/api/admin/logout', {}); } catch(e){} sessionStorage.removeItem('luna.admin'); adm.close(); };
 
 /* ---------- Start ---------- */
 const CFG = {greeting:'Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.', wake_reply:'Słyszę cię, cariño. Jestem Luna, sztucznie stworzona asystentka AI.', ai_tag:'Luna, asystentka AI', chat_notice:'Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.'};
