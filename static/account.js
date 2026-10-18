@@ -191,8 +191,8 @@ window.LunaNews = () => {
   if (!d){ d = document.createElement('dialog'); d.id = 'newsDlg'; d.className = 'news';
     d.innerHTML = '<h2>Co nowego w wersji 1.6.4</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
     document.body.appendChild(d); }
-  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.6'); } catch(e){}
+  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.7'); } catch(e){}
 };
-try { if (localStorage.getItem('luna.seenVer') !== '1.6.6' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
+try { if (localStorage.getItem('luna.seenVer') !== '1.6.7' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-news]')){ e.preventDefault(); window.LunaNews(); } });
 })();

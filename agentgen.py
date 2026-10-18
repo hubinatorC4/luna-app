@@ -172,15 +172,10 @@ def _nsfw(j, v):
     """nsfw_filter (moduł zespołu bezpieczeństwa). Brak modułu lub błąd = „zamknięte”: decyzję podejmuje moderator (None)."""
     try:
         import nsfw_filter
-        if j["kind"] == "img":
-            raw = base64.b64decode((store.get("agimg:" + v) or {})["b"])
-            fn = getattr(nsfw_filter, "check_image", None) or getattr(nsfw_filter, "check", None)
-        else:
-            import agentvideo; raw = open(os.path.join(agentvideo.VDIR, "g_" + v + ".mp4"), "rb").read()
-            fn = getattr(nsfw_filter, "check_video", None)
-        if not fn: return None
-        r = fn(raw); ok = r.get("ok", r.get("safe")) if isinstance(r, dict) else r
-        return False if ok is False else None   # nawet „czysty” wynik i tak trafia do moderatora
+        if j["kind"] != "img": return None    # wideo: filtr klatkowy nie jest jeszcze dostępny → moderator
+        raw = base64.b64decode((store.get("agimg:" + v) or {})["b"])
+        verdict, _why, _sc = nsfw_filter.classify(raw)   # ok | review | block (fail-closed → review)
+        return False if verdict == "block" else None   # nawet „ok” i tak trafia do moderatora
     except Exception: return None
 
 def _drop(j, v):
