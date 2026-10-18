@@ -121,6 +121,7 @@ def enter(uid, d):
     url, _info = social.avatars_check_wall(d.get("image"), d.get("img_decl"))
     eid = secrets.token_hex(5)
     e = {"id": eid, "uid": uid, "ak": ak, "name": name, "t": int(time.time()), "status": "pending", "wins": 0, "bt_votes": 0, "cats": cats, "scene": scene}
+    if _info.get("nsfw") != "ok": e["nsfw_review"] = True  # filtr: „na granicy” – moderator ogląda szczególnie uważnie
     with _lock:
         I = store.get("bt_img", {}) or {}; I[eid] = url; store.put("bt_img", dict(list(I.items())[-300:]))
         E = _entries(); E.append(e); store.put("bt_entries", E[-1000:])

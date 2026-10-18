@@ -21,6 +21,7 @@ import textutil
 import catalog, base64, training, profiles, nicktier, partners, agentwall, quality, userprof, agentvideo, battle_categories
 import promo_share
 import forms18_routes
+import nsfw_filter
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox, support
 from datetime import datetime, timedelta
 try:
@@ -1654,6 +1655,8 @@ class H(SimpleHTTPRequestHandler):
             except Exception as e: sys.stderr.write("webhook error %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
             return self._json({"ok": True, "result": res})
         if not security.origin_ok(self.headers): return self._json({"error": "Niedozwolone źródło żądania."}, 403)
+        try: nsfw_filter.set_lang(api_i18n.req_lang(u.query, self.headers) or "pl")  # język komunikatów filtra zdjęć
+        except Exception: pass
         try: data = self._body()
         except ValueError as e:
             if str(e) == "too large": return self._json({"error": "Za duże żądanie."}, 413)

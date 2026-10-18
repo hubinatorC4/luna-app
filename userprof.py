@@ -86,6 +86,8 @@ def set_avatar_upload(uid, plan, data_url):
     if not m: raise ValueError("Dozwolone są tylko obrazy JPG, PNG lub WEBP.")
     raw = base64.b64decode(m.group(2))
     if len(raw) > 5 * 1024 * 1024: raise ValueError("Plik jest za duży (maks. 5 MB).")
+    import nsfw_filter
+    nsfw = nsfw_filter.enforce(raw, "user_avatar")  # jawna nagość → Blocked; status i tak „pending” do decyzji moderatora
     px = min(quality.caps(plan)["img"], 1024)  # awatar: limit planu (854 / 1024), wyświetlany w 2x/3x
     out, ext = imgsafe.reencode(raw, max_px=px, max_in=5 * 1024 * 1024, quality=4)
     thumb, _ = imgsafe.reencode(out, max_px=64, quality=6)
@@ -95,7 +97,7 @@ def set_avatar_upload(uid, plan, data_url):
         P = _P(); r = P.get(uid) or {}; r["avatar"] = "up:" + h; P[uid] = r; store.put("user_profiles", P)
         M = store.get("avatar_mod", {}) or {}
         M["ua-" + h] = {"id": "ua-" + h, "vid": "user-" + uid[:8], "uid": uid[:8], "name": nick_of(uid), "t": int(time.time()), "kind": "user_avatar",
-                        "thumb": "data:image/jpeg;base64," + base64.b64encode(thumb).decode(), "ai_markers": [], "reports": 0, "user": uid}
+                        "thumb": "data:image/jpeg;base64," + base64.b64encode(thumb).decode(), "ai_markers": [], "reports": 0, "user": uid, **({"nsfw_review": True} if nsfw != "ok" else {})}
         store.put("avatar_mod", dict(sorted(M.items(), key=lambda kv: -kv[1]["t"])[:300]))
     return "up:" + h, px
 

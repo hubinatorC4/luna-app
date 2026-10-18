@@ -27,6 +27,8 @@ def submit(d):
         if not m: raise ValueError("Zrzut ekranu musi być obrazem (JPG, PNG lub WEBP).")
         raw = base64.b64decode(m.group(2))
         if len(raw) > 5 * 1024 * 1024: raise ValueError("Zrzut ekranu jest za duży (maks. 5 MB).")
+        import nsfw_filter
+        nsfw_filter.enforce(raw, "ticket")  # zrzut widzi tylko obsługa, ale jawnej nagości też nie przyjmujemy
         out, ext = imgsafe.reencode(raw, max_px=1600, max_in=5 * 1024 * 1024, quality=4)
         shot = f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
     key = secrets.token_urlsafe(10)

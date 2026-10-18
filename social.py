@@ -70,6 +70,8 @@ def counts(target, voter=None, V=None, X=None):
 def _cm_ok(c, X): return c["status"] == "approved" and c["author"] not in X
 
 # ---------- Ścianka ----------
+def _nsfw_last():
+    import nsfw_filter; return nsfw_filter.last()
 def _trusted(ak): return sum(1 for p in _posts() if p["author"] == ak and p.get("ever_approved")) >= TRUST_AFTER
 
 def create_post(d, uid, vid, acct_nick=None):
@@ -88,13 +90,14 @@ def create_post(d, uid, vid, acct_nick=None):
         img_kind = "user"
     elif d.get("image"):
         url, _info = avatars_check_wall(d.get("image"), d.get("img_decl")); img_kind = "ai"
+    nsfw_hold = bool(d.get("image")) and _nsfw_last() != "ok"
     if d.get("image"):
         img_id = secrets.token_hex(8)
         with _lock:
             I = store.get("wall_img", {}) or {}; I[img_id] = url
             store.put("wall_img", dict(list(I.items())[-400:]))
     agent = re.sub(r"[^\w\-]", "", str(d.get("agent", "")))[:40] or None
-    auto = _trusted(ak) and img_kind != "user"  # zdjęcia użytkownika zawsze przechodzą przez moderację przed publikacją
+    auto = _trusted(ak) and img_kind != "user" and not nsfw_hold  # zdjęcia użytkownika i obrazy „na granicy” filtra – zawsze moderacja
     lang = d.get("lang") if d.get("lang") in LANGS else "pl"
     p = {"id": secrets.token_hex(6), "lang": lang, "variants": {}, "official": False, "author": ak, "uid": uid or "", "nick": nick, "text": text, "img": img_id, "img_kind": img_kind, "agent": agent,
          "t": int(time.time()), "edited": 0, "status": "approved" if auto else "pending", "ever_approved": auto, "reports": 0}
@@ -112,6 +115,8 @@ def avatars_check_wall(data_url, declared):
     info = avatars.inspect(raw)
     if info["camera"] and not info["ai_markers"]:
         raise PermissionError("Ten plik wygląda na zdjęcie z aparatu lub telefonu. Na Ściance publikujemy tylko obrazy wygenerowane przez AI.")
+    import nsfw_filter
+    info["nsfw"] = nsfw_filter.enforce(raw, "wall_ai")  # jawna nagość → Blocked (400); granica → "review" (tylko moderator)
     out, ext = imgsafe.reencode(raw, max_px=1920, max_in=5 * 1024 * 1024, quality=3)  # wydawane dalej według planu oglądającego
     return f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode(), info
 
@@ -126,6 +131,8 @@ def user_photo_wall(data_url, decl, uid):
     if not m: raise ValueError("Dozwolone są tylko obrazy JPG, PNG lub WEBP.")
     raw = base64.b64decode(m.group(2))
     if len(raw) > 5 * 1024 * 1024: raise ValueError("Plik jest za duży (maks. 5 MB).")
+    import nsfw_filter
+    nsfw_filter.enforce(raw, "wall_user")  # zdjęcia użytkownika i tak zawsze czekają na moderatora
     out, ext = imgsafe.reencode(raw, max_px=quality.USER_PHOTO_PX, max_in=5 * 1024 * 1024, quality=4)  # bez EXIF/GPS
     quality.user_photo_mark(raw); quality.user_photo_mark(out)  # nigdy jako twarz agentki
     return f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()

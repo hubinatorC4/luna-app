@@ -76,14 +76,18 @@ def check_upload(data_url, declared, vid="", name=""):
     if info["camera"] and not info["ai_markers"]:
         raise PermissionError("Ten plik wygląda na zdjęcie z aparatu lub telefonu (" + ", ".join(info["camera"]) +
                               "). Awatarem może być tylko obraz wygenerowany przez AI albo gotowa ikona – wybierz awatar z galerii lub wygeneruj go w aplikacji.")
+    import nsfw_filter
+    nsfw = nsfw_filter.enforce(raw, "avatar")  # jawna nagość → Blocked
     out, ext = imgsafe.reencode(raw, max_px=256, max_in=5 * 1024 * 1024, quality=4)
     url = f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
     thumb, _ = imgsafe.reencode(out, max_px=64, quality=6)
     rec = {"id": hashlib.sha1(out, usedforsecurity=False).hexdigest()[:16], "vid": str(vid)[:32], "uid": str(vid)[:8], "name": str(name)[:30], "t": int(time.time()),
            "thumb": "data:image/jpeg;base64," + base64.b64encode(thumb).decode(), "ai_markers": info["ai_markers"], "kind": "upload", "reports": 0}
+    if nsfw != "ok": rec["nsfw_review"] = True
     with _lock:
         u = store.get("avatar_mod", {}) or {}; u[rec["id"]] = {**u.get(rec["id"], {}), **rec}
         store.put("avatar_mod", dict(sorted(u.items(), key=lambda kv: -kv[1]["t"])[:300]))
+    if nsfw != "ok": raise nsfw_filter.Held(nsfw_filter.review_message())  # awatar od razu widać na czacie → na granicy: nie publikujemy
     return url, info
 
 def report(uid, name, avatar, reason=""):
