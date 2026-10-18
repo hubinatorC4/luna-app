@@ -123,7 +123,7 @@ def jsonld(base, lang, app=True):
     return "".join(f'<script type="application/ld+json">{_j.dumps(x, ensure_ascii=False)}</script>' for x in out)
 
 # v1.6.6: wersja na komputer (tylko ≥1024 px) – wszystkie strony serwisu poza aplikacją i panelem
-NO_DESKTOP = ("/index.html", "/app.html", "/panel.html", "/app")
+NO_DESKTOP = ("/index.html", "/app.html", "/panel.html", "/app", "/admin-support.html")
 DESKTOP = '<link rel="stylesheet" href="/desktop.css?v=d1">\n<script src="/desktop.js?v=d1" defer></script>\n'
 
 def localize(doc, path, lang, base):

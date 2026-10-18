@@ -3,7 +3,7 @@
    2) zakładki: to, co się nie mieści, trafia do „Więcej ▾” (nic nie jest ucinane);
    3) strona główna: boczna kolumna (testerzy, na skróty, aplikacja). */
 (() => {
-if (document.documentElement.hasAttribute('data-app') || ['/app', '/index.html', '/app.html', '/panel.html'].includes(location.pathname)) return;
+if (document.documentElement.hasAttribute('data-app') || ['/app', '/index.html', '/app.html', '/panel.html', '/admin-support.html'].includes(location.pathname)) return;
 const header = document.querySelector('header.top');
 if (!header || !header.querySelector('.bar')) return;
 const mq = matchMedia('(min-width:1024px)');
