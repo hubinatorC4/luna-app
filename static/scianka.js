@@ -2,7 +2,7 @@
 (() => {
 const S = window.LunaSocial; const {T, esc, ago, api, ava} = S;
 const D = JSON.parse(document.getElementById('i18n').textContent); const W = Object.assign({}, D.pl, D[S.lang] || {});
-const X = {pl: {edit: 'Edytuj', del: 'Usuń', delq: 'Usunąć ten wpis?', save: 'Zapisz', pend: 'Dziękujemy! Wpis pojawi się po sprawdzeniu przez moderatora. 💚', ok: 'Opublikowano! 🎉', edited: 'edytowano', waiting: 'czeka na moderację', big: 'Obraz jest za duży (maks. 5 MB).', short: 'Napisz coś. 🙂'},
+const X = {pl: {other: 'Zobacz w innym języku:', newp: 'Nowe posty', top: 'Do góry', write: 'Napisz wpis', edit: 'Edytuj', del: 'Usuń', delq: 'Usunąć ten wpis?', save: 'Zapisz', pend: 'Dziękujemy! Wpis pojawi się po sprawdzeniu przez moderatora. 💚', ok: 'Opublikowano! 🎉', edited: 'edytowano', waiting: 'czeka na moderację', big: 'Obraz jest za duży (maks. 5 MB).', short: 'Napisz coś. 🙂'},
  en: {other: 'See in another language:', newp: 'New posts', top: 'Back to top', write: 'Write a post', edit: 'Edit', del: 'Delete', delq: 'Delete this post?', save: 'Save', pend: 'Thank you! Your post will appear once a moderator has reviewed it. 💚', ok: 'Posted! 🎉', edited: 'edited', waiting: 'awaiting moderation', big: 'The image is too large (max 5 MB).', short: 'Write something. 🙂'},
  es: {other: 'Ver en otro idioma:', newp: 'Nuevas publicaciones', top: 'Arriba', write: 'Escribir', edit: 'Editar', del: 'Eliminar', delq: '¿Eliminar esta publicación?', save: 'Guardar', pend: '¡Gracias! Tu publicación aparecerá cuando la revise un moderador. 💚', ok: '¡Publicado! 🎉', edited: 'editado', waiting: 'pendiente de moderación', big: 'La imagen es demasiado grande (máx. 5 MB).', short: 'Escribe algo. 🙂'},
  de: {other: 'In einer anderen Sprache ansehen:', newp: 'Neue Beiträge', top: 'Nach oben', write: 'Beitrag schreiben', edit: 'Bearbeiten', del: 'Löschen', delq: 'Diesen Beitrag löschen?', save: 'Speichern', pend: 'Danke! Dein Beitrag erscheint, sobald ein Moderator ihn geprüft hat. 💚', ok: 'Veröffentlicht! 🎉', edited: 'bearbeitet', waiting: 'wartet auf Freigabe', big: 'Das Bild ist zu groß (max. 5 MB).', short: 'Schreib etwas. 🙂'},
@@ -12,15 +12,17 @@ let sort = 'new', next = null, loading = false, done = false, img = null, ME = n
 const feed = $('#feed');
 const VAR = {};
 const fmt = t => esc(t).split(/\n{2,}/).map(x => `<p>${x.replace(/\n/g, '<br>')}</p>`).join('');
+const RICH = {};
 function postHTML(p){
+  if (p.rich) RICH[p.id] = p;
   const url = location.origin + '/scianka.html?post=' + p.id + (S.lang !== 'pl' ? '&lang=' + S.lang : '');
   const text = fmt(p.text); if (p.variants) VAR[p.id] = p.variants;
+  const lsw = p.variants ? `<div class="langsw">🌐 <span>${X.other}</span> ${Object.keys(p.variants).map(l => `<button type="button" data-vl="${l}" class="${l === p.lang ? 'on' : ''}">${l.toUpperCase()}</button>`).join('')}</div>` : '';
   return `<article class="post card" id="p-${esc(p.id)}" data-id="${esc(p.id)}">
-<header class="phead">${ava(p.nick, 48)}<div class="pmeta"><div><b class="nick">${esc(p.nick)}</b>${p.official ? ' <span class="verified">✓ Oficjalne</span>' : ''}${p.pending ? `<span class="pend">${X.waiting}</span>` : ''}</div><time datetime="${new Date(p.t * 1000).toISOString()}">${ago(p.t)}${p.edited ? ' · ' + X.edited : ''}</time></div>
+<header class="phead">${p.avatar ? `<span class="offava"><img src="${esc(p.avatar)}" alt="" width="44" height="44"></span>` : ava(p.nick, 48)}<div class="pmeta"><div><b class="nick">${esc(p.nick)}</b>${p.official ? (p.verified_label ? ` <span class="badge-ver" title="${esc(p.verified_label)}" aria-label="${esc(p.verified_label)}">✓</span>` : ' <span class="verified">✓ Oficjalne</span>') : ''}${p.pending ? `<span class="pend">${X.waiting}</span>` : ''}</div><time datetime="${new Date(p.t * 1000).toISOString()}">${ago(p.t)}${p.edited ? ' · ' + X.edited : ''}</time></div>
 ${p.mine ? `<div class="menu"><button type="button" data-edit>${X.edit}</button><button type="button" data-del>${X.del}</button></div>` : ''}${p.pending ? '' : `<button type="button" class="report" data-report="post:${esc(p.id)}">⋯ ${T.report}</button>`}</header>
-<div class="ptext" lang="${esc(p.lang)}">${text}</div>
-${p.variants ? `<div class="langsw">🌐 <span>${X.other}</span> ${Object.keys(p.variants).map(l => `<button type="button" data-vl="${l}" class="${l === p.lang ? 'on' : ''}">${l.toUpperCase()}</button>`).join('')}</div>` : ''}
-${p.img ? `<figure class="media"><img src="${esc(p.img)}" alt="" loading="lazy"><span class="ai-badge">✦ AI</span></figure>` : ''}
+${p.rich ? lsw : ''}${p.rich ? `<div class="rbody" lang="${esc(p.lang)}">${window.LunaOfficial.render(p, p.lang)}</div>` : `<div class="ptext" lang="${esc(p.lang)}">${text}</div>${lsw}`}
+${p.img && !p.rich ? `<figure class="media"><img src="${esc(p.img)}" alt="" loading="lazy"><span class="ai-badge">✦ AI</span></figure>` : ''}
 ${p.pending ? '' : `<div class="acts">${S.voteButtons('post:' + p.id, p.votes)}<button type="button" class="act" data-cm aria-expanded="false">💬 ${T.cm} <em>${p.ncomments}</em></button><button type="button" class="act share" data-share="${esc(url)}" data-text="${esc(p.text.slice(0, 90))}">↗ ${T.share}</button></div>
 <div class="comments" hidden></div>`}</article>`;
 }
@@ -47,6 +49,7 @@ document.querySelectorAll('.tabs [data-sort]').forEach(b => b.onclick = () => { 
 feed.addEventListener('click', async e => {
   const art = e.target.closest('article'); if (!art) return; const id = art.dataset.id;
   const vl = e.target.closest('[data-vl]');
+  if (vl && RICH[id]){ const rb = art.querySelector('.rbody'); rb.lang = vl.dataset.vl; rb.innerHTML = window.LunaOfficial.render(RICH[id], vl.dataset.vl); art.querySelectorAll('[data-vl]').forEach(b => b.classList.toggle('on', b === vl)); return; }
   if (vl){ const v = (VAR[id] || {})[vl.dataset.vl]; if (v != null){ const pt = art.querySelector('.ptext'); pt.lang = vl.dataset.vl; pt.innerHTML = fmt(v); art.querySelectorAll('[data-vl]').forEach(b => b.classList.toggle('on', b === vl)); } return; }
   if (e.target.closest('[data-cm]')){ const b = e.target.closest('[data-cm]'); const box = art.querySelector('.comments'); box.hidden = !box.hidden; b.setAttribute('aria-expanded', !box.hidden);
     if (!box.hidden && !box.dataset.ready){ box.dataset.ready = 1; S.comments(box, 'post:' + id, {onCount: n => b.querySelector('em').textContent = n}); } }

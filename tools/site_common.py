@@ -1,5 +1,5 @@
 """Wspólny nagłówek i stopka stron informacyjnych (generowane przez tools/build_pages.py)."""
-VER = "1.3.1"
+VER = "1.3.2"
 HEAD = """<!doctype html>
 <html lang="pl">
 <head>

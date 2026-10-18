@@ -12,4 +12,5 @@ data/
 !data/
 data/*
 !data/catalog_outfits.json
+!data/wall_official.json
 !static/promo/luna_powitanie.mp3

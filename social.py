@@ -3,7 +3,8 @@
 Wszystkie komentarze są moderowane przed publikacją; wpisy na Ściance od zaufanych autorów (3+ zatwierdzone) publikują się od razu.
 Liczniki są wyłącznie prawdziwe – nic nie jest „zasiewane”."""
 import base64, hashlib, re, secrets, threading, time, unicodedata
-import store, imgsafe, avatars
+import store, imgsafe, avatars, official
+PRICING = lambda: {}  # ustawiane przez serwer (cennik z CFG)
 
 _lock = threading.Lock()
 MAX_POST, MAX_CMT, MAX_NICK = 2000, 1000, 30
@@ -140,21 +141,35 @@ def public_post(p, voter, V, C, mine_ak, lang="pl"):
     return {"id": p["id"], "nick": p["nick"], "text": va[shown], "lang": shown, "orig": p.get("lang", "pl"), "variants": va if len(va) > 1 else None, "official": p.get("official", False), "img": ("/api/wall/img/" + p["img"]) if p.get("img") else None, "agent": p.get("agent"),
             "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved"}
 
+def _off_hidden(): return set(store.get("official_hidden", []) or [])
+
 def feed(sort, before, limit, uid, vid, lang="pl"):
-    voter = author_key(uid, vid); V = _votes(); C = _cmts()
+    voter = author_key(uid, vid); V = _votes(); C = _cmts(); hid = _off_hidden()
     P = [p for p in _posts() if p["status"] == "approved" or (p["author"] == voter and p["status"] == "pending")]
+    P += [dict(o, _off=True) for o in official.raw() if o["id"] not in hid]
+    score = lambda p: counts("post:" + p["id"], None, V)["up"] - counts("post:" + p["id"], None, V)["down"]
     if sort == "top":
         wk = time.time() - 7 * 86400
-        P = [p for p in P if p["t"] >= wk]
-        P.sort(key=lambda p: (counts("post:" + p["id"], None, V)["up"] - counts("post:" + p["id"], None, V)["down"], p["t"]), reverse=True)
+        P = [p for p in P if p["t"] >= wk or p.get("_off")]
+        P.sort(key=lambda p: (score(p), p["t"]), reverse=True)
         start = int(before or 0); items = P[start:start + limit]; nxt = start + limit if len(P) > start + limit else None
     else:
         P.sort(key=lambda p: p["t"], reverse=True)
         if before: P = [p for p in P if p["t"] < int(before)]
         items = P[:limit]; nxt = items[-1]["t"] if len(P) > limit else None
-    return {"items": [public_post(p, voter, V, C, voter, lang) for p in items], "next": nxt}
+    pr = PRICING()
+    def pub(p):
+        if p.get("_off"):
+            cm = [x for x in C if x["target"] == "post:" + p["id"] and x["status"] == "approved"]
+            return official.public(p, lang, pr, {"votes": counts("post:" + p["id"], voter, V), "ncomments": len(cm)})
+        return public_post(p, voter, V, C, voter, lang)
+    return {"items": [pub(p) for p in items], "next": nxt}
 
 def get_post(pid):
+    if str(pid).startswith("off-"):
+        o = official.get(pid)
+        if not o or pid in _off_hidden(): return None
+        return {"id": o["id"], "nick": official.data()["account"]["pl"], "text": o["v"]["pl"]["text"], "img": None, "img_url": o["img"], "official": True, "v": o["v"]}
     return next((p for p in _posts() if p["id"] == pid and p["status"] == "approved"), None)
 
 # ---------- komentarze ----------
@@ -213,6 +228,16 @@ def admin_list():
                       "pending": len([p for p in P if p["status"] == "pending"]) + len([c for c in C if c["status"] == "pending"])}}
 
 def moderate(kind, id_, action, extra=None):
+    if kind == "post" and str(id_).startswith("off-"):  # oficjalne wpisy z pliku w repo: tylko ukryj / przywróć
+        if not official.get(id_): raise KeyError(id_)
+        with _lock:
+            H = _off_hidden()
+            if action in ("hide", "delete", "reject"): H.add(id_)
+            elif action in ("approve", "dismiss", "unhide"): H.discard(id_)
+            else: raise ValueError("bad action")
+            store.put("official_hidden", sorted(H))
+            R = [r for r in (store.get("social_reports", []) or []) if r["target"] != f"post:{id_}" or action not in ("approve", "dismiss")]; store.put("social_reports", R)
+        return {"id": id_, "hidden": id_ in H}
     key = {"post": "wall_posts", "cmt": "comments"}[kind]
     with _lock:
         L = store.get(key, []) or []; x = next((i for i in L if i["id"] == id_), None)

@@ -56,3 +56,6 @@ body.xmas .countdown .cd span{border-color:#c9a24a;box-shadow:0 0 12px rgba(255,
 .item .bsoc{margin-top:8px}.item .bsoc .acts{margin-top:6px;padding-top:8px}
 .item .bsoc details summary{cursor:pointer;font-size:14px;color:#ddd;padding:4px 0}
 .item .bsoc .cform input.cn{flex-basis:100%}
+
+.item.upcoming{outline:1px solid rgba(46,230,107,.35)}
+.soonb{display:inline-block;margin-top:6px;font-size:12px;font-weight:800;color:#c8ffd9;background:rgba(46,230,107,.12);border:1px solid rgba(46,230,107,.3);padding:3px 10px;border-radius:999px;white-space:nowrap}

@@ -1,0 +1,850 @@
+{
+ "account": {
+  "pl": "Luna · oficjalne konto",
+  "en": "Luna · official account",
+  "es": "Luna · cuenta oficial",
+  "de": "Luna · offizielles Konto",
+  "uk": "Луна · офіційний акаунт"
+ },
+ "verified": {
+  "pl": "Zweryfikowane konto",
+  "en": "Verified account",
+  "es": "Cuenta verificada",
+  "de": "Verifiziertes Konto",
+  "uk": "Підтверджений акаунт"
+ },
+ "avatar": "/wall/official/logo.webp",
+ "posts": [
+  {
+   "id": "off-1",
+   "kind": 1,
+   "t": 1792341900,
+   "img": "/wall/official/butik.webp",
+   "items": [
+    "sweter",
+    "biznes",
+    "wieczorowa"
+   ],
+   "links": {
+    "btn": "/butik.html"
+   },
+   "v": {
+    "pl": {
+     "tag": "🛍️ Butik Luny",
+     "h": "Szafa, która nigdy się nie zacina",
+     "ps": [
+      "Prawdziwa szafa ma swoje humory: drzwi skrzypią, wieszaki spadają w środku nocy, a ulubiony sweter zawsze jest akurat w praniu. Wirtualna szafa w Butiku Luny nie ma takich problemów. Ma za to stroje, w które ubierzesz swoją agentkę AI jednym kliknięciem.",
+      "Na dobry początek trzy klasyki: coś na co dzień, coś do pracy i coś na wielkie&nbsp;wyjście.&nbsp;✨"
+     ],
+     "note": "Ceny z VAT. Stroje są wirtualne – zakładasz je swojej agentce AI w aplikacji.",
+     "btn": "Zobacz w Butiku",
+     "tiers": {
+      "basic": "Plan Podstawowa",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {
+      "sweter": "Sweter (na co dzień)",
+      "biznes": "Marynarka (biznes)",
+      "wieczorowa": "Suknia wieczorowa"
+     },
+     "text": "🛍️ Butik Luny · Szafa, która nigdy się nie zacina"
+    },
+    "en": {
+     "tag": "🛍️ Luna’s Boutique",
+     "h": "A wardrobe that never jams",
+     "ps": [
+      "Real wardrobes have moods: the doors creak, hangers crash down at 3 a.m., and your favourite jumper is always in the wash. The wardrobe in Luna’s Boutique has none of that drama – just outfits you can put on your AI agent in a single tap.",
+      "Three classics to start with: one for every day, one for work and one for the big night&nbsp;out.&nbsp;✨"
+     ],
+     "note": "Prices include VAT. The outfits are virtual – your AI agent wears them in the app.",
+     "btn": "See the Boutique",
+     "tiers": {
+      "basic": "Basic plan",
+      "premium": "Premium plan",
+      "pro": "Pro plan"
+     },
+     "names": {
+      "sweter": "Everyday sweater",
+      "biznes": "Business blazer",
+      "wieczorowa": "Evening gown"
+     },
+     "text": "🛍️ Luna’s Boutique · A wardrobe that never jams"
+    },
+    "es": {
+     "tag": "🛍️ Boutique de Luna",
+     "h": "Un armario que nunca se atasca",
+     "ps": [
+      "Los armarios de verdad tienen su carácter: las puertas chirrían, las perchas se caen a las tres de la madrugada y tu jersey favorito siempre está en la lavadora. El armario de la Boutique de Luna se ahorra esos dramas y te ofrece conjuntos que le pones a tu agente de IA con un solo toque.",
+      "Para empezar, tres clásicos: uno para el día a día, otro para el trabajo y otro para una noche&nbsp;especial.&nbsp;✨"
+     ],
+     "note": "Precios con IVA. La ropa es virtual: tu agente de IA la luce en la app.",
+     "btn": "Ver la Boutique",
+     "tiers": {
+      "basic": "Plan Básico",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {
+      "sweter": "Jersey para el día a día",
+      "biznes": "Blazer de oficina",
+      "wieczorowa": "Vestido de noche"
+     },
+     "text": "🛍️ Boutique de Luna · Un armario que nunca se atasca"
+    },
+    "de": {
+     "tag": "🛍️ Lunas Boutique",
+     "h": "Ein Kleiderschrank, der nie klemmt",
+     "ps": [
+      "Echte Kleiderschränke haben Launen: Die Türen quietschen, Bügel fallen nachts um drei herunter, und der Lieblingspulli liegt garantiert in der Wäsche. Der Schrank in Lunas Boutique erspart dir dieses Drama und bietet dir Outfits, die du deiner KI-Agentin mit einem Fingertipp anziehst.",
+      "Zum Start drei Klassiker: einer für jeden Tag, einer fürs Büro und einer für den großen&nbsp;Auftritt.&nbsp;✨"
+     ],
+     "note": "Preise inkl. MwSt. Die Outfits sind virtuell – deine KI-Agentin trägt sie in der App.",
+     "btn": "Zur Boutique",
+     "tiers": {
+      "basic": "Basis-Plan",
+      "premium": "Premium-Plan",
+      "pro": "Pro-Plan"
+     },
+     "names": {
+      "sweter": "Pullover für jeden Tag",
+      "biznes": "Business-Blazer",
+      "wieczorowa": "Abendkleid"
+     },
+     "text": "🛍️ Lunas Boutique · Ein Kleiderschrank, der nie klemmt"
+    },
+    "uk": {
+     "tag": "🛍️ Бутик Луни",
+     "h": "Шафа, яка ніколи не заїдає",
+     "ps": [
+      "Справжня шафа має характер: дверцята рипають, вішаки падають о третій ночі, а улюблений светр завжди саме в пранні. Шафа в Бутику Луни обходиться без такої драми – натомість у ній є вбрання, яке ви вдягнете на свою ШІ-агентку одним дотиком.",
+      "Для початку – три класичні образи: на щодень, для роботи й для особливого&nbsp;вечора.&nbsp;✨"
+     ],
+     "note": "Ціни з ПДВ. Вбрання віртуальне – ваша ШІ-агентка носить його в застосунку.",
+     "btn": "Перейти до Бутика",
+     "tiers": {
+      "basic": "План Базовий",
+      "premium": "План Premium",
+      "pro": "План Pro"
+     },
+     "names": {
+      "sweter": "Светр на щодень",
+      "biznes": "Діловий жакет",
+      "wieczorowa": "Вечірня сукня"
+     },
+     "text": "🛍️ Бутик Луни · Шафа, яка ніколи не заїдає"
+    }
+   }
+  },
+  {
+   "id": "off-2",
+   "kind": 2,
+   "t": 1792341600,
+   "img": "/wall/official/butik_swieta.webp",
+   "items": [
+    "cla-128",
+    "cou-117",
+    "eko-132"
+   ],
+   "links": {
+    "btn": "/butik.html#nowosci"
+   },
+   "v": {
+    "pl": {
+     "tag": "🎄 Kolekcja świąteczna",
+     "h": "Choinka jeszcze w lesie, a agentki już pytają: <i>w&nbsp;co się ubrać?</i>",
+     "ps": [
+      "Odpowiadamy z wyprzedzeniem. Pierwszego grudnia do Butiku wchodzi kolekcja świąteczna: butelkowa zieleń, głębokie bordo i odrobina księżycowego blasku. Twoja agentka będzie wyglądać odświętnie nawet wtedy, gdy rozmawiacie o korkach na obwodnicy. 🎁"
+     ],
+     "day": "1",
+     "mon": "grudnia",
+     "small": "premiera kolekcji świątecznej · ceny z VAT",
+     "btn": "Zobacz w Butiku",
+     "tiers": {
+      "basic": "Plan Podstawowa",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {
+      "cla-128": "Aksamitny sweter z golfem · butelkowa zieleń",
+      "cou-117": "Księżycowy dodatek – apaszka jedwabna · bordowy",
+      "eko-132": "Miejski dodatek – rękawiczki · bordowy"
+     },
+     "text": "🎄 Kolekcja świąteczna · Choinka jeszcze w lesie, a agentki już pytają: w co się ubrać?"
+    },
+    "en": {
+     "tag": "🎄 Christmas collection",
+     "h": "The tree’s still in the forest, but the agents are already asking: <i>what&nbsp;do I wear?</i>",
+     "ps": [
+      "We’ve got you covered early. On 1 December, the Christmas collection lands in the Boutique: bottle green, deep burgundy and a touch of moonlight. Your agent will look festive even while you’re chatting about the traffic. 🎁"
+     ],
+     "day": "1",
+     "mon": "December",
+     "small": "Christmas collection launch · prices incl. VAT",
+     "btn": "See the Boutique",
+     "tiers": {
+      "basic": "Basic plan",
+      "premium": "Premium plan",
+      "pro": "Pro plan"
+     },
+     "names": {
+      "cla-128": "Velvet turtleneck sweater · bottle green",
+      "cou-117": "Moonlit silk scarf accessory · burgundy",
+      "eko-132": "Downtown gloves accessory · burgundy"
+     },
+     "text": "🎄 Christmas collection · The tree’s still in the forest, but the agents are already asking: what do I wear?"
+    },
+    "es": {
+     "tag": "🎄 Colección navideña",
+     "h": "El árbol aún está en el bosque y las agentes ya preguntan: <i>¿qué&nbsp;me pongo?</i>",
+     "ps": [
+      "Nos adelantamos. El 1 de diciembre llega a la Boutique la colección navideña: verde botella, burdeos intenso y un toque de luz de luna. Tu agente irá de gala aunque estéis hablando del atasco de la mañana. 🎁"
+     ],
+     "day": "1",
+     "mon": "de diciembre",
+     "small": "estreno de la colección navideña · precios con IVA",
+     "btn": "Ver la Boutique",
+     "tiers": {
+      "basic": "Plan Básico",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {
+      "cla-128": "Jersey de cuello alto de terciopelo · verde botella",
+      "cou-117": "Pañuelo de seda Luz de Luna · burdeos",
+      "eko-132": "Guantes urbanos · burdeos"
+     },
+     "text": "🎄 Colección navideña · El árbol aún está en el bosque y las agentes ya preguntan: ¿qué me pongo?"
+    },
+    "de": {
+     "tag": "🎄 Weihnachtskollektion",
+     "h": "Der Baum steht noch im Wald, doch die Agentinnen fragen schon: <i>Was&nbsp;ziehe ich an?</i>",
+     "ps": [
+      "Wir antworten vorab. Am 1. Dezember kommt die Weihnachtskollektion in die Boutique: Flaschengrün, tiefes Burgund und ein Hauch Mondschein. So sieht deine Agentin sogar dann festlich aus, wenn ihr gerade über den Stau auf der Autobahn redet. 🎁"
+     ],
+     "day": "1.",
+     "mon": "Dezember",
+     "small": "Start der Weihnachtskollektion · Preise inkl. MwSt.",
+     "btn": "Zur Boutique",
+     "tiers": {
+      "basic": "Basis-Plan",
+      "premium": "Premium-Plan",
+      "pro": "Pro-Plan"
+     },
+     "names": {
+      "cla-128": "Samt-Rollkragenpullover · Flaschengrün",
+      "cou-117": "Mondschein-Seidentuch · Burgund",
+      "eko-132": "City-Handschuhe · Burgund"
+     },
+     "text": "🎄 Weihnachtskollektion · Der Baum steht noch im Wald, doch die Agentinnen fragen schon: Was ziehe ich an?"
+    },
+    "uk": {
+     "tag": "🎄 Різдвяна колекція",
+     "h": "Ялинка ще в лісі, а агентки вже питають: <i>що&nbsp;вдягнути?</i>",
+     "ps": [
+      "Відповідаємо заздалегідь. 1 грудня в Бутику з’явиться різдвяна колекція: пляшково-зелений, глибокий бордовий і дрібка місячного сяйва. Ваша агентка виглядатиме святково, навіть коли ви обговорюєте затори на дорозі. 🎁"
+     ],
+     "day": "1",
+     "mon": "грудня",
+     "small": "прем’єра різдвяної колекції · ціни з ПДВ",
+     "btn": "Перейти до Бутика",
+     "tiers": {
+      "basic": "План Базовий",
+      "premium": "План Premium",
+      "pro": "План Pro"
+     },
+     "names": {
+      "cla-128": "Оксамитовий светр із високим коміром · пляшково-зелений",
+      "cou-117": "Місячна шовкова хустка · бордовий",
+      "eko-132": "Міські рукавички · бордовий"
+     },
+     "text": "🎄 Різдвяна колекція · Ялинка ще в лісі, а агентки вже питають: що вдягнути?"
+    }
+   }
+  },
+  {
+   "id": "off-3",
+   "kind": 3,
+   "t": 1792341300,
+   "img": "/wall/official/casting.webp",
+   "items": [],
+   "links": {
+    "link": "/twarz.html"
+   },
+   "v": {
+    "pl": {
+     "tag": "🌟 Casting · 18+",
+     "h": "Zostań twarzą agentki",
+     "quote": "„Szukamy nowych gwiazd AI, wzorowanych na prawdziwych osobach, lecz tworzonych za pomocą sztucznej inteligencji”.",
+     "intro": "Zapraszamy pełnoletnie kobiety (18+). Na podstawie Twoich zdjęć powstanie agentka AI z Twoim charakterem i stylem. Co przygotować?",
+     "checks": [
+      "<b>2–3 zdjęcia twarzy</b> – wyraźne, w dobrym świetle.",
+      "<b>1–2 zdjęcia całej sylwetki</b> w codziennym ubraniu, bez bielizny i strojów kąpielowych.",
+      "<b>Krótki tekst</b>: dlaczego mamy wybrać właśnie Ciebie? Śmiało, pochwal się.",
+      "<b>Każda figura jest mile widziana</b>: niska, drobna, szczupła i plus size. Liczy się charakter, a nie rozmiar."
+     ],
+     "after": "Zgłoszenia przyjmujemy do <b>31.12.2026</b>. Finał w świątecznej oprawie odbędzie się na początku stycznia 2027 roku, a dokładną datę ogłosimy wkrótce. 🎄",
+     "link": "Zgłoś się do castingu",
+     "lsmall": "Casting 18+ · 18.10–31.12.2026",
+     "tiers": {
+      "basic": "Plan Podstawowa",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {},
+     "url": "luna-voice-coach.onrender.com/twarz.html",
+     "text": "🌟 Casting · 18+ · Zostań twarzą agentki"
+    },
+    "en": {
+     "tag": "🌟 Casting · 18+",
+     "h": "Become the face of an agent",
+     "quote": "“We’re looking for new AI stars – inspired by real people, but created with artificial intelligence.”",
+     "intro": "We’re inviting adult women (18+). Your photos will inspire an AI agent with your personality and style. Here’s what to prepare:",
+     "checks": [
+      "<b>2–3 face photos</b> – sharp and well lit.",
+      "<b>1–2 full-length photos</b> in everyday clothes – no lingerie or swimwear.",
+      "<b>A short note</b>: why should we pick you? Go on, blow your own trumpet.",
+      "<b>Every body type is welcome</b>: short, petite, slim or plus-size. Character counts, not size."
+     ],
+     "after": "Applications close on <b>31.12.2026</b>. The Christmas-themed final takes place in early January 2027 – we’ll announce the exact date soon. 🎄",
+     "link": "Apply for the casting",
+     "lsmall": "Casting 18+ · 18.10–31.12.2026",
+     "tiers": {
+      "basic": "Basic plan",
+      "premium": "Premium plan",
+      "pro": "Pro plan"
+     },
+     "names": {},
+     "url": "luna-voice-coach.onrender.com/twarz.html",
+     "text": "🌟 Casting · 18+ · Become the face of an agent"
+    },
+    "es": {
+     "tag": "🌟 Casting · +18",
+     "h": "Sé el rostro de una agente",
+     "quote": "«Buscamos nuevas estrellas de IA, inspiradas en personas reales, pero creadas con inteligencia artificial».",
+     "intro": "Invitamos a mujeres mayores de edad (+18). A partir de tus fotos crearemos una agente de IA con tu carácter y tu estilo. ¿Qué necesitas?",
+     "checks": [
+      "<b>2–3 fotos de la cara</b>, nítidas y con buena luz.",
+      "<b>1–2 fotos de cuerpo entero</b> con ropa de diario, sin lencería ni bañador.",
+      "<b>Un texto breve</b>: ¿por qué deberíamos elegirte a ti? Nada de falsa modestia.",
+      "<b>Todas las siluetas son bienvenidas</b>: bajita, menuda, delgada o de talla grande. Cuenta la personalidad, no la talla."
+     ],
+     "after": "Recibimos candidaturas hasta el <b>31/12/2026</b>. La final, con ambiente navideño, se celebrará a principios de enero de 2027; anunciaremos la fecha exacta muy pronto. 🎄",
+     "link": "Presenta tu candidatura",
+     "lsmall": "Casting +18 · 18/10–31/12/2026",
+     "tiers": {
+      "basic": "Plan Básico",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {},
+     "url": "luna-voice-coach.onrender.com/twarz.html",
+     "text": "🌟 Casting · +18 · Sé el rostro de una agente"
+    },
+    "de": {
+     "tag": "🌟 Casting · 18+",
+     "h": "Werde das Gesicht einer Agentin",
+     "quote": "„Wir suchen neue KI-Stars – inspiriert von echten Menschen, aber mit künstlicher Intelligenz erschaffen.“",
+     "intro": "Wir laden volljährige Frauen (18+) ein. Nach deinen Fotos entsteht eine KI-Agentin mit deinem Charakter und deinem Stil. Das brauchst du:",
+     "checks": [
+      "<b>2–3 Porträtfotos</b> – scharf und gut ausgeleuchtet.",
+      "<b>1–2 Ganzkörperfotos</b> in Alltagskleidung – ohne Dessous und Bademode.",
+      "<b>Ein kurzer Text</b>: Warum sollten wir gerade dich wählen? Nur keine falsche Bescheidenheit.",
+      "<b>Jede Figur ist willkommen</b>: klein, zierlich, schlank oder Plus Size. Es zählt der Charakter, nicht die Kleidergröße."
+     ],
+     "after": "Bewerbungen nehmen wir bis zum <b>31.12.2026</b> an. Das Finale im weihnachtlichen Rahmen findet Anfang Januar 2027 statt; den genauen Termin geben wir bald bekannt. 🎄",
+     "link": "Jetzt bewerben",
+     "lsmall": "Casting 18+ · 18.10.–31.12.2026",
+     "tiers": {
+      "basic": "Basis-Plan",
+      "premium": "Premium-Plan",
+      "pro": "Pro-Plan"
+     },
+     "names": {},
+     "url": "luna-voice-coach.onrender.com/twarz.html",
+     "text": "🌟 Casting · 18+ · Werde das Gesicht einer Agentin"
+    },
+    "uk": {
+     "tag": "🌟 Кастинг · 18+",
+     "h": "Станьте обличчям агентки",
+     "quote": "«Шукаємо нових ШІ-зірок, натхненних реальними людьми, але створених за допомогою штучного інтелекту».",
+     "intro": "Запрошуємо повнолітніх жінок (18+). За вашими фото з’явиться ШІ-агентка з вашим характером і стилем. Що підготувати?",
+     "checks": [
+      "<b>2–3 фото обличчя</b> – чіткі, за гарного освітлення.",
+      "<b>1–2 фото на повний зріст</b> у повсякденному одязі – без білизни та купальників.",
+      "<b>Короткий текст</b>: чому ми маємо обрати саме вас? Сміливо хваліться.",
+      "<b>Раді будь-якій фігурі</b>: невисоким, мініатюрним, струнким і plus size. Важить характер, а не розмір."
+     ],
+     "after": "Заявки приймаємо до <b>31.12.2026</b>. Фінал у різдвяній атмосфері відбудеться на початку січня 2027 року, а точну дату оголосимо незабаром. 🎄",
+     "link": "Подати заявку на кастинг",
+     "lsmall": "Кастинг 18+ · 18.10–31.12.2026",
+     "tiers": {
+      "basic": "План Базовий",
+      "premium": "План Premium",
+      "pro": "План Pro"
+     },
+     "names": {},
+     "url": "luna-voice-coach.onrender.com/twarz.html",
+     "text": "🌟 Кастинг · 18+ · Станьте обличчям агентки"
+    }
+   }
+  },
+  {
+   "id": "off-4",
+   "kind": 4,
+   "t": 1792341000,
+   "img": "/wall/official/premium.webp",
+   "items": [],
+   "links": {
+    "btn": "/promo.html#plany"
+   },
+   "v": {
+    "pl": {
+     "tag": "💳 Plany i usługi",
+     "h": "Szybki quiz: ile kosztuje pierwsza rozmowa z&nbsp;Luną?",
+     "quiz": [
+      "A) Tyle co kawa na mieście.",
+      "B) Tyle co bilet do kina.",
+      "C) 0 zł ✓"
+     ],
+     "p": "Brawo, odpowiedź C! Plan Podstawowa jest darmowy. A gdy rozmowy wciągną Cię na dobre, wybierz Premium albo Pro. Bez haczyków: płacisz raz za 30 dni, a plan sam się nie odnawia.",
+     "plans": [
+      [
+       "Podstawowa",
+       "na zawsze",
+       "Rozmowy z Luną z dziennym limitem"
+      ],
+      [
+       "Premium",
+       "za 30 dni",
+       "Więcej rozmów i stroje z linii Premium"
+      ],
+      [
+       "Pro",
+       "za 30 dni",
+       "Pełny pakiet, także stroje z linii Pro"
+      ]
+     ],
+     "hot": "Złoty środek",
+     "chips": [
+      "Jednorazowo za 30 dni",
+      "Bez automatycznego odnawiania",
+      "Ceny z VAT",
+      "Bez reklam"
+     ],
+     "btn": "Wybierz plan",
+     "tiers": {
+      "basic": "Plan Podstawowa",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {},
+     "text": "💳 Plany i usługi · Szybki quiz: ile kosztuje pierwsza rozmowa z Luną?"
+    },
+    "en": {
+     "tag": "💳 Plans & services",
+     "h": "Quick quiz: what does your first chat with Luna&nbsp;cost?",
+     "quiz": [
+      "A) As much as a takeaway coffee.",
+      "B) As much as a cinema ticket.",
+      "C) PLN 0 ✓"
+     ],
+     "p": "Correct – it’s C! The Basic plan is free. And once the conversations get you hooked, pick Premium or Pro. No catches: you pay once for 30 days, and the plan never renews on its own.",
+     "plans": [
+      [
+       "Basic",
+       "forever",
+       "Chats with Luna, with a daily limit"
+      ],
+      [
+       "Premium",
+       "per 30 days",
+       "More chats and Premium-line outfits"
+      ],
+      [
+       "Pro",
+       "per 30 days",
+       "The full package, including Pro-line outfits"
+      ]
+     ],
+     "hot": "The sweet spot",
+     "chips": [
+      "One-off payment for 30 days",
+      "No auto-renewal",
+      "VAT included",
+      "No ads"
+     ],
+     "btn": "Choose a plan",
+     "tiers": {
+      "basic": "Basic plan",
+      "premium": "Premium plan",
+      "pro": "Pro plan"
+     },
+     "names": {},
+     "text": "💳 Plans & services · Quick quiz: what does your first chat with Luna cost?"
+    },
+    "es": {
+     "tag": "💳 Planes y servicios",
+     "h": "Pregunta rápida: ¿cuánto cuesta tu primera conversación con&nbsp;Luna?",
+     "quiz": [
+      "A) Lo mismo que un café para llevar.",
+      "B) Lo mismo que una entrada de cine.",
+      "C) 0 PLN ✓"
+     ],
+     "p": "¡Correcto, la C! El plan Básico es gratis. Y cuando las conversaciones te enganchen, elige Premium o Pro. Sin letra pequeña: pagas una vez por 30 días y el plan no se renueva solo.",
+     "plans": [
+      [
+       "Básico",
+       "para siempre",
+       "Conversaciones con Luna con límite diario"
+      ],
+      [
+       "Premium",
+       "por 30 días",
+       "Más conversaciones y ropa de la línea Premium"
+      ],
+      [
+       "Pro",
+       "por 30 días",
+       "El paquete completo, también con ropa de la línea Pro"
+      ]
+     ],
+     "hot": "El punto justo",
+     "chips": [
+      "Pago único por 30 días",
+      "Sin renovación automática",
+      "IVA incluido",
+      "Sin anuncios"
+     ],
+     "btn": "Elegir plan",
+     "tiers": {
+      "basic": "Plan Básico",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {},
+     "text": "💳 Planes y servicios · Pregunta rápida: ¿cuánto cuesta tu primera conversación con Luna?"
+    },
+    "de": {
+     "tag": "💳 Pläne & Leistungen",
+     "h": "Kurzes Quiz: Was kostet dein erstes Gespräch mit&nbsp;Luna?",
+     "quiz": [
+      "A) So viel wie ein Coffee to go.",
+      "B) So viel wie ein Kinoticket.",
+      "C) 0 zł ✓"
+     ],
+     "p": "Richtig, C! Der Basis-Plan ist kostenlos. Und wenn dich die Gespräche richtig packen, wählst du Premium oder Pro. Ohne Haken: Du zahlst einmal für 30 Tage, und der Plan verlängert sich nicht von selbst.",
+     "plans": [
+      [
+       "Basis",
+       "dauerhaft",
+       "Gespräche mit Luna mit Tageslimit"
+      ],
+      [
+       "Premium",
+       "für 30 Tage",
+       "Mehr Gespräche und Outfits der Premium-Linie"
+      ],
+      [
+       "Pro",
+       "für 30 Tage",
+       "Das volle Paket, inklusive Outfits der Pro-Linie"
+      ]
+     ],
+     "hot": "Die goldene Mitte",
+     "chips": [
+      "Einmalig für 30 Tage",
+      "Keine automatische Verlängerung",
+      "Inkl. MwSt.",
+      "Werbefrei"
+     ],
+     "btn": "Plan wählen",
+     "tiers": {
+      "basic": "Basis-Plan",
+      "premium": "Premium-Plan",
+      "pro": "Pro-Plan"
+     },
+     "names": {},
+     "text": "💳 Pläne & Leistungen · Kurzes Quiz: Was kostet dein erstes Gespräch mit Luna?"
+    },
+    "uk": {
+     "tag": "💳 Плани та послуги",
+     "h": "Швидкий тест: скільки коштує перша розмова з&nbsp;Луною?",
+     "quiz": [
+      "А) Як кава на винос.",
+      "Б) Як квиток у кіно.",
+      "В) 0 зл. ✓"
+     ],
+     "p": "Правильно, В! План Базовий безкоштовний. А коли розмови по-справжньому захоплять, обирайте Premium або Pro. Без підступу: ви платите один раз за 30 днів, і план не продовжується сам.",
+     "plans": [
+      [
+       "Базовий",
+       "назавжди",
+       "Розмови з Луною з денним лімітом"
+      ],
+      [
+       "Premium",
+       "за 30 днів",
+       "Більше розмов і вбрання лінії Premium"
+      ],
+      [
+       "Pro",
+       "за 30 днів",
+       "Повний пакет, зокрема вбрання лінії Pro"
+      ]
+     ],
+     "hot": "Золота середина",
+     "chips": [
+      "Разово за 30 днів",
+      "Без автоматичного продовження",
+      "Ціни з ПДВ",
+      "Без реклами"
+     ],
+     "btn": "Обрати план",
+     "tiers": {
+      "basic": "План Базовий",
+      "premium": "План Premium",
+      "pro": "План Pro"
+     },
+     "names": {},
+     "text": "💳 Плани та послуги · Швидкий тест: скільки коштує перша розмова з Луною?"
+    }
+   }
+  },
+  {
+   "id": "off-5",
+   "kind": 5,
+   "t": 1792340700,
+   "img": "/wall/official/trening.webp",
+   "items": [],
+   "links": {
+    "btn": "/"
+   },
+   "v": {
+    "pl": {
+     "tag": "🎙️ Trening głosu z Luną",
+     "h": "Mit kontra fakt",
+     "mit": [
+      "Mit",
+      "Najważniejsze jest to, co mówisz. Cała reszta to tylko dodatki."
+     ],
+     "fakt": [
+      "Fakt",
+      "Ton, tempo i pauzy często ważą więcej niż same słowa. To, <i>jak</i> mówisz, bywa ważniejsze od tego, <i>co</i> mówisz."
+     ],
+     "ps": [
+      "Dlatego z Luną ćwiczysz nie tylko treść, ale przede wszystkim brzmienie: intonację, oddech, tempo i pauzę przed puentą. Luna słucha, podpowiada i, co ważne, nigdy nie przewraca oczami. 😉",
+      "Kilka minut dziennie wystarczy, żeby usłyszeć różnicę. Twoi rozmówcy też ją usłyszą."
+     ],
+     "noads": "✓ Bez reklam – nic nie przerwie Ci treningu",
+     "btn": "Zacznij trening",
+     "tiers": {
+      "basic": "Plan Podstawowa",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {},
+     "text": "🎙️ Trening głosu z Luną · Mit kontra fakt"
+    },
+    "en": {
+     "tag": "🎙️ Voice training with Luna",
+     "h": "Myth vs fact",
+     "mit": [
+      "Myth",
+      "What you say is all that matters. The rest is just decoration."
+     ],
+     "fakt": [
+      "Fact",
+      "Tone, pace and pauses often carry more weight than the words themselves. <i>How</i> you say it can matter more than <i>what</i> you say."
+     ],
+     "ps": [
+      "That’s why, with Luna, you train not just the content but above all the sound: intonation, breathing, pace and the pause before the punchline. Luna listens, gives you tips and – crucially – never rolls her eyes. 😉",
+      "A few minutes a day is enough to hear the difference. So will everyone you talk to."
+     ],
+     "noads": "✓ No ads – nothing interrupts your training",
+     "btn": "Start training",
+     "tiers": {
+      "basic": "Basic plan",
+      "premium": "Premium plan",
+      "pro": "Pro plan"
+     },
+     "names": {},
+     "text": "🎙️ Voice training with Luna · Myth vs fact"
+    },
+    "es": {
+     "tag": "🎙️ Entrenamiento de voz con Luna",
+     "h": "¿Mito o realidad?",
+     "mit": [
+      "Mito",
+      "Lo único que importa es lo que dices. Lo demás es puro decorado."
+     ],
+     "fakt": [
+      "Realidad",
+      "El tono, el ritmo y las pausas suelen pesar más que las propias palabras. <i>Cómo</i> lo dices puede importar más que <i>qué</i> dices."
+     ],
+     "ps": [
+      "Por eso, con Luna no solo trabajas el contenido, sino sobre todo cómo suena: la entonación, la respiración, el ritmo y esa pausa antes del remate. Luna escucha, te aconseja y, lo más importante, nunca pone los ojos en blanco. 😉",
+      "Con unos minutos al día ya notarás la diferencia. Y quien te escuche, también."
+     ],
+     "noads": "✓ Sin anuncios: nada interrumpe tu entrenamiento",
+     "btn": "Empezar a entrenar",
+     "tiers": {
+      "basic": "Plan Básico",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {},
+     "text": "🎙️ Entrenamiento de voz con Luna · ¿Mito o realidad?"
+    },
+    "de": {
+     "tag": "🎙️ Stimmtraining mit Luna",
+     "h": "Mythos oder Fakt?",
+     "mit": [
+      "Mythos",
+      "Es zählt nur, was du sagst. Der Rest ist Beiwerk."
+     ],
+     "fakt": [
+      "Fakt",
+      "Tonfall, Tempo und Pausen wiegen oft schwerer als die Worte selbst. <i>Wie</i> du etwas sagst, kann wichtiger sein als das, <i>was</i> du sagst."
+     ],
+     "ps": [
+      "Deshalb trainierst du mit Luna nicht nur den Inhalt, sondern vor allem den Klang: Betonung, Atmung, Tempo und die Pause vor der Pointe. Luna hört zu, gibt Tipps und – ganz wichtig – verdreht nie die Augen. 😉",
+      "Ein paar Minuten am Tag genügen, um den Unterschied zu hören. Deine Gesprächspartner hören ihn auch."
+     ],
+     "noads": "✓ Werbefrei – nichts unterbricht dein Training",
+     "btn": "Training starten",
+     "tiers": {
+      "basic": "Basis-Plan",
+      "premium": "Premium-Plan",
+      "pro": "Pro-Plan"
+     },
+     "names": {},
+     "text": "🎙️ Stimmtraining mit Luna · Mythos oder Fakt?"
+    },
+    "uk": {
+     "tag": "🎙️ Тренування голосу з Луною",
+     "h": "Міф чи факт?",
+     "mit": [
+      "Міф",
+      "Важливо лише те, що ви кажете. Решта – прикраси."
+     ],
+     "fakt": [
+      "Факт",
+      "Тон, темп і паузи часто важать більше, ніж самі слова. <i>Як</i> ви говорите, буває важливіше, ніж <i>що</i> ви говорите."
+     ],
+     "ps": [
+      "Тому з Луною ви тренуєте не лише зміст, а передусім звучання: інтонацію, дихання, темп і паузу перед пуантою. Луна слухає, підказує і, що важливо, ніколи не закочує очі. 😉",
+      "Кількох хвилин на день досить, щоб почути різницю. Ваші співрозмовники теж її почують."
+     ],
+     "noads": "✓ Без реклами – ніщо не перерве тренування",
+     "btn": "Почати тренування",
+     "tiers": {
+      "basic": "План Базовий",
+      "premium": "План Premium",
+      "pro": "План Pro"
+     },
+     "names": {},
+     "text": "🎙️ Тренування голосу з Луною · Міф чи факт?"
+    }
+   }
+  },
+  {
+   "id": "off-6",
+   "kind": 6,
+   "t": 1792340400,
+   "img": "/wall/official/druzyna.webp",
+   "items": [],
+   "links": {
+    "btn": "/twarz.html",
+    "btn2": "/dolacz.html"
+   },
+   "v": {
+    "pl": {
+     "tag": "✦ Dołącz do nas",
+     "h": "List do przyszłych gwiazd",
+     "p1": "Nie szukamy ideałów. Szukamy prawdziwych osób: kobiet z charakterem, ciepłym spojrzeniem i własnym stylem. Z ich inspiracji powstają agentki AI, które będą rozmawiać z ludźmi w Polsce i na świecie.",
+     "quote": "Każda gwiazda, która do nas dołączy, staje się częścią naszego zespołu.",
+     "p2": "Wierzymy, że dobre rzeczy powstają razem. Dlatego zapraszamy do współpracy, a nie tylko na jedną sesję zdjęciową. Drzwi są otwarte, wystarczy przez nie przejść.",
+     "sign": "Do zobaczenia w drużynie.",
+     "btn": "Dołącz do drużyny",
+     "btn2": "Inne formy współpracy",
+     "tiers": {
+      "basic": "Plan Podstawowa",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {},
+     "text": "✦ Dołącz do nas · List do przyszłych gwiazd"
+    },
+    "en": {
+     "tag": "✦ Join us",
+     "h": "A letter to future stars",
+     "p1": "We’re not looking for perfection. We’re looking for real people: women with character, a warm gaze and a style all their own. They inspire AI agents that will talk with people in Poland and around the world.",
+     "quote": "Every star who joins us becomes part of our team.",
+     "p2": "We believe good things are made together. That’s why we’re inviting you to a collaboration, not just a one-off photo shoot. The door is open – all you have to do is walk through it.",
+     "sign": "See you on the team.",
+     "btn": "Join the team",
+     "btn2": "Other ways to work with us",
+     "tiers": {
+      "basic": "Basic plan",
+      "premium": "Premium plan",
+      "pro": "Pro plan"
+     },
+     "names": {},
+     "text": "✦ Join us · A letter to future stars"
+    },
+    "es": {
+     "tag": "✦ Únete",
+     "h": "Carta a las futuras estrellas",
+     "p1": "No buscamos la perfección. Buscamos personas auténticas: mujeres con carácter, una mirada cálida y un estilo propio. En ellas se inspiran agentes de IA que hablarán con gente de Polonia y de todo el mundo.",
+     "quote": "Cada estrella que se une a nosotros pasa a formar parte de nuestro equipo.",
+     "p2": "Creemos que las cosas buenas se hacen en equipo. Por eso te proponemos una colaboración, no una simple sesión de fotos. La puerta está abierta: solo tienes que cruzarla.",
+     "sign": "Nos vemos en el equipo.",
+     "btn": "Únete al equipo",
+     "btn2": "Otras formas de colaborar",
+     "tiers": {
+      "basic": "Plan Básico",
+      "premium": "Plan Premium",
+      "pro": "Plan Pro"
+     },
+     "names": {},
+     "text": "✦ Únete · Carta a las futuras estrellas"
+    },
+    "de": {
+     "tag": "✦ Mach mit",
+     "h": "Ein Brief an künftige Stars",
+     "p1": "Wir suchen keine Perfektion. Wir suchen echte Menschen: Frauen mit Charakter, einem warmen Blick und eigenem Stil. Sie inspirieren KI-Agentinnen, die mit Menschen in Polen und auf der ganzen Welt sprechen werden.",
+     "quote": "Jeder Star, der zu uns kommt, wird Teil unseres Teams.",
+     "p2": "Wir glauben, dass gute Dinge gemeinsam entstehen. Darum laden wir dich zu einer Zusammenarbeit ein – nicht nur zu einem einzelnen Fotoshooting. Die Tür steht offen, du musst nur hindurchgehen.",
+     "sign": "Wir sehen uns im Team.",
+     "btn": "Werde Teil des Teams",
+     "btn2": "Weitere Formen der Zusammenarbeit",
+     "tiers": {
+      "basic": "Basis-Plan",
+      "premium": "Premium-Plan",
+      "pro": "Pro-Plan"
+     },
+     "names": {},
+     "text": "✦ Mach mit · Ein Brief an künftige Stars"
+    },
+    "uk": {
+     "tag": "✦ Приєднуйтеся",
+     "h": "Лист майбутнім зіркам",
+     "p1": "Ми не шукаємо ідеалу. Ми шукаємо справжніх людей: жінок із характером, теплим поглядом і власним стилем. Вони надихають ШІ-агенток, які розмовлятимуть із людьми в Польщі та в усьому світі.",
+     "quote": "Кожна зірка, яка до нас приєднається, стає частиною нашої команди.",
+     "p2": "Ми віримо, що добрі речі створюються разом. Тому запрошуємо до співпраці, а не лише на одну фотосесію. Двері відчинені – залишилося тільки увійти.",
+     "sign": "До зустрічі в команді.",
+     "btn": "Приєднатися до команди",
+     "btn2": "Інші форми співпраці",
+     "tiers": {
+      "basic": "План Базовий",
+      "premium": "План Premium",
+      "pro": "План Pro"
+     },
+     "names": {},
+     "text": "✦ Приєднуйтеся · Лист майбутнім зіркам"
+    }
+   }
+  }
+ ]
+}

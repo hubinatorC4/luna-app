@@ -207,4 +207,4 @@ body = f"""<div class="wallpage">
   <div class="card scard soft"><h3 data-i18n="ref_h">{P['ref_h']}</h3><p data-i18n="ref">{P['ref']}</p><button type="button" class="btn sm" id="refCopy" data-i18n="ref_btn">{P['ref_btn']}</button></div>
 </aside></main></div>
 """
-page("scianka.html", P["_title"], P["lead"], body, C.WALL, ["/social.js", "/scianka.js"], "a_wall", "wallbody")
+page("scianka.html", P["_title"], P["lead"], body, C.WALL, ["/social.js", "/wall-official.js", "/scianka.js"], "a_wall", "wallbody")

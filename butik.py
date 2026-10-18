@@ -17,7 +17,11 @@ def _load():
     if _cache["items"] is None:
         lines, seed = _seed()
         saved = store.get("butik_items", None)
-        _cache["lines"] = lines; _cache["items"] = saved if isinstance(saved, list) and saved else seed
+        its = saved if isinstance(saved, list) and saved else seed
+        rd = {i["id"]: i["release_date"] for i in seed if i.get("release_date")}
+        for i in its:
+            if i["id"] in rd and not i.get("release_date"): i["release_date"] = rd[i["id"]]
+        _cache["lines"] = lines; _cache["items"] = its
     return _cache["items"]
 
 def _save(items):
@@ -37,6 +41,17 @@ def check_price(p):
 
 def item(id_): return next((i for i in _load() if i["id"] == id_), None)
 
+def _today():
+    import datetime
+    try:
+        from zoneinfo import ZoneInfo; return datetime.datetime.now(ZoneInfo("Europe/Warsaw")).date().isoformat()
+    except Exception: return datetime.datetime.utcnow().date().isoformat()
+
+def eff_status(i):
+    """Pozycja zaplanowana z datą premiery (release_date) staje się dostępna automatycznie od tego dnia (czas polski)."""
+    if i.get("status") == "planned" and i.get("release_date") and i["release_date"] <= _today(): return "released"
+    return i.get("status")
+
 def tier_plan(t): return "darmowy" if t == "free" else t
 
 def ranges(items=None):
@@ -47,12 +62,12 @@ def ranges(items=None):
     return r
 
 def public(show_prices=False):
-    its = [i for i in _load() if i["status"] == "released"]
-    keep = ("id", "name", "name_en", "line", "collection", "category", "colors", "material", "description", "tier", "rarity", "image", "release_version")
-    out = [{k: i.get(k) for k in keep} | ({"price": i["price"]} if show_prices else {}) for i in its]
+    its = [i for i in _load() if eff_status(i) == "released" or (i["status"] == "planned" and i.get("release_date"))]
+    keep = ("id", "name", "name_en", "line", "collection", "category", "colors", "material", "description", "tier", "rarity", "image", "release_version", "release_date")
+    out = [{k: i.get(k) for k in keep} | ({"price": i["price"]} if show_prices else {}) | ({"upcoming": True} if eff_status(i) != "released" else {}) for i in its]
     planned = {}
     for i in _load():
-        if i["status"] == "planned": planned[i["line"]] = planned.get(i["line"], 0) + 1
+        if eff_status(i) == "planned": planned[i["line"]] = planned.get(i["line"], 0) + 1
     res = {"lines": lines(), "items": out, "planned": planned, "prices_visible": bool(show_prices)}
     if show_prices: res["ranges"] = ranges()
     return res

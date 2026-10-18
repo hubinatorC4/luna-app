@@ -17,7 +17,7 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import catalog, base64
-import social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
+import official, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
 from datetime import datetime, timedelta
 try:
     from zoneinfo import ZoneInfo
@@ -25,7 +25,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.3.1"
+VERSION = "1.3.2"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -607,6 +607,10 @@ def _announce_update():
     except Exception as e: print("update notify error", repr(e)[:200], file=sys.stderr)
 
 
+def _wall_pricing():
+    P = CFG["pricing"]; return {"show": P["show"], "foreign": P["foreign"], "plans": P["plans"]}
+social.PRICING = _wall_pricing
+
 def _help_prices():
     if not CFG["pricing"]["show"]: return None
     P = CFG["pricing"]["plans"]; return {"premium": P["premium"]["pln"].replace(".", ","), "pro": P["pro"]["pln"].replace(".", ",")}
@@ -861,7 +865,7 @@ class H(SimpleHTTPRequestHandler):
                 return self._json({"error": "Plan Podstawowa jest darmowy – wystarczy konto."}, 400)
             if kind == "pass" and ref in CFG["pricing"]["plans"]:
                 name, pln = f"Luna – dostęp {plans.NAMES[ref]} na 30 dni (bez odnawiania)", CFG["pricing"]["plans"][ref]["pln"]
-            elif kind == "item" and butik.item(ref) and butik.item(ref)["status"] == "released":
+            elif kind == "item" and butik.item(ref) and butik.eff_status(butik.item(ref)) == "released":
                 it = butik.item(ref); name, pln = f"Butik Luny – {it['name']}", it["price"]["pln"]
             else: return self._json({"error": "Nieznany produkt."}, 400)
             try: return self._json({"ok": True, **payments.create_checkout(kind, ref, name, pln, usr["uid"], usr["email"], notify.PUBLIC_URL)})
@@ -1063,10 +1067,14 @@ class H(SimpleHTTPRequestHandler):
                 lang = lang if lang in seo.LANGS else ""
                 doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, lang, notify.PUBLIC_URL.rstrip("/"))
                 pid = parse_qs(u.query).get("post", [""])[0]
-                if u.path == "/scianka.html" and re.fullmatch(r"[0-9a-f]{12}", pid or ""):
+                if u.path == "/scianka.html" and re.fullmatch(r"[0-9a-f]{12}|off-\d{1,3}", pid or ""):
                     po = social.get_post(pid)
                     if po:
                         import html as _h
+                        if po.get("official"):
+                            va = po["v"].get(lang or "pl") or po["v"]["pl"]
+                            po = dict(po, nick=official.data()["account"].get(lang or "pl", po["nick"]), text=va["text"])
+                            doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{notify.PUBLIC_URL.rstrip("/")}{po["img_url"]}">', doc)
                         dsc = _h.escape((po["nick"] + ": " + po["text"])[:200], quote=True)
                         doc = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{dsc}">', doc)
                         if po.get("img"): doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{notify.PUBLIC_URL}/api/wall/img/{po["img"]}">', doc)

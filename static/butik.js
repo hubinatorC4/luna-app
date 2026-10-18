@@ -11,6 +11,10 @@ const LN = {ekonomiczna: 'l_eko', classic: 'l_cla', couture: 'l_cou'};
 const money = p => !p ? '' : (B && B.foreign) ? `${pl(p.pln)} zł · ${pl(p.eur)} € · $${p.usd}` : `${pl(p.pln)} zł`;
 const pl = n => String(n).replace('.', ',');
 let B = null, ME = null, CSRF = '';
+const SOON = {pl: ['Premiera', 'Jeszcze niedostępne – kupisz od dnia premiery.'], en: ['Release:', 'Not available yet – you can buy it from release day.'], es: ['Estreno:', 'Aún no disponible: podrás comprarlo desde el día del estreno.'], de: ['Start:', 'Noch nicht erhältlich – ab dem Starttag kaufbar.'], uk: ['Прем’єра:', 'Ще недоступно – можна буде купити з дня прем’єри.']};
+const soon = i => { const l = document.documentElement.lang; const s = SOON[l] || SOON.pl; let d = i.release_date;
+  try { d = new Date(i.release_date + 'T12:00:00').toLocaleDateString(l === 'uk' ? 'uk-UA' : l, {day: 'numeric', month: 'long'}); } catch(e){}
+  return `<span class="soonb" title="${esc(s[1])}">📅 ${esc(s[0] + ' ' + d)}</span>`; };
 document.querySelectorAll('.tabsx button').forEach(b => b.onclick = () => {
   document.querySelectorAll('.tabsx button').forEach(x => x.classList.toggle('on', x === b));
   $('#tab-col').hidden = b.dataset.tab !== 'col'; $('#tab-price').hidden = b.dataset.tab !== 'price';
@@ -19,14 +23,16 @@ document.querySelectorAll('.tabsx button').forEach(b => b.onclick = () => {
 if (location.hash === '#cennik') document.querySelector('[data-tab=price]').click();
 function render(){
   if (!B) return; const t = T(); const en = document.documentElement.lang !== 'pl';
-  $('#items').innerHTML = B.items.map(i => `<div class="item"><img src="${esc(i.image || '/avatar-512.jpg')}" alt="" loading="lazy"><div class="b"><b>${esc(en ? i.name_en : i.name)}</b><br><small>${esc(t[LN[i.line]])} · ${esc(i.collection)}</small>${i.price ? `<div class="bprice">${money(i.price)}</div><small class="bvat">${esc(t.vat)}</small>` : ''}
+  const its = [...B.items.filter(i => i.upcoming), ...B.items.filter(i => !i.upcoming)]; let firstSoon = true;
+  $('#items').innerHTML = its.map(i => `<div class="item${i.upcoming ? ' upcoming' : ''}"${i.upcoming && firstSoon && !(firstSoon = false) ? ' id="nowosci"' : ''}><img src="${esc(i.image || (i.upcoming ? '/wall/official/butik_swieta.webp' : '/avatar-512.jpg'))}" alt="" loading="lazy"><div class="b"><b>${esc(en ? i.name_en : i.name)}</b><br><small>${esc(t[LN[i.line]])} · ${esc(i.collection)}</small>${i.upcoming ? '<br>' + soon(i) : ''}${i.price ? `<div class="bprice">${money(i.price)}</div><small class="bvat">${esc(t.vat)}</small>` : ''}
     <div class="wallpage bsoc"><div class="acts"><span data-votes="item:${esc(i.id)}"></span><button type="button" class="act share" data-share="${esc(location.origin + '/butik.html#' + i.id)}" data-text="${esc(en ? i.name_en : i.name)}">↗</button></div>
     <details><summary>💬</summary><div data-comments="item:${esc(i.id)}" data-rating="1"></div></details></div></div></div>`).join('');
   if (window.LunaSocial) window.LunaSocial.auto();
+  if (location.hash === '#nowosci' && !render.jumped && $('#nowosci')){ render.jumped = 1; setTimeout(() => $('#nowosci').scrollIntoView({block: 'center'}), 300); }
   $('#preview').hidden = !B.preview;
   const show = B.prices_visible;
   $('#lines').innerHTML = `<tr><th></th><th>${esc(t.released)}</th><th>${esc(t.planned)}</th>${show ? '<th>zł</th>' + (B.foreign ? '<th>€</th><th>$</th>' : '') + '' : ''}</tr>` +
-    Object.keys(B.lines).map(k => { const r = (B.ranges || {})[k]; const rel = B.items.filter(i => i.line === k).length;
+    Object.keys(B.lines).map(k => { const r = (B.ranges || {})[k]; const rel = B.items.filter(i => i.line === k && !i.upcoming).length;
       return `<tr><td><b>${esc(t[LN[k]])}</b></td><td>${rel}</td><td>${B.planned[k] || 0}</td>${show && r ? `<td>${pl(r.pln[0])}–${pl(r.pln[1])}</td>${B.foreign ? `<td>${pl(r.eur[0])}–${pl(r.eur[1])}</td><td>${r.usd[0]}–${r.usd[1]}</td>` : ''}` : ''}</tr>`; }).join('');
   const card = (name, big, sub, btn, hot) => `<div class="plancard${hot ? ' hot' : ''}"><h3>${esc(name)}</h3><div class="pbig">${big}</div><p class="psub">${sub}</p>${btn || ''}</div>`;
   const isFree = p => p.prices && Number(String(p.prices.pln).replace(',', '.')) <= 0;
@@ -36,7 +42,7 @@ function render(){
     const fx = B.foreign && p.prices.eur ? `<br><small>${pl(p.prices.eur)} € · $${p.prices.usd}</small>` : '';
     return card(p.name, `${pl(p.prices.pln)} zł`, `${esc(t.no_renew)}${fx}`, payBtn('pass', p.id), p.id === 'premium');
   }).join('') + (B.foreign ? '' : `<p class="hint pfoot">${esc(t.zl_only)}</p>`);
-  $('#itemPrices').innerHTML = show ? `<table class="tbl">${B.items.map(i => `<tr><td>${esc(en ? i.name_en : i.name)}</td><td>${money(i.price)}</td><td>${payBtn('item', i.id)}</td></tr>`).join('')}</table>` : `<p>${esc(t.hidden)}</p>`;
+  $('#itemPrices').innerHTML = show ? `<table class="tbl">${B.items.map(i => `<tr><td>${esc(en ? i.name_en : i.name)}</td><td>${money(i.price)}</td><td>${i.upcoming ? soon(i) : payBtn('item', i.id)}</td></tr>`).join('')}</table>` : `<p>${esc(t.hidden)}</p>`;
   const pb = $('#payBox');
   pb.innerHTML = twa ? `<p>${esc(t.pay_twa)}</p>` : !B.payments.web ? `<p>💳 ${esc(t.pay_soon)} · BLIK · ${esc(B.payments.methods.slice(1).join(' · '))}</p>`
     : `<label class="consent"><input type="checkbox" id="payConsent"> <span>${esc(t.consent)}</span></label>${ME ? '' : `<p class="hint">${esc(t.login)}</p>`}`;
