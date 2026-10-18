@@ -9,7 +9,7 @@ a{color:var(--acc)}
 .ah{gap:8px}
 .ah-brand{margin-right:auto;order:0;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--txt);font-family:var(--font-display);font-size:22px}
 .ah-brand img{width:40px;height:40px;border-radius:50%;opacity:.95}
-.ah .lswitch{order:1;background:var(--card);color:var(--txt);border:1px solid var(--line);padding:8px 6px;font-size:15px;max-width:72px}
+.ah .lswitch{order:1;background:var(--card);color:var(--txt);border:1px solid var(--line);padding:8px 6px;font-size:15px;width:auto;max-width:96px}
 .ah-acts{order:2;display:flex;gap:8px;align-items:center}
 .ah-lang{background:var(--card);color:var(--txt);border:1px solid var(--line);padding:8px 10px;font-size:15px}
 .ah-help{width:40px;height:40px;border-radius:50%!important;border:1px solid var(--line);background:var(--card);color:var(--txt);font-size:19px;font-weight:800;cursor:pointer}
@@ -53,7 +53,7 @@ table.cmp th:first-child,table.cmp td:first-child{text-align:left}
 table.cmp td.y{color:var(--green);font-weight:900}
 table.cmp td.n{color:#6d5f52}
 /* rozwijane */
-details.more{background:var(--card);border:1px solid var(--line);padding:4px 18px;margin:0 0 12px}
+details.more{border-radius:var(--r-card-sm);background:var(--card);border:1px solid var(--line);padding:4px 18px;margin:0 0 12px}
 details.more summary{cursor:pointer;font-weight:800;padding:12px 0;list-style:none;display:flex;justify-content:space-between;gap:10px}
 details.more summary::-webkit-details-marker{display:none}
 details.more summary::after{content:"＋";color:var(--green)}

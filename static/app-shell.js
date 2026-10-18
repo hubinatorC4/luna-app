@@ -20,7 +20,7 @@ const toast = t => { const el = $('#toast'); el.textContent = t; el.hidden = fal
 /* ---------- osadzone strony ---------- */
 const FRAME_CSS = `header.top,.sitefoot,footer.sitefoot,.hb-fab,.hb-win,.lswitch,.apk-btn,.apk-hint,.dl-sec,#pobierz,.wallpage>.hero,.appfoot .fan,.appfoot>p:last-child{display:none!important}
 body{padding-bottom:24px!important;font-size:17px}body.site{padding-top:0!important}
-.app-sup{margin:0 0 16px}.app-sup .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.app-sup .x{float:right;background:none;border:0;color:inherit;opacity:.6;font-size:18px;cursor:pointer}`;
+.app-sup{margin:0 0 16px}.app-sup .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.app-sup .acts .btn{flex:1 1 140px;width:auto}.app-sup .x{float:right;background:none;border:0;color:inherit;opacity:.6;font-size:18px;cursor:pointer}`;
 function route(href){
   let u; try { u = new URL(href, location.origin); } catch(e){ return false; }
   if (u.origin !== location.origin) return false;
