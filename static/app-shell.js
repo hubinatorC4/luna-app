@@ -1,5 +1,5 @@
 /* Luna – aplikacja v1.4: dolne menu (Ścianka, Luna, Butik, Premium, Więcej), wprowadzenie, wskazówki, ceny i płatności.
-   Ścianka, Luna i Butik to te same strony co w serwisie (to samo API, te same polubienia, komentarze i liczniki) – osadzone bez nagłówka strony. */
+   Ścianka (strona główna), Luna i Butik to te same strony co w serwisie (to samo API, te same polubienia, komentarze i liczniki) – osadzone bez nagłówka strony. */
 (() => {
 const LS = ['pl', 'en', 'es', 'de', 'uk'];
 const qs = new URLSearchParams(location.search);
@@ -18,7 +18,8 @@ const withLang = p => { const u = new URL(p, location.origin); if (lang !== 'pl'
 const toast = t => { const el = $('#toast'); el.textContent = t; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => el.hidden = true, 2600); };
 
 /* ---------- osadzone strony ---------- */
-const FRAME_CSS = `header.top,.sitefoot,footer.sitefoot,.hb-fab,.hb-win,.lswitch,.apk-btn,.apk-hint,.dl-sec,#pobierz,.wallpage>.hero,.appfoot .fan,.appfoot>p:last-child{display:none!important}
+const SITE_CSS = `header.top{display:none!important}`;
+const FRAME_CSS = `.sitefoot,footer.sitefoot,.hb-fab,.hb-win,.lswitch,.apk-btn,.apk-hint,.dl-sec,#pobierz,.wallpage>.hero,.appfoot .fan,.appfoot>p:last-child{display:none!important}
 body{padding-bottom:24px!important;font-size:17px}body.site{padding-top:0!important}
 .app-sup{margin:0 0 16px}.app-sup .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.app-sup .acts .btn{flex:1 1 140px;width:auto}.app-sup .x{float:right;background:none;border:0;color:inherit;opacity:.6;font-size:18px;cursor:pointer}`;
 function route(href){
@@ -28,7 +29,8 @@ function route(href){
   if (p === '/' || p === '/index.html'){ show('luna'); if (u.hash === '#live') frameOf('luna', '#live'); return true; }
   if (p === '/butik.html'){ show('butik'); if (u.hash) frameOf('butik', u.hash); return true; }
   if (p === '/scianka.html' && !u.searchParams.get('post')){ show('feed'); return true; }
-  if (p === '/promo.html' && u.hash === '#plany'){ show('plans'); return true; }
+  if (p === '/promo.html' && /^#(plany|cennik|plans)$/.test(u.hash)){ show('plans'); return true; }
+  if (p === '/promo.html' && !u.hash){ show('feed'); return true; }
   if (p === '/app.html'){ const t = (u.hash || '').slice(1); if (TABS.includes(t)) show(t); return true; }
   if (/\.html$/.test(p) && !p.startsWith('/api/')){ openPage(p + u.search + u.hash); return true; }
   return false;
@@ -41,7 +43,8 @@ function prep(fr, tab){
     const w = fr.contentWindow, f0 = w.fetch.bind(w);
     w.fetch = async (u, o) => { const r = await f0(u, o); if (String(u).includes('/api/pay/checkout') && r.ok){ const d = await r.clone().json().catch(() => ({})); if (d.url){ location.assign(d.url); return new Promise(() => {}); } } return r; };
   } catch(e){}
-  const st = d.createElement('style'); st.textContent = FRAME_CSS; (d.head || d.documentElement).appendChild(st);
+  const isLuna = ['/', '/index.html', '/live.html'].includes(fr.contentWindow.location.pathname);
+  const st = d.createElement('style'); st.textContent = FRAME_CSS + (isLuna ? '' : SITE_CSS); (d.head || d.documentElement).appendChild(st);
   d.addEventListener('click', e => {
     const a = e.target.closest && e.target.closest('a[href]'); if (!a || e.defaultPrevented || a.target === '_blank' || a.hasAttribute('download')) return;
     const h = a.getAttribute('href'); if (!h || h.startsWith('#') || h.startsWith('javascript:')) return;
@@ -93,8 +96,8 @@ $('#helpBtn').onclick = () => { show('more'); setTimeout(() => { const h = $('#h
 
 /* ---------- wskazówki (małe, do zamknięcia, raz na zakładkę) ---------- */
 function tip(tab){
-  const host = $('#p-' + tab); if (!T.tip[tab] || store('luna.app.tip.' + tab) || host.querySelector('.tip[role=note]') || !store('luna.app.onb')) return;
-  const el = document.createElement('div'); el.className = host.dataset.frame ? 'tip float' : 'tip'; el.setAttribute('role', 'note');
+  const host = $('#p-' + tab); if (tab === 'plans' || !T.tip[tab] || store('luna.app.tip.' + tab) || host.querySelector('.tip[role=note]') || !store('luna.app.onb')) return;
+  const el = document.createElement('div'); el.className = host.dataset.frame ? 'tip float' + (tab === 'luna' ? ' bottom' : '') : 'tip'; el.setAttribute('role', 'note');
   el.innerHTML = `<span>💡</span><span>${esc(T.tip[tab])}</span><button type="button" aria-label="${esc(T.close)}">✕</button>`;
   el.querySelector('button').onclick = () => { store('luna.app.tip.' + tab, '1'); el.remove(); };
   if (host.dataset.frame) host.prepend(el); else (host.querySelector('.wrapc') || host).prepend(el);
@@ -119,7 +122,7 @@ function shareLuna(){
 }
 function supportCard(d){
   if (store('luna.app.sup') || d.querySelector('.app-sup')) return;
-  const feed = d.getElementById('feed'); if (!feed) return;
+  const feed = d.getElementById('feedHost') || d.getElementById('feed'); if (!feed) return;
   const place = () => {
     if (d.querySelector('.app-sup')) return true;
     const posts = [...feed.children].filter(c => !c.classList.contains('app-sup'));
