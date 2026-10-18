@@ -827,7 +827,7 @@ class H(SimpleHTTPRequestHandler):
             adm = token_ok(self.headers.get("X-Admin-Token"))
             d = butik.public(CFG["pricing"]["show"] or adm); d["preview"] = adm and not CFG["pricing"]["show"]
             d["plans"] = [{"id": k, "name": plans.NAMES[k], **({"prices": (v if CFG["pricing"]["foreign"] else {"pln": v["pln"]})} if CFG["pricing"]["show"] or adm else {})} for k, v in CFG["pricing"]["plans"].items()]; d["foreign"] = CFG["pricing"]["foreign"]
-            d["payments"] = {"web": payments.enabled(), "mode": payments.mode() if adm else None, "methods": ["BLIK", "karta"] + (["Przelewy24"] if payments.P24 else [])}
+            d["payments"] = {"web": payments.enabled(), "mode": payments.mode() if adm else None, "methods": ["BLIK", "karta / card"] + (["Przelewy24"] if payments.P24 else [])}
             return self._json(d)
         if p == "/api/help/chips":
             lang = parse_qs(u.query).get("lang", ["pl"])[0]
