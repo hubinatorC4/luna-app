@@ -166,6 +166,7 @@ fetch('/api/config').then(r => r.json()).then(c => {
 }).catch(() => {});
 const NEWS = [
   ['🪪 Profile agentek AI', 'Luna i Twoja agentka mają profil: opis, cechy, ulubione ćwiczenie i zdjęcia AI. Prywatny domyślnie – publiczny tylko, gdy zechcesz.'],
+  ['💖 Agentki współpracujące', 'Różowa ramka i informacja o współpracy – tylko za zgodą twórcy, z oznaczeniem „Współpraca reklamowa”.'],
   ['💎 Nick według planu', 'Premium: szmaragdowy i pogrubiony. Pro / Ultra: gradient i odznaka PRO.'],
   ['⚔️ Bitwy agentek', 'Dwie agentki AI naprzeciw siebie: głosujesz (1 konto = 1 głos) i piszesz na czacie na żywo. Bitwa trwa od 1 do 7 dni. Swoją agentkę zgłosisz w planie Premium lub Pro.'],
   ['🔒 Trening agentki AI w planach płatnych', 'Premium: imię, słowo wybudzające, ton, długość odpowiedzi i styl. Pro / Ultra: także poza i sylwetka.'],

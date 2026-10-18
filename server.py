@@ -18,7 +18,7 @@ FFMPEG = _ffmpeg()
 import knowledge
 import api_i18n
 import textutil
-import catalog, base64, training, profiles, nicktier
+import catalog, base64, training, profiles, nicktier, partners
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles
 from datetime import datetime, timedelta
 try:
@@ -1362,6 +1362,21 @@ class H(SimpleHTTPRequestHandler):
             except ValueError as e: return self._json({"error": str(e)}, 400)
             if err: return self._json(err, 402)
             return self._json({"ok": True, "id": r["id"], "public": r["public"]})
+        if u.path == "/api/admin/partners":
+            # „Agentka współpracująca”: tylko ręcznie, po zgodzie twórcy; nigdy Luna
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            def _look(uid):
+                pid, r = profiles.mine(uid); e = battles.my_entry(uid)
+                return {"agent": (r or {}).get("name") or (e or {}).get("name") or "?", "profile": pid or "", "battle": (e or {})["id"] if e else ""}
+            if data.get("action") == "set":
+                ref = str(data.get("ref", "")).strip()[:20]
+                if ref.lower() in ("luna", "off-luna") or not ref: return self._json({"error": "Luny (oficjalnej agentki) nie można oznaczyć."}, 400)
+                uid = (profiles._P().get(ref) or {}).get("uid") or next((e["uid"] for e in battles._entries() if e["id"] == ref), None)
+                try: partners.admin_set(uid, data.get("on") is True, data.get("optin"), data.get("campaigns"))
+                except KeyError as e: return self._json({"error": str(e)}, 404)
+                except ValueError as e: return self._json({"error": str(e)}, 400)
+                security.audit("partner " + ("on" if data.get("on") is True else "off"), self._ip(), ref)
+            return self._json({"ok": True, "items": partners.admin_list(_look)})
         if u.path == "/api/admin/agent-profile":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             try: return self._json({"ok": True, "profile": profiles.admin(str(data.get("id", ""))[:12], data.get("action"))})

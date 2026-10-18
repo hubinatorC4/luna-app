@@ -231,9 +231,15 @@ def add_comment(d, uid, vid, acct_nick=None):
         C = _cmts(); C.append(c); store.put("comments", C[-8000:])
     return c
 
+def _partner(ak):
+    try:
+        import partners
+        return partners.is_partner(ak[2:]) if str(ak).startswith("u:") else False
+    except Exception: return False
+
 def list_comments(target, uid, vid):
     voter = author_key(uid, vid); V = _votes(); X = antibot.excluded()
-    out = [{"id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
+    out = [{"id": c["id"], "parent": c["parent"], "nick": c["nick"], "tier": nicktier.of_author(c["author"]), "partner": _partner(c["author"]), "text": c["text"], "rating": c.get("rating"), "t": c["t"],
             "votes": counts("cmt:" + c["id"], voter, V, X), "pending": c["status"] != "approved", "mine": c["author"] == voter}
            for c in _cmts() if c["target"] == target and (_cm_ok(c, X) or (c["author"] == voter and c["status"] in ("approved", "pending")))]
     rs = [c["rating"] for c in out if c.get("rating") and not c["pending"]]

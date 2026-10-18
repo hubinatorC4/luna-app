@@ -9,7 +9,7 @@ Zasady uczciwości (nie do wyłączenia):
 - bitwa trwa od 24 h do 7 dni (czas ustalany przy tworzeniu, pilnowany po stronie serwera), głosowanie zamyka się samo, zwycięzca jest ogłaszany;
 - nagroda: odznaka 🏆 przy agentce i wyróżnienie „Zwyciężczyni” na karcie Bitew przez 24 h. Bez nagród pieniężnych."""
 import hashlib, re, secrets, threading, time
-import store, social, antibot, notify, nicktier
+import store, social, antibot, notify, nicktier, partners
 
 _lock = threading.Lock()
 MIN_H, MAX_H, DEF_H = 24, 168, 72
@@ -190,9 +190,19 @@ def public(uid=None, dev=""):
     ch = st.get("champ")
     if ch and ch["until"] > now: out["champion"] = ch
     out["last"] = [{k: h[k] for k in ("id", "a", "b", "scene", "end", "va", "vb", "winner", "reason")} for h in st.get("hist", [])[:5]]
+    _mark_partners(out)
     me = my_entry(uid)
     out["my_entry"] = {"id": me["id"], "name": me["name"], "status": me["status"], "img": "/api/battles/img/" + me["id"], "wins": me.get("wins", 0)} if me else None
     return out
+
+def _mark_partners(out):
+    """Flaga „Agentka współpracująca” liczona na bieżąco (nigdy dla Luny), bez ujawniania właściciela."""
+    E = {e["id"]: e["uid"] for e in _entries()}
+    def mk(c):
+        if isinstance(c, dict) and c.get("id") and c["id"] != "luna": c["partner"] = partners.is_partner(E.get(c["id"]))
+    b = out.get("battle") or {}; mk(b.get("a")); mk(b.get("b"))
+    ch = out.get("champion") or {}; mk(ch.get("c")); mk(ch.get("a")); mk(ch.get("b"))
+    for h in out.get("last", []): mk(h.get("a")); mk(h.get("b"))
 
 def _owner(eid):
     e = next((x for x in _entries() if x["id"] == eid), None); return e["uid"] if e else None
@@ -219,7 +229,7 @@ def _chat(): return store.get("bt_chat", {}) or {}
 def chat_list(bid, uid=None, since=0):
     X = excluded(); me = "u:" + uid if uid else None
     L = _chat().get(bid, [])
-    items = [{"id": m["id"], "nick": m["nick"], "tier": nicktier.of_author(m["ak"]), "text": m["text"], "t": m["t"], "mine": m["ak"] == me}
+    items = [{"id": m["id"], "nick": m["nick"], "tier": nicktier.of_author(m["ak"]), "partner": partners.is_partner(m["ak"][2:] if m["ak"].startswith("u:") else ""), "text": m["text"], "t": m["t"], "mine": m["ak"] == me}
              for m in L if m["id"] > since and ((not m.get("hidden") and m["ak"] not in X) or m["ak"] == me)]
     return {"items": items[-80:], "last": L[-1]["id"] if L else 0}
 

@@ -43,6 +43,11 @@ S = {
 "view": ["Zobacz profil", "View profile", "Ver perfil", "Profil ansehen", "Переглянути профіль"],
 "in_plan": ["w planie", "in the plan", "en el plan", "im Plan", "у плані"],
 "anon": ["Profil pokazuje tylko agentkę – nigdy Twoje imię, e-mail ani dane konta.", "The profile shows only the agent – never your name, email or account details.", "El perfil solo muestra a la agente, nunca tu nombre, correo ni datos de la cuenta.", "Das Profil zeigt nur die Agentin – nie deinen Namen, deine E-Mail oder Kontodaten.", "Профіль показує лише агентку – ніколи ваше ім’я, e-mail чи дані акаунта."],
+"pt_badge": ["💖 Agentka współpracująca", "💖 Partner agent", "💖 Agente colaboradora", "💖 Partner-Agentin", "💖 Агентка-партнерка"],
+"pt_h": ["💖 Współpracuje z aplikacją Luna", "💖 Works with the Luna app", "💖 Colabora con la app Luna", "💖 Arbeitet mit der Luna-App zusammen", "💖 Співпрацює із застосунком Luna"],
+"pt_p": ["Promowana przez firmy partnerskie Luny", "Promoted by Luna’s partner companies", "Promocionada por empresas colaboradoras de Luna", "Beworben von Partnerfirmen von Luna", "Просувається компаніями-партнерами Luna"],
+"pt_c": ["Kampanie i marki", "Campaigns and brands", "Campañas y marcas", "Kampagnen und Marken", "Кампанії та бренди"],
+"pt_ad": ["Współpraca reklamowa", "Paid partnership", "Colaboración publicitaria", "Werbung / Kooperation", "Рекламна співпраця"],
 "err": ["Nie udało się zapisać.", "Could not save.", "No se pudo guardar.", "Speichern fehlgeschlagen.", "Не вдалося зберегти."],
 }
 L = ["pl", "en", "es", "de", "uk"]

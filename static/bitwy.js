@@ -7,6 +7,8 @@ const VW = {pl: ['głos', 'głosy', 'głosów'], en: ['vote', 'votes', 'votes'],
 const vw = n => { const f = VW[L] || VW.pl; let c = 'other'; try { c = new Intl.PluralRules(L).select(n); } catch (e) {} return esc(c === 'one' ? f[0] : c === 'few' ? f[1] : f[2]); };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 const lq = L === 'pl' ? '' : '?lang=' + L;
+const PT = {pl: 'Agentka współpracująca', en: 'Partner agent', es: 'Agente colaboradora', de: 'Partner-Agentin', uk: 'Агентка-партнерка'}[L] || 'Agentka współpracująca';
+const ptm = c => c && c.partner ? `<span class="pt-mark" title="${esc(PT)}" aria-label="${esc(PT)}">💖</span>` : '';
 const fmt = n => Number(n || 0).toLocaleString(L === 'uk' ? 'uk-UA' : L);
 let S = null, csrf = '', me = null, skew = 0, lastMsg = 0, busy = false;
 async function api(path, body){
@@ -22,8 +24,8 @@ const HEART = '<svg class="bt-heart" viewBox="0 0 64 64" aria-hidden="true"><def
   + '<path d="M40 28 L58 15" stroke="url(#bta)" stroke-width="3" stroke-linecap="round"/><path d="M60 13 L53 14 L57 19 Z" fill="url(#bta)"/></svg>';
 function heart(btn){ if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; btn.insertAdjacentHTML('beforeend', HEART); const h = btn.lastElementChild; setTimeout(() => h.remove(), 900); }
 function face(c, side, rank, sub, cls){
-  return `<div class="bt-half ${side} ${cls || ''}">${rank ? `<span class="bt-rank">#${rank}</span>` : ''}<div class="bt-pic"><img src="${esc(c.img)}" alt="${esc(c.name)} (${esc(t.ai)})" width="300" height="400" decoding="async"></div>
-    <div class="bt-cap"><div class="bt-name">${esc(c.name)}<span class="bt-ai">${esc(t.ai)}</span></div><div class="bt-sub">${sub}</div></div></div>`;
+  return `<div class="bt-half ${side} ${cls || ''}">${rank ? `<span class="bt-rank">#${rank}</span>` : ''}<div class="bt-pic${c.partner ? ' pt-ring' : ''}"><img src="${esc(c.img)}" alt="${esc(c.name)} (${esc(t.ai)})" width="300" height="400" decoding="async"></div>
+    <div class="bt-cap"><div class="bt-name">${esc(c.name)}${ptm(c)}<span class="bt-ai">${esc(t.ai)}</span></div><div class="bt-sub">${sub}</div></div></div>`;
 }
 const role = c => esc(c.official ? t.official : t.user_agent) + (c.wins ? ` · 🏆 ${fmt(c.wins)}` : '');
 function timer(){
@@ -73,7 +75,7 @@ function renderLast(){
   if (!S.last.length){ el.innerHTML = `<p class="bt-note">${esc(t.none_yet)}</p>`; return; }
   el.innerHTML = S.last.map(r => {
     const res = r.reason !== 'end' ? t.cancelled : r.winner ? `<span class="w">🏆 ${esc(r[r.winner].name)}</span> ${esc(t.won)}` : t.draw;
-    return `<div class="bt-r"><img src="${esc(r.a.img)}" alt="" width="40" height="52"><img src="${esc(r.b.img)}" alt="" width="40" height="52"><div><b>${esc(r.a.name)}</b> ${fmt(r.va)} : ${fmt(r.vb)} <b>${esc(r.b.name)}</b><br>${res} · ${new Date(r.end * 1000).toLocaleDateString(L)}</div></div>`;
+    return `<div class="bt-r"><img${r.a.partner ? ' class="pt-ring"' : ''} src="${esc(r.a.img)}" alt="" width="40" height="52"><img${r.b.partner ? ' class="pt-ring"' : ''} src="${esc(r.b.img)}" alt="" width="40" height="52"><div><b>${esc(r.a.name)}</b>${ptm(r.a)} ${fmt(r.va)} : ${fmt(r.vb)} <b>${esc(r.b.name)}</b>${ptm(r.b)}<br>${res} · ${new Date(r.end * 1000).toLocaleDateString(L)}</div></div>`;
   }).join('');
 }
 function renderEnter(){
@@ -114,7 +116,7 @@ async function vote(e){
   busy = false;
 }
 /* ---------- czat ---------- */
-function msgHtml(m){ return `<div class="bt-m${m.mine ? ' mine' : ''}" data-id="${m.id}">${m.mine ? '' : `<button type="button" data-mrep="${m.id}" aria-label="${esc(t.report)}">⚑</button>`}<b class="nk${m.tier ? ' nk-' + m.tier : ''}">${esc(m.nick)}</b>${esc(m.text)}</div>`; }
+function msgHtml(m){ return `<div class="bt-m${m.mine ? ' mine' : ''}" data-id="${m.id}">${m.mine ? '' : `<button type="button" data-mrep="${m.id}" aria-label="${esc(t.report)}">⚑</button>`}<b class="nk${m.tier ? ' nk-' + m.tier : ''}">${esc(m.nick)}</b>${m.partner ? ptm(m) : ''}${esc(m.text)}</div>`; }
 async function pollChat(){
   if (!S || S.state !== 'live' || document.hidden) return;
   try { const d = await api('/api/battles/chat?bid=' + S.battle.id + '&since=' + lastMsg); addMsgs(d.items); } catch(e){}
@@ -156,7 +158,7 @@ function intro(){
   if (!S || S.state !== 'live' || !S.battle || RM()) return;
   const b = S.battle;
   const plaque = c => c.wins > 0 ? `<div class="bi-plq">🏆 ${fmt(c.wins)} ${esc(plural(c.wins, t.pl_w))}</div>` : '';
-  const card = (c, side, rank) => `<div class="bi-ag ${side}"><span class="bt-rank">#${rank}</span><img src="${esc(c.img)}" alt="" width="300" height="400"><div class="bi-nm">${esc(c.name)}<span class="bt-ai">${esc(t.ai)}</span></div>${plaque(c)}</div>`;
+  const card = (c, side, rank) => `<div class="bi-ag ${side}"><span class="bt-rank">#${rank}</span><img${c.partner ? ' class="pt-ring"' : ''} src="${esc(c.img)}" alt="" width="300" height="400"><div class="bi-nm">${esc(c.name)}${ptm(c)}<span class="bt-ai">${esc(t.ai)}</span></div>${plaque(c)}</div>`;
   const o = document.createElement('div'); o.className = 'bt-intro'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', t.intro_t);
   o.innerHTML = `<div class="bi-bg" style="background-image:url('/bitwy/${esc(b.scene)}.webp')"></div><i class="bi-slash"></i>
     <h2 class="bi-t">${esc(t.intro_t)}</h2>${card(b.a, 'a', 1)}${card(b.b, 'b', 2)}<div class="bt-vs bi-vs" aria-hidden="true">VS</div>

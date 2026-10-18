@@ -17,18 +17,20 @@ function draw(){
   const st = [];
   if (V.likes > 0) st.push(`<span>♥ ${esc(T.likes)}: <b>${V.likes}</b></span>`);
   if (V.battles && V.battles.wins) st.push(`<span>⚔️ ${esc(T.wins)}: <b>${V.battles.wins}</b></span>`);
-  host.innerHTML = `<section class="card ph-head">
-    ${main ? `<img class="ph-main" src="${esc(main.url)}" alt="${esc(V.name)}" width="160" height="160">` : ''}
+  const P = V.partner;
+  host.innerHTML = `<section class="card ph-head${P ? ' partner' : ''}">
+    ${main ? `<img class="ph-main${P ? ' pt-ring' : ''}" src="${esc(main.url)}" alt="${esc(V.name)}" width="160" height="160">` : ''}
     <div><h1><span class="nk ${tier}">${esc(V.name)}</span> <span class="ai-badge" title="${esc(T.ainote)}">AI</span></h1>
-      ${V.official ? `<p class="ph-off">✓ ${esc(T.official)}</p>` : ''}
+      ${V.official ? `<p class="ph-off">✓ ${esc(T.official)}</p>` : ''}${P ? `<p class="ph-pt">${esc(T.pt_badge)}</p>` : ''}
       ${V.tags && V.tags.length ? `<p class="ph-tags">${V.tags.map(x => `<span>${esc(x)}</span>`).join('')}</p>` : ''}</div></section>
+    ${P ? `<section class="card ph-ptinfo"><span class="ad-tag">${esc(T.pt_ad)}</span><p class="pt-h">${esc(T.pt_h)}</p><p>${esc(T.pt_p)}</p>${P.campaigns && P.campaigns.length ? `<h3>${esc(T.pt_c)}</h3><ul>${P.campaigns.map(c => `<li>${esc(c)}</li>`).join('')}</ul>` : ''}</section>` : ''}
     ${V.bio ? `<p class="ph-bio">${esc(V.bio)}</p>` : ''}
     ${V.exercise ? `<p class="ph-ex"><b>🎙 ${esc(T.ex)}:</b> ${esc(V.exercise)}</p>` : ''}
     ${st.length ? `<p class="ph-stats">${st.join('')}</p>` : ''}
     <div class="ph-acts"><button type="button" class="pill ${V.liked ? 'primary' : 'ghost'}" id="phLike" aria-pressed="${V.liked}">${esc(V.liked ? T.liked : T.like)}</button>
       <button type="button" class="pill ghost" id="phShare">${esc(T.share)}</button>
       ${battlesOn ? `<a class="pill ghost" href="/bitwy.html?agent=${encodeURIComponent(V.id)}${lq() ? '&' + lq() : ''}">${esc(T.battles)}</a>` : ''}
-      ${V.official ? '' : `<button type="button" class="pill ghost" id="phRep">${esc(T.report)}</button>`}</div>
+      ${V.official || V.mine ? '' : `<button type="button" class="pill ghost" id="phRep">${esc(T.report)}</button>`}</div>
     <p class="ph-msg small" id="phMsg" role="status"></p>
     ${V.battles && V.battles.history && V.battles.history.length ? `<details class="card"><summary>${esc(T.hist)}</summary><ul class="ph-hist">${V.battles.history.slice(0, 20).map(b => `<li>${b.result === 'win' ? '🏆' : b.result === 'draw' ? '🤝' : '•'} ${esc(V.name)} ${b.mine} : ${b.theirs} ${esc(b.opp)} · ${new Date(b.end * 1000).toLocaleDateString(lang())}</li>`).join('')}</ul></details>` : ''}
     ${ph.length ? `<div class="ph-grid">${ph.map(p => `<img src="${esc(p.url)}" alt="${esc(V.name)} – AI" loading="lazy" width="240" height="300"${p.ref === V.pinned ? ' class="pin"' : ''}>`).join('')}</div>` : ''}

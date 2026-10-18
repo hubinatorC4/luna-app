@@ -4,7 +4,7 @@ Zasady: tylko obrazy AI (portrety Luny z aplikacji, stroje z Butiku posiadane pr
 i ponownym kodowaniu bez EXIF); profil prywatny domyślnie; limity według planu sprawdzane na serwerze; nigdy nie ujawniamy
 danych właściciela (imię, e-mail, konto) – tylko imię agentki. Liczniki wyłącznie prawdziwe."""
 import base64, hashlib, re, secrets, threading, time
-import store, plans, social, avatars, imgsafe, butik
+import store, plans, social, avatars, imgsafe, butik, partners
 
 _lock = threading.Lock()
 LIMITS = {"darmowy": 0, "podstawowa": 0, "premium": 4, "pro": 12}
@@ -160,7 +160,7 @@ def view(pid, lang="pl", viewer=None, owner_uid=None, owner_plan=None):
         L = LUNA[lg]; t = target("luna"); c = social.counts(t, viewer)
         return {"id": "luna", "official": True, "ai": True, "name": "Luna", "bio": L["bio"], "tags": L["tags"], "exercise": L["exercise"],
                 "photos": [{"ref": "l:" + n, "url": f"/catalog/luna/{n}.jpg"} for n in LUNA_ORDER], "pinned": "l:pose_prosto",
-                "likes": c["up"], "liked": c["mine"] == 1, "target": t, "public": True, "battles": battle_stats("luna"), "tier": ""}
+                "likes": c["up"], "liked": c["mine"] == 1, "target": t, "public": True, "battles": battle_stats("luna"), "tier": "", "partner": None}
     if not PID_RE.fullmatch(str(pid or "")): return None
     r = _P().get(pid)
     if not r or r.get("hidden"): return None
@@ -175,7 +175,7 @@ def view(pid, lang="pl", viewer=None, owner_uid=None, owner_plan=None):
     return {"id": pid, "official": False, "ai": True, "name": r["name"], "bio": r["bio"] if plans.has(pl, "premium") else "", "tags": r["tags"],
             "exercise": r["exercise"], "photos": [{"ref": p, "url": _photo_url(p, pid)} for p in ph], "pinned": pin,
             "likes": c["up"], "liked": c["mine"] == 1, "target": t, "public": bool(r.get("public")), "mine": is_owner,
-            "battles": battle_stats(pid, r["uid"]), "tier": pl if pl in ("premium", "pro") else "plain"}
+            "battles": battle_stats(pid, r["uid"]), "partner": partners.get(r["uid"]), "tier": pl if pl in ("premium", "pro") else "plain"}
 
 def public_ids():
     return [k for k, v in _P().items() if v.get("public") and not v.get("hidden")]
