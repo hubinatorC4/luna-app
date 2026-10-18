@@ -4,7 +4,7 @@
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
 const tok = () => sessionStorage.getItem('luna.admin') || '';
-let TAB = 'butik', DAYS = 30, DATA = null, SUS = null;
+let TAB = 'butik', DAYS = 30, DATA = null, SUS = null, REF = null, OFF = null;
 const zl = n => (Math.round((n || 0) * 100) / 100).toFixed(2).replace('.', ',') + ' zł';
 const num = n => Number(n || 0).toLocaleString('pl-PL');
 async function api(path, body){
@@ -20,7 +20,7 @@ $('#logout').onclick = async () => { try { await api('/api/admin/logout', {}); }
 document.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { TAB = b.dataset.t; document.querySelectorAll('[data-t]').forEach(x => x.classList.toggle('on', x === b)); render(); });
 document.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { DAYS = +b.dataset.d; document.querySelectorAll('[data-d]').forEach(x => x.classList.toggle('on', x === b)); load(); });
 async function load(){ $('#view').innerHTML = '<p class="empty">Ładowanie…</p>';
-  try { [DATA, SUS] = await Promise.all([api('/api/admin/stats?days=' + DAYS), api('/api/admin/suspects')]);
+  try { [DATA, SUS, REF, OFF] = await Promise.all([api('/api/admin/stats?days=' + DAYS), api('/api/admin/suspects'), api('/api/admin/referrals').catch(() => ({items: [], stats: {}})), api('/api/admin/official').catch(() => ({items: []}))]);
     $('#meta').textContent = `Dane z ${DATA.days} dni · magazyn: ${DATA.persistent ? 'trwały (Postgres)' : 'ulotny'}`; render(); } catch(e){ $('#view').innerHTML = `<p class="err">${esc(e.message)}</p>`; } }
 function csv(name, rows, cols){ const q = v => { const s = String(v ?? ''); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   const txt = '\ufeff' + cols.map(c => q(c[1])).join(';') + '\n' + rows.map(r => cols.map(c => q(typeof c[2] === 'function' ? c[2](r) : r[c[0]])).join(';')).join('\n');
@@ -49,6 +49,16 @@ function render(){
     const C = [['title', 'Wpis', null, '', r => `${r.official ? '<span class="tag">oficjalny</span> ' : ''}${esc(r.title)}`], ['views', 'Wyświetlenia', null, 'n'], ['unique', 'Unikalni', null, 'n'], ['likes', '👍 łącznie', null, 'n'], ['dislikes', '👎 łącznie', null, 'n'], ['likes_period', '👍 w okresie', null, 'n'], ['comments', 'Komentarze', null, 'n'], ['clicks', 'Kliknięcia linków', null, 'n'], ['ctr', 'CTR %', null, 'n'], ['shares', 'Udostępnienia', null, 'n'], ['engagement', 'Zaangażowanie %', null, 'n'], ['trend', 'Trend (dzień)', null, '', r => spark(r.trend)], ['langs', 'Języki', null, '', r => Object.entries(r.langs).map(([l, n]) => `<span class="tag">${l} ${n}</span>`).join('') || '–']];
     V.innerHTML = `<div class="card"><h2>Statystyki postów dla reklamodawców <button id="csvP">⬇ CSV</button></h2><p class="hint">Wyświetlenie = wpis widoczny co najmniej w 50% przez ≥1 s, raz na sesję dziennie. Boty i konta ukryte w cieniu nie są liczone. Zaangażowanie = (👍 + 👎 + komentarze + udostępnienia + kliknięcia w okresie) / wyświetlenia.</p>${table(P, C)}</div>`;
     $('#csvP').onclick = () => csv(`posty-statystyki-${DAYS}d.csv`, P, [['id', 'id'], ['title', 'wpis'], ['official', 'oficjalny'], ['views', 'wyswietlenia'], ['unique', 'unikalni'], ['views_total', 'wyswietlenia_lacznie'], ['likes', 'polubienia'], ['dislikes', 'nie_lubie'], ['likes_period', 'polubienia_okres'], ['dislikes_period', 'nie_lubie_okres'], ['comments', 'komentarze'], ['comments_period', 'komentarze_okres'], ['clicks', 'klikniecia'], ['ctr', 'ctr_proc'], ['shares', 'udostepnienia'], ['engagement', 'zaangazowanie_proc'], ['trend', 'trend', r => r.trend.join(' ')], ['langs', 'jezyki', r => Object.entries(r.langs).map(([l, n]) => l + ':' + n).join(' ')]]);
+  } else if (TAB === 'ref'){
+    const R = REF.items || [], st = REF.stats || {}; const SN = {pending: 'czeka na potwierdzenie e-maila', rewarded: 'nagrodzone', capped: 'limit miesięczny', rejected: 'odrzucone'};
+    V.innerHTML = `<div class="card"><h2>Poleć Lunę – ${REF.days || 7} dni Premium za polecenie, limit ${REF.cap || 10}/mies.</h2>
+      <div class="kpis"><div class="kpi"><b>${R.length}</b><small>wszystkie polecenia</small></div><div class="kpi"><b>${st.rewarded || 0}</b><small>nagrodzone</small></div><div class="kpi"><b>${st.pending || 0}</b><small>oczekujące</small></div><div class="kpi"><b>${(st.capped || 0) + (st.rejected || 0)}</b><small>limit / odrzucone</small></div></div>
+      ${table(R, [['referrer', 'Polecający'], ['referee', 'Polecona osoba'], ['created', 'Data', null, '', r => new Date(r.created * 1000).toLocaleString('pl-PL')], ['status', 'Status', null, '', r => esc(SN[r.status] || r.status) + (r.reason ? ' – ' + esc(r.reason) : '')], ['referee_verified', 'E-mail potwierdzony', null, '', r => r.referee_verified ? '✅' : '–']])}</div>`;
+  } else if (TAB === 'off'){
+    const O = OFF.items || [];
+    V.innerHTML = `<div class="card"><h2>Oficjalne wpisy Ścianki – ukryj / przywróć / przypnij</h2><p class="muted">Przypięty wpis pokazuje się na górze Ścianki i kanału strony głównej. Domyślnie żaden nie jest przypięty.</p>
+      ${table(O, [['id', 'ID'], ['title', 'Tytuł'], ['state', 'Stan', null, '', r => (r.hidden ? '🙈 ukryty' : '👁 widoczny') + (r.pinned ? ' · 📌 przypięty' : '')], ['act', 'Akcje', null, '', r => `<button class="sm" data-off="${esc(r.id)}" data-a="${r.hidden ? 'show' : 'hide'}">${r.hidden ? 'Przywróć' : 'Ukryj'}</button> <button class="sm" data-off="${esc(r.id)}" data-a="${r.pinned ? 'unpin' : 'pin'}">${r.pinned ? 'Odepnij' : 'Przypnij'}</button>`]])}</div>`;
+    V.querySelectorAll('[data-off]').forEach(b => b.onclick = async () => { try { OFF = await api('/api/admin/official', {id: b.dataset.off, action: b.dataset.a}); render(); } catch(e){ alert(e.message); } });
   } else if (TAB === 'site'){
     const S = DATA.site.sections;
     V.innerHTML = `<div class="card"><h2>Najczęściej oglądane sekcje strony</h2>${table(S, [['key', 'Sekcja'], ['views', 'Wyświetlenia', null, 'n']])}</div>

@@ -86,3 +86,14 @@ body.xmas .countdown .cd span{border-color:#c9a24a;box-shadow:0 0 12px rgba(255,
 .item .phsoon{position:absolute;left:10px;bottom:10px;background:rgba(15,10,20,.82);color:#fff;font-size:.82rem;font-weight:700;padding:5px 10px;border-radius:999px}
 .itemsmore{text-align:center;padding:18px;color:#a99;min-height:20px}
 .swatches .sw:disabled{cursor:not-allowed}
+.galgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:16px 0}
+.galitem{margin:0;padding:0;overflow:hidden;border-radius:22px}
+.galitem img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:50% 25%;display:block}
+.galitem figcaption{padding:10px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.galitem figcaption [data-votes]{margin-left:auto}
+.galweek{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:center;border:2px solid rgba(255,190,120,.5)}
+.galweek img{width:100%;border-radius:18px;aspect-ratio:3/2;object-fit:cover;object-position:50% 25%}
+.galweek .lskick{color:#ffc27a;font-weight:700}
+@media (max-width:640px){.galweek{grid-template-columns:1fr}.galgrid{grid-template-columns:1fr 1fr;gap:10px}}
+.galweek[hidden]{display:none!important}
+.likestrip{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;align-items:center;margin:0 0 14px}.likestrip a{padding:8px 14px;border-radius:999px;border:1px solid rgba(255,190,120,.4);text-decoration:none}

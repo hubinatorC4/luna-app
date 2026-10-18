@@ -1,5 +1,6 @@
 /* Przełącznik języka z flagami w nagłówku każdej strony; wybór zapamiętany, adres ?lang=xx (indeksowalny). */
 (() => {
+try { const r = new URLSearchParams(location.search).get('ref'); if (r && /^[a-z0-9]{5,12}$/.test(r)) localStorage.setItem('luna.ref', r); } catch(e){}
 const L = [['pl', '🇵🇱', 'Polski'], ['en', '🇬🇧', 'English'], ['es', '🇪🇸', 'Español'], ['de', '🇩🇪', 'Deutsch'], ['uk', '🇺🇦', 'Українська']];
 const APP = location.pathname === '/app' || location.pathname === '/index.html' || document.documentElement.hasAttribute('data-app');
 const q = new URLSearchParams(location.search).get('lang');
@@ -11,10 +12,10 @@ else if (!saved){ const nav = (navigator.language || 'pl').slice(0, 2).toLowerCa
 else if (saved && saved !== 'pl' && !q){ const u = new URL(location.href); u.searchParams.set('lang', saved); location.replace(u); return; }
 const cur = q || saved || 'pl';
 const NAV = {
- en: {'/promo.html': 'Tips', '/butik.html': 'Boutique', '/scianka.html': 'Wall', '/live.html': 'Luna Live', '/testerzy.html': 'Testers', '/dolacz.html': 'Join the project', '/twarz.html': 'AI Face', '/wesprzyj.html': 'Support Luna', '/regulamin.html': 'Terms', '/privacy.html': 'Privacy', '/problemy.html': 'Help', '/app': 'App', '/app#live': 'Chat with the creator'},
- es: {'/promo.html': 'Consejos', '/butik.html': 'Boutique', '/scianka.html': 'Muro', '/live.html': 'Luna Live', '/testerzy.html': 'Testers', '/dolacz.html': 'Únete al proyecto', '/twarz.html': 'Rostro IA', '/wesprzyj.html': 'Apoya a Luna', '/regulamin.html': 'Condiciones', '/privacy.html': 'Privacidad', '/problemy.html': 'Ayuda', '/app': 'App', '/app#live': 'Chat con el creador'},
- de: {'/promo.html': 'Tipps', '/butik.html': 'Boutique', '/scianka.html': 'Pinnwand', '/live.html': 'Luna Live', '/testerzy.html': 'Tester', '/dolacz.html': 'Mitmachen', '/twarz.html': 'KI-Gesicht', '/wesprzyj.html': 'Luna unterstützen', '/regulamin.html': 'AGB', '/privacy.html': 'Datenschutz', '/problemy.html': 'Hilfe', '/app': 'App', '/app#live': 'Chat mit dem Entwickler'},
- uk: {'/promo.html': 'Поради', '/butik.html': 'Бутик', '/scianka.html': 'Стіна', '/live.html': 'Luna Live', '/testerzy.html': 'Тестувальники', '/dolacz.html': 'Долучитися', '/twarz.html': 'Обличчя ШІ', '/wesprzyj.html': 'Підтримати Луну', '/regulamin.html': 'Правила', '/privacy.html': 'Конфіденційність', '/problemy.html': 'Допомога', '/': 'Застосунок', '/app#live': 'Чат з автором'}};
+ en: {'/promo.html': 'Tips', '/butik.html': 'Boutique', '/scianka.html': 'Wall', '/galeria.html': 'Agents gallery', '/live.html': 'Luna Live', '/testerzy.html': 'Testers', '/dolacz.html': 'Join the project', '/twarz.html': 'AI Face', '/wesprzyj.html': 'Support Luna', '/regulamin.html': 'Terms', '/privacy.html': 'Privacy', '/problemy.html': 'Help', '/app': 'App', '/app#live': 'Chat with the creator'},
+ es: {'/promo.html': 'Consejos', '/butik.html': 'Boutique', '/scianka.html': 'Muro', '/galeria.html': 'Galería de agentes', '/live.html': 'Luna Live', '/testerzy.html': 'Testers', '/dolacz.html': 'Únete al proyecto', '/twarz.html': 'Rostro IA', '/wesprzyj.html': 'Apoya a Luna', '/regulamin.html': 'Condiciones', '/privacy.html': 'Privacidad', '/problemy.html': 'Ayuda', '/app': 'App', '/app#live': 'Chat con el creador'},
+ de: {'/promo.html': 'Tipps', '/butik.html': 'Boutique', '/scianka.html': 'Pinnwand', '/galeria.html': 'Galerie der Agentinnen', '/live.html': 'Luna Live', '/testerzy.html': 'Tester', '/dolacz.html': 'Mitmachen', '/twarz.html': 'KI-Gesicht', '/wesprzyj.html': 'Luna unterstützen', '/regulamin.html': 'AGB', '/privacy.html': 'Datenschutz', '/problemy.html': 'Hilfe', '/app': 'App', '/app#live': 'Chat mit dem Entwickler'},
+ uk: {'/promo.html': 'Поради', '/butik.html': 'Бутик', '/scianka.html': 'Стіна', '/galeria.html': 'Галерея агенток', '/live.html': 'Luna Live', '/testerzy.html': 'Тестувальники', '/dolacz.html': 'Долучитися', '/twarz.html': 'Обличчя ШІ', '/wesprzyj.html': 'Підтримати Луну', '/regulamin.html': 'Правила', '/privacy.html': 'Конфіденційність', '/problemy.html': 'Допомога', '/': 'Застосунок', '/app#live': 'Чат з автором'}};
 const OPEN = {en: 'Open Luna', es: 'Abrir Luna', de: 'Luna öffnen', uk: 'Відкрити Луну'};
 function mount(){
   if (APP) return;

@@ -4,6 +4,7 @@ E = [
 ["Aplikacja", "App", "Aplicación", "App", "Застосунок"],
 ["Porady", "Tips", "Consejos", "Tipps", "Поради"],
 ["Butik", "Boutique", "Boutique", "Boutique", "Бутик"],
+["Galeria agentek", "Agents gallery", "Galería de agentes", "Galerie der Agentinnen", "Галерея агенток"],
 ["Ścianka Agentek Głosu", "Voice Agents’ Wall", "Muro de las Agentes de Voz", "Pinnwand der Stimmagentinnen", "Стіна голосових агенток"],
 ["Testerzy", "Testers", "Testers", "Tester", "Тестувальники"],
 ["Testerzy 🎁", "Testers 🎁", "Testers 🎁", "Tester 🎁", "Тестувальники 🎁"],

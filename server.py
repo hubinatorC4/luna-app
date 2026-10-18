@@ -17,7 +17,7 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import catalog, base64
-import official, i18n_pages, stats, antibot, owner, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
+import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
 from datetime import datetime, timedelta
 try:
     from zoneinfo import ZoneInfo
@@ -704,6 +704,8 @@ class H(SimpleHTTPRequestHandler):
             try: uid, sent = accounts.signup(data, notify.PUBLIC_URL)
             except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
             except ValueError as e: return self._json({"error": str(e)}, 400)
+            try: referral.on_signup(uid, data.get("ref"), "u:" + uid)
+            except Exception: pass
             antibot.on_write("u:" + uid, ip, self.headers.get("User-Agent", ""), str(data.get("email", "")).split("@")[0][:3] + "…@" + str(data.get("email", "")).rsplit("@", 1)[-1])
             sid, csrf = accounts.new_session(uid); self._set_sid(sid, accounts.SESSION_DAYS * 86400)
             return self._json({"ok": True, "verification_sent": sent, "csrf": csrf, "user": accounts.public(accounts._accts()[uid])})
@@ -723,6 +725,8 @@ class H(SimpleHTTPRequestHandler):
                 accounts.end_session(self._cookie("luna_sid")); self._set_sid("", 0); return self._json({"ok": True})
             if p == "/api/account/delete":
                 if not livechat.rate_ok("del:" + ip, 3, 20): return self._json({"error": "Za dużo prób."}, 429)
+                try: referral.forget(usr["uid"])
+                except Exception: pass
                 try: accounts.delete(usr["uid"], data.get("password") or None)
                 except ValueError as e: return self._json({"error": str(e)}, 400)
                 social.anonymise_author("u:" + usr["uid"]); antibot.forget("u:" + usr["uid"])
@@ -784,6 +788,10 @@ class H(SimpleHTTPRequestHandler):
             tok = check_code(ip, str(data.get("passphrase", ""))[:80])
             if not tok: return self._json({"error": "Nieprawidłowy kod."}, 401)
             return self._json({"admin_token": tok, "ttl": ADMIN_TTL})
+        if p == "/api/admin/official":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try: return self._json(social.official_action(str(data.get("id", ""))[:20], str(data.get("action", ""))))
+            except (KeyError, ValueError) as e: return self._json({"error": str(e)}, 400)
         if p == "/api/admin/suspects":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             aks = [str(a)[:40] for a in (data.get("aks") or [])[:500]]
@@ -992,6 +1000,14 @@ class H(SimpleHTTPRequestHandler):
         if p == "/api/account/me":
             a = self._acct()
             return self._json({"user": accounts.public(a[0]), "csrf": a[1]} if a else {"user": None})
+        if p == "/api/gallery":
+            q = parse_qs(u.query)
+            try: return self._json(social.gallery(q.get("offset", ["0"])[0], q.get("limit", ["24"])[0]))
+            except ValueError: return self._json({"error": "bad request"}, 400)
+        if p == "/api/referral":
+            a = self._acct()
+            if not a: return self._json({"error": "Zaloguj się."}, 401)
+            return self._json(referral.mine(a[0]["uid"], notify.PUBLIC_URL.rstrip("/")))
         if p == "/api/account/export":
             a = self._acct()
             if not a: return self._json({"error": "Zaloguj się."}, 401)
@@ -1001,6 +1017,9 @@ class H(SimpleHTTPRequestHandler):
             self.end_headers(); self.wfile.write(b); return True
         if p == "/api/account/verify":
             ok = accounts.verify(parse_qs(u.query).get("token", [""])[0])
+            if ok:
+                try: referral.on_verified(ok)
+                except Exception: pass
             msg = "✅ Adres e-mail potwierdzony. Możesz wrócić do Luny." if ok else "Link jest nieprawidłowy lub został już użyty."
             b = f"<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width'><title>Luna</title><body style='font-family:sans-serif;background:#0b0705;color:#f6e9da;padding:30px'><p>{msg}</p><p><a style='color:#f0a040' href='/app'>Otwórz Lunę</a></p>".encode()
             self.send_response(200 if ok else 400); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return True
@@ -1012,7 +1031,7 @@ class H(SimpleHTTPRequestHandler):
         return None
     def do_GET(self):
         u = urlparse(self.path)
-        if u.path.startswith(("/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
+        if u.path.startswith(("/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/referral", "/api/gallery", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
             r = self._get_account(u)
             if r is not None: return r
         if u.path == "/api/age/status":
@@ -1022,6 +1041,13 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/tts":
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tts(q)
+        if u.path == "/api/social-links":
+            # „Polub nas”: pokazujemy tylko profile, których adres ustawiono (env LUNA_SOCIAL_*). Bez adresów pasek jest ukryty.
+            L = {}
+            for k in ("facebook", "instagram", "tiktok", "youtube", "x"):
+                v = (os.getenv("LUNA_SOCIAL_" + k.upper()) or "").strip()
+                if re.fullmatch(r"https://[\w.-]+/[\w@./?=&%-]*", v): L[k] = v
+            return self._json({"links": L})
         if u.path == "/api/config":
             return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live", "free", "pay_notice", "app", "features")})
         if u.path == "/api/admin/config":
@@ -1070,8 +1096,10 @@ class H(SimpleHTTPRequestHandler):
             now = time.time()
             body = owner.inbox(since)
             return self._json({"since": owner._iso(since), "until": owner._iso(now), "version": VERSION, **body})
-        if u.path in ("/api/admin/stats", "/api/admin/suspects"):
+        if u.path in ("/api/admin/stats", "/api/admin/suspects", "/api/admin/referrals", "/api/admin/official"):
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            if u.path.endswith("referrals"): return self._json(referral.admin_list())
+            if u.path.endswith("official"): return self._json(social.official_admin())
             if u.path.endswith("suspects"): return self._json({"suspects": antibot.admin_list(), "threshold": antibot.THRESH, "turnstile": antibot.turnstile_on()})
             try: days = int(parse_qs(u.query).get("days", ["30"])[0])
             except ValueError: days = 30

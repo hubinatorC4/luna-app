@@ -286,3 +286,19 @@ background:linear-gradient(180deg,#fff 20%,var(--gold));-webkit-background-clip:
   .wallpage .chatbox{padding:10px 8px 8px;border-radius:20px}
   .wallpage .chatform input.cn{flex:1 1 100%}
 }
+/* Przypięty nabór + Bitwy agentek (wkrótce) */
+.recruit-pin{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;margin:0 0 18px}
+.recruit-pin>div{border-radius:24px;padding:18px 20px}
+.rc-urgent{background:linear-gradient(135deg,rgba(255,150,60,.22),rgba(255,90,120,.14));border:2px solid rgba(255,170,90,.7);box-shadow:0 18px 40px -24px rgba(255,140,60,.7)}
+.rc-urgent h2{margin:8px 0 6px;font-size:1.55rem;line-height:1.2;font-weight:800}
+.rc-urgent p{margin:0 0 14px}
+.rc-urgent .pill{min-height:50px;display:inline-flex;align-items:center}
+.rc-badge{display:inline-block;font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.35);color:#ffd9a8}
+.rc-battle{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.22);text-align:center}
+.rc-battle h3{margin:10px 0 6px}.rc-battle p{margin:0 0 8px;opacity:.9}.rc-battle small{opacity:.7}
+.rc-vs{display:flex;align-items:center;justify-content:center;gap:14px}
+.rc-slot{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:26px;background:rgba(255,190,120,.12);border:2px solid rgba(255,190,120,.4)}
+.rc-slot.q{border-style:dashed;color:#ffc27a;font-weight:800}
+.rc-vs b{font-size:1.2rem;color:#ffc27a;letter-spacing:.08em}
+@media (max-width:720px){.recruit-pin{grid-template-columns:1fr}.rc-urgent h2{font-size:1.35rem}}
+.post.pinned{border-color:rgba(255,190,120,.55)}.post .pinb{float:right;font-size:1.1rem}

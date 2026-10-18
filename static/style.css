@@ -212,3 +212,5 @@ dialog.news ul{padding-left:18px;line-height:1.5}dialog.news li{margin:8px 0}
 .appfoot p{margin:3px 0}.appfoot .fan{color:#d6f5df}.appfoot .money{color:#cdb79f}
 .badge-noads{display:inline-block;font-size:12px;border-radius:999px;padding:3px 10px;border:1px solid #6fdc8c;background:#101a12;color:#c9ffd9}
 .hb-fab{bottom:100px!important;width:48px!important;height:48px!important;font-size:21px!important}
+.refbox{margin:12px 0;padding:12px 14px;border-radius:16px;background:rgba(255,190,120,.07);border:1px solid rgba(255,190,120,.25)}
+.refbox h4{margin:0 0 4px}.refrow{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.refrow input{flex:1 1 180px;min-width:0}

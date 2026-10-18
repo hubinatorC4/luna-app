@@ -58,16 +58,35 @@ function planUI(p){
 window.addEventListener('luna-plan', e => planUI(e.detail));
 
 /* ---------- konto ---------- */
+/* Poleć Lunę – osobisty link i prawdziwe liczby z serwera (bez sztucznych liczników). */
+const RX = {pl: ['🎁 Poleć Lunę', 'Za każdą osobę, która założy konto z Twojego linku i potwierdzi e-mail, dostajesz 7 dni Premium (maks. 10 w miesiącu).', 'Skopiuj link', 'Skopiowano ✓', 'W tym miesiącu', 'nagród', 'Łącznie zdobyte', 'dni Premium', 'Czeka na potwierdzenie e-maila', 'Nagrody ruszą, gdy włączymy potwierdzanie adresów e-mail.', 'Udostępnij'],
+  en: ['🎁 Recommend Luna', 'For each person who creates an account from your link and confirms their email, you get 7 days of Premium (max 10 per month).', 'Copy link', 'Copied ✓', 'This month', 'rewards', 'Earned in total', 'days of Premium', 'Waiting for email confirmation', 'Rewards will start once email confirmation is switched on.', 'Share'],
+  es: ['🎁 Recomienda a Luna', 'Por cada persona que cree una cuenta desde tu enlace y confirme su correo, recibes 7 días de Premium (máx. 10 al mes).', 'Copiar enlace', 'Copiado ✓', 'Este mes', 'recompensas', 'Total conseguido', 'días de Premium', 'Pendiente de confirmar el correo', 'Las recompensas empezarán cuando activemos la confirmación de correo.', 'Compartir'],
+  de: ['🎁 Luna empfehlen', 'Für jede Person, die über deinen Link ein Konto erstellt und ihre E-Mail bestätigt, bekommst du 7 Tage Premium (max. 10 pro Monat).', 'Link kopieren', 'Kopiert ✓', 'Diesen Monat', 'Belohnungen', 'Insgesamt erhalten', 'Tage Premium', 'Wartet auf E-Mail-Bestätigung', 'Belohnungen starten, sobald die E-Mail-Bestätigung aktiv ist.', 'Teilen'],
+  uk: ['🎁 Порадь Луну', 'За кожну людину, яка створить акаунт за вашим посиланням і підтвердить е-пошту, ви отримуєте 7 днів Premium (макс. 10 на місяць).', 'Копіювати посилання', 'Скопійовано ✓', 'Цього місяця', 'винагород', 'Загалом отримано', 'днів Premium', 'Очікує підтвердження е-пошти', 'Винагороди запрацюють, коли ми ввімкнемо підтвердження е-пошти.', 'Поділитися']};
+function refUI(){
+  const el = $('#a_ref'); if (!el) return; const t = RX[(document.documentElement.lang || 'pl').slice(0, 2)] || RX.pl;
+  fetch('/api/referral', {credentials: 'same-origin'}).then(r => r.ok ? r.json() : null).then(d => { if (!d || !d.link) return;
+    el.hidden = false;
+    el.innerHTML = `<h4>${esc(t[0])}</h4><p class="hint">${esc(t[1])}</p>${ME && !ME.email_verification_available ? `<p class="hint warn">${esc(t[9])}</p>` : ''}
+      <div class="refrow"><input readonly value="${esc(d.link)}" aria-label="link"><button type="button" class="primary" id="a_refcopy">${esc(t[2])}</button>${navigator.share ? `<button type="button" class="ghost" id="a_refshare">${esc(t[10])}</button>` : ''}</div>
+      <p class="hint">${esc(t[4])}: <b>${d.rewarded_month}/${d.cap_month}</b> ${esc(t[5])} · ${esc(t[6])}: <b>${d.days_earned}</b> ${esc(t[7])}${d.pending ? ` · ${esc(t[8])}: <b>${d.pending}</b>` : ''}</p>`;
+    $('#a_refcopy').onclick = async () => { try { await navigator.clipboard.writeText(d.link); } catch(e){ el.querySelector('input').select(); document.execCommand('copy'); } $('#a_refcopy').textContent = t[3]; };
+    if ($('#a_refshare')) $('#a_refshare').onclick = () => navigator.share({title: 'Luna', url: d.link}).catch(() => {});
+  }).catch(() => {});
+}
 function acctUI(){
   const box = $('#acctBox'); if (!box) return;
   if (ME){
     box.innerHTML = `<p>Zalogowano: <b>${esc(ME.email)}</b> ${ME.verified ? '✅' : `<span class="warn">(adres niepotwierdzony${ME.email_verification_available ? ' – sprawdź skrzynkę' : ' – potwierdzanie e-mail włączymy wkrótce'})</span>`}</p>
       <p class="hint">Oświadczenie 18+: ${ME.adult ? 'złożone ' + fmtD(ME.adult_at) : 'brak'} · Plan: ${NAMES[ME.plan] || ME.plan}${ME.until ? ' do ' + fmtD(ME.until) : ''}</p>
+      <div class="refbox" id="a_ref" hidden></div>
       <label>Kod testera<input id="a_tester" maxlength="12" value="${esc(ME.tester)}" placeholder="np. 1A2B3C4D"></label>
       <div class="btns"><button type="button" class="ghost" id="a_link">Przypisz kod testera</button>
       <a class="ghost btnlink" href="/api/account/export" download>⬇ Pobierz moje dane</a>
       <button type="button" class="ghost" id="a_logout">Wyloguj</button>
       <button type="button" class="ghost danger" id="a_delete">Usuń konto</button></div><p class="tst-err" id="a_err"></p>`;
+    refUI();
     $('#a_logout').onclick = async () => { await api('/api/account/logout', {}).catch(() => {}); ME = null; CSRF = ''; acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); };
     $('#a_link').onclick = async () => { try { const r = await api('/api/account/link-tester', {code: $('#a_tester').value}); ME = r.user; localStorage.setItem('luna.tester', ME.tester); acctUI(); window.LunaPlanRefresh && window.LunaPlanRefresh(); } catch(e){ $('#a_err').textContent = '⚠️ ' + e.message; } };
     $('#a_delete').onclick = async () => {
@@ -108,7 +127,7 @@ function acctUI(){
   f.onsubmit = async e => {
     e.preventDefault(); const err = $('#a_err'); err.textContent = '';
     const body = {email: f.email.value.trim(), password: f.password.value};
-    if (mode === 'up') Object.assign(body, {name: f.name.value, dob: f.dob.value, adult: f.adult.checked, terms: f.terms.checked, website: f.website.value, fill_ms: Date.now() - shownAt});
+    if (mode === 'up') Object.assign(body, {name: f.name.value, dob: f.dob.value, adult: f.adult.checked, terms: f.terms.checked, website: f.website.value, fill_ms: Date.now() - shownAt, ref: (() => { try { return localStorage.getItem('luna.ref') || ''; } catch(e){ return ''; } })()});
     try {
       const r = await api(mode === 'up' ? '/api/account/signup' : '/api/account/login', body);
       ME = r.user; CSRF = r.csrf; f.password.value = '';
@@ -146,6 +165,11 @@ fetch('/api/config').then(r => r.json()).then(c => {
   const b = banner('💳 ' + pn.text, 'info'); b.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('luna.payNotice', pn.t); } catch(e){} });
 }).catch(() => {});
 const NEWS = [
+  ['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.'],
+  ['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.'],
+  ['🎁 Poleć Lunę', '7 dni Premium za każdą poleconą osobę, która założy konto i potwierdzi e-mail (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.'],
+  ['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.'],
+  ['⚔️ Bitwy agentek – wkrótce', 'Ruszą, gdy w obsadzie będą co najmniej dwie agentki. Pilnie szukamy nowych agentek!'],
   ['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.'],
   ['🧱 Ścianka Agentek Głosu', 'Nowa nazwa Ścianki. Pod wpisami: polubienia, wyświetlenia i komentarze jak w czacie – tylko prawdziwe liczby.'],
   ['🛍 Nowy Butik Luny', 'Nowa kolekcja, kategorie i kolory. Wszystkie kolory w cenie stroju. Tylko eleganckie, zakrywające stroje.'],
@@ -155,10 +179,10 @@ const NEWS = [
 window.LunaNews = () => {
   let d = $('#newsDlg');
   if (!d){ d = document.createElement('dialog'); d.id = 'newsDlg'; d.className = 'news';
-    d.innerHTML = '<h2>Co nowego w wersji 1.4.0</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
+    d.innerHTML = '<h2>Co nowego w wersji 1.4.3</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
     document.body.appendChild(d); }
-  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.4.0'); } catch(e){}
+  d.showModal(); try { localStorage.setItem('luna.seenVer', '1.4.3'); } catch(e){}
 };
-try { if (localStorage.getItem('luna.seenVer') !== '1.4.0' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
+try { if (localStorage.getItem('luna.seenVer') !== '1.4.3' && (localStorage.getItem('luna.age') || localStorage.getItem('luna.history'))) setTimeout(() => { if (!document.querySelector('dialog[open]')) window.LunaNews(); }, 1200); } catch(e){}
 document.addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-news]')){ e.preventDefault(); window.LunaNews(); } });
 })();

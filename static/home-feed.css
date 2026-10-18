@@ -110,3 +110,9 @@ body.homebody:not(.pasthero) .wall-write{display:none}
   .homebody .sh-cta .pill.primary{grid-column:1/-1}
   .homebody .sh-badges{padding:0}
 }
+@media (max-width:720px){
+  .homebody .sh-stage{aspect-ratio:16/11}
+  body.homebody:not(.pasthero) .hb-fab{opacity:0;pointer-events:none;transform:scale(.6)}
+  .homebody .hb-fab{transition:opacity .25s,transform .25s}
+}
+@media (max-width:720px){.homebody .sh-stage img{object-position:50% 18%}}

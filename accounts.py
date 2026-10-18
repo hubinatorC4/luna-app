@@ -70,7 +70,7 @@ def verify(tok):
         a = _accts()
         for u in a.values():
             if u.get("vtok") and secrets.compare_digest(u["vtok"], th):
-                u["verified"] = True; u["vtok"] = ""; store.put("accounts", a); return True
+                u["verified"] = True; u["vtok"] = ""; store.put("accounts", a); return u["uid"]
     return False
 
 def login(email, pw):

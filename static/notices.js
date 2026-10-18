@@ -49,3 +49,15 @@ function apply(lang){
 window.LunaDisclaimerLang = apply;
 apply(l);
 })();
+
+/* „Polub nas” – pasek widoczny tylko wtedy, gdy ustawiono adresy profili (LUNA_SOCIAL_*). Bez nagród za polubienia i bez liczników. */
+(() => {
+  const foot = document.querySelector('.sitefoot'); if (!foot) return;
+  const L = (document.documentElement.lang || 'pl').slice(0, 2);
+  const H = {pl: 'Polub nas', en: 'Follow us', es: 'Síguenos', de: 'Folge uns', uk: 'Стежте за нами'}[L] || 'Polub nas';
+  const N = {facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube', x: 'X'};
+  fetch('/api/social-links').then(r => r.json()).then(d => { const k = Object.keys(d.links || {}); if (!k.length) return;
+    const el = document.createElement('div'); el.className = 'likestrip';
+    el.innerHTML = '<b>💚 ' + H + '</b> ' + k.map(x => `<a href="${d.links[x].replace(/"/g, '')}" target="_blank" rel="noopener me">${N[x]}</a>`).join('');
+    foot.insertBefore(el, foot.firstChild); }).catch(() => {});
+})();

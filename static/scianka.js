@@ -30,7 +30,7 @@ function postHTML(p){
   const url = location.origin + '/scianka.html?post=' + p.id + (S.lang !== 'pl' ? '&lang=' + S.lang : '');
   const text = fmt(p.text); if (p.variants) VAR[p.id] = p.variants;
   const lsw = p.variants ? `<div class="langsw">🌐 <span>${X.other}</span> ${Object.keys(p.variants).map(l => `<button type="button" data-vl="${l}" class="${l === p.lang ? 'on' : ''}">${l.toUpperCase()}</button>`).join('')}</div>` : '';
-  return `<article class="post card" id="p-${esc(p.id)}" data-id="${esc(p.id)}"${p.pending ? '' : ` data-track="post:${esc(p.id)}"`}>
+  return `<article class="post card${p.pinned ? ' pinned' : ''}" id="p-${esc(p.id)}" data-id="${esc(p.id)}"${p.pending ? '' : ` data-track="post:${esc(p.id)}"`}>${p.pinned ? '<span class="pinb">📌</span>' : ''}
 <header class="phead">${p.avatar ? `<span class="offava"><img src="${esc(p.avatar)}" alt="" width="44" height="44"></span>` : ava(p.nick, 48)}<div class="pmeta"><div><b class="nick">${esc(p.nick)}</b>${p.official ? (p.verified_label ? ` <span class="badge-ver" title="${esc(p.verified_label)}" aria-label="${esc(p.verified_label)}">✓</span>` : ' <span class="verified">✓ Oficjalne</span>') : ''}${p.pending ? `<span class="pend">${X.waiting}</span>` : ''}</div><time datetime="${new Date(p.t * 1000).toISOString()}">${ago(p.t)}${p.edited ? ' · ' + X.edited : ''}</time></div>
 ${p.mine ? `<div class="menu"><button type="button" data-edit>${X.edit}</button><button type="button" data-del>${X.del}</button></div>` : ''}${p.pending ? '' : `<button type="button" class="report" data-report="post:${esc(p.id)}">⋯ ${T.report}</button>`}</header>
 ${p.rich ? lsw : ''}${p.rich ? `<div class="rbody" lang="${esc(p.lang)}">${window.LunaOfficial.render(p, p.lang)}</div>` : `<div class="ptext" lang="${esc(p.lang)}">${text}</div>${lsw}`}
@@ -94,7 +94,7 @@ f.onsubmit = async e => {
   } catch(err){ msg.className = 'cmsg err'; msg.textContent = err.message; }
 };
 fetch('/api/account/me', {credentials: 'same-origin'}).then(r => r.json()).then(m => { ME = m.user || null; if (ME && $('#adultRow')) $('#adultRow').hidden = true; }).catch(() => {});
-if ($('#refCopy')) $('#refCopy').onclick = async () => { const u = location.origin + '/promo.html'; try { await navigator.clipboard.writeText(u); $('#refCopy').textContent = T.copied; } catch(e){ prompt(T.copy, u); } };
+if ($('#refCopy')) $('#refCopy').onclick = async () => { let u = location.origin + '/'; try { const r = await fetch('/api/referral', {credentials: 'same-origin'}); if (r.ok){ const d = await r.json(); if (d.link) u = d.link; } } catch(e){} try { await navigator.clipboard.writeText(u); $('#refCopy').textContent = T.copied; } catch(e){ prompt(T.copy, u); } };
 /* „do góry”, szybki kompozytor, „Nowe posty (n)”, zapamiętanie pozycji przewinięcia */
 document.body.insertAdjacentHTML('beforeend', `<button type="button" class="wall-top" hidden aria-label="${X.top}">↑</button><button type="button" class="wall-write" aria-label="${X.write}">✍️</button><button type="button" class="wall-pill" hidden></button>`);
 const topB = $('.wall-top'), pill = $('.wall-pill');

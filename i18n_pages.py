@@ -3,8 +3,8 @@ Wpis z „<” – zamiana fragmentu HTML; wpis z „~” – zamiana podciągu;
 Pliki JS z listy JS dostają ?lang=xx i podmianę napisów (strony publiczne i aplikacja /app)."""
 import json, os, re
 D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "i18n")
-PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "/regulamin.html": ["regulamin_v140", "regulamin", "common"],
-         "/privacy.html": ["privacy_v140", "privacy", "common"], "/o-lunie.html": ["common"],
+PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "/regulamin.html": ["regulamin_v143", "regulamin_v140", "regulamin", "common"],
+         "/privacy.html": ["privacy_v140", "privacy", "common"], "/o-lunie.html": ["common"], "/galeria.html": ["common"],
          "/index.html": ["app_index"],
          **{x: ["common"] for x in ("/scianka.html", "/butik.html", "/testerzy.html", "/dolacz.html", "/twarz.html", "/wesprzyj.html", "/problemy.html")}}
 JS = {"portal.js": "js_portal", "live.js": "js_live", "testers.js": "js_testers", "push.js": "js_push",

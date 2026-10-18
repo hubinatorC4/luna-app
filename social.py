@@ -145,12 +145,30 @@ def public_post(p, voter, V, C, mine_ak, lang="pl", T=None):
             "t": p["t"], "edited": p.get("edited", 0), "votes": c, "ncomments": len(cm), "mine": p["author"] == mine_ak, "pending": p["status"] != "approved"}
 
 def _off_hidden(): return set(store.get("official_hidden", []) or [])
+def _pinned(): return list(store.get("wall_pinned", []) or [])
+
+def official_admin():
+    H = _off_hidden(); Pn = set(_pinned())
+    return {"items": [{"id": o["id"], "title": o["v"]["pl"].get("h") or o["v"]["pl"].get("text", "")[:80], "hidden": o["id"] in H, "pinned": o["id"] in Pn} for o in official.raw()]}
+
+def official_action(id_, action):
+    if not official.get(id_): raise KeyError(id_)
+    if action in ("hide", "show"): moderate("post", id_, "hide" if action == "hide" else "unhide")
+    elif action in ("pin", "unpin"):
+        with _lock:
+            Pn = [x for x in _pinned() if x != id_]
+            if action == "pin": Pn.insert(0, id_)
+            store.put("wall_pinned", Pn[:3])
+    else: raise ValueError("bad action")
+    return official_admin()
 
 def feed(sort, before, limit, uid, vid, lang="pl"):
     voter = author_key(uid, vid); V = _votes(); C = _cmts(); hid = _off_hidden()
     X = antibot.excluded(); T = stats.totals()
     P = [p for p in _posts() if (p["status"] == "approved" and p["author"] not in X) or (p["author"] == voter and p["status"] in ("approved", "pending"))]
     P += [dict(o, _off=True) for o in official.raw() if o["id"] not in hid]
+    PIN = [i for i in _pinned()]; pin_posts = [p for pid in PIN for p in P if p["id"] == pid]
+    P = [p for p in P if p["id"] not in PIN]
     def score(p): c = counts("post:" + p["id"], None, V, X); return c["up"] - c["down"]
     if sort == "top":
         wk = time.time() - 7 * 86400
@@ -167,7 +185,9 @@ def feed(sort, before, limit, uid, vid, lang="pl"):
             cm = [x for x in C if x["target"] == "post:" + p["id"] and _cm_ok(x, X)]
             return official.public(p, lang, pr, {"votes": counts("post:" + p["id"], voter, V, X), "ncomments": len(cm), "views": stats.post_views(p["id"], T)})
         return public_post(p, voter, V, C, voter, lang, T)
-    return {"items": [pub(p) for p in items], "next": nxt}
+    first = (sort == "top" and not int(before or 0)) or (sort != "top" and not before)
+    out = ([dict(pub(p), pinned=True) for p in pin_posts] if first else []) + [pub(p) for p in items]
+    return {"items": out, "next": nxt}
 
 def get_post(pid):
     if str(pid).startswith("off-"):
@@ -294,3 +314,25 @@ def purge_author(ak, ban=False):
         store.put("votes", V)
         if ban:
             b = _bans(); b.add(ak); store.put("social_bans", sorted(b))
+
+
+LUNA_GAL = ["outfit_sweter", "outfit_biznes", "pose_prosto", "outfit_koktajlowa", "pose_zamyslona", "outfit_wieczorowa", "pose_siedzaca", "pose_polobrot", "outfit_zakiet"]
+LUNA_T = 1792300000
+
+def gallery(offset=0, limit=24):
+    """Galeria agentek: zatwierdzone wpisy z obrazem (postacie AI) + oficjalne wpisy Luny z obrazem. Tylko prawdziwe dane.
+    Agentka tygodnia: wpis z obrazem z ostatnich 7 dni z największą liczbą prawdziwych polubień (min. 1) – inaczej brak."""
+    V = _votes(); X = antibot.excluded(); hid = _off_hidden()
+    P = [p for p in _posts() if p["status"] == "approved" and p.get("img") and p["author"] not in X]
+    out = [{"id": p["id"], "img": "/api/wall/img/" + p["img"], "nick": p["nick"], "agent": p.get("agent"), "t": p["t"], "official": False} for p in P]
+    for x in out: x["likes"] = counts("post:" + x["id"], None, V, X)["up"]; x["target"] = "post:" + x["id"]
+    # Luna – jedyna obecna agentka: jej prawdziwe, w pełni zakryte portrety z serwisu (bez głębokich dekoltów).
+    for i, n in enumerate(LUNA_GAL):
+        out.append({"id": "luna-" + n, "img": f"/catalog/luna/{n}.jpg", "nick": "Luna", "agent": "Luna", "t": LUNA_T - i, "official": True,
+                    "target": "agent:luna-" + n, "likes": counts("agent:luna-" + n, None, V, X)["up"]})
+    out.sort(key=lambda x: -x["t"])
+    wk = time.time() - 7 * 86400
+    cand = [x for x in out if x["t"] >= wk and x["likes"] >= 1]
+    week = max(cand, key=lambda x: (x["likes"], x["t"])) if cand else None
+    off = max(0, int(offset or 0)); lim = max(1, min(48, int(limit or 24)))
+    return {"items": out[off:off + lim], "total": len(out), "next": off + lim if len(out) > off + lim else None, "week": week}
