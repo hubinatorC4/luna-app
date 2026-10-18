@@ -21,7 +21,7 @@ def create_checkout(kind, ref, name, pln, uid, email, base_url):
     amount = grosze(pln)
     if amount < 200: raise ValueError("Kwota za niska dla BLIK (min. 2 zł).")
     methods = ["blik", "card"] + (["p24"] if P24 else [])
-    f = {"mode": "payment", "success_url": f"{base_url}/?platnosc=ok&session_id={{CHECKOUT_SESSION_ID}}", "cancel_url": f"{base_url}/?platnosc=anulowano",
+    f = {"mode": "payment", "success_url": f"{base_url}/app?platnosc=ok&session_id={{CHECKOUT_SESSION_ID}}", "cancel_url": f"{base_url}/app?platnosc=anulowano",
          "client_reference_id": uid, "customer_email": email, "locale": "auto", "payment_intent_data[receipt_email]": email,
          "line_items[0][quantity]": "1", "line_items[0][price_data][currency]": "pln", "line_items[0][price_data][unit_amount]": str(amount),
          "line_items[0][price_data][product_data][name]": name[:120],

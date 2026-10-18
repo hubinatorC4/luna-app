@@ -25,7 +25,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.4.0"
+VERSION = "1.4.1"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -1002,7 +1002,7 @@ class H(SimpleHTTPRequestHandler):
         if p == "/api/account/verify":
             ok = accounts.verify(parse_qs(u.query).get("token", [""])[0])
             msg = "✅ Adres e-mail potwierdzony. Możesz wrócić do Luny." if ok else "Link jest nieprawidłowy lub został już użyty."
-            b = f"<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width'><title>Luna</title><body style='font-family:sans-serif;background:#0b0705;color:#f6e9da;padding:30px'><p>{msg}</p><p><a style='color:#f0a040' href='/'>Otwórz Lunę</a></p>".encode()
+            b = f"<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width'><title>Luna</title><body style='font-family:sans-serif;background:#0b0705;color:#f6e9da;padding:30px'><p>{msg}</p><p><a style='color:#f0a040' href='/app'>Otwórz Lunę</a></p>".encode()
             self.send_response(200 if ok else 400); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return True
         if p in ("/api/admin/users", "/api/admin/avatars", "/api/admin/audit"):
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
@@ -1126,8 +1126,19 @@ class H(SimpleHTTPRequestHandler):
             self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
         if u.path == "/scianka.html" and not CFG["features"]["wall"]:
             return self._json({"error": "Ścianka Agentek Głosu – wkrótce."}, 404)
-        if u.path == "/" or u.path.endswith(".html"):
-            fp = os.path.join(STATIC, "index.html" if u.path == "/" else u.path.lstrip("/"))
+        if u.path in ("/app", "/app/"):
+            u = u._replace(path="/index.html")
+        elif u.path == "/":
+            # Strona główna = feed (Ścianka Agentek Głosu). Aplikacja TWA/PWA (start_url /app, ?source=twa|pwa) dostaje czat.
+            qs = parse_qs(u.query); ref = self.headers.get("Referer", "")
+            if qs.get("source", [""])[0] in ("twa", "pwa") or "platnosc" in qs or ref.startswith("android-app://"):
+                u = u._replace(path="/index.html")
+            else:
+                u = u._replace(path="/promo.html")
+        elif "." not in u.path.rsplit("/", 1)[-1] and re.fullmatch(r"/[a-z0-9-]{2,30}", u.path) and os.path.isfile(os.path.join(STATIC, u.path[1:] + ".html")):
+            self.send_response(301); self.send_header("Location", u.path + ".html" + ("?" + u.query if u.query else "")); self.send_header("Content-Length", "0"); self.end_headers(); return
+        if u.path.endswith(".html"):
+            fp = os.path.join(STATIC, u.path.lstrip("/"))
             if os.path.isfile(os.path.realpath(fp)) and os.path.realpath(fp).startswith(os.path.realpath(STATIC)):
                 lang = parse_qs(u.query).get("lang", [""])[0]
                 lang = lang if lang in seo.LANGS else ""

@@ -77,7 +77,7 @@ function acctUI(){
     return;
   }
   box.innerHTML = `<div class="tabs2"><button type="button" class="on" data-t="in">Zaloguj</button><button type="button" data-t="up">Załóż konto</button></div>
-    <form id="a_form" novalidate>
+    <div id="a_form" class="aform" role="form">
       <label>E-mail<input name="email" type="email" required maxlength="254" autocomplete="email"></label>
       <label>Hasło<input name="password" type="password" required minlength="10" maxlength="128" autocomplete="current-password"></label>
       <div class="up" hidden>
@@ -89,11 +89,15 @@ function acctUI(){
         <p class="hint">To oświadczenie – nie weryfikujemy wieku ani konta bankowego.</p>
       </div>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-      <div class="btns"><button class="primary" type="submit">Zaloguj</button></div>
+      <div class="btns"><button class="primary a_submit" type="button">Zaloguj</button></div>
       <p class="tst-err" id="a_err"></p>
-    </form>`;
+    </div>`;
   let mode = 'in'; const f = $('#a_form'); const shownAt = Date.now();
-  box.querySelectorAll('.tabs2 button').forEach(b => b.onclick = () => { mode = b.dataset.t; box.querySelectorAll('.tabs2 button').forEach(x => x.classList.toggle('on', x === b)); f.querySelector('.up').hidden = mode !== 'up'; f.querySelector('[type=submit]').textContent = mode === 'up' ? 'Załóż konto' : 'Zaloguj'; f.password.autocomplete = mode === 'up' ? 'new-password' : 'current-password'; });
+  /* formularz jest w <dialog><form> ustawień – zagnieżdżony <form> przeglądarka usuwa, więc działamy na <div> */
+  ['email', 'password', 'name', 'dob', 'adult', 'terms', 'website'].forEach(n => { f[n] = f.querySelector(`[name=${n}]`); });
+  box.querySelectorAll('.tabs2 button').forEach(b => b.onclick = () => { mode = b.dataset.t; box.querySelectorAll('.tabs2 button').forEach(x => x.classList.toggle('on', x === b)); f.querySelector('.up').hidden = mode !== 'up'; f.querySelector('.a_submit').textContent = mode === 'up' ? 'Załóż konto' : 'Zaloguj'; f.password.autocomplete = mode === 'up' ? 'new-password' : 'current-password'; });
+  f.querySelector('.a_submit').onclick = () => f.onsubmit({preventDefault(){}});
+  f.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox'){ e.preventDefault(); f.onsubmit(e); } });
   f.onsubmit = async e => {
     e.preventDefault(); const err = $('#a_err'); err.textContent = '';
     const body = {email: f.email.value.trim(), password: f.password.value};

@@ -2,7 +2,7 @@
  "name": "Luna mówi jak jest",
  "short_name": "Luna",
  "lang": "pl",
- "start_url": "/",
+ "start_url": "/app?source=pwa",
  "display": "standalone",
  "orientation": "portrait",
  "background_color": "#0b0705",
