@@ -1,7 +1,7 @@
 /* Tryb producenta – edycja katalogu postaci / strojów / póz / sylwetek / planów. */
 (() => {
 const $ = s => document.querySelector(s);
-const PLANS = [['podstawowa','Podstawowa'],['premium','Premium'],['pro','Pro / Ultra']];
+const PLANS = [['darmowy','Darmowy'],['podstawowa','Podstawowa'],['premium','Premium'],['pro','Pro / Ultra']];
 const TONES = [['rzeczowa','Rzeczowa'],['ciepla','Ciepła'],['zalotna','Zalotna (subtelna)'],['motywujaca','Motywująca']];
 const KIND = {outfits:'Stroje', poses:'Pozy', bodies:'Sylwetki'};
 let CAT = null, PUB = null, cur = 0;

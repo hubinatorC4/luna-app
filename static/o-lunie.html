@@ -4,16 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b0705">
-<title>Luna – asystentka AI, która pomoże Ci mówić pewniej</title>
+<title>O Lunie – Luna mówi jak jest</title>
+<meta property="og:image" content="/og-luna.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:site_name" content="Luna mówi jak jest">
 <meta name="description" content="Chcesz lepiej się wypowiadać i atrakcyjnie opowiadać o sobie? Luna to asystentka AI i trenerka głosu: rozmowa głosowa po polsku, ćwiczenia, barwa głosu, tryb hologram i własna asystentka.">
 <meta property="og:title" content="Luna – asystentka AI, która pomoże Ci mówić pewniej">
 <meta property="og:description" content="Chcesz lepiej się wypowiadać? To jest to. Poznaj Lunę.">
-<meta property="og:image" content="promo/luna_hero@2x.jpg">
+
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="stylesheet" href="promo/promo.css?v=1.2">
-<script>(function(){try{if(/[?&]source=twa\b/.test(location.search))sessionStorage.setItem("luna.twa","1");if(sessionStorage.getItem("luna.twa"))document.documentElement.classList.add("twa")}catch(e){}})()</script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
+<script src="/twa.js"></script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
+<link rel="stylesheet" href="/site.css?v=1.3.1">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -36,7 +38,7 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="#top"><span class="logo-ring"><img src="avatar-256.jpg" srcset="avatar-256.jpg 1x, avatar-512.jpg 2x" alt=""></span>LUNA</a>
+    <a class="logo" href="#top"><span class="logo-ring"><img src="/brand-emblem-256.png" alt=""></span>LUNA</a>
     <nav class="links">
       <a href="#funkcje">Funkcje</a><a href="#hologram">Hologram</a><a href="#stworz">Własna asystentka</a><a href="#plany">Plany</a><a href="#faq">FAQ</a><a href="/#live">Napisz do twórcy</a>
     </nav>
@@ -202,18 +204,17 @@
   </div>
 </section>
 
-<footer>
-  <div class="wrap">
-    <a class="logo" href="#top"><span class="logo-ring"><img src="avatar-256.jpg" alt=""></span>LUNA</a>
-    <nav><a href="/">Aplikacja</a><a href="#funkcje">Funkcje</a><a href="#plany">Plany</a><a href="#faq">FAQ</a><a href="/#live">Czat na żywo</a><a href="/privacy.html">Prywatność</a><a href="music/LICENSES.md">Licencje muzyki</a></nav>
-    <p style="margin:0">Luna – asystentka AI. Postać Luny jest wygenerowana sztucznie.<br>Muzyka: Kevin MacLeod (incompetech.com), CC BY 4.0. © 2026 Luna · v1.2</p>
-  </div>
+<script src="/olunie.js"></script>
+<footer class="sitefoot">
+  <img class="fbadge" src="/brand-badge-256.png" srcset="/brand-badge-256.png 1x, /brand-badge-512.png 2x" width="96" height="96" alt="Luna mówi jak jest" loading="lazy">
+  <p class="fan" data-note="fan">Luna mówi jak jest to projekt fanowski – i taki zostanie, słowo Luny! Wspieraj nas zawsze, gdziekolwiek jesteś. 💚</p>
+  <p><span class="badge-noads" data-note="noads">🚫 Bez reklam – Luna nie ogląda reklam, bo i tak by je przegadała 😄 Zero reklam, sama przyjemność gadania.</span></p>
+  <p class="money no-twa" data-note="money">Luna nie je, nie śpi i nie pije kawy… ale serwery już tak ☕ Każda drobna złotówka się przyda, a wsparcie jest zawsze dobrowolne.</p>
+  <p class="disc"><span class="b18">18+</span> <span data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</span></p>
+  <nav><a href="/">Aplikacja</a><a href="/promo.html">Porady</a><a href="/butik.html">Butik</a><a href="/live.html">Luna Live</a><a href="/testerzy.html">Testerzy</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/wesprzyj.html" class="no-twa">Wesprzyj Lunę</a><a href="/regulamin.html">Regulamin</a><a href="/privacy.html">Prywatność</a><a href="/#live">Czat z twórcą</a></nav>
+  <p class="copy">© 2026 Luna mówi jak jest · Luna jest asystentką AI, a jej postać została wygenerowana sztucznie · v1.3.1</p>
 </footer>
-<script>
-fetch('/api/catalog').then(r => r.json()).then(c => {
-  const esc = s => String(s).replace(/[&<>]/g, x => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[x]));
-  document.getElementById('plans').innerHTML = c.plans.map((p, i) => `<div class="plan${i === 1 ? ' hl' : ''}"><h3>${esc(p.name)}</h3><ul>${p.features.map((f, j) => `<li>${/oraz:$/.test(f) ? '<b>' + esc(f) + '</b>' : esc(f)}</li>`).join('')}</ul></div>`).join('');
-}).catch(() => {});
-</script>
+<script src="/notices.js"></script>
+<script src="/helpbot-loader.js?v=1.3.1"></script>
 </body>
 </html>

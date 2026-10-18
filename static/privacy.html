@@ -3,17 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Polityka prywatności – Luna, trener głosu</title>
+<title>Polityka prywatności – Luna mówi jak jest</title>
+<meta property="og:image" content="/og-luna.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:site_name" content="Luna mówi jak jest">
 <style>
 body{background:#0b0705;color:#f6e9da;font:16px/1.6 system-ui,sans-serif;max-width:820px;margin:0 auto;padding:24px}
 h1,h2{color:#ffcf8a;font-weight:600}h1{font-size:1.7em}h2{font-size:1.2em;margin-top:2em}
 a{color:#2ee66b}table{border-collapse:collapse;width:100%}td,th{border:1px solid #3a2a1e;padding:8px;vertical-align:top;text-align:left}
 .muted{color:#d9c3ad;font-size:.9em}
 </style>
-<script>(function(){try{if(/[?&]source=twa\b/.test(location.search))sessionStorage.setItem("luna.twa","1");if(sessionStorage.getItem("luna.twa"))document.documentElement.classList.add("twa")}catch(e){}})()</script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
+<script src="/twa.js"></script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
+<link rel="stylesheet" href="/site.css?v=1.3.1">
 </head>
 <body>
-<h1>Polityka prywatności aplikacji „Luna – trener głosu”</h1>
+<h1>Polityka prywatności aplikacji „Luna mówi jak jest”</h1>
 <p class="muted">Obowiązuje od: 18.10.2026. Dotyczy aplikacji na Androida (com.hubertszumski.luna) oraz strony https://luna-voice-coach.onrender.com.</p>
 
 <h2>1. Kto odpowiada za Twoje dane</h2>
@@ -29,7 +31,14 @@ a{color:#2ee66b}table{border-collapse:collapse;width:100%}td,th{border:1px solid
 <tr><td>Czat z twórcą: imię lub pseudonim, opcjonalny awatar, treść wiadomości</td><td>Odpowiedź na Twoje pytanie</td><td>Nie</td><td>Do zakończenia rozmowy, maksymalnie 12 miesięcy, chyba że poprosisz o wcześniejsze usunięcie</td></tr>
 <tr><td>Adres e-mail (przypomnienia o transmisjach Luna Live, zapis na testy)</td><td>Wysłanie przypomnienia lub kontakt w sprawie testów</td><td>Nie, tylko gdy się zapiszesz</td><td>Do wypisania się (link w każdym mailu) lub wycofania zgody</td></tr>
 <tr><td>Token powiadomień push (subskrypcja przeglądarki)</td><td>Powiadomienia o streamach, nowych filmikach i aktualizacjach</td><td>Nie, tylko po Twojej zgodzie</td><td>Do wyłączenia powiadomień</td></tr>
-<tr><td>Awatar użytkownika (zdjęcie, które sam wybierzesz)</td><td>Wyświetlanie przy Twoich wiadomościach</td><td>Nie</td><td>Przechowywany w Twoim urządzeniu; na serwer trafia tylko, gdy wyślesz go w czacie z twórcą</td></tr>
+<tr><td>Awatar użytkownika (ikona, awatar z galerii lub generatora albo obraz wygenerowany przez AI – nie zdjęcie prawdziwej osoby)</td><td>Wyświetlanie przy Twoich wiadomościach</td><td>Nie</td><td>Przechowywany w Twoim urządzeniu. Wgrany obraz AI jest sprawdzany na serwerze (metadane aparatu, znaczniki AI), ponownie kodowany i pozbawiany metadanych (EXIF); miniaturę zachowujemy do moderacji maks. 12 miesięcy. Zgłoszone awatary widzi moderator.</td></tr>
+<tr><td>Konto: e-mail, skrót hasła (Argon2id), imię (opcjonalnie), data urodzenia, oświadczenie 18+ z datą złożenia, plan i data ważności dostępu</td><td>Logowanie, przypisanie planu, wymóg pełnoletności</td><td>Tak, jeśli zakładasz konto</td><td>Do usunięcia konta (w ustawieniach)</td></tr>
+<tr><td>Oświadczenie 18+ bez konta: data urodzenia, data oświadczenia, losowy identyfikator urządzenia</td><td>Wymóg pełnoletności</td><td>Tak, aby korzystać z aplikacji</td><td>Do 24 miesięcy lub do prośby o usunięcie</td></tr>
+<tr><td>Ciasteczko sesji (luna_sid: HttpOnly, Secure, SameSite=Lax)</td><td>Utrzymanie zalogowania</td><td>Tak, gdy jesteś zalogowany/-a</td><td>Do 30 dni lub do wylogowania</td></tr>
+<tr><td>Płatności (WWW): identyfikator sesji Stripe, kwota, waluta, plan lub pozycja</td><td>Przyznanie dostępu, rozliczenia, obowiązki podatkowe</td><td>Tak, gdy kupujesz</td><td>5 lat (przepisy podatkowe). Dane karty i kody BLIK przetwarza wyłącznie Stripe – nie trafiają do nas.</td></tr>
+<tr><td>Zgłoszenia „Dołącz do projektu” i casting „Twarz AI”: imię, e-mail, rola, wiadomość, link, opcjonalny wzrost, data urodzenia, oświadczenie 18+</td><td>Odpowiedź na zgłoszenie</td><td>Nie</td><td>Do 12 miesięcy lub do wycofania zgody. W castingu nie zbieramy zdjęć przed podpisaniem umowy.</td></tr>
+<tr><td>Problemy techniczne: kategoria, opis, opcjonalny e-mail i zrzut ekranu (bez EXIF), wersja aplikacji, przeglądarka/system, język</td><td>Rozwiązanie problemu</td><td>Nie</td><td>Do 12 miesięcy; zrzut ekranu widzi tylko moderator</td></tr>
+<tr><td>Rozmowy z pomocnikiem AI (bot pomocy) i pytania bez odpowiedzi</td><td>Odpowiedzi na pytania, ulepszanie bazy FAQ</td><td>Nie</td><td>Do 90 dni; po przekazaniu do człowieka – jak zgłoszenie</td></tr>
 <tr><td>Skrót (hash) adresu IP, losowy identyfikator odwiedzającego</td><td>Ochrona przed spamem i nadużyciami, liczenie widzów transmisji</td><td>Tak (technicznie niezbędne)</td><td>Do 30 dni</td></tr>
 <tr><td>Ustawienia aplikacji (głos, motyw, wybrany strój)</td><td>Zapamiętanie Twoich preferencji</td><td>—</td><td>Tylko w pamięci Twojego urządzenia</td></tr>
 </table>
@@ -43,7 +52,9 @@ a{color:#2ee66b}table{border-collapse:collapse;width:100%}td,th{border:1px solid
 <li>Microsoft (usługa syntezy mowy – przekazujemy tylko tekst odpowiedzi Luny, bez Twoich danych),</li>
 <li>dostawca e-mail (np. Brevo) – tylko gdy zapiszesz się na przypomnienia,</li>
 <li>usługi push przeglądarki (np. Google Firebase Cloud Messaging) – tylko gdy włączysz powiadomienia,</li>
-<li>Google Play – obsługa zakupu aplikacji (zgodnie z polityką prywatności Google).</li>
+<li>Google Play – obsługa zakupów w aplikacji na Androida (Google Play Billing, zgodnie z polityką prywatności Google),</li>
+<li>Stripe (Stripe Payments Europe Ltd., Irlandia) – płatności w wersji przeglądarkowej (BLIK, karta); Stripe wysyła też potwierdzenie płatności,</li>
+<li>Postgres na Render (UE – Frankfurt) – trwałe przechowywanie kont i zgłoszeń, jeśli jest skonfigurowany.</li>
 </ul>
 <p>Nie sprzedajemy danych. Nie wyświetlamy reklam i nie używamy narzędzi reklamowych ani śledzących.</p>
 
@@ -52,15 +63,26 @@ a{color:#2ee66b}table{border-collapse:collapse;width:100%}td,th{border:1px solid
 <p>Podstawy prawne: zgoda (art. 6 ust. 1 lit. a RODO) – e-mail, push, czat z twórcą; wykonanie usługi (lit. b) – odpowiedzi Luny; prawnie uzasadniony interes (lit. f) – bezpieczeństwo i ochrona przed nadużyciami.</p>
 
 <h2>7. Usunięcie danych</h2>
-<p>Aby usunąć swoje dane, wypisz się z maili linkiem w wiadomości, wyłącz powiadomienia w ustawieniach i napisz do nas z prośbą o usunięcie rozmów. Usuniemy je w ciągu 30 dni.</p>
+<p>Jeśli masz konto, w Ustawieniach → Konto i plan możesz <b>pobrać swoje dane</b> (plik JSON) i <b>trwale usunąć konto</b> – usuwamy wtedy konto i sesje od razu. Pozostałe dane: wypisz się z maili linkiem w wiadomości, wyłącz powiadomienia w ustawieniach i napisz do nas z prośbą o usunięcie rozmów lub zgłoszeń. Usuniemy je w ciągu 30 dni. Dane o płatnościach przechowujemy tak długo, jak wymagają tego przepisy podatkowe.</p>
 
 <h2>8. Dzieci</h2>
-<p>Aplikacja jest przeznaczona dla osób dorosłych (18+). Nie zbieramy świadomie danych dzieci.</p>
+<p>Aplikacja jest przeznaczona dla osób dorosłych (18+). Prosimy o datę urodzenia i oświadczenie o pełnoletności – to oświadczenie, którego nie weryfikujemy. Osobom poniżej 18 lat odmawiamy dostępu i nie zapisujemy ich danych.</p>
 
 <h2>9. Bezpieczeństwo</h2>
-<p>Połączenia są szyfrowane (HTTPS). Dostęp do panelu moderatora jest chroniony hasłem.</p>
+<p>Połączenia są szyfrowane (HTTPS, HSTS). Stosujemy nagłówki bezpieczeństwa (CSP, X-Content-Type-Options, Referrer-Policy, Permissions-Policy – mikrofon tylko dla naszej strony), limity żądań, blokadę konta po wielu nieudanych logowaniach i ochronę CSRF. Hasła przechowujemy wyłącznie jako skróty Argon2id. Dostęp do panelu moderatora chroni kod przechowywany jako skrót, z limitem prób i dziennikiem audytu. Nie zapisujemy w logach haseł ani tokenów.</p>
 
 <h2>10. Zmiany</h2>
 <p>O zmianach w polityce poinformujemy w aplikacji. Aktualna wersja jest zawsze pod adresem https://luna-voice-coach.onrender.com/privacy.html.</p>
+<footer class="sitefoot">
+  <img class="fbadge" src="/brand-badge-256.png" srcset="/brand-badge-256.png 1x, /brand-badge-512.png 2x" width="96" height="96" alt="Luna mówi jak jest" loading="lazy">
+  <p class="fan" data-note="fan">Luna mówi jak jest to projekt fanowski – i taki zostanie, słowo Luny! Wspieraj nas zawsze, gdziekolwiek jesteś. 💚</p>
+  <p><span class="badge-noads" data-note="noads">🚫 Bez reklam – Luna nie ogląda reklam, bo i tak by je przegadała 😄 Zero reklam, sama przyjemność gadania.</span></p>
+  <p class="money no-twa" data-note="money">Luna nie je, nie śpi i nie pije kawy… ale serwery już tak ☕ Każda drobna złotówka się przyda, a wsparcie jest zawsze dobrowolne.</p>
+  <p class="disc"><span class="b18">18+</span> <span data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</span></p>
+  <nav><a href="/">Aplikacja</a><a href="/promo.html">Porady</a><a href="/butik.html">Butik</a><a href="/live.html">Luna Live</a><a href="/testerzy.html">Testerzy</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/wesprzyj.html" class="no-twa">Wesprzyj Lunę</a><a href="/regulamin.html">Regulamin</a><a href="/privacy.html">Prywatność</a><a href="/#live">Czat z twórcą</a></nav>
+  <p class="copy">© 2026 Luna mówi jak jest · Luna jest asystentką AI, a jej postać została wygenerowana sztucznie · v1.3.1</p>
+</footer>
+<script src="/notices.js"></script>
+<script src="/helpbot-loader.js?v=1.3.1"></script>
 </body>
 </html>

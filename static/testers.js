@@ -11,7 +11,7 @@ function applyStatus(st){
   document.documentElement.style.setProperty('--uring', window.LunaTesterRing || 'var(--amber)');
   document.body.classList.toggle('tester', !!window.LunaTesterRing);
   if (st && st.granted){
-    try { const c = JSON.parse(localStorage.getItem('luna.custom') || '{}'); if (!c.plan || c.plan === 'podstawowa'){ c.plan = 'premium'; c.testerPlan = true; localStorage.setItem('luna.custom', JSON.stringify(c)); window.LunaCustomApply && window.LunaCustomApply(); } } catch(e){}
+    window.LunaPlanRefresh && window.LunaPlanRefresh();  // plan potwierdza serwer (kod testera / konto)
   }
   const el = $('#testerState'); if (el) el.textContent = st && st.found ? (st.granted ? `✅ Tester ${st.name}: Premium aktywne do ${new Date(st.until * 1000).toLocaleDateString('pl-PL')}, obwódka ${st.ring_choice}.` : `⏳ Zgłoszenie przyjęte (${st.name}). Premium i obwódkę ${st.ring_choice} włączymy po zatwierdzeniu.`) : '';
 }
@@ -49,6 +49,8 @@ function render(d){
       <label class="ring-opt"><input type="radio" name="android" value="0">Nie</label>
       <p class="hint">Do zamkniętych testów w Google Play potrzebny jest adres e-mail powiązany z Twoim kontem Google – najlepiej podaj właśnie ten.</p>
     </fieldset>
+    <label>Data urodzenia *<input name="dob" type="date" required></label>
+    <label class="consent"><input type="checkbox" name="adult" required> <span>Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe. *</span></label>
     <label class="consent"><input type="checkbox" name="consent" required> <span>${esc(d.consent)} * <a href="/privacy.html" target="_blank">Informacja o danych</a></span></label>
     <button class="btn primary" type="submit">Zgłaszam się do testów</button>
     <p class="tst-err" role="alert"></p>
@@ -57,12 +59,12 @@ function render(d){
   f.onsubmit = async e => {
     e.preventDefault(); const fd = new FormData(f), err = f.querySelector('.tst-err'); err.textContent = '';
     const body = {name: fd.get('name'), email: fd.get('email'), reason: fd.get('reason'), ring: fd.get('ring'),
-      android: fd.get('android') === null ? null : fd.get('android') === '1', consent: !!fd.get('consent')};
+      android: fd.get('android') === null ? null : fd.get('android') === '1', consent: !!fd.get('consent'), dob: fd.get('dob'), adult: !!fd.get('adult')};
     f.querySelector('button').disabled = true;
     try {
       const r = await fetch('/api/testers/signup', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
       const j = await r.json();
-      if (!r.ok){ if (j.full) return loadInfo().then(render); throw new Error(j.error || r.status); }
+      if (!r.ok){ if (j.full) return loadInfo().then(render); if (j.underage){ box.innerHTML = '<div class="tst-done">' + esc(j.error) + '</div>'; return; } throw new Error(j.error || r.status); }
       localStorage.setItem('luna.tester', j.code); refresh(); loadInfo().then(render);
     } catch(x){ err.textContent = '⚠️ ' + x.message; f.querySelector('button').disabled = false; }
   };

@@ -113,11 +113,22 @@ Promise.all([fetch('/api/library').then(r => r.json()), fetch('/api/config').the
   render(); route();
 });
 fetch('/api/catalog').then(r => r.json()).then(c => {
+  const pr = id => { const p = c.plans.find(x => x.id === id); return p && p.prices ? String(p.prices.pln).replace('.', ',') + ' zł' : null; };
+  if (pr('premium') && pr('pro')){ const fl = $('#faqList'); const d = document.createElement('details'); const sm = document.createElement('summary'); sm.textContent = 'Ile kosztuje Luna?'; const pp = document.createElement('p');
+    pp.textContent = `Aplikacja jest bezpłatna. Plan Darmowy działa bez konta (z dziennym limitem), Podstawowa jest za darmo – wystarczy konto. Premium kosztuje ${pr('premium')}, a Pro ${pr('pro')} za 30 dni – jednorazowo, bez automatycznego odnawiania, cena zawiera VAT. Testerzy dostają 2 miesiące Premium za darmo.`;
+    d.append(sm, pp); fl.prepend(d); }
   const P = $('#plans'); P.textContent = '';
-  c.plans.forEach((p, i) => { const d = document.createElement('div'); d.className = 'plan' + (i === 1 ? ' hl' : '');
+  c.plans.forEach((p, i) => { const d = document.createElement('div'); d.className = 'plan' + (p.id === 'premium' ? ' hl' : '');
     const h = document.createElement('h3'); h.textContent = p.name; const ul = document.createElement('ul');
     p.features.forEach(f => { const li = document.createElement('li'); li.textContent = f; if (/oraz:$/.test(f)) li.className = 'inc'; ul.appendChild(li); });
-    d.append(h, ul); if (i === 1){ const t = document.createElement('p'); t.className = 'ptag'; t.textContent = '🎁 Testerzy: 2 miesiące za darmo'; d.appendChild(t); } P.appendChild(d); });
+    d.append(h, ul);
+    const t = document.createElement('p'); t.className = 'ptag';
+    const free = p.id === 'darmowy' || p.id === 'podstawowa';
+    if (p.prices || free){ const b = document.createElement('div'); b.className = 'pbig'; b.textContent = free ? '0 zł' : String(p.prices.pln).replace('.', ',') + ' zł';
+      const s = document.createElement('small'); s.className = 'psub'; s.textContent = p.id === 'darmowy' ? 'bez konta, z limitem' : p.id === 'podstawowa' ? 'za darmo – wystarczy konto' : '30 dni · bez odnawiania · cena zawiera VAT';
+      d.insertBefore(s, ul); d.insertBefore(b, s); }
+    t.textContent = free ? '✓ Bez opłat' : p.id === 'premium' ? '🎁 Testerzy: Premium 2 miesiące za darmo' + (p.prices ? ' (wartość ' + (Math.round(parseFloat(String(p.prices.pln).replace(',', '.')) * 200) / 100).toFixed(2).replace('.', ',') + ' zł)' : '') : 'Płatności – wkrótce';
+    d.appendChild(t); P.appendChild(d); });
 }).catch(() => {});
 function liveTab(){
   fetch('/api/live-room/state').then(r => r.json()).then(s => {

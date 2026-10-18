@@ -1,6 +1,6 @@
 """Rekrutacja testerów (maks. 50). Dane w magazynie store (Postgres, gdy ustawiony DATABASE_URL)."""
 import csv, io, re, secrets, threading, time
-import store
+import store, age
 from notify import EMAIL_RE
 
 LIMIT = 50
@@ -25,6 +25,7 @@ def signup(d, ip_hash=""):
     if not EMAIL_RE.fullmatch(email): raise ValueError("Podaj poprawny adres e-mail.")
     if not ring: raise ValueError("Wybierz kolor obwódki.")
     if android not in (True, False): raise ValueError("Zaznacz, czy masz telefon z Androidem.")
+    decl = age.check(d)  # 18+: data urodzenia i oświadczenie (Underage → grzeczna odmowa)
     if d.get("consent") is not True: raise ValueError("Zaznacz zgodę na przetwarzanie danych.")
     with _lock:
         t = _all()
@@ -33,7 +34,7 @@ def signup(d, ip_hash=""):
         code = secrets.token_hex(4).upper()
         while code in t: code = secrets.token_hex(4).upper()
         t[code] = {"code": code, "name": name, "email": email, "reason": reason, "ring": ring, "android": android,
-                   "t": int(time.time()), "consent": CONSENT, "granted": False, "until": 0, "ip": ip_hash}
+                   "t": int(time.time()), "consent": CONSENT, "granted": False, "until": 0, "ip": ip_hash, **decl}
         store.put("testers", t)
         return code, LIMIT - len(t)
 
@@ -61,12 +62,15 @@ def delete(code):
         t = _all(); t.pop(code, None); store.put("testers", t)
 
 def admin_list():
-    return sorted(_all().values(), key=lambda v: v["t"])
+    out = []
+    for v in sorted(_all().values(), key=lambda v: v["t"]):
+        v = dict(v); v["age"] = age.age_of(v["dob"]) if v.get("dob") else None; out.append(v)
+    return out
 
 def csv_export():
     b = io.StringIO(); w = csv.writer(b, delimiter=";")
-    w.writerow(["kod", "imię", "e-mail", "dlaczego", "obwódka", "android", "data zgłoszenia", "premium do", "zgoda"])
+    w.writerow(["kod", "imię", "e-mail", "dlaczego", "obwódka", "android", "data zgłoszenia", "premium do", "zgoda", "data urodzenia", "oświadczenie 18+", "data oświadczenia"])
     for v in admin_list():
         w.writerow([v["code"], v["name"], v["email"], v["reason"], v["ring"], "tak" if v["android"] else "nie",
-                    time.strftime("%Y-%m-%d %H:%M", time.localtime(v["t"])), time.strftime("%Y-%m-%d", time.localtime(v["until"])) if v["granted"] else "", v["consent"]])
+                    time.strftime("%Y-%m-%d %H:%M", time.localtime(v["t"])), time.strftime("%Y-%m-%d", time.localtime(v["until"])) if v["granted"] else "", v["consent"], v.get("dob", ""), v.get("adult_text", "BRAK"), time.strftime("%Y-%m-%d %H:%M", time.localtime(v["adult_at"])) if v.get("adult_at") else ""])
     return "\ufeff" + b.getvalue()

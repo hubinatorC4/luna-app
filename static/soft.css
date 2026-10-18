@@ -1,0 +1,65 @@
+/* v1.3.1 – miękki, zaokrąglony wygląd (globalnie przez zmienne). Ładowany jako ostatni arkusz na każdej stronie. */
+@font-face{font-family:"Nunito";font-style:normal;font-weight:200 1000;font-display:swap;src:url(/fonts/nunito-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Nunito";font-style:normal;font-weight:200 1000;font-display:swap;src:url(/fonts/nunito-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Nunito";font-style:normal;font-weight:200 1000;font-display:swap;src:url(/fonts/nunito-cyrillic.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;src:url(/fonts/playfair-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;src:url(/fonts/playfair-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Playfair Display";font-style:normal;font-weight:400 900;font-display:swap;src:url(/fonts/playfair-cyrillic.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+:root{
+  --r-card:28px; --r-card-sm:22px; --r-btn:999px; --r-input:16px; --r-modal:24px; --r-img:20px; --r-chip:999px;
+  --shadow-soft:0 18px 40px -18px rgba(0,0,0,.65),0 4px 14px -6px rgba(0,0,0,.35);
+  --shadow-glow:0 10px 30px -10px rgba(46,204,113,.35);
+  --ease:cubic-bezier(.22,.8,.3,1); --t:.28s;
+  --font-ui:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-display:"Playfair Display",Georgia,"Times New Roman",serif;
+  --soft-grad:radial-gradient(120% 90% at 50% -10%,rgba(46,204,113,.16),transparent 60%),radial-gradient(90% 70% at 100% 0%,rgba(255,154,60,.10),transparent 60%);
+}
+html,body,button,input,select,textarea{font-family:var(--font-ui)}
+h1,h2,.star-hero h1,.page h1,.brand-hero h1,dialog h2,dialog h3{font-family:var(--font-display);letter-spacing:.2px}
+h1,h2{font-weight:700}
+/* przyciski: pigułki */
+button,.pill,.btn,.btnlink,.apk-btn,.live-cta,.convo-btn,.cstop,.ctap,.mbtn,.copybtn,.btns button,.presets button,#admin .add,#admin .filebtn,#custom .filebtn,#custom .add,#settings .filebtn,.search button,.tst-form button,form button,a.cta,.sh-cta a{border-radius:var(--r-btn)!important;transition:transform var(--t) var(--ease),box-shadow var(--t) var(--ease),background-color var(--t) var(--ease),filter var(--t) var(--ease)}
+button:hover:not(:disabled),.pill:hover,.apk-btn:hover,.live-cta:hover{transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+button:active:not(:disabled){transform:translateY(0) scale(.98)}
+.mic,.send,.play,.live-form button,.presets.uav button,.rdot,.cdot,.dot{border-radius:50%!important}
+/* pola */
+input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea,#input,.search,.lswitch,.filters select,dialog select{border-radius:var(--r-input)!important}
+.search{overflow:hidden}
+.search button{border-radius:0 var(--r-input) var(--r-input) 0!important}
+input[type=checkbox]{border-radius:6px}
+/* karty i sekcje */
+.card,.cardlg,.catcard,.plan,.tester-banner,.tform,.tst-form fieldset,.faq details,.timbre,.musicpanel,.conv,.tester-strip,.convo-bar,.plan-warn,.pay-banner,.planbar,.planbox,.chat-notice,#admin details,#custom details,#admin .items .item,.note,.warnbox,.item,.xmas-banner,.coach,.blik,fieldset,details.card,.steps li,.kick,.sugg,.ai-label,.msg{border-radius:var(--r-card)!important}
+.msg,.chat-notice,.ai-label,.note,.warnbox,.coach,.blik,.sugg,.plan-warn,.pay-banner,.convo-bar{border-radius:var(--r-card-sm)!important}
+.card,.cardlg,.catcard,.plan,.tester-banner,.tform,.item,.planbox,.musicpanel,.timbre,.xmas-banner,details.card{box-shadow:var(--shadow-soft);transition:transform var(--t) var(--ease),box-shadow var(--t) var(--ease)}
+.cardlg:hover,.catcard:hover,.item:hover{transform:translateY(-3px)}
+dialog,.modal,.helpwin{border-radius:var(--r-modal)!important;box-shadow:0 30px 80px -20px rgba(0,0,0,.75)}
+/* obrazy */
+.thumb,.card img,.item img,.cardlg img,.page img:not(.round):not([class*=emblem]),#admin .itemrow img{border-radius:var(--r-img)!important}
+.ring,.ring img,.lring,.lring img,.tb-ring,.tb-ring img,.rg,.rg img,.sh-ring,.sh-ring img,.mini,.icon,.mav,.presets.uav img,.avatar,[class*=avatar] img,img.ava,.fbadge{border-radius:50%!important}
+/* plakietki, zakładki, toasty, odliczanie */
+.badge,.badge-noads,.badge-ai,.tag,.cic,.dur,.lvl,.cdur,.b18,.card em,.toast,.tabs2 button,.tabsx button,.prtab,.langtabs button,.tabs a,nav a,.chip,.countdown .cd span,.countdown span,.tst-bar,.tst-bar i,.tst-bar span{border-radius:var(--r-chip)!important}
+.toast{box-shadow:var(--shadow-soft)}
+.tbl{border-collapse:separate;border-spacing:0;border-radius:var(--r-card-sm);overflow:hidden}
+/* tła hero: łuk + miękki gradient */
+.star-hero,.brand-hero{position:relative;background:var(--soft-grad);border-radius:0 0 50% 50% / 0 0 48px 48px;padding-bottom:56px;overflow:hidden}
+.page>h1:first-of-type{position:relative}
+/* faliste separatory sekcji */
+.wave{display:block;width:100%;height:44px;color:var(--wave,#0d1210);margin:-1px 0 0}
+section+section,.page>section+section{position:relative}
+.soft-divider{height:36px;margin:28px 0;background:no-repeat center/100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 20 C 150 0 300 40 450 20 S 750 0 900 20 S 1100 40 1200 20' fill='none' stroke='%232ecc71' stroke-opacity='.35' stroke-width='2'/%3E%3C/svg%3E")}
+header{border-radius:0 0 var(--r-card) var(--r-card)}
+.sitefoot{border-radius:var(--r-card) var(--r-card) 0 0;position:relative;background:#111613;border-top:0!important;margin-top:60px!important}
+.sitefoot::before{content:"";position:absolute;left:0;right:0;top:-30px;height:31px;pointer-events:none;background:no-repeat center bottom/100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 30' preserveAspectRatio='none'%3E%3Cpath d='M0 30 V18 C 200 0 400 30 600 16 S 1000 2 1200 18 V30 Z' fill='%23111613'/%3E%3C/svg%3E")}
+a{transition:color var(--t) var(--ease)}
+:focus-visible{outline:3px solid rgba(46,204,113,.7);outline-offset:3px;border-radius:12px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}button:hover,.cardlg:hover,.catcard:hover,.item:hover{transform:none!important}}
+.sec{position:relative;padding-top:54px!important}
+.sec::before{content:"";position:absolute;left:0;right:0;top:6px;height:30px;pointer-events:none;background:no-repeat center/100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 30' preserveAspectRatio='none'%3E%3Cpath d='M0 15 C 150 0 300 30 450 15 S 750 0 900 15 S 1100 30 1200 15' fill='none' stroke='%232ecc71' stroke-opacity='.35' stroke-width='2'/%3E%3C/svg%3E")}
+.page h2{position:relative}
+.page h2:not(:first-child)::before{content:"";display:block;height:22px;margin:30px 0 14px;background:no-repeat center/100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 30' preserveAspectRatio='none'%3E%3Cpath d='M0 15 C 150 0 300 30 450 15 S 750 0 900 15 S 1100 30 1200 15' fill='none' stroke='%232ecc71' stroke-opacity='.3' stroke-width='2'/%3E%3C/svg%3E")}
+.langtabs[hidden]{display:none!important}
+.star-hero{border-radius:32px 32px 50% 50% / 32px 32px 72px 72px!important;box-shadow:var(--shadow-soft)}
+@media (max-width:640px){
+  .lswitch{max-width:64px;padding:6px 4px;font-size:13px;text-overflow:clip}
+  .star-hero{border-radius:28px 28px 50% 50% / 28px 28px 40px 40px!important}
+}

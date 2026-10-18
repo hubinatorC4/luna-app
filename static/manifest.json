@@ -1,5 +1,5 @@
 {
- "name": "Luna – asystentka AI, trenerka głosu",
+ "name": "Luna mówi jak jest",
  "short_name": "Luna",
  "lang": "pl",
  "start_url": "/",
@@ -32,5 +32,6 @@
    "type": "image/png",
    "purpose": "maskable"
   }
- ]
+ ],
+ "description": "Luna mówi jak jest – asystentka AI do nauki mówienia i pracy z głosem."
 }

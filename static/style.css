@@ -175,3 +175,40 @@ body.tester .mav.me{border-color:var(--uring);box-shadow:0 0 8px var(--uring);bo
 .item.tst{display:flex;flex-direction:column;gap:3px}.item.tst small{color:var(--muted)}.item.tst .reason{margin:2px 0;font-size:13px}
 .rdot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .btnlink{display:inline-flex;align-items:center;padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--amber2);border:1px solid rgba(240,160,64,.4)}
+
+/* v1.3.1 – rozmowa ciągła */
+.convo-btn{display:block;margin:4px auto 6px;background:linear-gradient(135deg,#1f8f4a,#2ee66b);color:#04140a;border:none;border-radius:999px;padding:10px 20px;font-weight:800;font-size:15px;box-shadow:0 4px 18px rgba(46,230,107,.35);cursor:pointer}
+.convo-btn.on{background:#3a1410;color:#ffb3a7;box-shadow:none;border:1px solid #ff8a7a}
+.convo-bar{display:flex;align-items:center;gap:8px;margin:0 10px 6px;padding:8px 12px;border-radius:14px;background:rgba(46,230,107,.12);border:1px solid rgba(46,230,107,.5);font-size:14px}
+.convo-bar[hidden]{display:none}
+.convo-bar #convoState{flex:1}
+.cdot{width:10px;height:10px;border-radius:50%;background:var(--ring);box-shadow:0 0 8px var(--ring);animation:listen 1s ease-in-out infinite}
+body.speaking .cdot{background:var(--amber)}
+.cstop,.ctap{border:none;border-radius:10px;padding:6px 10px;font-weight:700;cursor:pointer}.cstop{background:#3a1410;color:#ffb3a7}.ctap{background:var(--ring);color:#04140a}
+
+.disclaimer{font-size:12.5px;line-height:1.4;color:#e9d8c4;opacity:.92;text-align:center;margin:2px 14px 6px}
+.cta-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 10px}
+.cta-row .convo-btn{margin:4px 0}
+.apk-btn{display:inline-block;margin:4px 0;padding:10px 16px;border-radius:999px;background:#1d2a1d;border:1px solid #6fdc8c;color:#d6ffe0;font-weight:700;font-size:14px;text-decoration:none}
+.apk-hint{font-size:12px;color:#cdb79f;text-align:center;margin:2px 14px 6px}.apk-hint a{color:var(--amber2)}
+.plan-warn{margin:4px 10px;padding:8px 12px;border-radius:12px;background:rgba(240,160,64,.14);border:1px solid var(--amber);font-size:13px}
+.plan-warn[hidden]{display:none}
+.appfoot{font-size:12px;color:#d8c3aa;text-align:center;padding:6px 12px 10px;line-height:1.45}.appfoot a{color:var(--amber2)}
+.b18{display:inline-block;border:1px solid #ff8a7a;color:#ffb3a7;border-radius:6px;padding:0 5px;font-weight:700;font-size:11px}
+.planbox{font-size:14px;line-height:1.5}.warn{color:#ffcf8a}
+.tabs2{display:flex;gap:6px;margin:6px 0}.tabs2 button{flex:1;background:transparent;border:1px solid rgba(240,160,64,.4);color:var(--text);border-radius:10px;padding:6px}.tabs2 button.on{background:rgba(240,160,64,.2)}
+.consent{display:flex;gap:8px;align-items:flex-start;font-size:13px}.consent input{margin-top:3px}
+.btnlink{display:inline-block;padding:7px 10px;border-radius:10px;border:1px solid rgba(240,160,64,.4);color:var(--amber2);text-decoration:none;font-size:14px}
+.agegate{max-width:440px}.agegate h2{margin-top:0}
+.tst-err{color:#ffb3a7;font-size:13px;min-height:1em}
+.prtab input{width:70px}.prtab td,.prtab th{padding:2px 4px;text-align:left}
+
+.gen summary{cursor:pointer;font-weight:600;margin:6px 0}.genrow{display:flex;gap:10px;align-items:flex-start}.genrow img{border-radius:50%;flex:none;background:#000}
+.gensel{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:12px;flex:1}.gensel select{width:100%}
+.pay-banner{position:fixed;left:50%;transform:translateX(-50%);top:10px;z-index:60;max-width:min(560px,94vw);padding:10px 38px 10px 14px;border-radius:12px;font-size:14px;line-height:1.4;background:#1d1a14;border:1px solid var(--amber);color:var(--text);box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.pay-banner.ok{border-color:#6fdc8c}.pay-banner.warn{border-color:#ff8a7a}.pay-banner button{position:absolute;right:6px;top:6px;background:none;border:none;color:inherit;font-size:16px;cursor:pointer}
+dialog.news ul{padding-left:18px;line-height:1.5}dialog.news li{margin:8px 0}
+
+.appfoot p{margin:3px 0}.appfoot .fan{color:#d6f5df}.appfoot .money{color:#cdb79f}
+.badge-noads{display:inline-block;font-size:12px;border-radius:999px;padding:3px 10px;border:1px solid #6fdc8c;background:#101a12;color:#c9ffd9}
+.hb-fab{bottom:100px!important;width:48px!important;height:48px!important;font-size:21px!important}

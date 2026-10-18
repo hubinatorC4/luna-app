@@ -8,7 +8,7 @@ DATA = os.path.join(ROOT, "data")
 UPLOADS = os.path.join(DATA, "uploads")
 FILE = os.path.join(DATA, "catalog.json")
 PLACEHOLDER = "/catalog/luna/outfit_koronkowa.jpg"
-PLAN_IDS = ["podstawowa", "premium", "pro"]
+PLAN_IDS = ["darmowy", "podstawowa", "premium", "pro"]
 KINDS = ("outfits", "poses", "bodies")
 TONE_IDS = ("rzeczowa", "ciepla", "zalotna", "motywujaca")
 
@@ -17,18 +17,20 @@ def _o(i, name, plan, img=None):
 
 DEFAULT = {
     "plans": [
-        {"id": "podstawowa", "name": "Podstawowa", "price": "0 zł", "period": "na zawsze",
-         "features": ["Rozmowa tekstowa i głosowa z Luną", "Słowo wybudzające „Luna”", "Barwa głosu: presety i suwaki", "2 stroje awatara"]},
-        {"id": "premium", "name": "Premium", "price": "19,99 zł", "period": "miesięcznie",
+        {"id": "darmowy", "name": "Darmowy", "price": "", "period": "",
+         "features": ["Około 5 minut rozmowy z Luną dziennie", "Test głosu i próbki barwy", "Oglądanie Luna Live (bez zadawania pytań)", "1 strój awatara"]},
+        {"id": "podstawowa", "name": "Podstawowa", "price": "", "period": "",
+         "features": ["Wszystko z planu Darmowy, oraz:", "Rozmowa z Luną bez dziennego limitu", "Pytania do Luny w Luna Live", "Barwa głosu: presety i suwaki", "2 stroje awatara i hologram"]},
+        {"id": "premium", "name": "Premium", "price": "", "period": "",
          "features": ["Wszystko z planu Podstawowa, oraz:", "4 stroje awatara", "Stwórz własną asystentkę: imię, słowo wybudzające, ton, długość odpowiedzi", "Własny kolor pierścienia i własny obraz awatara"]},
-        {"id": "pro", "name": "Pro / Ultra", "price": "39,99 zł", "period": "miesięcznie",
+        {"id": "pro", "name": "Pro / Ultra", "price": "", "period": "",
          "features": ["Wszystko z planów Podstawowa i Premium, oraz:", "Wszystkie stroje (6)", "Zmiana pozy awatara", "Wybór sylwetki (wzrost, budowa)", "Dodatkowe postacie z katalogu"]},
     ],
     "agents": [{
         "id": "luna", "name": "Luna", "wake_word": "Luna", "plan": "podstawowa", "tone": "ciepla",
         "persona": "", "description": "Ciepła trenerka głosu z hiszpańskim temperamentem.",
         "voice": {"voice": "pl-PL-ZofiaNeural", "pitch": -2.6, "rate": -8, "warmth": 4.5, "volume": -27, "spanish": True},
-        "outfits": [_o("koronkowa", "Koronkowa sukienka", "podstawowa"), _o("sweter", "Sweter (na co dzień)", "podstawowa"),
+        "outfits": [_o("koronkowa", "Koronkowa sukienka", "darmowy"), _o("sweter", "Sweter (na co dzień)", "podstawowa"),
                     _o("wieczorowa", "Suknia wieczorowa", "premium"), _o("biznes", "Marynarka (biznes)", "premium"),
                     _o("letnia", "Letnia sukienka", "pro"), _o("koktajlowa", "Sukienka koktajlowa", "pro")],
         "poses": [_o("prosto", "Na wprost", "pro"), _o("polobrot", "Półobrót", "pro"),
@@ -135,8 +137,11 @@ def save_upload(name, raw):
         if len(raw) > 4 * 1024 * 1024: raise ValueError("Plik większy niż 4 MB")
         if not (sig.startswith(b"\xff\xd8") or sig.startswith(b"\x89PNG") or (sig[:4] == b"RIFF" and sig[8:12] == b"WEBP")):
             raise ValueError("To nie jest prawidłowy obraz")
-    import secrets
+    import secrets, imgsafe
     os.makedirs(UPLOADS, exist_ok=True)
+    if ext != ".mp3":
+        raw, out_ext = imgsafe.reencode(raw, max_px=2048, quality=3)  # ponowne kodowanie, bez EXIF
+        ext = "." + out_ext
     fn = secrets.token_hex(8) + (".jpg" if ext == ".jpeg" else ext)
     with open(os.path.join(UPLOADS, fn), "wb") as f: f.write(raw)
     return "/uploads/" + fn

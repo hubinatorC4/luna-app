@@ -12,8 +12,9 @@
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="stylesheet" href="style.css">
-<title>Luna – trenerka głosu</title>
-<script>(function(){try{if(/[?&]source=twa\b/.test(location.search))sessionStorage.setItem("luna.twa","1");if(sessionStorage.getItem("luna.twa"))document.documentElement.classList.add("twa")}catch(e){}})()</script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
+<title>Luna mówi jak jest – asystentka AI do pracy z głosem</title>
+<meta property="og:image" content="/og-luna.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:site_name" content="Luna mówi jak jest">
+<script src="/twa.js"></script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
 </head>
 <body>
 <div class="bg"></div>
@@ -52,10 +53,18 @@
   <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
 </section>
 
-<a class="tester-strip" id="testerBanner" href="/promo.html#testerzy" hidden>🎁 Szukamy testerów Luny! Premium za darmo na 2 miesiące · <b>Zostało … z 50 miejsc</b> · Zgłoś się →</a>
+<p class="disclaimer" data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</p>
+<div class="cta-row">
+  <button type="button" class="convo-btn" id="convoBtn">🎙️ Rozmowa na żywo</button>
+  <a class="apk-btn no-twa" href="https://github.com/hubinatorC4/luna-app/releases/download/android-v1.0.0/luna-1.0.0-release.apk" rel="noopener">🤖 Pobierz na Androida</a>
+</div>
+<p class="apk-hint no-twa">Plik APK: po pobraniu zezwól na instalację z nieznanych źródeł. Link do testów w Google Play – wkrótce. <a href="/testerzy.html">Jak zostać testerem?</a></p>
+<p class="plan-warn" id="planWarn" hidden></p>
+<a class="tester-strip" id="testerBanner" href="/testerzy.html" hidden>🎁 Szukamy testerów Luny! Premium za darmo na 2 miesiące · <b>Zostało … z 50 miejsc</b> · Zgłoś się →</a>
 <button type="button" class="live-cta" id="liveCta">💬 Czat na żywo – napisz do twórcy</button>
 <main id="chat" aria-live="polite"></main>
 
+<div class="convo-bar" id="convoBar" hidden><span class="cdot"></span><span id="convoState">Słucham…</span><button type="button" id="convoTap" class="ctap" hidden>🎙️ Mów</button><button type="button" id="convoStop" class="cstop">■ Zakończ</button></div>
 <form id="composer" autocomplete="off">
   <button type="button" id="micBtn" class="mic" aria-label="Mów do Luny">🎙</button>
   <input id="input" placeholder="Zapytaj Lunę o głos…" enterkeyhint="send">
@@ -95,19 +104,38 @@
       <label class="row"><input type="checkbox" id="lispChk"> Delikatne seplenienie (tylko w dźwięku)</label>
     </fieldset>
     <label class="row"><input type="checkbox" id="autoSpeak"> Czytaj odpowiedzi na głos</label>
+    <label class="row"><input type="checkbox" id="convoChk"> Rozmowa ciągła – po słowie „Luna” słucham dalej bez ponownego wołania (koniec: „Luna, koniec” lub 30 s ciszy)</label>
     <label class="row" id="holoRow"><input type="checkbox" id="holoChk"> Tryb hologram <span class="tag" id="holoTag"></span></label>
     <fieldset class="timbre">
       <legend>Twój profil</legend>
       <label>Twoje imię (widoczne w czacie)<input type="text" id="u_name" maxlength="30" placeholder="np. Hubert"></label>
+      <p class="hint">Wybierz gotowy awatar lub ikonę albo wygeneruj własny awatar AI. Nie wgrywaj zdjęć prawdziwych osób.</p>
       <div class="presets uav" id="u_presets"></div>
-      <div class="btns">
-        <label class="filebtn">📷 Wgraj zdjęcie<input type="file" id="u_upload" accept="image/*" hidden></label>
-        <button type="button" id="u_clear" class="ghost">Bez awatara</button>
-      </div>
-      <p class="hint">Zdjęcie jest przycinane do koła (256 px) i zostaje tylko na tym urządzeniu.</p>
+      <details class="gen" open><summary>✨ Wygeneruj awatar AI</summary>
+        <div class="genrow"><img id="u_genPrev" alt="Podgląd awatara" width="96" height="96"><div class="gensel" id="u_gen"></div></div>
+        <div class="btns"><button type="button" id="u_random" class="ghost">🎲 Losuj</button><button type="button" id="u_clear" class="ghost">Bez awatara</button></div>
+      </details>
+      <details class="gen"><summary>Wgraj własny obraz wygenerowany przez AI (opcjonalnie)</summary>
+        <label class="consent"><input type="checkbox" id="u_aiDecl"> <span>Oświadczam, że to obraz wygenerowany przez AI i nie przedstawia prawdziwej osoby.</span></label>
+        <label class="filebtn">🖼 Wybierz obraz AI<input type="file" id="u_upload" accept="image/png,image/jpeg,image/webp" hidden></label>
+        <p class="hint">Serwer odrzuca pliki z metadanymi aparatu (np. model telefonu, GPS) bez znacznika AI, a potem usuwa wszystkie metadane. Ta kontrola nie jest w 100% skuteczna – liczymy na uczciwość, a zgłoszone awatary sprawdza moderator.</p>
+      </details>
       <label>Kod testera (jeśli masz)<input type="text" id="u_tester" maxlength="12" placeholder="np. 1A2B3C4D" autocapitalize="characters"></label>
       <p class="hint" id="testerState"></p>
       <button type="button" class="ghost" data-push>🔔 Powiadom mnie</button>
+    </fieldset>
+    <fieldset class="timbre" id="acctSection">
+      <legend>Konto i plan</legend>
+      <div id="planBox" class="planbox"></div>
+      <div id="acctBox"></div>
+    </fieldset>
+    <fieldset class="timbre">
+      <legend>O aplikacji</legend>
+      <p class="disclaimer" data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</p>
+      <p class="hint">Luna jest asystentką AI – postać jest wygenerowana sztucznie. Tylko dla osób pełnoletnich (18+).</p>
+      <p><span class="badge-noads" data-note="noads">🚫 Bez reklam</span></p>
+      <p class="hint" data-note="fan"></p>
+      <p class="hint"><a href="#" data-news>✨ Co nowego</a> · <a href="/problemy.html">🛠 Problemy techniczne</a> · <a href="/regulamin.html">Regulamin</a> · <a href="/privacy.html">Prywatność</a> · <a href="/testerzy.html">Testerzy</a> · <a href="/butik.html">Butik</a> · <a href="/dolacz.html">Dołącz do projektu</a> · <a href="/wesprzyj.html" class="no-twa">Wesprzyj</a></p>
     </fieldset>
     <div class="btns">
       <button type="button" id="testVoice">▶ Posłuchaj próbki</button>
@@ -187,7 +215,35 @@
       <label>Szybkość pulsowania: <b id="adm_pulse_v"></b><input type="range" id="adm_pulse_speed" min="0.4" max="4" step="0.1"></label>
       <label class="row"><input type="checkbox" id="adm_holo_default"> Tryb hologram domyślnie włączony</label>
       <label>Tryb hologram dostępny od planu
-        <select id="adm_holo_plan"><option value="podstawowa">Podstawowa (dla wszystkich)</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select></label>
+        <select id="adm_holo_plan"><option value="darmowy">Darmowy (dla wszystkich)</option><option value="podstawowa">Podstawowa</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select></label>
+    </details>
+    <details id="planSection"><summary>💳 Plany, ceny i limity</summary>
+      <p class="hint">Cennik v2: Podstawowa za darmo (z kontem), Premium 59,99 zł i Pro 99,99 zł za 30 dni, bez automatycznego odnawiania, ceny brutto z VAT. Po wygaśnięciu – powrót do Podstawowej (z kontem) lub Darmowego. Płatności WWW: Stripe (po ustawieniu klucza).</p>
+      <label class="row"><input type="checkbox" id="adm_pr_show"> Pokaż ceny publicznie (domyślnie wyłączone – do akceptacji Huberta)</label>
+      <label>Adres w Google Play (gdy ustawiony, przycisk „Pobierz aplikację” zmienia się na „Pobierz z Google Play”)<input id="adm_app_play" type="url" maxlength="300" placeholder="https://play.google.com/store/apps/details?id=..."></label>
+      <label class="row"><input type="checkbox" id="adm_pr_foreign"> Pokaż też EUR/USD (robocze odpowiedniki; domyślnie tylko PLN)</label>
+      <table class="prtab"><tr><th>Plan</th><th>zł</th><th>EUR</th><th>USD</th></tr><tr><td>Podstawowa</td><td><input id="adm_pr_podstawowa_pln" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_podstawowa_eur" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_podstawowa_usd" inputmode="decimal" maxlength="8" size="6"></td></tr><tr><td>Premium</td><td><input id="adm_pr_premium_pln" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_premium_eur" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_premium_usd" inputmode="decimal" maxlength="8" size="6"></td></tr><tr><td>Pro / Ultra</td><td><input id="adm_pr_pro_pln" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_pro_eur" inputmode="decimal" maxlength="8" size="6"></td><td><input id="adm_pr_pro_usd" inputmode="decimal" maxlength="8" size="6"></td></tr></table>
+      <h4>Plan Darmowy – limity</h4>
+      <label>Minuty rozmowy z Luną dziennie <input type="number" id="adm_fr_min" min="0" max="240" step="1"></label>
+      <label class="row"><input type="checkbox" id="adm_fr_live"> Pytania w Luna Live w planie Darmowy</label>
+      <label class="row"><input type="checkbox" id="adm_fr_convo"> „Rozmowa na żywo” w planie Darmowy (w ramach limitu minut)</label>
+      <label class="row"><input type="checkbox" id="adm_fr_voice"> Test głosu w planie Darmowy</label>
+      <p class="hint">Przydział strojów do planów: sekcja „Katalog postaci, strojów i planów” (pole plan przy każdym stroju). Butik Luny: sekcja „🛍 Butik”.</p>
+      <h4>Dane sprzedawcy (paragony, regulamin)</h4>
+      <label>Nazwa / imię i nazwisko<input id="adm_se_name" maxlength="120"></label>
+      <label>Adres<input id="adm_se_address" maxlength="200"></label>
+      <label>NIP (opcjonalnie)<input id="adm_se_nip" maxlength="16"></label>
+      <label>Status VAT<select id="adm_se_vat"><option value="">— nie ustawiono —</option><option value="czynny">czynny podatnik VAT</option><option value="zwolniony">zwolniony z VAT</option></select></label>
+      <h4>Wesprzyj Lunę (przelew – widoczne tylko w wersji WWW)</h4>
+      <label>Odbiorca<input id="adm_su_holder" maxlength="80"></label>
+      <label>Numer konta (IBAN)<input id="adm_su_iban" maxlength="42"></label>
+      <label>Tytuł przelewu<input id="adm_su_title" maxlength="60"></label>
+      <p class="hint">To numer do dobrowolnych wpłat. Wypłaty ze Stripe i Google Play trafiają na konto ustawione w profilach Stripe / Google Play – ich danych nie zapisujemy w aplikacji.</p>
+      <h4>Casting „Twarz AI”</h4>
+      <label>Początek zgłoszeń<input type="datetime-local" id="adm_ca_start"></label>
+      <label>Koniec zgłoszeń<input type="datetime-local" id="adm_ca_end"></label>
+      <label>Finał (puste = „wkrótce”)<input type="datetime-local" id="adm_ca_final"></label>
+      <label class="row"><input type="checkbox" id="adm_ca_xmas"> Motyw świąteczny automatycznie od 1 grudnia do finału</label>
     </details>
     <details id="catSection"><summary>Katalog postaci, strojów i planów</summary>
       <p class="hint">⚠️ Wgrywaj wyłącznie stonowane, nie-erotyczne obrazy (bez bielizny, prześwitów i nagości). Treści naruszające tę zasadę będą usuwane.</p>
@@ -276,8 +332,8 @@
     <h2>✨ Stwórz własną asystentkę</h2>
     <div class="planbar">
       <label>Twój plan
-        <select id="c_plan"><option value="podstawowa">Podstawowa</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select></label>
-      <p class="hint no-twa">Wersja demonstracyjna – wybór planu nie pobiera płatności.</p>
+        <select id="c_plan"><option value="darmowy">Darmowy</option><option value="podstawowa">Podstawowa</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select></label>
+      <p class="hint" id="c_planNote">Płatności – wkrótce.</p>
     </div>
     <details open><summary>Postać</summary><div class="grid" id="c_agents"></div></details>
     <details open><summary>Strój</summary><div class="grid" id="c_outfits"></div></details>
@@ -296,7 +352,7 @@
     <details><summary>Wygląd <span class="tag">Premium</span></summary>
       <div class="lockable" data-plan="premium">
         <label>Kolor pierścienia<input type="color" id="c_ring"></label>
-        <label class="filebtn">🖼 Wgraj własny obraz awatara<input type="file" id="c_upload" accept="image/*" hidden></label>
+        <label class="filebtn">🖼 Wgraj własny obraz AI (oświadczenie w Ustawieniach → profil)<input type="file" id="c_upload" accept="image/png,image/jpeg,image/webp" hidden></label>
         <button type="button" class="add" id="c_upload_clear">Usuń własny obraz</button>
         <p class="hint">Obraz zostaje tylko na tym urządzeniu. Wgrywaj wyłącznie stonowane obrazy – bez treści erotycznych.</p>
       </div>
@@ -309,7 +365,27 @@
   </form>
 </dialog>
 <audio id="player" preload="auto"></audio>
+<dialog id="ageGate" class="agegate">
+  <form id="ageForm">
+    <h2>Luna jest dla osób pełnoletnich</h2>
+    <p>Zanim zaczniesz, podaj datę urodzenia i potwierdź oświadczenie. Robimy to jednorazowo.</p>
+    <label>Data urodzenia<input type="date" id="ageDob" required></label>
+    <label class="consent"><input type="checkbox" id="ageChk" required> <span>Oświadczam, że jestem osobą pełnoletnią (18+) i posiadam własne konto bankowe.</span></label>
+    <p class="hint">To Twoje oświadczenie – nie weryfikujemy wieku ani konta bankowego. Zapisujemy datę złożenia oświadczenia. <a href="/regulamin.html" target="_blank">Regulamin</a> · <a href="/privacy.html" target="_blank">Prywatność</a></p>
+    <p class="tst-err" id="ageErr"></p>
+    <button class="primary" type="submit">Potwierdzam</button>
+  </form>
+  <div id="ageBlocked" hidden><h2>Dziękujemy 💛</h2><p></p></div>
+</dialog>
+<footer class="appfoot">
+  <p class="fan" data-note="fan"></p>
+  <p><span class="badge-noads" data-note="noads">🚫 Bez reklam</span> <span class="money no-twa" data-note="money"></span></p>
+  <p><span class="b18">18+</span> <span data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</span></p>
+  <p><a href="/promo.html">Porady</a> · <a href="/butik.html">Butik</a> · <a href="/testerzy.html">Testerzy</a> · <a href="/dolacz.html">Dołącz do projektu</a> · <a href="/twarz.html">Twarz AI</a> · <a href="/problemy.html">Problemy techniczne</a> · <a href="/wesprzyj.html" class="no-twa">Wesprzyj</a> · <a href="/regulamin.html">Regulamin</a> · <a href="/privacy.html">Prywatność</a></p>
+</footer>
 <script src="app.js"></script>
+<script src="account.js"></script>
+<script src="notices.js"></script>
 <script src="admin.js"></script>
 <script src="custom.js"></script>
 <script src="music.js"></script>
@@ -320,5 +396,6 @@
 <script src="push.js"></script>
 <script src="admin-catalog.js"></script>
 <script src="admin-extra.js"></script>
+<script src="helpbot-loader.js?v=1.3.1"></script>
 </body>
 </html>

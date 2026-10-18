@@ -1,15 +1,18 @@
 /* „Stwórz własną asystentkę” – personalizacja po stronie użytkownika (localStorage). */
 (() => {
 const $ = s => document.querySelector(s);
-const RANK = {podstawowa: 0, premium: 1, pro: 2};
-const PLAN_NAME = {podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'};
-const DEF = {plan: 'podstawowa', agent: 'luna', name: '', wake: '', tone: '', length: '', ring: '', outfit: '', pose: '', body: '', own: ''};
+const RANK = {darmowy: 0, podstawowa: 1, premium: 2, pro: 3};
+const PLAN_NAME = {darmowy: 'Darmowy', podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'};
+let SP = {plan: 'darmowy', free: {outfits: 1}};  // plan z serwera (konto) – nie da się go zmienić w przeglądarce
+const isAdmin = () => !!sessionStorage.getItem('luna.admin');
+const DEF = {plan: 'darmowy', agent: 'luna', name: '', wake: '', tone: '', length: '', ring: '', outfit: '', pose: '', body: '', own: ''};
 let C = Object.assign({}, DEF, JSON.parse(localStorage.getItem('luna.custom') || '{}'));
 let CAT = null;
 const save = () => { try { localStorage.setItem('luna.custom', JSON.stringify(C)); } catch(e){ alert('Za mało miejsca na obraz – wybierz mniejszy plik.'); } };
-const has = plan => RANK[C.plan] >= RANK[plan || 'podstawowa'];
+const has = plan => RANK[C.plan] >= RANK[plan || 'darmowy'];
+const freeLocked = () => false;  // przydział strojów do planów: panel → katalog (pole „plan”)
 const agent = () => (CAT && (CAT.agents.find(a => a.id === C.agent && has(a.plan)) || CAT.agents[0])) || null;
-const item = (kind, id) => { const a = agent(); return a && a[kind].find(o => o.id === id && has(o.plan)); };
+const item = (kind, id) => { const a = agent(); return a && a[kind].find((o, i) => o.id === id && has(o.plan) && !freeLocked(kind, i)); };
 const name = () => (has('premium') && C.name.trim()) || (agent() ? agent().name : 'Luna');
 
 function image(){
@@ -40,14 +43,14 @@ window.LunaHas = plan => has(plan);
 window.LunaPersona = () => ({agent: agent() ? agent().id : 'luna', name: name(),
   tone: has('premium') ? C.tone : '', length: has('premium') ? C.length : ''});
 
-function card(o, kind, selected){
-  const locked = !has(o.plan);
+function card(o, kind, selected, idx){
+  const fl = freeLocked(kind, idx); const need = fl ? 'podstawowa' : o.plan; const locked = !has(o.plan) || fl;
   const b = document.createElement('button'); b.type = 'button'; b.className = 'card' + (selected ? ' on' : '') + (locked ? ' locked' : '');
   const im1 = o.image || o.avatar, im2 = o.image2x;
   b.innerHTML = `<img src="${im1}"${im2 ? ` srcset="${im1} 1x, ${im2} 2x"` : ''} alt="" loading="lazy"><span>${o.name}</span>` +
-    (locked ? `<em>🔒 ${PLAN_NAME[o.plan]}</em>` : (o.placeholder ? '<em class="soon">wkrótce</em>' : ''));
+    (locked ? `<em>🔒 ${PLAN_NAME[need]}</em>` : (o.placeholder ? '<em class="soon">wkrótce</em>' : ''));
   b.onclick = () => {
-    if (locked) { alert('Ta opcja jest dostępna w planie ' + PLAN_NAME[o.plan] + '.'); return; }
+    if (locked) { alert('Ta opcja jest dostępna od planu ' + PLAN_NAME[need] + '. Płatności – wkrótce.'); return; }
     if (kind === 'agents') { C.agent = o.id; C.outfit = C.pose = C.body = ''; }
     else { const k = {outfits: 'outfit', poses: 'pose', bodies: 'body'}[kind]; C[k] = C[k] === o.id && kind !== 'outfits' ? '' : o.id; }
     save(); render(); apply();
@@ -56,9 +59,10 @@ function card(o, kind, selected){
 }
 function render(){
   if (!CAT) return;
-  $('#c_plan').value = C.plan;
+  $('#c_plan').value = C.plan; $('#c_plan').disabled = !isAdmin();
+  $('#c_planNote').textContent = isAdmin() ? 'Tryb producenta: podgląd dowolnego planu.' : (SP.logged_in ? `Twój plan: ${PLAN_NAME[SP.plan]}.` : 'Plan Darmowy. Zaloguj się, aby korzystać z planu przypisanego do konta.') + ' Płatności – wkrótce.';
   const a = agent();
-  const fill = (sel, list, kind, cur) => { const el = $(sel); el.innerHTML = ''; list.forEach(o => el.appendChild(card(o, kind, o.id === cur))); };
+  const fill = (sel, list, kind, cur) => { const el = $(sel); el.innerHTML = ''; list.forEach((o, i) => el.appendChild(card(o, kind, o.id === cur, i))); };
   fill('#c_agents', CAT.agents, 'agents', a.id);
   fill('#c_outfits', a.outfits, 'outfits', C.outfit || (a.outfits[0] && a.outfits[0].id));
   fill('#c_poses', a.poses, 'poses', C.pose);
@@ -70,19 +74,22 @@ function render(){
     el.querySelectorAll('input,select,button').forEach(i => i.disabled = !ok);
   });
 }
-$('#c_plan').onchange = e => { C.plan = e.target.value; save(); render(); apply(); };
+$('#c_plan').onchange = e => { if (!isAdmin()) return; C.plan = e.target.value; save(); render(); apply(); };
+window.LunaPlan = () => SP;
+window.LunaPlanRefresh = () => {
+  const h = {}; const at = sessionStorage.getItem('luna.admin'); if (at) h['X-Admin-Token'] = at; const tc = localStorage.getItem('luna.tester'); if (tc) h['X-Tester'] = tc;
+  return fetch('/api/account/plan?vid=' + (window.LunaVid ? window.LunaVid() : ''), {headers: h, credentials: 'same-origin'}).then(r => r.json()).then(p => {
+    SP = p; if (!isAdmin() || RANK[C.plan] === undefined) C.plan = p.plan; save(); render(); apply();
+    document.body.dataset.plan = C.plan; window.dispatchEvent(new CustomEvent('luna-plan', {detail: p}));
+  }).catch(() => {});
+};
 ['name', 'wake'].forEach(k => $('#c_' + k).oninput = e => { C[k] = e.target.value.replace(/[<>]/g, ''); save(); apply(); });
 ['tone', 'length'].forEach(k => $('#c_' + k).onchange = e => { C[k] = e.target.value; save(); });
 $('#c_ring').oninput = e => { C.ring = e.target.value; save(); apply(); };
-$('#c_upload').onchange = e => {
-  const f = e.target.files[0]; if (!f) return;
-  const img = new Image(); img.onload = () => {
-    const s = Math.min(512 / img.width, 512 / img.height, 1), cv = document.createElement('canvas');
-    cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
-    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
-    C.own = cv.toDataURL('image/jpeg', 0.85); save(); apply(); URL.revokeObjectURL(img.src);
-  };
-  img.src = URL.createObjectURL(f); e.target.value = '';
+$('#c_upload').onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  if (!window.LunaAiUpload) return;
+  const url = await window.LunaAiUpload(f, 512); if (url){ C.own = url; save(); apply(); }
 };
 $('#c_upload_clear').onclick = () => { C.own = ''; save(); apply(); };
 $('#c_voice').onclick = () => { $('#custom').close(); $('#settingsBtn').click(); };
@@ -90,4 +97,5 @@ $('#c_reset').onclick = () => { const plan = C.plan; C = Object.assign({}, DEF, 
 $('#customBtn').onclick = () => { render(); $('#custom').showModal(); };
 window.LunaReloadCatalog = () => fetch('/api/catalog').then(r => r.json()).then(c => { CAT = c; render(); apply(); });
 window.LunaReloadCatalog().catch(() => {});
+window.LunaPlanRefresh();
 })();

@@ -49,7 +49,7 @@ new ResizeObserver(() => on && size()).observe(cv.parentElement);
 const chk = $('#holoChk');
 function sync(){
   const ok = allowed(); chk.disabled = !ok;
-  $('#holoTag').textContent = ok ? '' : '🔒 ' + ({podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'}[H.plan]);
+  $('#holoTag').textContent = ok ? '' : '🔒 ' + ({darmowy: 'Darmowy', podstawowa: 'Podstawowa', premium: 'Premium', pro: 'Pro / Ultra'}[H.plan]);
   chk.checked = want(); set(want());
 }
 chk.onchange = () => { const s = S(); s.holo = chk.checked; localStorage.setItem('luna.settings', JSON.stringify(s)); set(want()); };

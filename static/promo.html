@@ -4,20 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0a">
-<title>Luna – porady głosowe, Luna Live i trening wypowiedzi</title>
+<title>Luna mówi jak jest – porady głosowe, Luna Live i trening wypowiedzi</title>
+<meta property="og:image" content="/og-luna.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:site_name" content="Luna mówi jak jest">
 <meta name="description" content="Chcesz lepiej się wypowiadać i wysławiać? Porady głosowe Luny, asystentki AI: barwa, oddech, dykcja, tempo, pewność siebie i wystąpienia. Szukamy testerów!">
 <meta property="og:title" content="Luna – asystentka AI do treningu głosu">
-<meta property="og:image" content="/promo/luna_hero@2x.jpg">
+
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="/portal.css?v=1.3">
-<script>(function(){try{if(/[?&]source=twa\b/.test(location.search))sessionStorage.setItem("luna.twa","1");if(sessionStorage.getItem("luna.twa"))document.documentElement.classList.add("twa")}catch(e){}})()</script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
+<script src="/twa.js"></script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
+<link rel="stylesheet" href="/site.css?v=1.3.1">
 </head>
 <body>
 <header class="top">
   <div class="bar">
-    <a class="logo" href="/promo.html" aria-label="Luna – strona główna"><span class="lring"><img src="/avatar-256.jpg" srcset="/avatar-256.jpg 1x, /avatar-512.jpg 2x" alt=""></span><span class="lname">Luna</span></a>
+    <a class="logo" href="/promo.html" aria-label="Luna – strona główna"><span class="lring"><img src="/brand-emblem-256.png" srcset="/brand-emblem-256.png 1x, /brand-emblem-512.png 2x" alt=""></span><span class="lname">Luna <small class="lsub">mówi jak jest</small></span></a>
     <form class="search" id="searchForm" role="search" autocomplete="off">
       <input id="q" type="search" placeholder="Szukaj porad: oddech, dykcja, trema…" aria-label="Szukaj porad" aria-autocomplete="list" aria-controls="sugg">
       <button aria-label="Szukaj">🔍</button>
@@ -25,6 +27,7 @@
     </form>
     <div class="acts">
       <button class="pill ghost" data-push type="button">🔔 Powiadom mnie</button>
+      <a class="pill dlhead no-twa" href="#pobierz" data-dl="btn_short">📲 Pobierz</a>
       <a class="pill primary" href="/">Otwórz Lunę</a>
     </div>
   </div>
@@ -35,7 +38,7 @@
     <a href="/live.html" class="livetab">Luna Live <span class="lv" id="liveTab"></span></a>
     <a href="#plany" data-tab="plany">Plany</a>
     <a href="/#live">Czat z twórcą</a>
-    <a href="#testerzy" class="hot">Testerzy 🎁</a>
+    <a href="/butik.html">Butik</a><a href="/testerzy.html" class="hot">Testerzy 🎁</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/problemy.html">Pomoc</a>
   </nav>
 </header>
 
@@ -44,12 +47,30 @@
     <div class="tb-ring"><img src="/avatar-256.jpg" alt=""></div>
     <div class="tb-copy">
       <b>Szukamy testerów Luny!</b>
-      <span>Chcesz jako pierwsza lub pierwszy sprawdzić Lunę? Premium za darmo przez 2 miesiące dla 50 osób.</span>
+      <span data-note="testers">Szukamy 50 śmiałków…</span>
       <span class="tst-left">Zostało … z 50 miejsc</span>
     </div>
-    <a class="pill primary" href="#testerzy">Zgłoś się</a>
+    <a class="pill primary" href="/testerzy.html">Zgłoś się</a>
   </section>
 
+  <section class="star-hero" id="luna">
+    <div class="sh-ring"><picture><source type="image/webp" srcset="/avatar-512.webp 1x, /avatar-1024.webp 2x"><img src="/avatar-512.jpg" srcset="/avatar-512.jpg 1x, /avatar-1024.jpg 2x" width="260" height="260" alt="Luna – asystentka AI (postać wygenerowana sztucznie)" fetchpriority="high"></picture></div>
+    <div class="sh-copy">
+      <div class="langtabs mini" aria-label="Język"><button type="button" data-lang="pl">PL</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="de">DE</button><button type="button" data-lang="uk">UK</button></div>
+      <h1 data-i18n="h_title">Luna mówi jak jest</h1>
+      <p class="sh-tag" data-i18n="h_tag">Twoja trenerka głosu AI. Mówi jak jest, żeby Tobie mówiło się jeszcze lepiej.</p>
+      <div class="sh-cta">
+        <a class="pill primary big" href="/" data-i18n="h_talk">🎙️ Porozmawiaj z Luną</a>
+        <a class="pill ghost" href="/testerzy.html" data-i18n="h_test">🎁 Zostań testerem</a>
+        <button type="button" class="pill ghost" id="heroListen" data-i18n="h_listen">▶ Posłuchaj Luny</button>
+      </div>
+      <p class="sh-badges"><span class="badge-noads" data-i18n="h_noads">🚫 Bez reklam</span> <span class="badge-ai" data-i18n="h_ai">🤖 Luna jest asystentką AI – postać wygenerowana sztucznie</span></p>
+      <p class="disclaimer" data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</p>
+      <p class="fan" data-note="fan"></p>
+      <p class="money no-twa" data-note="money"></p>
+    </div>
+    <audio id="heroAudio" preload="none" src="/promo/luna_powitanie.mp3"></audio>
+  </section>
   <section class="hero-strip">
     <p>Chcesz lepiej się wypowiadać i wysławiać? <span>Chcesz ciekawie opowiadać o sobie?</span> <b>To jest to. Poznaj Lunę.</b></p>
   </section>
@@ -69,7 +90,7 @@
 
   <section class="sec" id="plany">
     <h2>Chcesz więcej możliwości? <em>Wybierz plan.</em></h2>
-    <p class="vsub">Każdy wyższy plan zawiera wszystko z niższych. W czasie testów wszystkie plany możesz sprawdzić w wersji demonstracyjnej.</p>
+    <p class="vsub">Aplikacja jest darmowa do pobrania. Plan Darmowy ma dzienne limity, a Podstawowa, Premium i Pro / Ultra to subskrypcje (każdy wyższy plan zawiera wszystko z niższych). <b>Płatności – wkrótce.</b></p>
     <div class="plans" id="plans"></div>
   </section>
 
@@ -79,19 +100,39 @@
       <h2>Szukamy testerów Luny!</h2>
       <p class="q">Chcesz lepiej się wypowiadać? Chcesz jako pierwsza lub pierwszy sprawdzić Lunę?</p>
       <p class="big">To jest to.</p>
-      <p><span class="no-twa">Luna będzie w przyszłości aplikacją płatną, ale </span><span class="twa-only">W ramach testów </span><b>pierwsze 50 osób</b>, które zgłoszą się do testów, dostanie <b>wersję Premium za darmo na dwa miesiące</b> oraz <b>unikalny awatar z fioletową lub niebieską obwódką</b> – zamiast zielonej. Zgłoś się!</p>
+      <p><span class="no-twa">Luna jest darmowa do pobrania, a Premium będzie płatne – ale </span><span class="twa-only">W ramach testów </span><b>pierwsze 50 osób</b>, które zgłoszą się do testów, dostanie <b>wersję Premium za darmo na dwa miesiące</b> oraz <b>unikalny awatar z fioletową lub niebieską obwódką</b> – zamiast zielonej. Zgłoś się!</p>
       <div class="rings"><span class="rg" style="--c:#8B5CF6"><img src="/avatar-256.jpg" alt="Awatar z fioletową obwódką"></span><span class="rg" style="--c:#3B82F6"><img src="/avatar-256.jpg" alt="Awatar z niebieską obwódką"></span></div>
       <div class="tst-bar"><i></i></div><p class="tst-left">Zostało … z 50 miejsc</p>
     </div>
     <div id="testerzy-form" class="tform"></div>
   </section>
 
-  <section class="sec" id="instalacja">
-    <h2>Chcesz mieć Lunę zawsze pod ręką? <em>Zainstaluj ją.</em></h2>
-    <div class="two">
-      <div class="box"><h3>Android (Chrome)</h3><ol><li>Otwórz Lunę w Chrome.</li><li>Stuknij menu <b>⋮</b>.</li><li>Wybierz <b>„Zainstaluj aplikację”</b>.</li></ol></div>
-      <div class="box"><h3>iPhone (Safari)</h3><ol><li>Otwórz Lunę w Safari.</li><li>Stuknij <b>Udostępnij</b>.</li><li>Wybierz <b>„Do ekranu początkowego”</b>.</li></ol></div>
-    </div>
+  <section class="sec" id="dolacz">
+    <h2>Dołącz do projektu Luna <em>– twórz z nami.</em></h2>
+    <p class="vsub invite" data-note="invite"></p>
+    <p><a class="pill primary" href="/dolacz.html">✉️ Napisz do nas</a> <a class="pill ghost" href="/twarz.html">⭐ Casting „Twarz AI”</a></p>
+  </section>
+
+  <section class="sec dl" id="pobierz">
+    <h2 data-dl="h">Pobierz aplikację</h2>
+    <p class="vsub" data-dl="lead">Luna zawsze pod ręką – na telefonie, bez reklam.</p>
+    <p class="dl-cta"><a class="pill primary big" id="dlBtn" href="https://github.com/hubinatorC4/luna-app/releases/download/android-v1.0.0/luna-1.0.0-release.apk" rel="noopener"><span aria-hidden="true">📲</span> <span data-dl="btn">Pobierz aplikację</span></a></p>
+    <div class="dl-tabs" role="tablist"><button type="button" class="on" data-p="android">🤖 Android</button><button type="button" data-p="ios">🍎 iPhone / iPad</button><button type="button" data-p="pc">💻 <span data-dl="pc">Komputer</span></button></div>
+    <ol class="dl-steps" data-panel="android">
+      <li><span class="dl-ic">📲</span><b data-dl="a1h">Stuknij „Pobierz aplikację”</b><small data-dl="a1">Na telefonie z Androidem – pobierze się plik instalacyjny Luny.</small></li>
+      <li><span class="dl-ic">🛡️</span><b data-dl="a2h">Otwórz pobrany plik</b><small data-dl="a2">Jeśli telefon zapyta, zezwól na instalację z tego źródła. To jednorazowe i bezpieczne ustawienie.</small></li>
+      <li><span class="dl-ic">✨</span><b data-dl="a3h">Stuknij „Zainstaluj”</b><small data-dl="a3">Gotowe! Luna pojawi się na ekranie głównym.</small></li>
+    </ol>
+    <ol class="dl-steps" data-panel="ios" hidden>
+      <li><span class="dl-ic">🧭</span><b data-dl="i1h">Otwórz Lunę w Safari</b><small data-dl="i1">Wejdź na luna-voice-coach.onrender.com.</small></li>
+      <li><span class="dl-ic">⬆️</span><b data-dl="i2h">Stuknij „Udostępnij”</b><small data-dl="i2">To ikonka kwadratu ze strzałką u dołu ekranu.</small></li>
+      <li><span class="dl-ic">🏠</span><b data-dl="i3h">Wybierz „Do ekranu początkowego”</b><small data-dl="i3">Luna zamieszka na ekranie głównym jak zwykła aplikacja.</small></li>
+    </ol>
+    <ol class="dl-steps" data-panel="pc" hidden>
+      <li><span class="dl-ic">🌐</span><b data-dl="c1h">Otwórz Lunę w Chrome lub Edge</b><small data-dl="c1">Wejdź na luna-voice-coach.onrender.com.</small></li>
+      <li><span class="dl-ic">⊕</span><b data-dl="c2h">Kliknij „Zainstaluj aplikację”</b><small data-dl="c2">Ikona na końcu paska adresu albo menu ⋮ → „Zainstaluj aplikację”.</small></li>
+      <li><span class="dl-ic">🚀</span><b data-dl="c3h">Gotowe</b><small data-dl="c3">Luna otworzy się we własnym oknie.</small></li>
+    </ol>
   </section>
 
   <section class="sec" id="faq">
@@ -100,12 +141,6 @@
     <p class="vsub">Więcej o Lunie: <a href="/o-lunie.html">funkcje, hologram, własna asystentka</a>.</p>
   </section>
 </main>
-
-<footer class="foot">
-  <a class="logo" href="/promo.html"><span class="lring"><img src="/avatar-256.jpg" alt=""></span><span class="lname">Luna</span></a>
-  <nav><a href="/">Aplikacja</a><a href="/live.html">Luna Live</a><a href="/o-lunie.html">O Lunie</a><a href="/#live">Czat z twórcą</a><a href="/privacy.html">Prywatność</a><a href="/music/LICENSES.md">Licencje muzyki</a></nav>
-  <p>Luna – asystentka AI. Postać Luny jest wygenerowana sztucznie. Porady nie zastępują foniatry ani logopedy. © 2026 Luna · v1.3</p>
-</footer>
 
 <dialog id="card" class="cardlg">
   <div class="cthumb" id="cThumb"><span class="cdur" id="cDur"></span></div>
@@ -121,5 +156,20 @@
 <script src="/portal.js?v=1.3"></script>
 <script src="/testers.js?v=1.3"></script>
 <script src="/push.js?v=1.3"></script>
+<script type="application/json" id="i18n">{"pl": {"h_title": "Luna mówi jak jest", "h_tag": "Twoja trenerka głosu AI. Mówi jak jest, żeby Tobie mówiło się jeszcze lepiej.", "h_talk": "🎙️ Porozmawiaj z Luną", "h_test": "🎁 Zostań testerem", "h_listen": "▶ Posłuchaj Luny", "h_noads": "🚫 Bez reklam", "h_ai": "🤖 Luna jest asystentką AI – postać wygenerowana sztucznie"}, "en": {"h_title": "Luna Tells It Like It Is", "h_tag": "Your AI voice coach. She tells it like it is, so you can speak even better.", "h_talk": "🎙️ Talk to Luna", "h_test": "🎁 Become a tester", "h_listen": "▶ Hear Luna", "h_noads": "🚫 No ads", "h_ai": "🤖 Luna is an AI assistant – an artificially generated character"}, "es": {"h_title": "Luna dice las cosas como son", "h_tag": "Tu entrenadora de voz con IA. Te dice las cosas como son para que hables aún mejor.", "h_talk": "🎙️ Habla con Luna", "h_test": "🎁 Hazte tester", "h_listen": "▶ Escucha a Luna", "h_noads": "🚫 Sin anuncios", "h_ai": "🤖 Luna es una asistente de IA, un personaje generado artificialmente"}, "de": {"h_title": "Luna sagt, wie es ist", "h_tag": "Deine KI-Stimmtrainerin. Sie sagt, wie es ist, damit du noch besser sprichst.", "h_talk": "🎙️ Mit Luna sprechen", "h_test": "🎁 Tester werden", "h_listen": "▶ Luna anhören", "h_noads": "🚫 Keine Werbung", "h_ai": "🤖 Luna ist eine KI-Assistentin – eine künstlich erzeugte Figur"}, "uk": {"h_title": "Луна каже як є", "h_tag": "Твоя ШІ-тренерка голосу. Каже як є, щоб тобі говорилося ще краще.", "h_talk": "🎙️ Поговорити з Луною", "h_test": "🎁 Стати тестувальником", "h_listen": "▶ Послухати Луну", "h_noads": "🚫 Без реклами", "h_ai": "🤖 Луна — ШІ-асистентка, штучно згенерований персонаж"}}</script>
+<script src="/notices.js"></script>
+<script src="/pagei18n.js"></script>
+<script src="/hero.js"></script>
+<footer class="sitefoot">
+  <img class="fbadge" src="/brand-badge-256.png" srcset="/brand-badge-256.png 1x, /brand-badge-512.png 2x" width="96" height="96" alt="Luna mówi jak jest" loading="lazy">
+  <p class="fan" data-note="fan">Luna mówi jak jest to projekt fanowski – i taki zostanie, słowo Luny! Wspieraj nas zawsze, gdziekolwiek jesteś. 💚</p>
+  <p><span class="badge-noads" data-note="noads">🚫 Bez reklam – Luna nie ogląda reklam, bo i tak by je przegadała 😄 Zero reklam, sama przyjemność gadania.</span></p>
+  <p class="money no-twa" data-note="money">Luna nie je, nie śpi i nie pije kawy… ale serwery już tak ☕ Każda drobna złotówka się przyda, a wsparcie jest zawsze dobrowolne.</p>
+  <p class="disc"><span class="b18">18+</span> <span data-disclaimer>Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet.</span></p>
+  <nav><a href="/">Aplikacja</a><a href="/promo.html">Porady</a><a href="/butik.html">Butik</a><a href="/live.html">Luna Live</a><a href="/testerzy.html">Testerzy</a><a href="/dolacz.html">Dołącz do projektu</a><a href="/twarz.html">Twarz AI</a><a href="/wesprzyj.html" class="no-twa">Wesprzyj Lunę</a><a href="/regulamin.html">Regulamin</a><a href="/privacy.html">Prywatność</a><a href="/#live">Czat z twórcą</a></nav>
+  <p class="copy">© 2026 Luna mówi jak jest · Luna jest asystentką AI, a jej postać została wygenerowana sztucznie · v1.3.1</p>
+</footer>
+<script src="/helpbot-loader.js?v=1.3.1"></script>
+<script src="/download.js?v=1.3.1"></script>
 </body>
 </html>

@@ -35,16 +35,8 @@ def clean_text(s, n):
     return s.strip()[:n]
 
 def clean_avatar(a):
-    a = str(a or "")
-    m = re.fullmatch(r"data:image/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)", a)
-    if m:
-        try:
-            raw = base64.b64decode(m.group(2), validate=True)
-            if len(raw) <= MAX_AVATAR: return a
-        except Exception:
-            pass
-        return ""
-    return ""
+    import imgsafe
+    return imgsafe.safe_avatar_dataurl(a, MAX_AVATAR)
 
 def rate_ok(key, per_min, per_day):
     now = time.time()

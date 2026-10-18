@@ -9,3 +9,7 @@ assets/
 luna-app.zip
 data/
 !static/music/*.mp3
+!data/
+data/*
+!data/catalog_outfits.json
+!static/promo/luna_powitanie.mp3

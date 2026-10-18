@@ -17,7 +17,7 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import catalog, base64
-import livechat, liveroom, library, store, notify, testers
+import helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
 from datetime import datetime, timedelta
 try:
     from zoneinfo import ZoneInfo
@@ -25,7 +25,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.3.0"
+VERSION = "1.3.1"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -78,6 +78,17 @@ DEFAULTS = {
     "live": {"day": 6, "time": "20:00", "hours": 3, "note": "Co tydzień: pytania z czatu, łamaniec językowy tygodnia, ćwiczenia oddechowe i wyzwania głosowe.", "pool": True, "auto": True},
     "voice_defaults": {"voice": "pl-PL-ZofiaNeural", "pitch": -1.6, "hz": -14, "rate": -10, "warmth": 6, "volume": -31, "rasp": 4, "breath": 5, "lisp": True, "spanish": True},
     "ui": {"ring_color": "#2ee66b", "pulse_speed": 1.4, "holo_default": False, "holo_plan": "podstawowa"},
+    # Cennik v2 (18.10.2026): Podstawowa za darmo (z kontem), Premium 59,99 zł, Pro 99,99 zł za 30 dni, bez odnawiania, z VAT.
+    # Domyślnie tylko PLN; EUR/USD to robocze odpowiedniki, widoczne dopiero po włączeniu "foreign".
+    "pricing": {"v": 2, "show": True, "foreign": False, "plans": {"podstawowa": {"pln": "0", "eur": "0", "usd": "0"},
+                                         "premium": {"pln": "59,99", "eur": "14,99", "usd": "14,99"},
+                                         "pro": {"pln": "99,99", "eur": "24,99", "usd": "24,99"}}},
+    "support": {"holder": "", "iban": "", "title": "Wsparcie Luna"},
+    "pay_notice": {"text": "", "t": 0},
+    "seller": {"name": "", "address": "", "nip": "", "vat": ""},
+    "casting": {"start": "2026-10-18T00:00", "end": "2026-12-31T23:59", "final": "", "xmas": True},
+    "app": {"play_url": ""},
+    "free": {"chat_minutes": 5, "outfits": 1, "live_questions": False, "voice_test": True, "convo": True},
     "music": {"volume": 0.25, "tracks": json.load(open(os.path.join(ROOT, "static", "music", "playlist.json"), encoding="utf-8"))},
 }
 _cfg_lock = threading.Lock()
@@ -125,12 +136,42 @@ def sanitize(new):
         "hz": int(_num(vd.get("hz"), -30, 10, d["hz"])), "rasp": _num(vd.get("rasp"), 0, 10, d["rasp"]),
         "breath": _num(vd.get("breath"), 0, 10, d["breath"]), "lisp": bool(vd.get("lisp", d["lisp"])),
         "spanish": bool(vd.get("spanish", d["spanish"]))}
+    pr = new.get("pricing") if isinstance(new.get("pricing"), dict) else {}
+    pp = pr.get("plans") if isinstance(pr.get("plans"), dict) and pr.get("v") == 2 else {}  # stary cennik (v1) → nowe ceny domyślne
+    c["pricing"] = {"v": 2, "show": (pr.get("show") is True) if pr.get("v") == 2 else True, "foreign": pr.get("foreign") is True, "plans": {}}
+    for pid, dv in DEFAULTS["pricing"]["plans"].items():
+        src = pp.get(pid) if isinstance(pp.get(pid), dict) else {}
+        c["pricing"]["plans"][pid] = {cur: (str(src.get(cur)).strip()[:10] if re.fullmatch(r"\d{1,4}([,.]\d{1,2})?", str(src.get(cur, "")).strip()) else dv[cur]) for cur in ("pln", "eur", "usd")}
+    su = new.get("support") if isinstance(new.get("support"), dict) else {}
+    iban = re.sub(r"[^A-Z0-9 ]", "", str(su.get("iban", "")).upper())[:42].strip()
+    c["support"] = {"holder": re.sub(r"[<>\x00-\x1f]", "", str(su.get("holder", "")))[:80].strip(), "iban": iban,
+                    "title": re.sub(r"[<>\x00-\x1f]", "", str(su.get("title", "") or "Wsparcie Luna"))[:60].strip()}
+    pn = new.get("pay_notice") if isinstance(new.get("pay_notice"), dict) else {}
+    c["pay_notice"] = {"text": re.sub(r"[<>\x00-\x1f]", "", str(pn.get("text") or "")).strip()[:300], "t": int(_num(pn.get("t"), 0, 4e9, 0))}
+    se = new.get("seller") if isinstance(new.get("seller"), dict) else {}
+    cl = lambda v, n: re.sub(r"[<>\x00-\x1f]", "", str(v or "")).strip()[:n]
+    c["seller"] = {"name": cl(se.get("name"), 120), "address": cl(se.get("address"), 200), "nip": re.sub(r"[^0-9A-Z\-]", "", str(se.get("nip") or "").upper())[:16],
+                   "vat": se.get("vat") if se.get("vat") in ("czynny", "zwolniony", "") else ""}
+    ca = new.get("casting") if isinstance(new.get("casting"), dict) else {}
+    dt = lambda v, d: v if re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}", str(v or "")) else d
+    ap = new.get("app") if isinstance(new.get("app"), dict) else {}
+    pu = str(ap.get("play_url", "")).strip()[:300]
+    c["app"] = {"play_url": pu if re.fullmatch(r"https://play\.google\.com/[\w\-./?=&%]+", pu) else ""}
+    c["casting"] = {"start": dt(ca.get("start"), DEFAULTS["casting"]["start"]), "end": dt(ca.get("end"), DEFAULTS["casting"]["end"]),
+                    "final": str(ca.get("final")) if re.fullmatch(r"\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?", str(ca.get("final") or "")) else "",
+                    "xmas": ca.get("xmas", True) is not False}
+    fr = new.get("free") if isinstance(new.get("free"), dict) else {}
+    c["free"] = {"chat_minutes": int(_num(fr.get("chat_minutes"), 0, 240, DEFAULTS["free"]["chat_minutes"])),
+                 "outfits": int(_num(fr.get("outfits"), 0, 6, DEFAULTS["free"]["outfits"])),
+                 "live_questions": bool(fr.get("live_questions", DEFAULTS["free"]["live_questions"])),
+                 "voice_test": bool(fr.get("voice_test", DEFAULTS["free"]["voice_test"])),
+                 "convo": bool(fr.get("convo", DEFAULTS["free"]["convo"]))}
     ui = new.get("ui") if isinstance(new.get("ui"), dict) else {}
     col = str(ui.get("ring_color", "")).strip()
     c["ui"] = {"ring_color": col if re.fullmatch(r"#[0-9a-fA-F]{6}", col) else DEFAULTS["ui"]["ring_color"],
                "pulse_speed": _num(ui.get("pulse_speed"), 0.4, 4, DEFAULTS["ui"]["pulse_speed"]),
                "holo_default": bool(ui.get("holo_default", False)),
-               "holo_plan": ui.get("holo_plan") if ui.get("holo_plan") in ("podstawowa", "premium", "pro") else "podstawowa"}
+               "holo_plan": ui.get("holo_plan") if ui.get("holo_plan") in ("darmowy", "podstawowa", "premium", "pro") else "podstawowa"}
     m = new.get("music") if isinstance(new.get("music"), dict) else {}
     tr = m.get("tracks") if isinstance(m.get("tracks"), list) else DEFAULTS["music"]["tracks"]
     c["music"] = {"volume": _num(m.get("volume"), 0, 1, DEFAULTS["music"]["volume"]),
@@ -140,6 +181,10 @@ def sanitize(new):
     return c
 
 def load_cfg():
+    try:
+        sv = store.get("config", None)  # Postgres (trwale), gdy jest DATABASE_URL
+        if isinstance(sv, dict) and sv: return sanitize(sv)
+    except Exception: pass
     try:
         with open(CONFIG_FILE, encoding="utf-8") as f: return sanitize(json.load(f))
     except Exception:
@@ -157,6 +202,8 @@ def save_cfg(new):
         with open(tmpf, "w", encoding="utf-8") as f: json.dump(c, f, ensure_ascii=False, indent=1)
         os.replace(tmpf, CONFIG_FILE)
         CFG = c
+    try: store.put("config", c)
+    except Exception: pass
     return c
 
 CAT = catalog.load()
@@ -510,9 +557,33 @@ def run_reminders():
     if due(k2, ns - 20 * 60, ns):
         sent.append(k2); store.put("reminders_sent", sent[-50:])
         out.append(("push-15m", notify.send_push("live", "Luna Live za kwadrans", "Za chwilę startujemy. Dołącz i zadaj pytanie na czacie!", "/live.html")))
+    for lo, hi, tag, txt in ((6, 7, "7d", "za 7 dni"), (0, 1, "1d", "jutro")):
+        for uid, pid, until in accounts.expiring(lo, hi, tag):
+            out.append(("pass-" + tag, notify.send_push("manual", "Luna – dostęp wygasa " + txt,
+                f"Twój miesięczny dostęp {plans.NAMES.get(pid, pid)} wygasa {time.strftime('%d.%m.%Y', time.localtime(until))}. Potem wrócisz do planu Darmowy.", "/#plan", uid=uid)))
     notify.send_confirmations()
     store.put("cron_last", {"t": int(now), "actions": [a for a, _ in out]})
     return out
+
+def casting_state():
+    ca = CFG["casting"]; now = datetime.now(WAW)
+    ts = lambda v: datetime.fromisoformat(v).replace(tzinfo=WAW) if v else None
+    st, en = ts(ca["start"]), ts(ca["end"]); fi = ts(ca["final"] if "T" in ca["final"] else (ca["final"] + "T18:00" if ca["final"] else ""))
+    open_ = st <= now <= en
+    xmas_end = fi or datetime(en.year + 1, 1, 15, tzinfo=WAW)
+    xmas = ca["xmas"] and datetime(now.year if now.month == 12 else now.year - 1, 12, 1, tzinfo=WAW) <= now <= xmas_end
+    return {"start": int(st.timestamp() * 1000), "end": int(en.timestamp() * 1000) + 59999, "final": int(fi.timestamp() * 1000) if fi else None,
+            "open": open_, "closed": now > en, "xmas": bool(xmas), "now": int(now.timestamp() * 1000)}
+
+def _mod_push(title, body):
+    """Push tylko do subskrypcji moderatora (temat „mod”)."""
+    if not notify.push_enabled(): return
+    from pywebpush import webpush
+    payload = json.dumps({"title": title[:80], "body": body[:200], "url": "/", "tag": "mod"}, ensure_ascii=False)
+    for s in list(notify._subs().values()):
+        if notify.MOD_TOPIC in s.get("topics", []):
+            try: webpush(s["sub"], payload, vapid_private_key=notify.PRIV, vapid_claims={"sub": notify.SUBJ}, ttl=3600 * 24, timeout=10)
+            except Exception: pass
 
 def _bg_loop():
     n = 0
@@ -533,38 +604,304 @@ def _announce_update():
     except Exception as e: print("update notify error", repr(e)[:200], file=sys.stderr)
 
 
+def _help_prices():
+    if not CFG["pricing"]["show"]: return None
+    P = CFG["pricing"]["plans"]; return {"premium": P["premium"]["pln"].replace(".", ","), "pro": P["pro"]["pln"].replace(".", ",")}
+helpbot.PRICES = _help_prices
+
 class H(SimpleHTTPRequestHandler):
     def __init__(self, *a, **k): super().__init__(*a, directory=STATIC, **k)
-    def log_message(self, fmt, *args): sys.stderr.write("%s %s\n" % (self.address_string(), fmt % args))
+    def log_message(self, fmt, *args): sys.stderr.write("%s %s\n" % (security.ip_hash(self.address_string()), security.redact(fmt % args)))
     def end_headers(self):
-        if self.path.endswith((".html", "/", ".js", ".css", ".json")):
+        if urlparse(self.path).path.endswith((".html", "/", ".js", ".css", ".json")):
             self.send_header("Cache-Control", "no-cache")
+        for k, v in security.HEADERS.items(): self.send_header(k, v)
+        for c in getattr(self, "_cookies", []): self.send_header("Set-Cookie", c)
+        self._cookies = []
         super().end_headers()
+    def _cookie(self, name):
+        for part in (self.headers.get("Cookie") or "").split(";"):
+            k, _, v = part.strip().partition("=")
+            if k == name: return v
+        return ""
+    def _set_sid(self, sid, max_age):
+        self._cookies = getattr(self, "_cookies", []) + [f"luna_sid={sid}; Path=/; Max-Age={max_age}; HttpOnly; Secure; SameSite=Lax"]
+    def _acct(self):
+        return accounts.session(self._cookie("luna_sid"))
+    def _csrf_ok(self, csrf):
+        t = self.headers.get("X-CSRF-Token") or ""
+        return bool(t) and hmac.compare_digest(t, csrf)
     def _json(self, obj, code=200):
         b = json.dumps(obj, ensure_ascii=False).encode()
         self.send_response(code); self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b)
+        return True
     def _ip(self):
         xf = self.headers.get("X-Forwarded-For")
         return xf.split(",")[0].strip() if xf else self.client_address[0]
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
-        if n > 8 * 1024 * 1024: raise ValueError("too large")
+        p = urlparse(self.path).path
+        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets") else 64 * 1024
+        if n > lim: raise ValueError("too large")
         return json.loads(self.rfile.read(n) or b"{}") if n else {}
+
+    def _plan(self):
+        if token_ok(self.headers.get("X-Admin-Token")): return "pro", None
+        a = self._acct()
+        pl = accounts.plan(a[0])["plan"] if a else "darmowy"
+        tc = self.headers.get("X-Tester") or ""
+        if pl in ("darmowy", "podstawowa") and tc and testers.status(tc[:12]).get("granted"): pl = "premium"  # kod testera weryfikowany na serwerze
+        return pl, (a[0]["uid"] if a else None)
+    def _plan_info(self, vid=""):
+        pl, uid = self._plan(); fr = CFG["free"]
+        keys = plans.keys_for(uid, vid if livechat.VID_RE.fullmatch(vid or "") else "", self._ip())
+        left = max(0, fr["chat_minutes"] * 60 - max(plans.used(k) / (3 if k.startswith("i:") else 1) for k in keys)) if pl == "darmowy" else None
+        a = self._acct(); ap = accounts.plan(a[0]) if a else {"until": 0, "source": None}
+        until = ap["until"] if ap.get("plan") == pl else 0
+        return {"plan": pl, "name": plans.NAMES[pl], "free": fr, "until": until, "source": ap.get("source") if until else None,
+                "days_left": round((until - time.time()) / 86400, 1) if until else None, "chat_seconds_left": None if left is None else int(left),
+                "payments": "wkrótce", "logged_in": bool(uid)}
+    def _ring(self, data):
+        a = self._acct()
+        if a:
+            r = accounts.plan(a[0]).get("ring")
+            if r: return r
+        return testers.ring_for(data.get("tester"))
+    def _post_account(self, u, data):
+        """Konta, deklaracja 18+, awatary, moderacja awatarów, audyt. Zwraca None, gdy ścieżka nie pasuje."""
+        p = u.path; ip = self._ip()
+        if p.startswith("/api/admin/") and token_ok(self.headers.get("X-Admin-Token")):
+            security.audit("POST " + p, ip, str(data.get("action") or data.get("code") or data.get("uid") or "")[:40])
+        if p == "/api/account/signup":
+            if not (livechat.rate_ok("su:" + ip, 3, 20) and livechat.rate_ok("su:*", 30, 2000)): return self._json({"error": "Za dużo prób – spróbuj później."}, 429)
+            try: uid, sent = accounts.signup(data, notify.PUBLIC_URL)
+            except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            sid, csrf = accounts.new_session(uid); self._set_sid(sid, accounts.SESSION_DAYS * 86400)
+            return self._json({"ok": True, "verification_sent": sent, "csrf": csrf, "user": accounts.public(accounts._accts()[uid])})
+        if p == "/api/account/login":
+            if not (livechat.rate_ok("li:" + ip, 6, 60) and livechat.rate_ok("li:*", 120, 5000)): return self._json({"error": "Za dużo prób logowania – odczekaj chwilę."}, 429)
+            try: uid = accounts.login(data.get("email"), data.get("password"))
+            except PermissionError as e: return self._json({"error": str(e), "locked": True}, 423)
+            except ValueError as e: return self._json({"error": str(e)}, 401)
+            sid, csrf = accounts.new_session(uid); self._set_sid(sid, accounts.SESSION_DAYS * 86400)
+            return self._json({"ok": True, "csrf": csrf, "user": accounts.public(accounts._accts()[uid])})
+        if p in ("/api/account/logout", "/api/account/delete", "/api/account/link-tester", "/api/account/declare"):
+            a = self._acct()
+            if not a: return self._json({"error": "Zaloguj się."}, 401)
+            usr, csrf = a
+            if not self._csrf_ok(csrf): return self._json({"error": "Nieprawidłowy token CSRF – odśwież stronę."}, 403)
+            if p == "/api/account/logout":
+                accounts.end_session(self._cookie("luna_sid")); self._set_sid("", 0); return self._json({"ok": True})
+            if p == "/api/account/delete":
+                if not livechat.rate_ok("del:" + ip, 3, 20): return self._json({"error": "Za dużo prób."}, 429)
+                try: accounts.delete(usr["uid"], data.get("password"))
+                except ValueError as e: return self._json({"error": str(e)}, 400)
+                self._set_sid("", 0); return self._json({"ok": True})
+            if p == "/api/account/link-tester":
+                try: return self._json({"ok": True, "user": accounts.public(accounts.link_tester(usr["uid"], data.get("code")))})
+                except ValueError as e: return self._json({"error": str(e)}, 400)
+        if p == "/api/age/declare":
+            if not livechat.rate_ok("age:" + ip, 6, 60): return self._json({"error": "Za dużo prób."}, 429)
+            try: rec = age.declare(str(data.get("vid", "")), data, data.get("name", ""))
+            except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True, "at": rec["adult_at"]})
+        if p == "/api/avatar/upload":
+            if not livechat.rate_ok("av:" + ip, 4, 30): return self._json({"error": "Za dużo prób – spróbuj później."}, 429)
+            try: url, info = avatars.check_upload(data.get("data"), data.get("ai_declared"), str(data.get("vid", "")), data.get("name", ""))
+            except PermissionError as e: return self._json({"error": str(e), "camera": True}, 422)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True, "avatar": url, "ai_markers": info["ai_markers"]})
+        if p == "/api/avatar/report":
+            if not livechat.rate_ok("rep:" + ip, 5, 40): return self._json({"error": "Za dużo zgłoszeń."}, 429)
+            uid = str(data.get("uid", ""))
+            m = next((x for x in liveroom.S["chat"] if x.get("uid") == uid and x.get("avatar")), None)
+            try: avatars.report(uid, m["name"] if m else str(data.get("name", "")), m["avatar"] if m else "", data.get("reason", ""))
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True})
+        if p == "/api/admin/pass":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try:
+                if data.get("action") == "revoke": accounts.revoke_pass(str(data.get("uid")))
+                else: accounts.grant_pass(str(data.get("uid")), data.get("plan"), data.get("months", 1))
+            except KeyError: return self._json({"error": "not found"}, 404)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True, "accounts": accounts.admin_list()})
+        if p == "/api/join":
+            if not (livechat.rate_ok("join:" + ip, 2, 6) and livechat.rate_ok("join:*", 30, 300)): return self._json({"error": "Za dużo zgłoszeń – spróbuj później."}, 429)
+            if data.get("role") == "twarz AI" and not casting_state()["open"]: return self._json({"error": "Zgłoszenia zamknięte, finał wkrótce."}, 403)
+            try: rec = join.submit(data, security.ip_hash(ip))
+            except PermissionError: return self._json({"ok": True})  # spam: udajemy sukces, nic nie zapisujemy
+            except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            try: _mod_push("Nowe zgłoszenie do projektu Luna", f"{rec['name']} – {rec['role_other'] or rec['role']}")
+            except Exception: pass
+            return self._json({"ok": True})
+        if p == "/api/help":
+            if not (livechat.rate_ok("hb:" + ip, 15, 300) and livechat.rate_ok("hb:*", 600, 20000)): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
+            return self._json(helpbot.answer(data.get("q", ""), data.get("lang", "pl")))
+        if p == "/api/help/handoff":
+            if not livechat.rate_ok("hh:" + ip, 2, 10): return self._json({"error": "Za dużo zgłoszeń – spróbuj później."}, 429)
+            tr = data.get("transcript") if isinstance(data.get("transcript"), list) else []
+            txt = "\n".join(f"{'Użytkownik' if m.get('me') else 'Bot'}: {helpbot.SENS_RE.sub('***', str(m.get('t', '')))[:500]}" for m in tr[-30:] if isinstance(m, dict))
+            d = {"category": "Inne", "description": "[Przekazane z czatu pomocy]\n" + (txt or "(pusta rozmowa)"), "email": str(data.get("email", ""))[:254], "t0": 0, "env": data.get("env") or {}}
+            try: tid, key, sent = tickets.submit({**d, "t0": time.time() * 1000 - 10000})
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            try: _mod_push("Czat pomocy → człowiek " + tid, (txt or "")[-120:])
+            except Exception: pass
+            return self._json({"ok": True, "id": tid, "key": key})
+        if p == "/api/admin/help":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            if data.get("action") == "clear_unanswered": store.put("help_unanswered", [])
+            elif data.get("action") == "reset": store.put("help_faq", [])
+            elif isinstance(data.get("faq"), list): helpbot.save_kb(data["faq"])
+            return self._json({"ok": True, "faq": helpbot.kb(), "unanswered": list(reversed(store.get("help_unanswered", []) or []))})
+        if p == "/api/tickets":
+            if not (livechat.rate_ok("tk:" + ip, 3, 15) and livechat.rate_ok("tk:*", 40, 600)): return self._json({"error": "Za dużo zgłoszeń – spróbuj za chwilę."}, 429)
+            try: tid, key, sent = tickets.submit(data)
+            except PermissionError: return self._json({"ok": True, "id": "LUNA-0000", "key": ""})
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            try: _mod_push("Nowe zgłoszenie techniczne " + tid, str(data.get("category", "")))
+            except Exception: pass
+            return self._json({"ok": True, "id": tid, "key": key, "email_sent": sent})
+        if p == "/api/admin/tickets":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try: tickets.update(str(data.get("id", "")), data)
+            except KeyError: return self._json({"error": "not found"}, 404)
+            return self._json({"ok": True, **tickets.admin_list()})
+        if p == "/api/admin/pay-notice":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            txt = re.sub(r"[<>\x00-\x1f]", "", str(data.get("text", ""))).strip()[:300]
+            c = json.loads(json.dumps(CFG)); c["pay_notice"] = {"text": txt, "t": int(time.time()) if txt else 0}
+            globals()["CFG"] = save_cfg(c)
+            res = notify.send_push("update", "Luna – nowość w płatnościach 💳", txt, "/") if txt and data.get("push", True) else {"sent": 0}
+            return self._json({"ok": True, "push": res})
+        if p == "/api/admin/join":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            join.mark(str(data.get("id", "")), bool(data.get("read", True)), data.get("action") == "delete")
+            return self._json({"ok": True, "items": join.admin_list(), "unread": join.unread()})
+        if p == "/api/admin/butik":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            act = data.get("action")
+            try:
+                if act == "update": return self._json({"ok": True, "item": butik.update(str(data.get("id")), data.get("fields") or {})})
+                if act == "release": return self._json({"ok": True, "released": butik.release_next(data.get("n", 10), data.get("version") or VERSION, data.get("line") or None, data.get("ids") or None)})
+                if act == "reset": butik.reset(); return self._json({"ok": True})
+            except KeyError: return self._json({"error": "not found"}, 404)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"error": "bad action"}, 400)
+        if p == "/api/pay/checkout":
+            if not payments.enabled(): return self._json({"error": "Płatności – wkrótce.", "soon": True}, 503)
+            if data.get("twa"): return self._json({"error": "W aplikacji z Google Play płatności odbywają się przez Google Play."}, 400)
+            a = self._acct()
+            if not a: return self._json({"error": "Zaloguj się, aby kupić dostęp."}, 401)
+            usr, csrf = a
+            if not self._csrf_ok(csrf): return self._json({"error": "Nieprawidłowy token CSRF – odśwież stronę."}, 403)
+            if data.get("consent_immediate") is not True: return self._json({"error": "Zaznacz zgodę na natychmiastowe dostarczenie treści cyfrowych."}, 400)
+            if not livechat.rate_ok("pay:" + usr["uid"], 5, 30): return self._json({"error": "Za dużo prób."}, 429)
+            kind, ref = data.get("kind"), str(data.get("ref", ""))
+            if kind == "pass" and ref in CFG["pricing"]["plans"] and payments.grosze(CFG["pricing"]["plans"][ref]["pln"]) <= 0:
+                return self._json({"error": "Plan Podstawowa jest darmowy – wystarczy konto."}, 400)
+            if kind == "pass" and ref in CFG["pricing"]["plans"]:
+                name, pln = f"Luna – dostęp {plans.NAMES[ref]} na 30 dni (bez odnawiania)", CFG["pricing"]["plans"][ref]["pln"]
+            elif kind == "item" and butik.item(ref) and butik.item(ref)["status"] == "released":
+                it = butik.item(ref); name, pln = f"Butik Luny – {it['name']}", it["price"]["pln"]
+            else: return self._json({"error": "Nieznany produkt."}, 400)
+            try: return self._json({"ok": True, **payments.create_checkout(kind, ref, name, pln, usr["uid"], usr["email"], notify.PUBLIC_URL)})
+            except Exception as e: sys.stderr.write("checkout error %s\n" % type(e).__name__); return self._json({"error": "Nie udało się rozpocząć płatności."}, 502)
+        if p == "/api/admin/avatars":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            act, uid, id_ = data.get("action"), str(data.get("uid", ""))[:8], str(data.get("id", ""))[:20]
+            if act == "remove": avatars.block(uid, True)
+            elif act == "restore": avatars.block(uid, False)
+            elif act == "ban": avatars.block(uid, True); liveroom.ban(uid, True)
+            elif act == "dismiss": avatars.dismiss(id_)
+            else: return self._json({"error": "bad action"}, 400)
+            return self._json({"ok": True, "items": avatars.admin_list()})
+        return None
+    def _get_account(self, u):
+        p = u.path
+        if p == "/api/butik":
+            adm = token_ok(self.headers.get("X-Admin-Token"))
+            d = butik.public(CFG["pricing"]["show"] or adm); d["preview"] = adm and not CFG["pricing"]["show"]
+            d["plans"] = [{"id": k, "name": plans.NAMES[k], **({"prices": (v if CFG["pricing"]["foreign"] else {"pln": v["pln"]})} if CFG["pricing"]["show"] or adm else {})} for k, v in CFG["pricing"]["plans"].items()]; d["foreign"] = CFG["pricing"]["foreign"]
+            d["payments"] = {"web": payments.enabled(), "mode": payments.mode() if adm else None, "methods": ["BLIK", "karta"] + (["Przelewy24"] if payments.P24 else [])}
+            return self._json(d)
+        if p == "/api/help/chips":
+            lang = parse_qs(u.query).get("lang", ["pl"])[0]
+            return self._json({"chips": helpbot.chips(lang if lang in helpbot.LANGS else "pl"), "intro": helpbot.INTRO.get(lang, helpbot.INTRO["pl"])})
+        if p == "/api/admin/help":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            return self._json({"faq": helpbot.kb(), "unanswered": list(reversed(store.get("help_unanswered", []) or []))})
+        if p == "/api/tickets/status":
+            q = parse_qs(u.query); st = tickets.status(q.get("id", [""])[0], q.get("k", [""])[0])
+            return self._json(st or {"error": "not found"}, 200 if st else 404)
+        if p in ("/api/admin/tickets", "/api/admin/tickets/shot"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            q = {k: v[0] for k, v in parse_qs(u.query).items()}
+            if p.endswith("/shot"):
+                sh = tickets.shot(q.get("id", ""))
+                return self._json({"shot": sh} if sh else {"error": "not found"}, 200 if sh else 404)
+            return self._json(tickets.admin_list(q))
+        if p == "/api/seller":
+            se = CFG["seller"]; return self._json({"filled": bool(se["name"] and se["address"]), **se})
+        if p == "/api/casting":
+            return self._json(casting_state())
+        if p == "/api/support":
+            su = CFG["support"]
+            return self._json({"enabled": bool(su["holder"] and su["iban"]), **({"holder": su["holder"], "iban": su["iban"], "title": su["title"]} if su["holder"] and su["iban"] else {})})
+        if p in ("/api/admin/butik", "/api/admin/join"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            if p == "/api/admin/join": return self._json({"items": join.admin_list(), "unread": join.unread()})
+            return self._json(butik.admin_list({k: v[0] for k, v in parse_qs(u.query).items()}))
+        if p == "/api/account/plan":
+            return self._json(self._plan_info(parse_qs(u.query).get("vid", [""])[0]))
+        if p == "/api/account/me":
+            a = self._acct()
+            return self._json({"user": accounts.public(a[0]), "csrf": a[1]} if a else {"user": None})
+        if p == "/api/account/export":
+            a = self._acct()
+            if not a: return self._json({"error": "Zaloguj się."}, 401)
+            b = json.dumps(accounts.export(a[0]["uid"]), ensure_ascii=False, indent=2).encode()
+            self.send_response(200); self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Disposition", "attachment; filename=luna-moje-dane.json"); self.send_header("Content-Length", str(len(b)))
+            self.end_headers(); self.wfile.write(b); return True
+        if p == "/api/account/verify":
+            ok = accounts.verify(parse_qs(u.query).get("token", [""])[0])
+            msg = "✅ Adres e-mail potwierdzony. Możesz wrócić do Luny." if ok else "Link jest nieprawidłowy lub został już użyty."
+            b = f"<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width'><title>Luna</title><body style='font-family:sans-serif;background:#0b0705;color:#f6e9da;padding:30px'><p>{msg}</p><p><a style='color:#f0a040' href='/'>Otwórz Lunę</a></p>".encode()
+            self.send_response(200 if ok else 400); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return True
+        if p in ("/api/admin/users", "/api/admin/avatars", "/api/admin/audit"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            if p == "/api/admin/users": return self._json({"accounts": accounts.admin_list(), "devices": age.admin_list(), "storage": store.status()})
+            if p == "/api/admin/avatars": return self._json({"items": avatars.admin_list()})
+            return self._json({"log": security.audit_list()})
+        return None
     def do_GET(self):
         u = urlparse(self.path)
+        if u.path.startswith(("/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
+            r = self._get_account(u)
+            if r is not None: return r
         if u.path == "/api/voices":
             return self._json({"voices": VOICES, "default": DEFAULT_VOICE})
         if u.path == "/api/tts":
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tts(q)
         if u.path == "/api/config":
-            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live")})
+            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live", "free", "pay_notice", "app")})
         if u.path == "/api/admin/config":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
         if u.path == "/api/catalog":
-            return self._json(catalog.public(CAT))
+            pub = catalog.public(CAT)
+            for pl in pub.get("plans", []):
+                pl["pass"] = "" if pl["id"] == "darmowy" else "za darmo – wystarczy konto" if pl["id"] == "podstawowa" else "30 dni, bez automatycznego odnawiania"
+                if CFG["pricing"]["show"] and pl["id"] in CFG["pricing"]["plans"]:
+                    pr = CFG["pricing"]["plans"][pl["id"]]
+                    pl["prices"] = dict(pr) if CFG["pricing"]["foreign"] else {"pln": pr["pln"]}
+            return self._json(pub)
         if u.path == "/api/admin/catalog":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"catalog": CAT, "public": catalog.public(CAT), "plans": catalog.PLAN_IDS, "tones": list(TONES)})
@@ -631,26 +968,64 @@ class H(SimpleHTTPRequestHandler):
             except KeyError: return self._json({"error": "not found"}, 404)
         if u.path == "/api/health":
             return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled(), "version": VERSION})
+        if u.path in ("/sitemap.xml", "/robots.txt"):
+            base = notify.PUBLIC_URL.rstrip("/")
+            b = (seo.sitemap(base) if u.path.endswith(".xml") else seo.robots(base)).encode()
+            self.send_response(200); self.send_header("Content-Type", "application/xml; charset=utf-8" if u.path.endswith(".xml") else "text/plain; charset=utf-8")
+            self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/" or u.path.endswith(".html"):
+            fp = os.path.join(STATIC, "index.html" if u.path == "/" else u.path.lstrip("/"))
+            if os.path.isfile(os.path.realpath(fp)) and os.path.realpath(fp).startswith(os.path.realpath(STATIC)):
+                lang = parse_qs(u.query).get("lang", [""])[0]
+                lang = lang if lang in seo.LANGS else ""
+                doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, lang, notify.PUBLIC_URL.rstrip("/"))
+                b = doc.encode()
+                self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
+                self.send_header("Content-Language", lang or "pl"); self.send_header("Vary", "Accept-Language"); self.end_headers(); self.wfile.write(b); return
         return super().do_GET()
     def do_POST(self):
         u = urlparse(self.path)
+        if u.path == "/api/stripe/webhook":
+            n = int(self.headers.get("Content-Length") or 0)
+            if n > 256 * 1024: return self._json({"error": "too large"}, 413)
+            raw = self.rfile.read(n)
+            if not payments.verify(raw, self.headers.get("Stripe-Signature", "")): return self._json({"error": "bad signature"}, 400)
+            try: res = payments.handle(json.loads(raw), lambda uid, plan, m: accounts.grant_pass(uid, plan, m, by="stripe"), accounts.grant_item)
+            except Exception as e: sys.stderr.write("webhook error %s\n" % type(e).__name__); return self._json({"error": "handler"}, 500)
+            return self._json({"ok": True, "result": res})
+        if not security.origin_ok(self.headers): return self._json({"error": "Niedozwolone źródło żądania."}, 403)
         try: data = self._body()
+        except ValueError as e:
+            if str(e) == "too large": return self._json({"error": "Za duże żądanie."}, 413)
+            return self._json({"error": "bad json"}, 400)
         except Exception: return self._json({"error": "bad json"}, 400)
+        if not isinstance(data, dict): return self._json({"error": "bad json"}, 400)
+        r = self._post_account(u, data)
+        if r is not None: return r
         if u.path == "/api/chat":
             q = str(data.get("message", "")).strip()[:1000]
             if not q: return self._json({"error": "empty"}, 400)
             if code_candidate(q):
                 tok = check_code(self._ip(), q)
+                security.audit("admin_login_ok" if tok else "admin_login_fail", self._ip())
                 if tok: return self._json({"admin_token": tok, "ttl": ADMIN_TTL, "reply": "Tryb producenta odblokowany."})
+            pl, uid = self._plan(); lim_keys = None
+            if pl == "darmowy":
+                lim_keys = plans.keys_for(uid, str(data.get("vid", "")) if livechat.VID_RE.fullmatch(str(data.get("vid", ""))) else "", self._ip())
+                if not plans.chat_allowed(lim_keys, CFG["free"]["chat_minutes"]):
+                    return self._json({"error": "limit", "limit": True, "reply": f"Na dziś wykorzystano limit planu Darmowy (ok. {CFG['free']['chat_minutes']} min rozmowy). Wróć jutro albo wybierz plan Podstawowa lub wyższy – płatności wkrótce. Luna to asystentka AI."}, 402)
             hist = data.get("history")
             ctx = persona_ctx(data.get("persona"))
             rr = rule_reply(q)
-            if rr: return self._json({"reply": disclose(rr, hist, ctx["name"]), "source": "rule"})
+            if rr:
+                if lim_keys: plans.add(lim_keys, 6)
+                return self._json({"reply": disclose(rr, hist, ctx["name"]), "source": "rule"})
             ov = kb_override(q)
             if ov: return self._json({"reply": disclose(shape(ov, ctx), hist, ctx["name"]), "source": "kb_custom"})
             a = llm_answer(q, hist, ctx); src = "llm"
             if not a: a, src = shape(knowledge.answer(q), ctx), "offline"
             a = disclose(a, hist, ctx["name"])
+            if lim_keys: plans.add(lim_keys, plans.speech_secs(q, a) + 8)
             return self._json({"reply": a, "source": src})
         if u.path == "/api/admin/backup":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
@@ -664,6 +1039,7 @@ class H(SimpleHTTPRequestHandler):
             if not livechat.rate_ok("tst:" + self._ip(), 3, 10): return self._json({"error": "Za dużo prób – spróbuj później."}, 429)
             try: code, left = testers.signup(data, hashlib.sha256(("luna" + self._ip()).encode()).hexdigest()[:16])
             except OverflowError as e: return self._json({"error": str(e), "full": True}, 409)
+            except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
             except ValueError as e: return self._json({"error": str(e)}, 400)
             return self._json({"ok": True, "code": code, "remaining": left})
         if u.path in ("/api/admin/testers/grant", "/api/admin/testers/delete"):
@@ -684,8 +1060,11 @@ class H(SimpleHTTPRequestHandler):
             text = livechat.clean_text(data.get("text", ""), 300); ask = bool(data.get("ask")); cmd = text.split(" ", 1)[0].lower() if text.startswith("!") else ""
             if cmd in ("!pomoc", "!help", "!komendy"): return self._json({"ok": True, "system": HELP})
             if cmd == "!pytanie": text = text[len(cmd):].strip(); ask = True
+            if ask and self._plan()[0] == "darmowy" and not CFG["free"]["live_questions"]:
+                return self._json({"error": "W planie Darmowy możesz oglądać Luna Live i pisać na czacie, ale pytania do Luny są dostępne od planu Podstawowa (płatności wkrótce).", "plan_required": "podstawowa"}, 402)
             if cmd and cmd not in COMMANDS and cmd not in ("!pytanie", "!temat"): return self._json({"ok": True, "system": "Nieznana komenda. " + HELP})
-            try: m = liveroom.post(vid, data.get("name", ""), data.get("avatar", ""), text, ask, testers.ring_for(data.get("tester")))
+            av = "" if vid[:8] in avatars.blocked_uids() else data.get("avatar", "")
+            try: m = liveroom.post(vid, data.get("name", ""), av, text, ask, self._ring(data))
             except PermissionError as e: return self._json({"error": str(e)}, 403)
             except ValueError as e: return self._json({"error": str(e)}, 400)
             liveroom.add_greet(vid, m["name"])
@@ -722,7 +1101,8 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"ok": True, "state": liveroom.public_state(0, mod=True)})
         if u.path == "/api/push/subscribe":
             if not livechat.rate_ok("psub:" + self._ip(), 10, 100): return self._json({"error": "limit"}, 429)
-            try: notify.subscribe(data.get("sub"), data.get("topics")); return self._json({"ok": True})
+            a = self._acct()
+            try: notify.subscribe(data.get("sub"), data.get("topics"), a[0]["uid"] if a else None, mod=token_ok(self.headers.get("X-Admin-Token"))); return self._json({"ok": True})
             except ValueError as e: return self._json({"error": str(e)}, 400)
         if u.path == "/api/push/unsubscribe":
             notify.unsubscribe(str((data.get("sub") or {}).get("endpoint", data.get("endpoint", "")))); return self._json({"ok": True})
@@ -753,7 +1133,9 @@ class H(SimpleHTTPRequestHandler):
             if not livechat.VID_RE.fullmatch(vid): return self._json({"error": "bad id"}, 400)
             if not (livechat.rate_ok("ip:" + ip, 8, 300) and livechat.rate_ok("vid:" + vid, 6, 150) and livechat.rate_ok("all", 120, 5000)):
                 return self._json({"error": "Za dużo wiadomości – spróbuj za chwilę."}, 429)
-            try: msgs = livechat.visitor_send(vid, data.get("name", ""), data.get("avatar", ""), data.get("text", ""), CFG.get("chat_notice", ""), testers.ring_for(data.get("tester")))
+            if vid[:8] in liveroom.S["banned"]: return self._json({"error": "Nie możesz pisać na tym czacie."}, 403)
+            av = "" if vid[:8] in avatars.blocked_uids() else data.get("avatar", "")
+            try: msgs = livechat.visitor_send(vid, data.get("name", ""), av, data.get("text", ""), CFG.get("chat_notice", ""), self._ring(data))
             except ValueError as e: return self._json({"error": str(e)}, 400)
             return self._json({"ok": True, "msgs": msgs})
         if u.path in ("/api/admin/live/reply", "/api/admin/live/delete"):
