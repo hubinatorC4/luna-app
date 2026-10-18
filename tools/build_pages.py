@@ -24,7 +24,7 @@ body = f"""<main class="page">
 <h1 data-i18n="h1">{P['h1']}</h1>
 <p class="lead" data-i18n="lead">{P['lead']}</p>
 <p><span class="badge-noads" data-note="noads"></span></p>
-<div class="card"><h2 data-i18n="left_h">{P['left_h']}</h2><div class="tst-bar"><i></i></div><p class="tst-left" aria-live="polite">Zostało … z 50 miejsc</p></div>
+<div class="card"><h2 data-i18n="left_h">{P['left_h']}</h2><div class="tst-bar"><i></i></div><p class="tst-left" aria-live="polite">Zostało … z 1000 miejsc</p></div>
 <h2 data-i18n="rules_h">{P['rules_h']}</h2><ul data-i18n="rules">{P['rules']}</ul>
 <h2 data-i18n="steps_h">{P['steps_h']}</h2>
 <ol class="steps"><li data-i18n="s1">{P['s1']}</li><li data-i18n="s2">{P['s2']}</li><li data-i18n="s3">{P['s3']}</li><li data-i18n="s4">{P['s4']}</li><li data-i18n="s5">{P['s5']}</li></ol>
@@ -34,7 +34,7 @@ body = f"""<main class="page">
 <div class="faq">{''.join(f'<details><summary data-i18n="q{i}">{P[f"q{i}"]}</summary><p data-i18n="a{i}">{P[f"a{i}"]}</p></details>' for i in range(1, 6))}</div>
 </main>
 """
-page("testerzy.html", P["_title"], "Jak zostać testerem aplikacji Luna mówi jak jest: 5 kroków, zasady i FAQ. Maksymalnie 50 osób, Premium za darmo na 2 miesiące.", body, C.TESTERZY, ["/testers.js"], "a_test")
+page("testerzy.html", P["_title"], "Jak zostać testerem aplikacji Luna mówi jak jest: 5 kroków, zasady i FAQ. Maksymalnie 1000 osób, Premium za darmo na 2 miesiące i dodatki tylko dla testerów.", body, C.TESTERZY, ["/testers.js"], "a_test")
 
 # ---------- wesprzyj ----------
 P = C.WESPRZYJ["pl"]

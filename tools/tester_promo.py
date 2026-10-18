@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+"""Tekst promocyjny „Szukamy 1000 testerów Luny!” (pl, en, es, de, uk) – jedno źródło dla strony testerów, banerów i aplikacji."""
+L5 = ["pl", "en", "es", "de", "uk"]
+TITLE = ["🎙️ Szukamy 1000 testerów Luny!", "🎙️ We’re looking for 1000 Luna testers!", "🎙️ ¡Buscamos 1000 testers de Luna!",
+         "🎙️ Wir suchen 1000 Luna-Tester!", "🎙️ Шукаємо 1000 тестувальників Луни!"]
+BODY = [
+ "Lubisz być pierwszy? Dołącz do tysiąca osób, które jako pierwsze sprawdzą bitwy, rankingi i swoją własną agentkę AI. W zamian dostajesz dwa miesiące Premium za darmo i wyjątkowe dodatki tylko dla testerów: ikonki, ekskluzywne emotki, specjalne awatary i możliwość delikatnej zmiany koloru ramki wokół Twojego logo. Miejsc jest dokładnie 1000 i licznik nie kłamie. Zgłoś się, zanim Luna powie „komplet” 😉",
+ "Like being first? Join a thousand people who’ll be the first to try battles, rankings and their very own AI agent. In return you get two months of Premium for free and special tester-only extras: icons, exclusive emotes, special avatars and the option to gently change the colour of the frame around your logo. There are exactly 1000 spots and the counter doesn’t lie. Sign up before Luna says “full house” 😉",
+ "¿Te gusta ser de los primeros? Únete a mil personas que probarán antes que nadie las batallas, los rankings y su propia agente de IA. A cambio recibes dos meses de Premium gratis y extras exclusivos para testers: iconos, emoticonos exclusivos, avatares especiales y la opción de cambiar con suavidad el color del marco de tu logo. Hay exactamente 1000 plazas y el contador no miente. Apúntate antes de que Luna diga «completo» 😉",
+ "Du bist gern der Erste? Werde Teil von tausend Leuten, die als Erste Battles, Ranglisten und ihre ganz eigene KI-Agentin ausprobieren. Dafür bekommst du zwei Monate Premium gratis und besondere Extras nur für Tester: Icons, exklusive Emotes, spezielle Avatare und die Möglichkeit, die Rahmenfarbe um dein Logo sanft zu ändern. Es gibt genau 1000 Plätze, und der Zähler lügt nicht. Melde dich, bevor Luna „ausgebucht“ sagt 😉",
+ "Любите бути першими? Приєднуйтеся до тисячі людей, які першими спробують битви, рейтинги й власну AI-агентку. Натомість отримаєте два місяці Premium безкоштовно та особливі бонуси лише для тестувальників: іконки, ексклюзивні емодзі, спеціальні аватари й можливість делікатно змінити колір рамки навколо вашого лого. Місць рівно 1000, і лічильник не бреше. Зголошуйтеся, поки Луна не сказала «аншлаг» 😉",
+]

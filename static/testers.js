@@ -26,16 +26,18 @@ function loadInfo(){ return fetch('/api/testers').then(r => r.json()); }
 if (ab) loadInfo().then(d => { if (d.remaining > 0 && !code()){ ab.querySelector('b').textContent = `Zostało ${d.remaining} z ${d.limit} miejsc`; ab.hidden = false; } }).catch(() => {});
 
 /* ---------- formularz (strona główna / promocyjna) ---------- */
+const PERKS = '🎟️ Dodatki testera: odznaka, ekskluzywne emotki, specjalne awatary i wybór koloru ramki – znajdziesz je w „Mój panel”, gdy podepniesz kod testera do konta.';
 const box = $('#testerzy-form');
-if (!box) return;
 function count(d){
   document.querySelectorAll('.tst-left').forEach(e => e.textContent = d.remaining > 0 ? `Zostało ${d.remaining} z ${d.limit} miejsc` : 'Komplet – wszystkie miejsca zajęte');
   document.querySelectorAll('.tst-bar i').forEach(e => e.style.width = ((d.limit - d.remaining) / d.limit * 100) + '%');
 }
+/* licznik miejsc – prawdziwe dane z /api/testers (zgłoszenia przyjęte do testów), także gdy formularz to [data-f18="tester"] */
+if (!box){ if (document.querySelector('.tst-left')) loadInfo().then(count).catch(() => {}); return; }
 function render(d){
   count(d);
-  if (code()){ box.innerHTML = `<div class="tst-done">🎉 Jesteś na liście testerów! Twój kod testera: <b>${esc(code())}</b>.<br>Zachowaj go – wpiszesz go w aplikacji (Ustawienia → Twój profil), jeśli zmienisz urządzenie.</div>`; return; }
-  if (d.remaining <= 0){ box.innerHTML = '<div class="tst-done">Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.</div>'; return; }
+  if (code()){ box.innerHTML = `<div class="tst-done">🎉 Jesteś na liście testerów! Twój kod testera: <b>${esc(code())}</b>.<br>Zachowaj go – wpiszesz go w aplikacji (Ustawienia → Twój profil), jeśli zmienisz urządzenie.<br><br>${PERKS}</div>`; return; }
+  if (d.remaining <= 0){ box.innerHTML = '<div class="tst-done">Dziękujemy! Wszystkie 1000 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.</div>'; return; }
   box.innerHTML = `<form class="tst-form" novalidate>
     <label>Imię *<input name="name" required maxlength="40" autocomplete="given-name"></label>
     <label>E-mail *<input name="email" type="email" required maxlength="254" autocomplete="email"></label>

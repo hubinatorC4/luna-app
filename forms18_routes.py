@@ -61,7 +61,7 @@ def post(h, u, data, token_ok, casting_open, base_url):
         kind = p.rsplit("/", 1)[-1]
         if not (livechat.rate_ok("f18:" + ip, 2, 8) and livechat.rate_ok("f18:*", 40, 600)): return h._json({"error": "Za dużo zgłoszeń – spróbuj później."}, 429)
         if kind == "casting" and not casting_open: return h._json({"error": "Zgłoszenia zamknięte, finał wkrótce."}, 403)
-        if kind == "tester" and testers.remaining() <= 0: return h._json({"error": "Komplet! Wszystkie 50 miejsc dla testerów jest już zajętych."}, 409)
+        if kind == "tester" and testers.remaining() <= 0: return h._json({"error": f"Komplet! Wszystkie {testers.LIMIT} miejsc dla testerów jest już zajętych."}, 409)
         if not antibot.turnstile_ok(data.get("turnstile"), ip): return h._json({"error": "Potwierdź, że nie jesteś botem (Turnstile).", "turnstile": True}, 400)
         a = h._acct()
         try: r, key = forms18.submit(kind, data, security.ip_hash(ip), a[0]["uid"] if a else "")

@@ -136,7 +136,10 @@ def save(uid, d):
             if k in d: r[k] = d.get(k) is True
         if "avatar" in d and str(d["avatar"]).startswith("preset:"):
             v = str(d["avatar"])[7:]
-            if v not in PRESETS: raise ValueError("Nieznany awatar.")
+            import tester_perks
+            if v in tester_perks.AVATARS:   # awatary testerów – tylko dla aktywnych testerów (sprawdzane na serwerze)
+                if not tester_perks.is_tester_uid(uid): raise PermissionError("Ten awatar to dodatek tylko dla testerów 🎟️")
+            elif v not in PRESETS: raise ValueError("Nieznany awatar.")
             r["avatar"] = "preset:" + v
         if "avatar" in d and str(d["avatar"]).startswith("gen:"):
             r["avatar"] = str(d["avatar"])[:20]  # sprawdzane w serwerze (Premium+ i własny wygenerowany obraz)

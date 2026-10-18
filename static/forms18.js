@@ -109,6 +109,7 @@ async function verifyStep(box, kind, id, k, st, fresh){
   const card = st && st.verification.card ? ` · ${esc(st.verification.card.brand || '')} •••• ${esc(st.verification.card.last4 || '')}` : '';
   box.innerHTML = `<div class="f18done">${fresh ? `<div class="f18ico">💚</div><h3>${L('thanks')}</h3>` : `<h3>${L('status')}</h3>`}
     ${kind === 'casting' ? `<div class="f18safe">${L('safe_box', 1)}</div>` : ''}
+    ${kind === 'tester' ? `<div class="f18safe f18perks">${L('perks', 1)}</div>` : ''}
     ${st ? `<p class="f18st ${esc(stKey(st))}">${L(stKey(st))}${card}</p>` : ''}
     ${done ? '' : `<div class="f18v"><h4>${L('v_h')}</h4>${c.verify === 'on' ? `<p>${L('v_lead')}</p>
       <div class="f18m">${m.document ? `<button type="button" class="f18mb" data-m="document"><b>${L('m_doc')}</b><small>${L('m_doc_d')}</small></button>` : ''}

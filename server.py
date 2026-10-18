@@ -23,7 +23,7 @@ import catalog, base64, training, profiles, nicktier, partners, agentwall, quali
 import promo_share
 import forms18_routes
 import nsfw_filter
-import reports_routes, reports, team
+import reports_routes, reports, team, tester_perks
 import moderator
 import official, i18n_pages, stats, antibot, owner, referral, social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers, battles, inbox, support
 from datetime import datetime, timedelta
@@ -1574,6 +1574,7 @@ class H(SimpleHTTPRequestHandler):
             b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
             self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/api/tester/perks": return tester_perks.get(self, u)
         if u.path == "/api/admin/team":
             r = team.get(self, u, token_ok)
             if r is not None: return r
@@ -1729,7 +1730,7 @@ class H(SimpleHTTPRequestHandler):
                 if u.path in ("/index.html", "/agentka.html", "/bitwy.html") and "owner-line.js" not in doc:   # 👑 linia własności agentki
                     doc = doc.replace("</body>", '<script src="/owner-line.js?v=1.0" defer></script>\n</body>', 1)
                 if u.path not in ("/panel.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html") and "report.js" not in doc:   # Zgłoś 🚩 (arkusz zgłoszeń, 🚩 na zdjęciach) i Stan konta
-                    doc = doc.replace("</body>", '<script src="/report.js?v=1.0" defer></script>\n<script src="/standing.js?v=1.0" defer></script>\n</body>', 1)
+                    doc = doc.replace("</body>", '<script src="/report.js?v=1.0" defer></script>\n<script src="/standing.js?v=1.0" defer></script>\n<script src="/tester-perks.js?v=1.0" defer></script>\n</body>', 1)
                 if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
                     doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
                 doc = moderator.inject(doc, self, u.path)   # ogłoszenie + (tylko dla konta admin) link „🛡️ Panel admina”
@@ -1792,6 +1793,10 @@ class H(SimpleHTTPRequestHandler):
         if r is not None: return r
         if u.path in ("/api/report", "/api/admin/reports"):
             r = reports_routes.post(self, u, data, token_ok)
+            if r is not None: return r
+        tester_perks.pre_post(self, u.path, data)   # emotki testerów 🎟️ – tylko dla aktywnych testerów (filtr na serwerze)
+        if u.path == "/api/tester/frame":
+            r = tester_perks.post(self, u, data)
             if r is not None: return r
         if u.path in ("/api/team/apply", "/api/admin/team"):   # „Dołącz do zespołu” (team.py)
             r = team.post(self, u, data, token_ok)

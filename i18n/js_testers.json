@@ -1,6 +1,10 @@
 {
 "en": [
 [
+"'🎟️ Dodatki testera: odznaka, ekskluzywne emotki, specjalne awatary i wybór koloru ramki – znajdziesz je w „Mój panel”, gdy podepniesz kod testera do konta.'",
+"'🎟️ Tester extras: a badge, exclusive emotes, special avatars and a choice of frame colour – you’ll find them in “My panel” once your tester code is linked to your account.'"
+],
+[
 "`Zostało ${d.remaining} z ${d.limit} miejsc`",
 "`${d.remaining} of ${d.limit} places left`"
 ],
@@ -17,8 +21,8 @@
 "Keep it – you’ll enter it in the app (Settings → Your profile) if you change devices."
 ],
 [
-"Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
-"Thank you! All 50 tester places are taken. Sign up for notifications so you don’t miss the launch."
+"Dziękujemy! Wszystkie 1000 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
+"Thank you! All 1000 tester places are taken. Sign up for notifications so you don’t miss the launch."
 ],
 [
 "<label>Imię *<",
@@ -87,6 +91,10 @@
 ],
 "es": [
 [
+"'🎟️ Dodatki testera: odznaka, ekskluzywne emotki, specjalne awatary i wybór koloru ramki – znajdziesz je w „Mój panel”, gdy podepniesz kod testera do konta.'",
+"'🎟️ Extras de tester: insignia, emoticonos exclusivos, avatares especiales y color del marco a elegir; los encontrarás en «Mi panel» al vincular tu código de tester a tu cuenta.'"
+],
+[
 "`Zostało ${d.remaining} z ${d.limit} miejsc`",
 "`Quedan ${d.remaining} de ${d.limit} plazas`"
 ],
@@ -103,8 +111,8 @@
 "Guárdalo: lo introducirás en la aplicación (Ajustes → Tu perfil) si cambias de dispositivo."
 ],
 [
-"Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
-"¡Gracias! Las 50 plazas de tester ya están ocupadas. Activa las notificaciones para no perderte el lanzamiento."
+"Dziękujemy! Wszystkie 1000 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
+"¡Gracias! Las 1000 plazas de tester ya están ocupadas. Activa las notificaciones para no perderte el lanzamiento."
 ],
 [
 "<label>Imię *<",
@@ -173,6 +181,10 @@
 ],
 "de": [
 [
+"'🎟️ Dodatki testera: odznaka, ekskluzywne emotki, specjalne awatary i wybór koloru ramki – znajdziesz je w „Mój panel”, gdy podepniesz kod testera do konta.'",
+"'🎟️ Tester-Extras: Abzeichen, exklusive Emotes, spezielle Avatare und Rahmenfarbe nach Wahl – du findest sie in „Mein Panel“, sobald dein Tester-Code mit deinem Konto verknüpft ist.'"
+],
+[
 "`Zostało ${d.remaining} z ${d.limit} miejsc`",
 "`Noch ${d.remaining} von ${d.limit} Plätzen frei`"
 ],
@@ -189,8 +201,8 @@
 "Bewahre ihn auf – du gibst ihn in der App ein (Einstellungen → Dein Profil), wenn du das Gerät wechselst."
 ],
 [
-"Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
-"Danke! Alle 50 Testerplätze sind vergeben. Aktiviere Benachrichtigungen, um den Start nicht zu verpassen."
+"Dziękujemy! Wszystkie 1000 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
+"Danke! Alle 1000 Testerplätze sind vergeben. Aktiviere Benachrichtigungen, um den Start nicht zu verpassen."
 ],
 [
 "<label>Imię *<",
@@ -259,6 +271,10 @@
 ],
 "uk": [
 [
+"'🎟️ Dodatki testera: odznaka, ekskluzywne emotki, specjalne awatary i wybór koloru ramki – znajdziesz je w „Mój panel”, gdy podepniesz kod testera do konta.'",
+"'🎟️ Бонуси тестувальника: значок, ексклюзивні емодзі, спеціальні аватари й вибір кольору рамки – знайдете їх у «Моїй панелі», щойно прив’яжете код тестувальника до акаунта.'"
+],
+[
 "`Zostało ${d.remaining} z ${d.limit} miejsc`",
 "`Залишилося ${d.remaining} з ${d.limit} місць`"
 ],
@@ -275,8 +291,8 @@
 "Збережіть його – ви введете його в застосунку (Налаштування → Ваш профіль), якщо зміните пристрій."
 ],
 [
-"Dziękujemy! Wszystkie 50 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
-"Дякуємо! Усі 50 місць для тестувальників уже зайняті. Підпишіться на сповіщення, щоб не пропустити прем’єру."
+"Dziękujemy! Wszystkie 1000 miejsc dla testerów jest już zajętych. Zapisz się na powiadomienia, by nie przegapić premiery.",
+"Дякуємо! Усі 1000 місць для тестувальників уже зайняті. Підпишіться на сповіщення, щоб не пропустити прем’єру."
 ],
 [
 "<label>Imię *<",
