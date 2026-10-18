@@ -4,7 +4,7 @@ Luna to aplikacja webowa (PWA). Rozmawia po polsku ciepłym, niskim głosem z hi
 
 **Na żywo:** https://luna-voice-coach.onrender.com · strona promocyjna: `/promo.html`
 
-## Funkcje (v1.2)
+## Funkcje (v1.3)
 - czat tekstowy i głosowy, słowo wybudzające „Luna”, synteza mowy (edge-tts, pl-PL-ZofiaNeural)
 - panel „Barwa głosu”: wysokość, tempo, ciepło, głośność i presety
 - „Stwórz własną asystentkę”: imię, słowo wybudzające, ton, długość odpowiedzi, kolor pierścienia, stroje, pozy i sylwetki (gating według planów)
@@ -12,6 +12,7 @@ Luna to aplikacja webowa (PWA). Rozmawia po polsku ciepłym, niskim głosem z hi
 - tryb hologram, okrągłe awatary Luny i użytkownika
 - muzyka w tle: 10 utworów smooth jazz (Kevin MacLeod, CC BY 4.0, zob. `static/music/LICENSES.md`)
 - czat na żywo „Napisz do twórcy” (💬): rozmowy odwiedzających z anonimowym identyfikatorem, imieniem i awatarem; skrzynka moderatora (📥) z licznikami nieprzeczytanych i odpowiedziami; limity wiadomości; komunikat o czasie odpowiedzi (edytowalny w panelu) jako baner i automatyczna wiadomość po pierwszym pytaniu
+- **v1.3:** portal porad (`/promo.html`) z wyszukiwarką, zakładkami i filtrami; **Luna Live** (`/live.html`) – cotygodniowa transmisja (domyślnie niedziela 20:00–23:00, czas polski), czat widzów, kolejka pytań, odpowiedzi głosem Luny dla wszystkich, ćwiczenia i komendy, „Stream w basenie”; rekrutacja **testerów** (50 miejsc, Premium na 60 dni, fioletowa/niebieska obwódka); powiadomienia **Web Push** i przypomnienia **e-mail**; nowy domyślny głos „Ciepła chrypka”
 - panel producenta: osobowość, teksty, baza wiedzy, reguły, głos, wygląd, katalog postaci i playlista
 
 ## Uruchomienie lokalne
@@ -57,3 +58,13 @@ Wolno używać wyłącznie utworów na licencjach pozwalających na redystrybucj
 
 ## Bezpieczeństwo treści
 Stała linia bezpieczeństwa po stronie serwera i ujawnianie, że Luna jest AI, nie dają się wyłączyć z panelu.
+
+## Zmienne środowiskowe v1.3
+| Zmienna | Opis |
+|---|---|
+| `DATABASE_URL` | Postgres (Render → luna-db → *Internal Database URL*). Bez niej testerzy i subskrypcje są na ulotnym dysku |
+| `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | klucze Web Push (prywatny tylko w Renderze, nigdy w repo) |
+| `CRON_SECRET` | sekret dla `POST /api/cron` (nagłówek `X-Cron-Secret`) – ta sama wartość jako sekret repo GitHub |
+| `EMAIL_PROVIDER` (`brevo`/`resend`), `EMAIL_API_KEY`, `EMAIL_FROM` | wysyłka e-maili; bez nich e-mail jest wyłączony |
+
+Harmonogram przypomnień: skopiuj `tools/github-cron.yml` do `.github/workflows/luna-cron.yml` (wymaga tokenu z uprawnieniem `workflow`).

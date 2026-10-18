@@ -17,9 +17,15 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import catalog, base64
-import livechat
+import livechat, liveroom, library, store, notify, testers
+from datetime import datetime, timedelta
+try:
+    from zoneinfo import ZoneInfo
+    WAW = ZoneInfo("Europe/Warsaw")
+except Exception:
+    WAW = None
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -69,7 +75,8 @@ DEFAULTS = {
     "chat_notice": "Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.",
     "kb_topics": [],
     "rules": [],
-    "voice_defaults": {"voice": "pl-PL-ZofiaNeural", "pitch": -2.6, "rate": -8, "warmth": 4.5, "volume": -27, "spanish": True},
+    "live": {"day": 6, "time": "20:00", "hours": 3, "note": "Co tydzień: pytania z czatu, łamaniec językowy tygodnia, ćwiczenia oddechowe i wyzwania głosowe.", "pool": True, "auto": True},
+    "voice_defaults": {"voice": "pl-PL-ZofiaNeural", "pitch": -1.6, "hz": -14, "rate": -10, "warmth": 6, "volume": -31, "rasp": 4, "breath": 5, "lisp": True, "spanish": True},
     "ui": {"ring_color": "#2ee66b", "pulse_speed": 1.4, "holo_default": False, "holo_plan": "podstawowa"},
     "music": {"volume": 0.25, "tracks": json.load(open(os.path.join(ROOT, "static", "music", "playlist.json"), encoding="utf-8"))},
 }
@@ -92,6 +99,14 @@ def sanitize(new):
     for k in ("ai_first", "wake_reply", "ai_tag"):
         if not re.search(r"\bAI\b|sztuczn", c[k], re.I): c[k] = DEFAULTS[k]
     if not re.search(r"\bAI\b|sztuczn", c["greeting"], re.I): c["greeting"] = DEFAULTS["ai_first"] + " " + c["greeting"]
+    lv = new.get("live") if isinstance(new.get("live"), dict) else {}
+    try: c["live"]["day"] = max(0, min(6, int(lv.get("day", c["live"]["day"]))))
+    except Exception: pass
+    if re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", str(lv.get("time", ""))): c["live"]["time"] = lv["time"]
+    c["live"]["hours"] = _num(lv.get("hours", c["live"]["hours"]), 0.5, 6, 3)
+    if "note" in lv: c["live"]["note"] = str(lv["note"])[:500].strip()
+    for k in ("pool", "auto"):
+        if k in lv: c["live"][k] = bool(lv[k])
     topics = new.get("kb_topics", new.get("kb_overrides", []))
     c["kb_topics"] = [{"keywords": [str(x).strip()[:60] for x in (o.get("keywords") or []) if str(x).strip()][:30],
                        "answer": str(o.get("answer", ""))[:2000].strip()}
@@ -107,6 +122,8 @@ def sanitize(new):
     c["voice_defaults"] = {"voice": vd.get("voice") if vd.get("voice") in VOICES else d["voice"],
         "pitch": _num(vd.get("pitch"), -6, 2, d["pitch"]), "rate": int(_num(vd.get("rate"), -40, 30, d["rate"])),
         "warmth": _num(vd.get("warmth"), 0, 10, d["warmth"]), "volume": _num(vd.get("volume"), -36, -16, d["volume"]),
+        "hz": int(_num(vd.get("hz"), -30, 10, d["hz"])), "rasp": _num(vd.get("rasp"), 0, 10, d["rasp"]),
+        "breath": _num(vd.get("breath"), 0, 10, d["breath"]), "lisp": bool(vd.get("lisp", d["lisp"])),
         "spanish": bool(vd.get("spanish", d["spanish"]))}
     ui = new.get("ui") if isinstance(new.get("ui"), dict) else {}
     col = str(ui.get("ring_color", "")).strip()
@@ -315,40 +332,60 @@ def segments(text, voice, spanish):
         else: merged.append((t, v))
     return merged
 
-async def synth_all(segs, tmp, rate=-8):
+async def synth_all(segs, tmp, rate=-8, hz=0):
     files = []
     async def one(i, t, v):
         f = os.path.join(tmp, f"s{i}.mp3")
-        await edge_tts.Communicate(t, v, rate=f"{int(rate):+d}%").save(f)
+        # hiszpańskie wstawki dostają łagodniejsze obniżenie, żeby brzmiały naturalnie
+        h = int(hz if v != SPANISH_VOICE else hz * 0.6)
+        await edge_tts.Communicate(t, v, rate=f"{int(rate):+d}%", pitch=f"{h:+d}Hz").save(f)
         return f
     files = await asyncio.gather(*(one(i, t, v) for i, (t, v) in enumerate(segs)))
     return files
 
-def tts(text, voice, pitch_st, lufs, spanish, rate=-8, warmth=4.5):
+# Preset „Ciepła chrypka” – nowy domyślny głos Luny (v1.3)
+VOICE_PRESET = {"voice": "pl-PL-ZofiaNeural", "pitch": -1.6, "hz": -14, "rate": -10, "warmth": 6, "volume": -31,
+                "rasp": 4, "breath": 5, "lisp": True, "spanish": True}
+
+def tts(text, voice, pitch_st, lufs, spanish, rate=-8, warmth=4.5, hz=0, rasp=0, breath=0, lisp=False):
     voice = voice if voice in VOICES else DEFAULT_VOICE
     pitch_st = max(-6.0, min(2.0, float(pitch_st)))
     rate = int(max(-40, min(30, float(rate))))
     warmth = max(0.0, min(10.0, float(warmth)))
     lufs = max(-36.0, min(-16.0, float(lufs)))
+    hz = int(max(-30, min(10, float(hz))))
+    rasp = max(0.0, min(10.0, float(rasp))); breath = max(0.0, min(10.0, float(breath))); lisp = bool(lisp)
     text = text.strip()[:1200]
-    key = hashlib.sha1(json.dumps([text, voice, round(pitch_st, 2), round(lufs, 1), bool(spanish), rate, round(warmth, 1), 4]).encode()).hexdigest()
+    key = hashlib.sha1(json.dumps([text, voice, round(pitch_st, 2), round(lufs, 1), bool(spanish), rate, round(warmth, 1), hz, round(rasp, 1), round(breath, 1), lisp, 5]).encode()).hexdigest()
     out = os.path.join(CACHE, key + ".mp3")
     if os.path.exists(out) and os.path.getsize(out) > 1000:
         return out
     tmp = tempfile.mkdtemp(prefix="luna")
     try:
         segs = segments(text, voice, spanish)
-        files = asyncio.run(synth_all(segs, tmp, rate))
+        files = asyncio.run(synth_all(segs, tmp, rate, hz))
         f = 2 ** (pitch_st / 12.0)
         inputs, chain = [], ""
         for i, fl in enumerate(files):
             inputs += ["-i", fl]
             chain += f"[{i}:a]aresample=24000,aformat=channel_layouts=mono,apad=pad_dur=0.06[a{i}];"
-        chain += "".join(f"[a{i}]" for i in range(len(files))) + f"concat=n={len(files)}:v=0:a=1[c];"
-        chain += (f"[c]asetrate={24000*f:.1f},aresample=24000,atempo={1/f:.4f},"
-                  "highpass=f=60,lowpass=f=11000,"
-                  f"equalizer=f=150:t=q:w=1:g={warmth*2/3:.2f},equalizer=f=240:t=q:w=1:g={warmth:.2f},equalizer=f=3000:t=q:w=1.4:g={-warmth*0.45:.2f},"
-                  "afftdn=nr=6:nf=-40,"
+        n = len(files)
+        inputs += ["-f", "lavfi", "-i", "anoisesrc=color=pink:amplitude=0.9:sample_rate=24000:seed=7",
+                   "-f", "lavfi", "-i", "anoisesrc=color=white:amplitude=0.9:sample_rate=24000:seed=11"]
+        chain += "".join(f"[a{i}]" for i in range(n)) + f"concat=n={n}:v=0:a=1[c];"
+        chain += (f"[c]asetrate={24000*f:.1f},aresample=24000,atempo={1/f:.4f},highpass=f=60,lowpass=f=11000,"
+                  f"equalizer=f=150:t=q:w=1:g={warmth*2/3:.2f},equalizer=f=260:t=q:w=1:g={warmth:.2f},equalizer=f=3000:t=q:w=1.4:g={-warmth*0.45:.2f},"
+                  "afftdn=nr=6:nf=-40")
+        if lisp:  # łagodne seplenienie: przytłumione, „rozmyte” sybilanty zamiast ostrego „s/sz”
+            chain += ",deesser=i=0.7:m=0.75:f=0.35:s=o,equalizer=f=7200:t=q:w=1.2:g=-4,equalizer=f=4200:t=q:w=1.5:g=2"
+        chain += ",asplit=3[v][e1][e2];"
+        # chrypka: szum mnożony przez obwiednię mowy, pasmo 0,7–3 kHz, lekko przesterowany
+        chain += f"[e1][{n}:a]amultiply,bandpass=f=1600:w=2200:t=h,asoftclip=type=tanh,volume={rasp*0.035:.3f}[r];"
+        # oddech/powietrze: wysokie pasmo 5–9 kHz, delikatnie
+        chain += f"[e2][{n+1}:a]amultiply,highpass=f=4800,lowpass=f=9000,volume={breath*0.045:.3f}[b];"
+        chain += ("[v][r][b]amix=inputs=3:normalize=0:duration=first,"
+                  "acompressor=threshold=-24dB:ratio=2.5:attack=15:release=180:makeup=2,"
+                  f"equalizer=f=7000:t=h:w=2500:g={0.25*breath:.2f},"
                   f"loudnorm=I={lufs}:TP=-6:LRA=7,alimiter=limit=0.5:level=disabled,aresample=44100[o]")
         subprocess.run([FFMPEG, "-y", "-v", "error", *inputs, "-filter_complex", chain, "-map", "[o]",
                         "-ac", "1", "-c:a", "libmp3lame", "-b:a", "128k", out + ".tmp.mp3"], check=True)
@@ -356,6 +393,145 @@ def tts(text, voice, pitch_st, lufs, spanish, rate=-8, warmth=4.5):
         return out
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+# ======================= Luna Live: harmonogram, reżyser transmisji, przypomnienia =======================
+DAYS = ["poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota", "niedziela"]
+DAYS_ACC = ["w poniedziałek", "we wtorek", "w środę", "w czwartek", "w piątek", "w sobotę", "w niedzielę"]
+
+def sched(at=None):
+    lv = CFG.get("live", DEFAULTS["live"]); tz = WAW
+    now = datetime.now(tz) if at is None else at
+    hh, mm = map(int, lv["time"].split(":")); dur = timedelta(hours=float(lv["hours"]))
+    base = now.replace(hour=hh, minute=mm, second=0, microsecond=0) + timedelta(days=(lv["day"] - now.weekday()))
+    cands = [base + timedelta(days=7 * k) for k in (-1, 0, 1)]
+    cur = next((c for c in cands if c <= now < c + dur), None)
+    nxt = next(c for c in cands if c > now)
+    end_t = (datetime.combine(nxt.date(), nxt.time()) + dur).time()
+    return {"in_window": cur is not None, "now": int(now.timestamp() * 1000),
+            "cur_start": int(cur.timestamp() * 1000) if cur else None, "cur_end": int((cur + dur).timestamp() * 1000) if cur else None,
+            "next_start": int(nxt.timestamp() * 1000), "next_end": int((nxt + dur).timestamp() * 1000),
+            "day": lv["day"], "day_name": DAYS[lv["day"]], "time": lv["time"], "end": end_t.strftime("%H:%M"), "hours": lv["hours"],
+            "next_label": f"{DAYS[nxt.weekday()]}, {nxt.strftime('%d.%m')} o {nxt.strftime('%H:%M')}",
+            "weekly": f"Co tydzień {DAYS_ACC[lv['day']]}, {lv['time']}–{end_t.strftime('%H:%M')} (czas polski)",
+            "note": lv.get("note", ""), "pool": lv.get("pool", True), "auto": lv.get("auto", True)}
+
+def live_should_be_on():
+    m = liveroom.S["mode"]
+    return m == "on" or (m == "auto" and sched()["in_window"])
+
+TWISTERS = ["W Szczebrzeszynie chrząszcz brzmi w trzcinie.", "Czy tata czyta cytaty Tacyta?",
+            "Stół z powyłamywanymi nogami.", "Szedł Sasza suchą szosą.", "Cześć, czy szczęście szczególnie sprzyja szczerym?"]
+def twister():
+    return TWISTERS[datetime.now(WAW).isocalendar()[1] % len(TWISTERS)]
+
+def exercise(kind):
+    if kind == "lamaniec":
+        t = twister()
+        return ("Łamaniec tygodnia", f"Czas na łamaniec językowy tygodnia. Powtórzcie za mną, najpierw powoli: {t} A teraz trochę szybciej, ale wyraźnie: {t} Napiszcie na czacie, ile razy udało się bez pomyłki.")
+    if kind == "oddech":
+        return ("Ćwiczenie oddechowe", "Ćwiczymy oddech. Usiądźcie prosto, ramiona w dół. Wdech nosem na cztery… zatrzymajcie na dwa… i długi wydech na sześć. Jeszcze dwa razy w swoim tempie. Spokojny oddech to spokojny, ciepły głos.")
+    if kind == "wyzwanie":
+        return ("Wyzwanie: o sobie w 30 sekund", "Wyzwanie dla was: opowiedzcie o sobie w trzydzieści sekund. Kim jesteście, co lubicie, czym się zajmujecie. Mówcie wolno, z uśmiechem i z pauzą po każdym zdaniu. Nagrajcie się w telefonie i odsłuchajcie. Na czacie napiszcie jedno zdanie, od którego zaczęliście.")
+    if kind == "rozgrzewka":
+        return ("Rozgrzewka", "Krótka rozgrzewka. Zamknijcie usta i zamruczcie „mmm” na wygodnym, niskim tonie przez pięć sekund. Teraz przejdźcie z „mmm” w „maaa”. Poczujcie wibrację w klatce piersiowej. Jeszcze raz, miękko i bez forsowania.")
+    return None
+
+EX_ORDER = ["lamaniec", "oddech", "wyzwanie", "rozgrzewka"]
+COMMANDS = {"!lamaniec": "lamaniec", "!łamaniec": "lamaniec", "!oddech": "oddech", "!wyzwanie": "wyzwanie", "!rozgrzewka": "rozgrzewka"}
+HELP = "Komendy: !pytanie <treść> – pytanie do Luny, !lamaniec, !oddech, !wyzwanie, !rozgrzewka, !temat. Bez treści dla dorosłych i bez próśb o działania poza aplikacją."
+
+def answer_for(q):
+    ctx = persona_ctx(None)
+    a = rule_reply(q) or kb_override(q)
+    if a: return shape(a, ctx)
+    a = llm_answer(q, [], ctx)
+    return a or shape(knowledge.answer(q), ctx)
+
+def speak_job(job):
+    vd = CFG["voice_defaults"]
+    text = job["text"]
+    try:
+        p = tts(text, vd["voice"], vd["pitch"], vd["volume"], vd["spanish"], vd["rate"], vd["warmth"], vd.get("hz", 0), vd.get("rasp", 0), vd.get("breath", 0), vd.get("lisp", False))
+    except Exception as e:
+        print("live TTS error", repr(e)[:200], file=sys.stderr); return
+    dur = os.path.getsize(p) * 8 / 128000
+    with liveroom.lock: cid = liveroom.nid()
+    liveroom.set_current({"id": cid, "kind": job["kind"], "title": job.get("title", ""), "caption": job.get("caption", text), "name": job.get("name", ""),
+                          "question": job.get("question", ""), "audio": "/api/live-room/audio/" + os.path.basename(p), "start": liveroom.now_ms() + 900, "dur": round(dur, 2)})
+
+_dir = {"last_end": 0, "last_ai": 0, "ex_i": 0, "was_on": False}
+def director_tick():
+    on = live_should_be_on(); S = liveroom.S
+    if S["mode"] == "off" and not sched()["in_window"]: liveroom.set_mode("auto")
+    if on and not S["on"]:
+        liveroom.begin(liveroom.S.get("topic") or "")
+        tp = S["topic"]
+        liveroom.add_job({"kind": "intro", "title": "Start transmisji", "text": f"Hola, witajcie na Luna Live! {CFG['ai_first']} " + (f"Dzisiejszy temat: {tp}. " if tp else "") +
+                          "Piszcie pytania na czacie, zaczynając od wykrzyknika i słowa pytanie, a ja będę na nie odpowiadać. Zaczynamy!"})
+        _dir.update(last_ai=time.time(), last_end=time.time())
+    elif not on and S["on"]:
+        liveroom.end(); return
+    if not S["on"] or liveroom.busy(): return
+    if S["current"]: _dir["last_end"] = max(_dir["last_end"], S["current"]["start"] / 1000 + S["current"]["dur"])
+    job = None
+    g = liveroom.take_greets()
+    if g: job = {"kind": "greet", "title": "Powitanie", "text": ("Witajcie, " + ", ".join(g) + "! Miło, że jesteście na streamie." if len(g) > 1 else f"Witaj, {g[0]}! Miło, że jesteś na streamie.") + " Rozgośćcie się."}
+    if not job: job = liveroom.pop_job()
+    if not job and sched()["auto"] or not job and S.get("auto"):
+        qid = liveroom.next_pending()
+        if qid: job = question_job(qid)
+    if not job and time.time() - _dir["last_end"] > 150 and liveroom.touch("") > 0:
+        k = EX_ORDER[_dir["ex_i"] % len(EX_ORDER)]; _dir["ex_i"] += 1
+        t, tx = exercise(k); job = {"kind": "exercise", "title": t, "text": tx}
+    if job:
+        if time.time() - _dir["last_ai"] > 600 and job["kind"] != "intro":
+            job["text"] += " Przypominam: jestem Luną, sztucznie stworzoną asystentką AI."; _dir["last_ai"] = time.time()
+        speak_job(job); _dir["last_end"] = time.time()
+
+def question_job(qid):
+    q = liveroom.take_question(qid)
+    if not q: return None
+    a = answer_for(q["text"])
+    return {"kind": "answer", "title": "Pytanie z czatu", "name": q["name"], "question": q["text"],
+            "text": f"{q['name']} pyta: {q['text']} {a} ({CFG['ai_tag']})", "caption": a}
+
+def run_reminders():
+    """Wysyła należne przypomnienia (push + e-mail). Wywoływane przez /api/cron i wątek w tle."""
+    sc = sched(); ns = sc["next_start"] / 1000; now = time.time(); out = []
+    sent = store.get("reminders_sent", []) or []
+    def due(key, lo, hi):
+        return key not in sent and lo <= now < hi
+    k1 = f"{int(ns)}:day"; k2 = f"{int(ns)}:15m"
+    if due(k1, ns - 24 * 3600, ns - 20 * 3600):
+        sent.append(k1); store.put("reminders_sent", sent[-50:])
+        when = f"{sc['day_name']} o {sc['time']}"
+        out.append(("push-day", notify.send_push("live", "Jutro Luna Live", f"Transmisja jutro ({when}, czas polski). Przygotuj pytania!", "/live.html")))
+        out.append(("email-day", notify.email_reminder(when) if notify.email_enabled() else {"disabled": True}))
+    if due(k2, ns - 20 * 60, ns):
+        sent.append(k2); store.put("reminders_sent", sent[-50:])
+        out.append(("push-15m", notify.send_push("live", "Luna Live za kwadrans", "Za chwilę startujemy. Dołącz i zadaj pytanie na czacie!", "/live.html")))
+    notify.send_confirmations()
+    store.put("cron_last", {"t": int(now), "actions": [a for a, _ in out]})
+    return out
+
+def _bg_loop():
+    n = 0
+    while True:
+        try: director_tick()
+        except Exception as e: print("director error", repr(e)[:200], file=sys.stderr)
+        n += 1
+        if n % 60 == 0:
+            try: run_reminders()
+            except Exception as e: print("reminder error", repr(e)[:200], file=sys.stderr)
+        time.sleep(1)
+
+def _announce_update():
+    try:
+        if store.get("notified_version") != VERSION:
+            store.put("notified_version", VERSION)
+            if notify.push_enabled(): notify.send_push("update", f"Luna {VERSION} jest dostępna", "Nowa wersja aplikacji – otwórz, aby odświeżyć.", "/")
+    except Exception as e: print("update notify error", repr(e)[:200], file=sys.stderr)
+
 
 class H(SimpleHTTPRequestHandler):
     def __init__(self, *a, **k): super().__init__(*a, directory=STATIC, **k)
@@ -383,7 +559,7 @@ class H(SimpleHTTPRequestHandler):
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tts(q)
         if u.path == "/api/config":
-            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music")})
+            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live")})
         if u.path == "/api/admin/config":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
@@ -399,6 +575,49 @@ class H(SimpleHTTPRequestHandler):
             b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
             self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/api/testers":
+            return self._json({"limit": testers.LIMIT, "remaining": testers.remaining(), "rings": testers.RINGS, "consent": testers.CONSENT, "persistent": store.status()["persistent"]})
+        if u.path == "/api/testers/status":
+            return self._json(testers.status(parse_qs(u.query).get("code", [""])[0]))
+        if u.path in ("/api/admin/testers", "/api/admin/testers.csv"):
+            if not token_ok(self.headers.get("X-Admin-Token") or parse_qs(u.query).get("token", [""])[0]): return self._json({"error": "unauthorized"}, 401)
+            if u.path.endswith(".csv"):
+                b = testers.csv_export().encode("utf-8")
+                self.send_response(200); self.send_header("Content-Type", "text/csv; charset=utf-8")
+                self.send_header("Content-Disposition", "attachment; filename=testerzy-luna.csv"); self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
+            return self._json({"testers": testers.admin_list(), "remaining": testers.remaining(), "limit": testers.LIMIT, "storage": store.status()})
+        if u.path == "/api/admin/backup":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            return self._json({"version": VERSION, "t": int(time.time()), "testers": store.get("testers", {}), "push_subs": store.get("push_subs", {}), "email_subs": store.get("email_subs", {})})
+        if u.path == "/api/library":
+            return self._json(library.LIB)
+        if u.path == "/api/live-room/state":
+            q = {k: v[0] for k, v in parse_qs(u.query).items()}
+            n = liveroom.touch(q.get("vid", ""))
+            try: since = int(q.get("since", 0) or 0)
+            except Exception: since = 0
+            st = liveroom.public_state(since, mod=token_ok(self.headers.get("X-Admin-Token")))
+            st.update(viewers=n, sched=sched(), help=HELP, ai_label="Luna – asystentka AI (postać wygenerowana sztucznie)")
+            return self._json(st)
+        if u.path.startswith("/api/live-room/audio/"):
+            fn = os.path.basename(u.path)
+            fp = os.path.join(CACHE, fn)
+            if not re.fullmatch(r"[0-9a-f]{40}\.mp3", fn) or not os.path.exists(fp): return self._json({"error": "not found"}, 404)
+            b = open(fp, "rb").read()
+            self.send_response(200); self.send_header("Content-Type", "audio/mpeg"); self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "public, max-age=86400"); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/api/push/key":
+            return self._json({"enabled": notify.push_enabled(), "key": notify.PUB})
+        if u.path in ("/api/email/confirm", "/api/email/unsubscribe"):
+            t = parse_qs(u.query).get("t", [""])[0]
+            ok = notify.email_confirm(t) if u.path.endswith("confirm") else notify.email_unsubscribe(t)
+            msg = ("Dziękujemy! Zapis na przypomnienia Luna Live jest potwierdzony." if ok else "Link jest nieważny albo zapis został już usunięty.") if u.path.endswith("confirm") else \
+                  ("Wypisano Cię z przypomnień e-mail Luna Live. Nie wyślemy już żadnych wiadomości." if ok else "Ten adres nie jest już zapisany.")
+            b = f"<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width'><title>Luna</title><body style='background:#0b0b0b;color:#fff;font-family:system-ui;padding:40px;text-align:center'><h2 style='color:#ff9000'>Luna</h2><p>{msg}</p><p><a style='color:#ff9000' href='/promo.html'>Wróć do Luny</a></p>".encode()
+            self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/api/admin/notify":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            return self._json(notify.status())
         if u.path == "/api/live/poll":
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             try: msgs, unread = livechat.visitor_poll(q.get("vid", ""), int(q.get("since", 0) or 0), q.get("mark", "1") != "0")
@@ -433,12 +652,108 @@ class H(SimpleHTTPRequestHandler):
             if not a: a, src = shape(knowledge.answer(q), ctx), "offline"
             a = disclose(a, hist, ctx["name"])
             return self._json({"reply": a, "source": src})
+        if u.path == "/api/admin/backup":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            n = {}
+            for k in ("testers", "push_subs", "email_subs"):
+                v = data.get(k)
+                if isinstance(v, dict):
+                    cur = store.get(k, {}) or {}; cur.update({str(a): b for a, b in v.items() if isinstance(b, dict)}); store.put(k, cur); n[k] = len(v)
+            return self._json({"ok": True, "imported": n})
+        if u.path == "/api/testers/signup":
+            if not livechat.rate_ok("tst:" + self._ip(), 3, 10): return self._json({"error": "Za dużo prób – spróbuj później."}, 429)
+            try: code, left = testers.signup(data, hashlib.sha256(("luna" + self._ip()).encode()).hexdigest()[:16])
+            except OverflowError as e: return self._json({"error": str(e), "full": True}, 409)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True, "code": code, "remaining": left})
+        if u.path in ("/api/admin/testers/grant", "/api/admin/testers/delete"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try:
+                if u.path.endswith("delete"): testers.delete(str(data.get("code"))); return self._json({"ok": True})
+                return self._json({"ok": True, "tester": testers.grant(str(data.get("code")), bool(data.get("on")), data.get("ring"))})
+            except KeyError: return self._json({"error": "not found"}, 404)
+        if u.path == "/api/live-room/join":
+            vid = str(data.get("vid", ""))
+            if livechat.VID_RE.fullmatch(vid) and livechat.rate_ok("join:" + self._ip(), 10, 200): liveroom.add_greet(vid, data.get("name", ""))
+            return self._json({"ok": True})
+        if u.path == "/api/live-room/chat":
+            ip = self._ip(); vid = str(data.get("vid", ""))
+            if not livechat.VID_RE.fullmatch(vid): return self._json({"error": "bad id"}, 400)
+            if not (livechat.rate_ok("lip:" + ip, 12, 600) and livechat.rate_ok("lvid:" + vid, 8, 400) and livechat.rate_ok("lall", 200, 20000)):
+                return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
+            text = livechat.clean_text(data.get("text", ""), 300); ask = bool(data.get("ask")); cmd = text.split(" ", 1)[0].lower() if text.startswith("!") else ""
+            if cmd in ("!pomoc", "!help", "!komendy"): return self._json({"ok": True, "system": HELP})
+            if cmd == "!pytanie": text = text[len(cmd):].strip(); ask = True
+            if cmd and cmd not in COMMANDS and cmd not in ("!pytanie", "!temat"): return self._json({"ok": True, "system": "Nieznana komenda. " + HELP})
+            try: m = liveroom.post(vid, data.get("name", ""), data.get("avatar", ""), text, ask, testers.ring_for(data.get("tester")))
+            except PermissionError as e: return self._json({"error": str(e)}, 403)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            liveroom.add_greet(vid, m["name"])
+            sysmsg = None
+            if cmd in COMMANDS or cmd == "!temat":
+                if not liveroom.cmd_ok(vid, 90): sysmsg = "Komendę można użyć raz na półtorej minuty."
+                elif cmd == "!temat": liveroom.add_job({"kind": "topic", "title": "Temat", "text": f"Dzisiejszy temat: {liveroom.S['topic'] or 'pytania z czatu i ćwiczenia głosu'}."}); sysmsg = "Luna za chwilę przypomni temat."
+                else:
+                    t, tx = exercise(COMMANDS[cmd])
+                    sysmsg = "Luna dodała ćwiczenie do kolejki." if liveroom.add_job({"kind": "exercise", "title": t, "text": f"{m['name']} prosi o ćwiczenie. " + tx}) else "Kolejka jest pełna – spróbuj za chwilę."
+            elif ask: sysmsg = "Pytanie trafiło do kolejki Luny."
+            return self._json({"ok": True, "msg": m, "system": sysmsg})
+        if u.path == "/api/admin/live-room":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            a = data.get("action"); arg = data.get("id")
+            try:
+                if a == "start": liveroom.set_topic(data.get("topic", "")); liveroom.set_mode("on")
+                elif a == "stop": liveroom.set_mode("off" if sched()["in_window"] else "auto")
+                elif a == "schedule": liveroom.set_mode("auto")
+                elif a == "topic": liveroom.set_topic(data.get("topic", ""))
+                elif a == "auto": liveroom.set_auto(bool(data.get("value")))
+                elif a == "approve":
+                    j = question_job(int(arg))
+                    if j: liveroom.add_job(j, front=True)
+                elif a == "reject": liveroom.reject(int(arg))
+                elif a == "delete": liveroom.delete_msg(int(arg))
+                elif a == "ban": liveroom.ban(str(arg), True)
+                elif a == "unban": liveroom.ban(str(arg), False)
+                elif a == "exercise":
+                    ex = exercise(str(arg))
+                    if ex: liveroom.add_job({"kind": "exercise", "title": ex[0], "text": ex[1]}, front=True)
+                else: return self._json({"error": "unknown action"}, 400)
+            except (TypeError, ValueError): return self._json({"error": "bad id"}, 400)
+            return self._json({"ok": True, "state": liveroom.public_state(0, mod=True)})
+        if u.path == "/api/push/subscribe":
+            if not livechat.rate_ok("psub:" + self._ip(), 10, 100): return self._json({"error": "limit"}, 429)
+            try: notify.subscribe(data.get("sub"), data.get("topics")); return self._json({"ok": True})
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+        if u.path == "/api/push/unsubscribe":
+            notify.unsubscribe(str((data.get("sub") or {}).get("endpoint", data.get("endpoint", "")))); return self._json({"ok": True})
+        if u.path == "/api/email/subscribe":
+            if not livechat.rate_ok("esub:" + self._ip(), 3, 20): return self._json({"error": "Za dużo prób – spróbuj później."}, 429)
+            try: _, conf = notify.email_subscribe(data.get("email"), data.get("consent"), self._ip())
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True, "confirmed": conf, "email_enabled": notify.email_enabled(),
+                               "message": "Sprawdź skrzynkę i potwierdź zapis." if notify.email_enabled() else "Zapisaliśmy Twój adres. Wyślemy prośbę o potwierdzenie, gdy uruchomimy wysyłkę e-maili."})
+        if u.path == "/api/email/unsubscribe":
+            notify.email_unsubscribe(parse_qs(u.query).get("t", [""])[0] or str(data.get("t", ""))); return self._json({"ok": True})
+        if u.path == "/api/cron":
+            sec = self.headers.get("X-Cron-Secret", "")
+            if not notify.CRON_SECRET or not hmac.compare_digest(sec.encode(), notify.CRON_SECRET.encode()): return self._json({"error": "unauthorized"}, 401)
+            out = run_reminders()
+            return self._json({"ok": True, "actions": [a for a, _ in out], "live": liveroom.S["on"], "next": sched()["next_label"]})
+        if u.path in ("/api/admin/notify/push", "/api/admin/notify/email-test"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            try:
+                if u.path.endswith("email-test"): return self._json({"ok": True, "status": notify.test_email(data.get("to"))})
+                topic = data.get("topic") if data.get("topic") in ("live", "video", "update") else "manual"
+                title = livechat.clean_text(data.get("title", ""), 80); body = livechat.clean_text(data.get("body", ""), 200)
+                if not title: return self._json({"error": "Podaj tytuł."}, 400)
+                return self._json({"ok": True, **notify.send_push(topic, title, body, str(data.get("url") or "/"))})
+            except Exception as e: return self._json({"error": str(e)[:200]}, 400)
         if u.path == "/api/live/send":
             ip = self._ip(); vid = str(data.get("vid", ""))
             if not livechat.VID_RE.fullmatch(vid): return self._json({"error": "bad id"}, 400)
             if not (livechat.rate_ok("ip:" + ip, 8, 300) and livechat.rate_ok("vid:" + vid, 6, 150) and livechat.rate_ok("all", 120, 5000)):
                 return self._json({"error": "Za dużo wiadomości – spróbuj za chwilę."}, 429)
-            try: msgs = livechat.visitor_send(vid, data.get("name", ""), data.get("avatar", ""), data.get("text", ""), CFG.get("chat_notice", ""))
+            try: msgs = livechat.visitor_send(vid, data.get("name", ""), data.get("avatar", ""), data.get("text", ""), CFG.get("chat_notice", ""), testers.ring_for(data.get("tester")))
             except ValueError as e: return self._json({"error": str(e)}, 400)
             return self._json({"ok": True, "msgs": msgs})
         if u.path in ("/api/admin/live/reply", "/api/admin/live/delete"):
@@ -476,9 +791,11 @@ class H(SimpleHTTPRequestHandler):
         text = str(q.get("text", "")).strip()
         if not text: return self._json({"error": "empty text"}, 400)
         try:
-            p = tts(text, q.get("voice", DEFAULT_VOICE), q.get("pitch", -2.6), q.get("volume", -27),
-                    str(q.get("spanish", "1")).lower() not in ("0", "false", "no"),
-                    q.get("rate", -8), q.get("warmth", 4.5))
+            vd = CFG["voice_defaults"]; g = lambda k: q.get(k, vd.get(k))
+            p = tts(text, g("voice") or DEFAULT_VOICE, g("pitch"), g("volume"),
+                    str(g("spanish")).lower() not in ("0", "false", "no"), g("rate"), g("warmth"),
+                    g("hz") if g("hz") is not None else 0, g("rasp") or 0, g("breath") or 0,
+                    str(g("lisp")).lower() in ("1", "true", "yes"))
         except Exception as e:
             print("TTS error:", repr(e), file=sys.stderr)
             return self._json({"error": "tts failed"}, 502)
@@ -490,4 +807,6 @@ class H(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(os.getenv("PORT", sys.argv[1] if len(sys.argv) > 1 else 8765))
     print(f"Luna działa na http://0.0.0.0:{port}")
+    threading.Thread(target=_bg_loop, daemon=True).start()
+    threading.Thread(target=_announce_update, daemon=True).start()
     ThreadingHTTPServer(("0.0.0.0", port), H).serve_forever()

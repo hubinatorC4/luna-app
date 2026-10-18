@@ -1,0 +1,17 @@
+# Luna – zaplanowane wybudzanie i przypomnienia (GitHub Actions).
+# Skopiuj do .github/workflows/luna-cron.yml i dodaj sekret repozytorium CRON_SECRET (ta sama wartość co na Renderze).
+name: luna-cron
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Wywołaj /api/cron
+        run: |
+          curl -fsS -m 120 --retry 3 --retry-delay 20 -X POST \
+            -H "X-Cron-Secret: ${{ secrets.CRON_SECRET }}" \
+            https://luna-voice-coach.onrender.com/api/cron

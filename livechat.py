@@ -66,7 +66,7 @@ def _msg(frm, text, name=""):
 def _view(c, since=0):
     return [m for m in c["msgs"] if m["id"] > since]
 
-def visitor_send(vid, name, avatar, text, notice):
+def visitor_send(vid, name, avatar, text, notice, ring=None):
     if not VID_RE.fullmatch(vid or ""): raise ValueError("bad id")
     text = clean_text(text, MAX_TEXT); name = clean_text(name, MAX_NAME) or "Gość"
     if not text: raise ValueError("empty")
@@ -76,7 +76,7 @@ def visitor_send(vid, name, avatar, text, notice):
             if len(CONVS) >= MAX_CONVS:
                 old = sorted(CONVS.items(), key=lambda kv: kv[1]["updated"])[0][0]; CONVS.pop(old, None)
             c = CONVS[vid] = {"vid": vid, "created": int(time.time() * 1000), "msgs": [], "unread": 0, "visitor_unread": 0}
-        c["name"] = name; c["avatar"] = clean_avatar(avatar)
+        c["name"] = name; c["avatar"] = clean_avatar(avatar); c["ring"] = ring
         first = not any(m["from"] == "visitor" for m in c["msgs"])
         c["msgs"].append(_msg("visitor", text, name))
         if first and notice: c["msgs"].append(_msg("system", notice))
@@ -99,7 +99,7 @@ def inbox():
         out = []
         for c in CONVS.values():
             last = next((m for m in reversed(c["msgs"]) if m["from"] != "system"), {})
-            out.append({"vid": c["vid"], "name": c.get("name", "Gość"), "avatar": c.get("avatar", ""), "unread": c.get("unread", 0),
+            out.append({"vid": c["vid"], "name": c.get("name", "Gość"), "avatar": c.get("avatar", ""), "ring": c.get("ring"), "unread": c.get("unread", 0),
                         "updated": c.get("updated", 0), "count": len(c["msgs"]), "last": (last.get("text", "") or "")[:120], "last_from": last.get("from", "")})
         out.sort(key=lambda x: -x["updated"])
         return {"convs": out, "unread": sum(x["unread"] for x in out)}
@@ -109,7 +109,7 @@ def conv(vid, mark=True):
         c = CONVS.get(vid)
         if not c: raise KeyError("not found")
         if mark and c.get("unread"): c["unread"] = 0; _save()
-        return {"vid": vid, "name": c.get("name", "Gość"), "avatar": c.get("avatar", ""), "msgs": list(c["msgs"])}
+        return {"vid": vid, "name": c.get("name", "Gość"), "avatar": c.get("avatar", ""), "ring": c.get("ring"), "msgs": list(c["msgs"])}
 
 def reply(vid, text):
     text = clean_text(text, MAX_TEXT)

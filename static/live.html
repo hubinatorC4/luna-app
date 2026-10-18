@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Luna Live – transmisja z Luną, asystentką AI</title>
+<meta name="description" content="Luna Live: raz w tygodniu Luna, asystentka AI, odpowiada głosem na pytania z czatu i prowadzi ćwiczenia głosu.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="/portal.css?v=1.3">
+<link rel="stylesheet" href="/live.css?v=1.3">
+<script>(function(){try{if(/[?&]source=twa\b/.test(location.search))sessionStorage.setItem("luna.twa","1");if(sessionStorage.getItem("luna.twa"))document.documentElement.classList.add("twa")}catch(e){}})()</script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
+</head>
+<body class="liveroom">
+<header class="top">
+  <div class="bar">
+    <a class="logo" href="/promo.html"><span class="lring"><img src="/avatar-256.jpg" alt=""></span><span class="lname">Luna</span></a>
+    <div class="lvhead"><span class="badge-live" id="liveBadge" hidden>● NA ŻYWO</span><span class="viewers" id="viewers" hidden></span><span class="lvtopic" id="topic"></span></div>
+    <div class="acts"><button class="pill ghost" data-push type="button">🔔 Powiadom mnie</button><a class="pill primary" href="/">Otwórz Lunę</a></div>
+  </div>
+  <nav class="tabs">
+    <a href="/promo.html#popularne">Popularne</a><a href="/promo.html#najnowsze">Najnowsze</a><a href="/promo.html#kategorie">Kategorie</a>
+    <a href="/live.html" class="on">Luna Live</a><a href="/promo.html#plany">Plany</a><a href="/#live">Czat z twórcą</a><a href="/promo.html#testerzy" class="hot">Testerzy 🎁</a>
+  </nav>
+</header>
+<main class="lvmain">
+  <section class="stagecol">
+    <div class="stage" id="stage">
+      <div class="scene" aria-hidden="true">
+        <div class="sky"></div><div class="moon"></div>
+        <div class="lights"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="palm p1"></div><div class="palm p2"></div>
+        <div class="deck"></div>
+        <div class="pooltub"><div class="water"></div><div class="caustics"></div><div class="glow"></div></div>
+      </div>
+      <div class="lvavatar" id="avatarWrap">
+        <div class="lvring"><img id="lvImg" src="/catalog/luna/outfit_koronkowa.jpg" srcset="/catalog/luna/outfit_koronkowa.jpg 1x, /catalog/luna/outfit_koronkowa@2x.jpg 2x" alt="Luna – asystentka AI w koronkowej sukience, postać wygenerowana sztucznie"></div>
+        <div class="reflect"></div>
+      </div>
+      <div class="ailabel">🤖 Luna – asystentka AI (postać wygenerowana sztucznie)</div>
+      <div class="scene-toggles">
+        <label><input type="checkbox" id="poolChk"> 🏊 Stream w basenie</label>
+        <label><input type="checkbox" id="holoChk"> ✨ Hologram</label>
+      </div>
+      <button class="joinbtn" id="joinBtn" type="button" hidden>🔊 Dołącz z dźwiękiem</button>
+      <div class="offline" id="offline" hidden>
+        <h2>Luna jest offline – następny live wkrótce</h2>
+        <p class="next" id="nextLabel"></p>
+        <div class="countdown" id="countdown" aria-live="off"><div><b id="cdD">0</b><span>dni</span></div><div><b id="cdH">00</b><span>godz.</span></div><div><b id="cdM">00</b><span>min</span></div><div><b id="cdS">00</b><span>sek.</span></div></div>
+        <p class="weekly" id="weekly"></p>
+      </div>
+    </div>
+    <div class="caption" id="caption" hidden><small id="capTitle"></small><p class="capq" id="capQ"></p><p id="capText"></p></div>
+    <section class="infobox">
+      <h2>Harmonogram</h2>
+      <p id="schedText"></p><p class="hint" id="schedNote"></p>
+      <h3>Na streamie</h3>
+      <ul class="howto"><li>Luna wita widzów po pseudonimie i odpowiada głosem na pytania z czatu.</li><li>Łamaniec językowy tygodnia, ćwiczenia oddechowe i wyzwania, np. „opowiedz o sobie w 30 sekund”.</li><li>Komendy na czacie: <code>!pytanie</code>, <code>!lamaniec</code>, <code>!oddech</code>, <code>!wyzwanie</code>, <code>!rozgrzewka</code>, <code>!temat</code>, <code>!pomoc</code>.</li></ul>
+      <h3>Przypomnienie e-mail dzień przed</h3>
+      <form id="mailForm" class="mailform">
+        <input type="email" id="mailInput" required placeholder="Twój e-mail" maxlength="254" autocomplete="email">
+        <label class="consent"><input type="checkbox" id="mailConsent" required> <span>Wyrażam zgodę na otrzymywanie e-mailowych przypomnień o transmisjach Luna Live. Mogę się wypisać w każdej chwili linkiem w każdej wiadomości. <a href="/privacy.html" target="_blank">Informacja o danych</a></span></label>
+        <button class="pill primary" type="submit">Przypomnij mi</button>
+        <p class="hint" id="mailMsg"></p>
+      </form>
+    </section>
+  </section>
+  <aside class="chatcol">
+    <div class="modpanel" id="modPanel" hidden>
+      <h3>🎛 Moderator</h3>
+      <div class="btns"><input id="modTopic" maxlength="120" placeholder="Temat"><button class="pill primary sm" id="modStart" type="button">▶ Start</button><button class="pill ghost sm" id="modStop" type="button">■ Stop</button><button class="pill ghost sm" id="modSched" type="button">⏱ Harmonogram</button></div>
+      <div class="btns"><button class="pill ghost sm" data-ex="lamaniec" type="button">Łamaniec</button><button class="pill ghost sm" data-ex="oddech" type="button">Oddech</button><button class="pill ghost sm" data-ex="wyzwanie" type="button">Wyzwanie</button><button class="pill ghost sm" data-ex="rozgrzewka" type="button">Rozgrzewka</button><label class="sm"><input type="checkbox" id="modAuto"> Luna sama wybiera pytania</label></div>
+      <h4>Kolejka pytań</h4><div id="modQueue" class="modq"></div>
+      <h4>Zablokowani</h4><div id="modBanned" class="hint"></div>
+    </div>
+    <div class="chathead">Czat na żywo <small id="chatInfo"></small></div>
+    <div class="chatlist" id="chatList" aria-live="polite"></div>
+    <form class="chatform" id="chatForm">
+      <div class="crow"><input id="nick" maxlength="24" placeholder="Twój pseudonim" required><label class="ask"><input type="checkbox" id="askChk"> Pytanie do Luny</label></div>
+      <div class="crow"><input id="chatInput" maxlength="300" placeholder="Napisz na czacie…" required><button class="pill primary" type="submit" id="chatSend">➤</button></div>
+      <p class="hint" id="chatMsg"></p>
+    </form>
+  </aside>
+</main>
+<audio id="lvAudio" preload="auto"></audio>
+<script src="/live.js?v=1.3"></script>
+<script src="/testers.js?v=1.3"></script>
+<script src="/push.js?v=1.3"></script>
+</body>
+</html>

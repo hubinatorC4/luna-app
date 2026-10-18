@@ -26,7 +26,8 @@ function ruleItem(o = {trigger:'', reply:'', match:'zawiera'}){
     <label>Odpowiedź Luny<textarea class="rp" rows="2">${esc(o.reply)}</textarea></label>`;
   d.querySelector('.mt').value = o.match; d.querySelector('.del').onclick = () => d.remove(); $('#ruleList').appendChild(d);
 }
-const V = [['pitch', v => (v > 0 ? '+' : '') + v + ' półt.'], ['rate', v => (v > 0 ? '+' : '') + v + '%'], ['warmth', v => Math.round(v * 10) + '%'], ['volume', v => Math.round((+v + 36) / 20 * 100) + '%']];
+const V = [['pitch', v => (v > 0 ? '+' : '') + v + ' półt.'], ['rate', v => (v > 0 ? '+' : '') + v + '%'], ['warmth', v => Math.round(v * 10) + '%'], ['volume', v => Math.round((+v + 36) / 20 * 100) + '%'], ['hz', v => v + ' Hz'], ['rasp', v => Math.round(v * 10) + '%'], ['breath', v => Math.round(v * 10) + '%']];
+const CHRYPKA = {voice:'pl-PL-ZofiaNeural', pitch:-1.6, hz:-14, rate:-10, warmth:6, volume:-31, rasp:4, breath:5, lisp:true, spanish:true};
 function labels(){ V.forEach(([k, f]) => $('#adm_v_' + k + '_v').textContent = f($('#adm_v_' + k).value)); $('#adm_pulse_v').textContent = $('#adm_pulse_speed').value + ' s'; }
 let MUS = [];
 function musRender(){
@@ -45,9 +46,10 @@ function fill(c){
   $('#kbList').innerHTML = ''; (c.kb_topics || []).forEach(kbItem);
   $('#ruleList').innerHTML = ''; (c.rules || []).forEach(ruleItem);
   const vs = $('#adm_v_voice'); if (!vs.options.length) for (const [k, v] of Object.entries(meta.voices || {})){ const o = document.createElement('option'); o.value = k; o.textContent = v; vs.appendChild(o); }
-  const vd = c.voice_defaults; vs.value = vd.voice; V.forEach(([k]) => $('#adm_v_' + k).value = vd[k]); $('#adm_v_spanish').checked = vd.spanish;
+  const vd = c.voice_defaults; vs.value = vd.voice; V.forEach(([k]) => $('#adm_v_' + k).value = vd[k] ?? CHRYPKA[k]); $('#adm_v_spanish').checked = vd.spanish; $('#adm_v_lisp').checked = !!vd.lisp;
   MUS = JSON.parse(JSON.stringify((c.music && c.music.tracks) || [])); musRender(); $('#adm_mvol').value = c.music ? c.music.volume : .25; $('#adm_mvol_v').textContent = Math.round($('#adm_mvol').value * 100) + '%';
   $('#adm_holo_default').checked = !!c.ui.holo_default; $('#adm_holo_plan').value = c.ui.holo_plan || 'podstawowa';
+  const lv = c.live || {}; $('#adm_lv_day').value = lv.day ?? 6; $('#adm_lv_time').value = lv.time || '20:00'; $('#adm_lv_hours').value = lv.hours ?? 3; $('#adm_lv_note').value = lv.note || ''; $('#adm_lv_pool').checked = lv.pool !== false; $('#adm_lv_auto').checked = lv.auto !== false;
   $('#adm_ring_color').value = c.ui.ring_color; $('#adm_pulse_speed').value = c.ui.pulse_speed; labels();
 }
 function collect(){
@@ -55,7 +57,8 @@ function collect(){
   c.tone = $('#adm_tone').value; c.length = $('#adm_length').value;
   c.kb_topics = [...document.querySelectorAll('#kbList .item')].map(d => ({keywords: d.querySelector('.kw').value.split(',').map(s => s.trim()).filter(Boolean), answer: d.querySelector('.ans').value.trim()})).filter(o => o.keywords.length && o.answer);
   c.rules = [...document.querySelectorAll('#ruleList .item')].map(d => ({trigger: d.querySelector('.tr').value.trim(), match: d.querySelector('.mt').value, reply: d.querySelector('.rp').value.trim()})).filter(o => o.trigger && o.reply);
-  c.voice_defaults = {voice: $('#adm_v_voice').value, spanish: $('#adm_v_spanish').checked}; V.forEach(([k]) => c.voice_defaults[k] = parseFloat($('#adm_v_' + k).value));
+  c.voice_defaults = {voice: $('#adm_v_voice').value, spanish: $('#adm_v_spanish').checked, lisp: $('#adm_v_lisp').checked}; V.forEach(([k]) => c.voice_defaults[k] = parseFloat($('#adm_v_' + k).value));
+  c.live = {day: +$('#adm_lv_day').value, time: $('#adm_lv_time').value, hours: parseFloat($('#adm_lv_hours').value), note: $('#adm_lv_note').value, pool: $('#adm_lv_pool').checked, auto: $('#adm_lv_auto').checked};
   c.music = {volume: parseFloat($('#adm_mvol').value), tracks: MUS};
   c.ui = {ring_color: $('#adm_ring_color').value, pulse_speed: parseFloat($('#adm_pulse_speed').value), holo_default: $('#adm_holo_default').checked, holo_plan: $('#adm_holo_plan').value};
   return c;
@@ -85,4 +88,6 @@ $('#musFile').onchange = async e => {
 };
 window.LunaAdmin = {open};
 if (tok()) {/* sesja aktywna – panel otworzy się po ponownym wpisaniu kodu lub z konsoli */}
+document.querySelector('#adm_v_preset').onclick = () => { const q = s => document.querySelector(s); q('#adm_v_voice').value = CHRYPKA.voice; V.forEach(([k]) => q('#adm_v_' + k).value = CHRYPKA[k]); q('#adm_v_lisp').checked = true; q('#adm_v_spanish').checked = true; labels(); };
+document.querySelector('#adm_v_test').onclick = () => { const q = s => document.querySelector(s); const p = new URLSearchParams({text: 'Słyszę cię, cariño. Szczególnie cieszę się, że ćwiczysz.', voice: q('#adm_v_voice').value, spanish: q('#adm_v_spanish').checked ? 1 : 0, lisp: q('#adm_v_lisp').checked ? 1 : 0}); V.forEach(([k]) => p.set(k, q('#adm_v_' + k).value)); new Audio('/api/tts?' + p).play(); };
 })();

@@ -106,6 +106,8 @@ def public(c):
                 if o["image"].endswith(".jpg") and os.path.exists(os.path.join(STATIC, o["image"].lstrip("/")[:-4] + "@2x.jpg")):
                     o["image2x"] = o["image"][:-4] + "@2x.jpg"
         a["avatar"] = next((o["image"] for o in a["outfits"] if not o["placeholder"]), a["outfits"][0]["image"] if a["outfits"] else PLACEHOLDER)
+    for p in c.get("plans", []):  # ceny nie są publikowane (aplikacja w fazie testów)
+        p.pop("price", None); p.pop("period", None)
     return c
 
 def load():

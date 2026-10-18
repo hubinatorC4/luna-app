@@ -2,14 +2,17 @@
 const $ = s => document.querySelector(s);
 const chat = $('#chat'), input = $('#input'), player = $('#player'), statusEl = $('#status');
 const PRESETS = {
-  niska:{pitch:-2.6, rate:-8, warmth:4.5, volume:-27},
-  szept:{pitch:-1.5, rate:-18, warmth:2, volume:-33},
-  jasna:{pitch:0.5, rate:-4, warmth:1.5, volume:-24},
-  gleboka:{pitch:-4.8, rate:-14, warmth:8, volume:-26}
+  chrypka:{pitch:-1.6, hz:-14, rate:-10, warmth:6, volume:-31, rasp:4, breath:5, lisp:true},
+  niska:{pitch:-2.6, hz:0, rate:-8, warmth:4.5, volume:-27, rasp:0, breath:0, lisp:false},
+  szept:{pitch:-1.5, hz:0, rate:-18, warmth:2, volume:-33, rasp:0, breath:3, lisp:false},
+  jasna:{pitch:0.5, hz:0, rate:-4, warmth:1.5, volume:-24, rasp:0, breath:0, lisp:false},
+  gleboka:{pitch:-4.8, hz:0, rate:-14, warmth:8, volume:-26, rasp:1, breath:0, lisp:false}
 };
-const DEF = {voice:'pl-PL-ZofiaNeural', pitch:-2.6, rate:-8, warmth:4.5, volume:-27, preset:'niska', spanish:true, autoSpeak:true, wake:false};
+const DEF = {voice:'pl-PL-ZofiaNeural', pitch:-1.6, hz:-14, rate:-10, warmth:6, volume:-31, rasp:4, breath:5, lisp:true, vver:13, preset:'chrypka', spanish:true, autoSpeak:true, wake:false};
 let S = Object.assign({}, DEF, JSON.parse(localStorage.getItem('luna.settings') || '{}'));
 const save = () => localStorage.setItem('luna.settings', JSON.stringify(S));
+// v1.3: nowy domyślny głos „Ciepła chrypka” – migracja ustawień sprzed 1.3
+if (!S.vver){ Object.assign(S, PRESETS.chrypka, {preset:'chrypka', vver:13}); save(); }
 let history = JSON.parse(sessionStorage.getItem('luna.history') || '[]');
 let speaking = false;
 
@@ -32,7 +35,7 @@ window.LunaRefreshAvatars = () => document.querySelectorAll('.mav').forEach(im =
 /* ---------- Głos ---------- */
 function setSpeaking(on){ speaking = on; document.body.classList.toggle('speaking', on); if(on) setStatus('Luna mówi…'); else setStatus(wakeOn ? 'Nasłuchuję słowa „Luna”…' : 'Twoja trenerka głosu'); }
 function ttsUrl(text){
-  const p = new URLSearchParams({text, voice:S.voice, pitch:S.pitch, rate:S.rate, warmth:S.warmth, volume:S.volume, spanish:S.spanish?1:0});
+  const p = new URLSearchParams({text, voice:S.voice, pitch:S.pitch, hz:S.hz ?? 0, rate:S.rate, warmth:S.warmth, volume:S.volume, rasp:S.rasp ?? 0, breath:S.breath ?? 0, lisp:S.lisp?1:0, spanish:S.spanish?1:0});
   return '/api/tts?' + p.toString();
 }
 function fallbackSpeak(text){
@@ -155,7 +158,7 @@ wakeToggle.onchange = () => setWake(wakeToggle.checked);
 if (S.wake){ document.addEventListener('pointerdown', () => setWake(true), {once:true}); setStatus('Dotknij ekranu, aby wznowić nasłuchiwanie'); }
 
 /* ---------- Ustawienia ---------- */
-const dlg = $('#settings'), voiceSel = $('#voiceSel'), pitch = $('#pitch'), vol = $('#volume'), rate = $('#rate'), warmth = $('#warmth');
+const dlg = $('#settings'), voiceSel = $('#voiceSel'), pitch = $('#pitch'), vol = $('#volume'), rate = $('#rate'), warmth = $('#warmth'), rasp = $('#rasp'), breath = $('#breath');
 function renderSettings(){
   voiceSel.value = S.voice; pitch.value = S.pitch; vol.value = S.volume; rate.value = S.rate; warmth.value = S.warmth;
   $('#rateVal').textContent = (S.rate > 0 ? '+' : '') + S.rate + '%';
@@ -164,6 +167,7 @@ function renderSettings(){
   $('#spanishChk').checked = S.spanish; $('#autoSpeak').checked = S.autoSpeak;
   $('#pitchVal').textContent = (S.pitch > 0 ? '+' : '') + S.pitch + ' półt.'; 
   $('#volVal').textContent = Math.round((S.volume + 36) / 20 * 100) + '%';
+  rasp.value = S.rasp ?? 0; breath.value = S.breath ?? 0; $('#raspVal').textContent = Math.round((S.rasp ?? 0) * 10) + '%'; $('#breathVal').textContent = Math.round((S.breath ?? 0) * 10) + '%'; $('#lispChk').checked = !!S.lisp;
 }
 fetch('/api/voices').then(r => r.json()).then(d => {
   for (const [k, v] of Object.entries(d.voices)){ const o = document.createElement('option'); o.value = k; o.textContent = v; voiceSel.appendChild(o); }
@@ -172,12 +176,13 @@ fetch('/api/voices').then(r => r.json()).then(d => {
 $('#settingsBtn').onclick = () => { renderSettings(); dlg.showModal(); };
 voiceSel.onchange = () => { S.voice = voiceSel.value; save(); };
 const slider = (el, k) => el.oninput = () => { S[k] = parseFloat(el.value); S.preset = ''; save(); renderSettings(); };
-slider(pitch, 'pitch'); slider(vol, 'volume'); slider(rate, 'rate'); slider(warmth, 'warmth');
+slider(pitch, 'pitch'); slider(vol, 'volume'); slider(rate, 'rate'); slider(warmth, 'warmth'); slider(rasp, 'rasp'); slider(breath, 'breath');
+$('#lispChk').onchange = e => { S.lisp = e.target.checked; S.preset = ''; save(); renderSettings(); };
 document.querySelectorAll('#presets button').forEach(b => b.onclick = () => { Object.assign(S, PRESETS[b.dataset.p], {preset:b.dataset.p}); save(); renderSettings(); $('#testVoice').click(); });
 $('#spanishChk').onchange = e => { S.spanish = e.target.checked; save(); };
 $('#autoSpeak').onchange = e => { S.autoSpeak = e.target.checked; save(); };
 $('#resetBtn').onclick = () => { const w = S.wake; S = Object.assign({}, DEF, {wake:w}); save(); renderSettings(); };
-$('#testVoice').onclick = () => speak('Hola, cariño. Mów szczerze, cicho i powoli, a twój głos będzie niższy i cieplejszy.');
+$('#testVoice').onclick = () => speak('Hola, cariño. Słyszę cię. Mów szczerze, cicho i powoli – szczególnie wtedy, gdy czujesz stres.');
 
 function openAdmin(){ window.LunaAdmin && window.LunaAdmin.open(); }
 
@@ -189,7 +194,7 @@ window.LunaApplyConfig = c => {
   const n = $('#chatNotice'); if (n){ n.textContent = CFG.chat_notice || ''; n.hidden = !CFG.chat_notice; }
   if (CFG.ui){ document.documentElement.style.setProperty('--ring', CFG.ui.ring_color); document.documentElement.style.setProperty('--pulse', CFG.ui.pulse_speed + 's'); }
   window.LunaCustomApply && window.LunaCustomApply();
-  if (CFG.voice_defaults && !localStorage.getItem('luna.settings')){ Object.assign(DEF, CFG.voice_defaults); Object.assign(S, CFG.voice_defaults); }
+  if (CFG.voice_defaults && (!localStorage.getItem('luna.settings') || S.preset === 'chrypka' && !S.custom)){ Object.assign(DEF, CFG.voice_defaults); Object.assign(S, CFG.voice_defaults); }
 };
 fetch('/api/config').then(r => r.json()).then(window.LunaApplyConfig).catch(()=>{});
 if (history.length){ history.forEach(h => addMsg(h.content, h.role === 'user' ? 'me' : 'luna')); }

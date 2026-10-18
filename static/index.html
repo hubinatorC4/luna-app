@@ -13,6 +13,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="stylesheet" href="style.css">
 <title>Luna – trenerka głosu</title>
+<script>(function(){try{if(/[?&]source=twa\b/.test(location.search))sessionStorage.setItem("luna.twa","1");if(sessionStorage.getItem("luna.twa"))document.documentElement.classList.add("twa")}catch(e){}})()</script><style>.twa .no-twa{display:none!important}html:not(.twa) .twa-only{display:none!important}</style>
 </head>
 <body>
 <div class="bg"></div>
@@ -27,6 +28,7 @@
     </label>
     <button id="liveBtn" class="icon badged" aria-label="Czat na żywo – napisz do twórcy" title="Czat na żywo – napisz do twórcy">💬<span class="badge" id="liveBadge" hidden></span></button>
     <button id="inboxBtn" class="icon badged" aria-label="Skrzynka moderatora" title="Skrzynka moderatora" hidden>📥<span class="badge" id="inboxBadge" hidden></span></button>
+    <a id="liveRoomBtn" class="icon" href="/live.html" aria-label="Luna Live" title="Luna Live – transmisja">📺</a>
     <button id="musicBtn" class="icon" aria-label="Muzyka" title="Muzyka">🎷</button>
     <button id="customBtn" class="icon" aria-label="Stwórz własną asystentkę" title="Stwórz własną asystentkę">✨</button>
     <button id="settingsBtn" class="icon" aria-label="Ustawienia">⚙</button>
@@ -50,6 +52,7 @@
   <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
 </section>
 
+<a class="tester-strip" id="testerBanner" href="/promo.html#testerzy" hidden>🎁 Szukamy testerów Luny! Premium za darmo na 2 miesiące · <b>Zostało … z 50 miejsc</b> · Zgłoś się →</a>
 <button type="button" class="live-cta" id="liveCta">💬 Czat na żywo – napisz do twórcy</button>
 <main id="chat" aria-live="polite"></main>
 
@@ -69,6 +72,7 @@
     <fieldset class="timbre">
       <legend>Barwa głosu</legend>
       <div class="presets" id="presets">
+        <button type="button" data-p="chrypka">Ciepła chrypka</button>
         <button type="button" data-p="niska">Niska i ciepła</button>
         <button type="button" data-p="szept">Szept</button>
         <button type="button" data-p="jasna">Jaśniejsza</button>
@@ -86,6 +90,9 @@
       <label>Głośność: <b id="volVal"></b>
         <input type="range" id="volume" min="-36" max="-16" step="1">
       </label>
+      <label>Chrypka: <b id="raspVal"></b><input type="range" id="rasp" min="0" max="10" step="0.5"></label>
+      <label>Oddech (powietrze): <b id="breathVal"></b><input type="range" id="breath" min="0" max="10" step="0.5"></label>
+      <label class="row"><input type="checkbox" id="lispChk"> Delikatne seplenienie (tylko w dźwięku)</label>
     </fieldset>
     <label class="row"><input type="checkbox" id="autoSpeak"> Czytaj odpowiedzi na głos</label>
     <label class="row" id="holoRow"><input type="checkbox" id="holoChk"> Tryb hologram <span class="tag" id="holoTag"></span></label>
@@ -98,6 +105,9 @@
         <button type="button" id="u_clear" class="ghost">Bez awatara</button>
       </div>
       <p class="hint">Zdjęcie jest przycinane do koła (256 px) i zostaje tylko na tym urządzeniu.</p>
+      <label>Kod testera (jeśli masz)<input type="text" id="u_tester" maxlength="12" placeholder="np. 1A2B3C4D" autocapitalize="characters"></label>
+      <p class="hint" id="testerState"></p>
+      <button type="button" class="ghost" data-push>🔔 Powiadom mnie</button>
     </fieldset>
     <div class="btns">
       <button type="button" id="testVoice">▶ Posłuchaj próbki</button>
@@ -159,11 +169,17 @@
       <button type="button" class="add" id="ruleAdd">＋ Dodaj regułę</button>
     </details>
     <details><summary>Domyślna barwa głosu</summary>
+      <p class="hint">Domyślnie: „Ciepła chrypka” – ciepły, bardzo niski, cichy i miękki głos z lekką chrypką, odrobiną powietrza i delikatnym sepleniem.</p>
       <label>Głos<select id="adm_v_voice"></select></label>
       <label>Wysokość: <b id="adm_v_pitch_v"></b><input type="range" id="adm_v_pitch" min="-6" max="2" step="0.1"></label>
       <label>Tempo: <b id="adm_v_rate_v"></b><input type="range" id="adm_v_rate" min="-40" max="30" step="1"></label>
       <label>Ciepło: <b id="adm_v_warmth_v"></b><input type="range" id="adm_v_warmth" min="0" max="10" step="0.5"></label>
+      <label>Obniżenie głosu lektora: <b id="adm_v_hz_v"></b><input type="range" id="adm_v_hz" min="-30" max="10" step="1"></label>
       <label>Głośność: <b id="adm_v_volume_v"></b><input type="range" id="adm_v_volume" min="-36" max="-16" step="1"></label>
+      <label>Chrypka: <b id="adm_v_rasp_v"></b><input type="range" id="adm_v_rasp" min="0" max="10" step="0.5"></label>
+      <label>Oddech: <b id="adm_v_breath_v"></b><input type="range" id="adm_v_breath" min="0" max="10" step="0.5"></label>
+      <label class="row"><input type="checkbox" id="adm_v_lisp"> Seplenienie (delikatne, tylko w dźwięku – tekst czatu pozostaje poprawny)</label>
+      <div class="btns"><button type="button" class="ghost" id="adm_v_preset">Preset „Ciepła chrypka”</button><button type="button" class="ghost" id="adm_v_test">▶ Odsłuchaj</button></div>
       <label class="row"><input type="checkbox" id="adm_v_spanish"> Hiszpańskie wstawki po hiszpańsku</label>
     </details>
     <details><summary>Wygląd awatara</summary>
@@ -214,6 +230,37 @@
         <label class="filebtn">⬆ Importuj JSON<input type="file" id="admImport" accept="application/json,.json" hidden></label>
       </div>
     </details>
+    <details id="tstSection"><summary>🎁 Testerzy <span id="tstCount"></span></summary>
+      <p class="hint" id="tstStore"></p>
+      <div class="btns"><button type="button" class="ghost" id="tstReload">↻ Odśwież</button><button type="button" class="ghost" id="tstCsv">⬇ Eksport CSV</button></div>
+      <div id="tstList" class="items"></div>
+    </details>
+    <details id="liveSection"><summary>📺 Luna Live – transmisja</summary>
+      <p class="hint" id="lvState"></p>
+      <label>Dzień transmisji<select id="adm_lv_day"><option value="0">Poniedziałek</option><option value="1">Wtorek</option><option value="2">Środa</option><option value="3">Czwartek</option><option value="4">Piątek</option><option value="5">Sobota</option><option value="6">Niedziela</option></select></label>
+      <label>Godzina startu (czas polski)<input type="time" id="adm_lv_time"></label>
+      <label>Czas trwania (godziny)<input type="number" id="adm_lv_hours" min="0.5" max="6" step="0.5"></label>
+      <label>Opis harmonogramu<textarea id="adm_lv_note" rows="2"></textarea></label>
+      <label class="row"><input type="checkbox" id="adm_lv_pool"> Domyślnie „Stream w basenie”</label>
+      <label class="row"><input type="checkbox" id="adm_lv_auto"> Luna sama wybiera pytania z kolejki</label>
+      <p class="hint">Zapisz zmiany harmonogramu przyciskiem „Zapisz” na dole.</p>
+      <label>Temat transmisji<input type="text" id="lvTopic" maxlength="120" placeholder="np. Jak mówić pewnie na rozmowie o pracę"></label>
+      <div class="btns"><button type="button" class="ghost" id="lvStart">▶ Start teraz</button><button type="button" class="ghost" id="lvStop">■ Zakończ</button><button type="button" class="ghost" id="lvSched">⏱ Wg harmonogramu</button><a class="ghost btnlink" href="/live.html" target="_blank">Otwórz pokój moderatora</a></div>
+    </details>
+    <details id="ntfSection"><summary>🔔 Powiadomienia</summary>
+      <p class="hint" id="ntfStatus">…</p>
+      <label>Rodzaj<select id="ntfTopic"><option value="manual">Wszyscy subskrybenci</option><option value="live">Luna Live</option><option value="video">Nowe wideo</option><option value="update">Aktualizacja</option></select></label>
+      <label>Tytuł<input type="text" id="ntfTitle" maxlength="80"></label>
+      <label>Treść<input type="text" id="ntfBody" maxlength="200"></label>
+      <label>Link (ścieżka)<input type="text" id="ntfUrl" value="/" maxlength="200"></label>
+      <div class="btns"><button type="button" class="ghost" id="ntfSend">📣 Wyślij powiadomienie</button></div>
+      <label>Testowy e-mail (tylko na własny adres)<input type="email" id="ntfMail"></label>
+      <div class="btns"><button type="button" class="ghost" id="ntfMailSend">✉ Wyślij test</button></div>
+    </details>
+    <details id="bakSection"><summary>💾 Kopia danych</summary>
+      <p class="hint">Eksport/import testerów, subskrypcji i zapisów e-mail (JSON). Zrób kopię przed wdrożeniem, jeśli dane nie są w Postgresie.</p>
+      <div class="btns"><button type="button" class="ghost" id="bakExport">⬇ Eksport danych</button><label class="filebtn">⬆ Import danych<input type="file" id="bakImport" accept=".json" hidden></label></div>
+    </details>
     <p id="admMsg" class="hint"></p>
     <div class="btns sticky">
       <button type="button" id="admSave" class="primary">Zapisz</button>
@@ -230,7 +277,7 @@
     <div class="planbar">
       <label>Twój plan
         <select id="c_plan"><option value="podstawowa">Podstawowa</option><option value="premium">Premium</option><option value="pro">Pro / Ultra</option></select></label>
-      <p class="hint">Wersja demonstracyjna – wybór planu nie pobiera płatności.</p>
+      <p class="hint no-twa">Wersja demonstracyjna – wybór planu nie pobiera płatności.</p>
     </div>
     <details open><summary>Postać</summary><div class="grid" id="c_agents"></div></details>
     <details open><summary>Strój</summary><div class="grid" id="c_outfits"></div></details>
@@ -269,6 +316,9 @@
 <script src="profile.js"></script>
 <script src="holo.js"></script>
 <script src="livechat.js"></script>
+<script src="testers.js"></script>
+<script src="push.js"></script>
 <script src="admin-catalog.js"></script>
+<script src="admin-extra.js"></script>
 </body>
 </html>

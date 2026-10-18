@@ -12,7 +12,7 @@ const GUEST_AV = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://
 function row(list, m, mine, avSrc, label){
   if (m.from === 'system'){ const n = document.createElement('div'); n.className = 'msg sys'; n.textContent = 'ℹ️ ' + m.text; list.appendChild(n); return; }
   const r = document.createElement('div'); r.className = 'msgrow ' + (mine ? 'me' : 'luna');
-  const im = document.createElement('img'); im.className = 'mav'; im.alt = ''; im.src = avSrc || GUEST_AV;
+  const im = document.createElement('img'); im.className = 'mav' + (mine && m.from === 'visitor' ? ' me' : ''); im.alt = ''; im.src = avSrc || GUEST_AV;
   const b = document.createElement('div'); b.className = 'msg ' + (mine ? 'me' : 'luna');
   const sm = document.createElement('small'); sm.className = 'meta'; sm.textContent = label + ' · ' + fmt(m.t);
   const tx = document.createElement('div'); tx.textContent = m.text;
@@ -53,7 +53,7 @@ $('#liveForm').onsubmit = async e => {
   e.preventDefault(); const t = $('#liveInput').value.trim(); if (!t) return;
   $('#liveSend').disabled = true; $('#liveErr').textContent = '';
   try {
-    const r = await fetch('/api/live/send', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({vid, name: userName(), avatar: await smallAvatar(), text: t})});
+    const r = await fetch('/api/live/send', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({vid, name: userName(), avatar: await smallAvatar(), text: t, tester: window.LunaTesterCode ? window.LunaTesterCode() : ''})});
     const d = await r.json();
     if (!r.ok) throw new Error(d.error || r.status);
     msgs = d.msgs; $('#liveInput').value = ''; renderLive();
@@ -82,7 +82,7 @@ async function refreshInbox(){
       const L = $('#inboxList'); L.textContent = ''; $('#inboxEmpty').hidden = d.convs.length > 0;
       d.convs.forEach(c => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'conv' + (c.unread ? ' unread' : '');
-        const im = document.createElement('img'); im.className = 'mav'; im.alt = ''; im.src = c.avatar || GUEST_AV;
+        const im = document.createElement('img'); im.className = 'mav'; im.alt = ''; im.src = c.avatar || GUEST_AV; if (c.ring){ im.style.borderColor = c.ring; im.style.boxShadow = '0 0 8px ' + c.ring; }
         const t = document.createElement('span'); t.className = 'ct';
         const n = document.createElement('b'); n.textContent = c.name; const s = document.createElement('small'); s.textContent = fmt(c.updated) + ' · #' + c.vid.slice(0, 6);
         const l = document.createElement('span'); l.className = 'last'; l.textContent = (c.last_from === 'moderator' ? 'Ty: ' : '') + c.last;
@@ -96,9 +96,10 @@ async function refreshInbox(){
 async function loadConv(){
   try {
     const d = await api('/api/admin/live/' + cur);
-    $('#inboxName').textContent = d.name + ' · #' + d.vid.slice(0, 6); $('#inboxAv').src = d.avatar || GUEST_AV;
+    $('#inboxName').textContent = d.name + ' · #' + d.vid.slice(0, 6); $('#inboxAv').src = d.avatar || GUEST_AV; $('#inboxAv').style.borderColor = d.ring || '';
     const T = $('#inboxThread'), atEnd = T.scrollHeight - T.scrollTop - T.clientHeight < 40; T.textContent = '';
     d.msgs.forEach(m => row(T, m, m.from === 'moderator', m.from === 'moderator' ? MOD_AV : (d.avatar || GUEST_AV), m.from === 'moderator' ? 'Ty (moderator)' : (m.name || d.name)));
+    if (d.ring) T.querySelectorAll('.msgrow.luna .mav').forEach(im => { if (!im.src.includes('2a1c12')) { im.style.borderColor = d.ring; im.style.boxShadow = '0 0 8px ' + d.ring; } });
     if (atEnd || !T.dataset.v) T.scrollTop = T.scrollHeight; T.dataset.v = '1';
   } catch(e){ $('#inboxErr').textContent = '⚠️ ' + e.message; }
 }

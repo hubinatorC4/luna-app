@@ -165,3 +165,13 @@ dialog.wide[open]{display:flex}
 .conv .badge{position:static;box-shadow:none}
 .inbox-bar{display:flex;align-items:center;gap:8px}.inbox-bar b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .danger{color:#ff8a7a!important}
+
+/* v1.3 */
+.tester-strip{display:block;margin:2px 12px 6px;padding:7px 12px;border-radius:12px;background:linear-gradient(90deg,#2a1a40,#14244a);border:1px solid #5b4aa0;color:#fff;font-size:13px;text-decoration:none;text-align:center}
+.tester-strip b{color:#ffb347}
+a.icon{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+body.tester .mav.me{border-color:var(--uring);box-shadow:0 0 8px var(--uring);border-width:2px}
+.mav.tr{border-width:2px}
+.item.tst{display:flex;flex-direction:column;gap:3px}.item.tst small{color:var(--muted)}.item.tst .reason{margin:2px 0;font-size:13px}
+.rdot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.btnlink{display:inline-flex;align-items:center;padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--amber2);border:1px solid rgba(240,160,64,.4)}
