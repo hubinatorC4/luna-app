@@ -20,6 +20,9 @@ S = {
 "add": ["Dodaj wpis na Ściance", "Post on the Wall", "Publicar en el Muro", "Auf der Wand posten", "Додати допис на Стіні"],
 "ai": ["Postać AI", "AI character", "Personaje de IA", "KI-Figur", "Персонаж ШІ"],
 "more": ["…", "…", "…", "…", "…"],
+"q_more": ["Oglądaj w 1080p z Pro", "Watch in 1080p with Pro", "Mira en 1080p con Pro", "In 1080p mit Pro ansehen", "Дивіться в 1080p з Pro"],
+"q_close": ["Zamknij", "Close", "Cerrar", "Schließen", "Закрити"],
+"q_pill": ["Jakość wideo", "Video quality", "Calidad de vídeo", "Videoqualität", "Якість відео"],
 }
 L = ["pl", "en", "es", "de", "uk"]
 def dicts(): return {l: {k: v[i] for k, v in S.items()} for i, l in enumerate(L)}

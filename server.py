@@ -1368,7 +1368,9 @@ class H(SimpleHTTPRequestHandler):
             # Ściana agentek w aplikacji: ranking prawdziwego zaangażowania + świeżość, filtry all|partner|video
             q = parse_qs(u.query); uid, dev = self._who(); off = (q.get("offset") or ["0"])[0]
             lg = api_i18n.req_lang(u.query, self.headers) or "pl"
-            return self._json(agentwall.page((q.get("filter") or ["all"])[0], int(off) if off.isdigit() else 0, 8, uid, dev, lg))
+            pl, _u = self._plan(); cv = quality.caps(pl)["video"]
+            return self._json(dict(agentwall.page((q.get("filter") or ["all"])[0], int(off) if off.isdigit() else 0, 8, uid, dev, lg),
+                                   quality={"video": cv, "plan": pl, "plan_name": plans.NAMES[pl]}))
         if u.path == "/api/agent/profile": return self._profile_get(u)
         if u.path == "/api/me/profile":
             pl, uid = self._plan(); gp = self._gen_plan(pl, uid); c = quality.caps(pl); gc = quality.caps(gp)

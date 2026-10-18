@@ -182,11 +182,19 @@ def _work():
         except Exception as e:
             _upd(jid, status="failed", error=str(e)[:200])
 
+READY_T = {"pl": ("🎬 Film Twojej agentki jest gotowy", "{s} s · {q}p · znak „AI”. Obejrzyj go w Mój panel → Generator agentek."),
+           "en": ("🎬 Your agent’s video is ready", "{s} s · {q}p · “AI” label. Watch it in My panel → Agent generator."),
+           "es": ("🎬 El vídeo de tu agente está listo", "{s} s · {q}p · marca «AI». Míralo en Mi panel → Generador de agentes."),
+           "de": ("🎬 Das Video deiner Agentin ist fertig", "{s} s · {q}p · „AI“-Zeichen. Ansehen unter Mein Bereich → Agentinnen-Generator."),
+           "uk": ("🎬 Відео вашої агентки готове", "{s} с · {q}p · позначка «AI». Перегляньте в Моя панель → Генератор агенток.")}
 def _notify_ready(j):
+    """Gotowy film → wiadomość w Skrzynce (kategoria Ważne, tłumaczona przy odczycie) + push, jeśli włączony."""
     try:
-        import inbox  # moduł Skrzynki (osobny worker) – jeśli jest
-        inbox.system_message(j["uid"], "video_ready", {"id": j["id"], "secs": j["secs"], "q": j["q"]})
-    except Exception: pass
+        import inbox
+        ti = {l: v[0] for l, v in READY_T.items()}; bo = {l: v[1].format(s=j["secs"], q=j["q"]) for l, v in READY_T.items()}
+        inbox.deliver(j["uid"], "important", title=ti, body=bo, link="/ustawienia.html#gen", dedupe="vid:" + j["id"])
+    except Exception as e:
+        import sys; sys.stderr.write("video inbox %s\n" % type(e).__name__)
 
 def _ensure_worker():
     if not _started[0]:

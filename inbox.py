@@ -120,6 +120,10 @@ def prefs(uid):
     return {"invites": p.get("invites", "all"), "receipts": bool(p.get("receipts", True)), "battles": bool(bt),
             "security": bool(p.get("security", True)), "push": bool(p.get("push", True))}
 def _pair(a, b): return "-".join(sorted((a, b)))
+def _want(uid, kind):
+    try:
+        import userprof; return userprof.notif_on(uid, kind)
+    except Exception: return True
 
 # ---------- wiadomości systemowe ----------
 def deliver(uid, cat, key=None, kw=None, title=None, body=None, link=None, dedupe=None, t=None):
@@ -130,11 +134,13 @@ def deliver(uid, cat, key=None, kw=None, title=None, body=None, link=None, dedup
         if dedupe and any(m.get("dd") == dedupe for m in M): return None
         m = {"id": secrets.token_hex(5), "cat": cat, "t": int(t or time.time()), "r": 0, "a": 0}
         if key: m["k"] = key; m["kw"] = {k: str(v)[:80] for k, v in (kw or {}).items()}
+        elif isinstance(title, dict):  # tytuł/treść w 5 językach (wybierane przy odczycie)
+            m["ti"] = {k: str(v)[:120] for k, v in title.items()}; m["bo"] = {k: str(v)[:2000] for k, v in (body or {}).items()}
         else: m["ti"] = str(title or "")[:120]; m["bo"] = str(body or "")[:2000]
         if link and str(link).startswith("/"): m["ln"] = str(link)[:200]
         if dedupe: m["dd"] = str(dedupe)[:60]
         M.append(m); d["m"] = M[-MAX_MSGS:]; store.put("ib:" + uid, d)
-    if cat in ("important", "friends") and key != "welcome" and notify.push_enabled() and prefs(uid)["push"]:
+    if cat in ("important", "friends") and key != "welcome" and notify.push_enabled() and prefs(uid)["push"] and (cat != "friends" or _want(uid, "friends")):
         try:
             ti, bo = _render(m, "pl")
             threading.Thread(target=notify.send_push, args=("manual", ti, bo, "/skrzynka.html"), kwargs={"tag": "inbox", "uid": uid}, daemon=True).start()
@@ -394,7 +400,7 @@ def dm_send(uid, p, text):
         lastv = {"t": int(time.time()), "x": text[:60]}
         fo.setdefault("last", {})[k] = lastv; _save_fr(other, fo)
         fm = _fr(uid); fm.setdefault("last", {})[k] = lastv; _save_fr(uid, fm)
-    if notify.push_enabled() and prefs(other)["push"] and int(fo["unread"][k]) == 1:
+    if notify.push_enabled() and prefs(other)["push"] and _want(other, "messages") and int(fo["unread"][k]) == 1:
         threading.Thread(target=notify.send_push, args=("manual", "💬 " + person(uid)["nick"], "Nowa wiadomość na czacie Luny", "/znajomi.html"), kwargs={"tag": "dm", "uid": other}, daemon=True).start()
     return mid
 

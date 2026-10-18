@@ -83,6 +83,7 @@ function draw(){
   if (pr.nick && !pr.tour_done && !sessionStorage.getItem('st.tour')) setTimeout(() => tour(0), 500);
   if (!pr.nick) sheet('edit');
   if (P.settings.delete_at) delBanner();
+  const h = (location.hash || '').slice(1); if (h && SHEETS[h] && !open) sheet(h);
 }
 async function unread(){
   try { const r = await fetch('/api/inbox/unread', {credentials: 'same-origin'}); if (!r.ok) return; const j = await r.json(); const n = j.total ?? j.unread ?? 0;

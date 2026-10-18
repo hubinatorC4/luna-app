@@ -56,6 +56,11 @@ def send_push(topic, title, body, url="/", tag=None, uid=None):
             if s.get("uid") != uid or (topic == "battle" and "battle" not in s.get("topics", [])): continue
         elif topic == "manual" and MOD_TOPIC in s.get("topics", []) and len(s.get("topics", [])) == 1: continue
         elif topic != "manual" and topic not in s.get("topics", DEFAULT_TOPICS): continue
+        if topic == "update" and s.get("uid"):
+            try:
+                import userprof
+                if not userprof.notif_on(s["uid"], "updates"): continue  # Mój panel → Powiadomienia → Nowości w aplikacji
+            except Exception: pass
         try:
             webpush(s["sub"], payload, vapid_private_key=PRIV, vapid_claims={"sub": SUBJ}, ttl=3600 * 12, timeout=10)
             sent += 1

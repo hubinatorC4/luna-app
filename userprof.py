@@ -149,9 +149,12 @@ INVITE = ("all", "friends_of_friends", "nobody")
 def settings(uid):
     r = _P().get(uid) or {}
     n = r.get("notif") or {}
-    return {"notif": {k: bool(n.get(k, k in ("battles", "messages"))) for k in NOTIF_TYPES}, "invite": r.get("invite", "all"),
+    return {"notif": {k: bool(n.get(k, True)) for k in NOTIF_TYPES}, "invite": r.get("invite", "all"),
             "blocked": [{"nick": x} for x in (r.get("blocked") or [])], "delete_at": r.get("delete_at", 0)}
-def notif_on(uid, kind): return settings(uid)["notif"].get(kind, False)
+def notif_on(uid, kind):
+    """Przełączniki z Mój panel → Powiadomienia (domyślnie włączone). Bramkują wysyłkę push: friends, messages, updates."""
+    if not uid: return True
+    return bool(((_P().get(uid) or {}).get("notif") or {}).get(kind, True))
 def save_settings(uid, d):
     with _lock:
         P = _P(); r = P.get(uid) or {}
