@@ -1,0 +1,11 @@
+# Dependabot: cotygodniowe aktualizacje bezpieczeństwa zależności Pythona i akcji GitHub (darmowe).
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule: { interval: "weekly", day: "monday" }
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "security"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: { interval: "monthly" }

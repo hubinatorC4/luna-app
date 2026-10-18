@@ -1,0 +1,23 @@
+# Luna – darmowe skanowanie bezpieczeństwa przy każdym pushu i co tydzień.
+# Skopiuj do .github/workflows/security-scan.yml (wymaga uprawnienia „workflow”: gh auth refresh -s workflow).
+name: security-scan
+on:
+  push: { branches: [main] }
+  pull_request:
+  schedule: [{ cron: "17 4 * * 1" }]
+permissions: { contents: read }
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Bandit (Python SAST)
+        run: pip install bandit && bandit -r . -x ./tests,./tools -ll -q
+      - name: pip-audit (znane podatności zależności)
+        run: pip install pip-audit && pip-audit -r requirements.txt
+      - name: Gitleaks (sekrety w historii)
+        uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
