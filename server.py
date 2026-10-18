@@ -1951,6 +1951,9 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/admin/backup":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             n = {}
+            try:
+                import dob_purge; dob_purge.clean_value(data)   # stara kopia zapasowa nie przywróci dat urodzenia
+            except Exception: pass
             for k in ("testers", "push_subs", "email_subs"):
                 v = data.get(k)
                 if isinstance(v, dict):
@@ -2115,6 +2118,9 @@ if __name__ == "__main__":
     except Exception as e: print("ensure_admin", repr(e)[:200], file=sys.stderr)
     try: userprof.seed_moderator()
     except Exception as e: sys.stderr.write("seed_moderator %s\n" % type(e).__name__)
+    try:   # jednorazowe, idempotentne usunięcie starych dat urodzenia (do audytu tylko liczba rekordów)
+        import dob_purge; r = dob_purge.run(audit=security.audit); print("dob_purge records=%d" % r["records"], flush=True)
+    except Exception as e: sys.stderr.write("dob_purge %s\n" % type(e).__name__)
     threading.Thread(target=_bg_loop, daemon=True).start()
     threading.Thread(target=_announce_update, daemon=True).start()
     try: inbox.announce_version(VERSION, INBOX_NEWS.get(VERSION))  # „Co nowego” trafia też do Skrzynki (kategoria Aktualizacje)

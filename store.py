@@ -45,5 +45,13 @@ def put(k, v):
         os.makedirs(os.path.dirname(FILE), exist_ok=True)
         json.dump(d, open(FILE + ".tmp", "w", encoding="utf-8"), ensure_ascii=False); os.replace(FILE + ".tmp", FILE)
 
+def keys():
+    """Lista kluczy magazynu (do migracji)."""
+    if BACKEND == "postgres":
+        import psycopg
+        with psycopg.connect(URL, connect_timeout=10) as c:
+            return [r[0] for r in c.execute("SELECT k FROM luna_kv").fetchall()]
+    with _lock: return list(_file().keys())
+
 def status():
     return {"backend": BACKEND, "persistent": BACKEND == "postgres"}

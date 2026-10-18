@@ -53,5 +53,5 @@ def status(vid):
 def admin_list():
     out = []
     for v in (store.get("age_decl", {}) or {}).values():
-        out.append({"vid": v["vid"], "name": v.get("name", ""), "age": age_of(v["dob"]) if v.get("dob") else None, "adult": v["adult"], "at": v["adult_at"], "source": v.get("source", "app")})
+        out.append({"vid": v["vid"], "name": v.get("name", ""), "adult": v["adult"], "at": v["adult_at"], "source": v.get("source", "app")})
     return sorted(out, key=lambda x: -x["at"])

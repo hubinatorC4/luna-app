@@ -41,7 +41,7 @@ def submit(d, ip_hash=""):
     return rec
 
 def unread(): return sum(1 for m in _all() if not m.get("read"))
-def admin_list(): return list(reversed(_all()))
+def admin_list(): return [{k: x for k, x in m.items() if k != "dob"} for m in reversed(_all())]   # bez daty urodzenia
 def mark(id_, read=True, delete=False):
     with _lock:
         a = _all()

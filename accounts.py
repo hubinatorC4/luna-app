@@ -284,5 +284,5 @@ def delete(uid, pw=None, check=True):
 
 def admin_list():
     return [{"uid": u["uid"], "email": u["email"], "name": u["name"], "verified": u["verified"], "created": u["created"],
-             "adult": bool(u.get("adult")), "adult_at": u.get("adult_at", 0), "age": age.age_of(u["dob"]) if u.get("dob") else None,
+             "adult": bool(u.get("adult")), "adult_at": u.get("adult_at", 0),
              "plan": plan(u)["plan"], "until": plan(u)["until"], "source": plan(u)["source"], "locked": u.get("lock", 0) > time.time()} for u in sorted(_accts().values(), key=lambda x: -x["created"])]

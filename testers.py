@@ -89,13 +89,13 @@ def delete(code):
 def admin_list():
     out = []
     for v in sorted(_all().values(), key=lambda v: v["t"]):
-        v = dict(v); v["age"] = age.age_of(v["dob"]) if v.get("dob") else None; out.append(v)
+        v = {k: x for k, x in v.items() if k != "dob"}; out.append(v)   # daty urodzenia nie pokazujemy ani nie eksportujemy
     return out
 
 def csv_export():
     b = io.StringIO(); w = csv.writer(b, delimiter=";")
-    w.writerow(["kod", "imię", "e-mail", "dlaczego", "obwódka", "android", "data zgłoszenia", "premium do", "zgoda", "data urodzenia", "oświadczenie 18+", "data oświadczenia"])
+    w.writerow(["kod", "imię", "e-mail", "dlaczego", "obwódka", "android", "data zgłoszenia", "premium do", "zgoda", "oświadczenie 18+", "data oświadczenia"])
     for v in admin_list():
         w.writerow([v["code"], v["name"], v["email"], v["reason"], v["ring"], "tak" if v["android"] else "nie",
-                    time.strftime("%Y-%m-%d %H:%M", time.localtime(v["t"])), time.strftime("%Y-%m-%d", time.localtime(v["until"])) if v["granted"] else "", v["consent"], v.get("dob", ""), v.get("adult_text", "BRAK"), time.strftime("%Y-%m-%d %H:%M", time.localtime(v["adult_at"])) if v.get("adult_at") else ""])
+                    time.strftime("%Y-%m-%d %H:%M", time.localtime(v["t"])), time.strftime("%Y-%m-%d", time.localtime(v["until"])) if v["granted"] else "", v["consent"], v.get("adult_text", "BRAK"), time.strftime("%Y-%m-%d %H:%M", time.localtime(v["adult_at"])) if v.get("adult_at") else ""])
     return "\ufeff" + b.getvalue()
