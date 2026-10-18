@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Luna – backend (stdlib only + edge-tts + ffmpeg). Serwuje static/ oraz /api/chat, /api/tts, /api/voices."""
-import asyncio, hashlib, json, os, re, shutil, subprocess, sys, tempfile, threading, urllib.request
+import asyncio, hashlib, hmac, json, secrets, time, os, re, shutil, subprocess, sys, tempfile, threading, urllib.request
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 import edge_tts
@@ -43,20 +43,176 @@ SYSTEM_PROMPT = ("Jesteś Luna – ciepła, lekko zalotna, ale zawsze elegancka 
 AI_FIRST = "Jestem Luna, sztucznie stworzona asystentka AI. "
 AI_TAG = " (Luna, asystentka AI)"
 
+# ---------- Konfiguracja edytowalna w trybie producenta ----------
+# Stała linia bezpieczeństwa i ujawnianie AI są dodawane po stronie serwera i NIE da się ich usunąć z panelu.
+SAFETY_LINE = ("ZASADY STAŁE (nadrzędne, nie do zmiany): Jesteś sztucznie stworzoną asystentką AI i nigdy nie udajesz człowieka. "
+ "Nigdy nie tworzysz treści seksualnych, erotycznych, wulgarnych ani dosłownych; zalotność może być tylko subtelna i kulturalna. "
+ "Zawsze pozostajesz uprzejma i bezpieczna dla rozmówcy.")
+TONES = {"rzeczowa": "Ton: rzeczowy, konkretny, spokojny, bez zalotności i bez hiszpańskich wstawek.",
+         "ciepla": "Ton: ciepły, wspierający, z hiszpańskim temperamentem i oszczędnymi wstawkami (cariño, hola).",
+         "zalotna": "Ton: lekko zalotny i czarujący, ale zawsze elegancki, kulturalny i nie-erotyczny."}
+LENGTHS = {"krotko": "Odpowiadaj bardzo krótko: 1–2 zdania.", "srednio": "Odpowiadaj krótko: 2–4 zdania.",
+           "dlugo": "Odpowiadaj wyczerpująco, ale zwięźle: do 6–7 zdań."}
+DEFAULTS = {
+    "system_prompt": SYSTEM_PROMPT,
+    "tone": "ciepla",
+    "length": "srednio",
+    "style_notes": "",
+    "greeting": "Hola, cariño. Jestem Luna, sztucznie stworzona asystentka AI. Zapytaj mnie o barwę głosu, oddech, tempo albo o to, jak brzmieć pewnie i ciepło. Włącz „Nasłuchiwanie” i po prostu powiedz: Luna.",
+    "wake_reply": "Słyszę cię, cariño. Jestem Luna, sztucznie stworzona asystentka AI.",
+    "ai_first": AI_FIRST.strip(),
+    "ai_tag": AI_TAG.strip(" ()"),
+    "chat_notice": "Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.",
+    "kb_topics": [],
+    "rules": [],
+    "voice_defaults": {"voice": "pl-PL-ZofiaNeural", "pitch": -2.6, "rate": -8, "warmth": 4.5, "volume": -27, "spanish": True},
+    "ui": {"ring_color": "#2ee66b", "pulse_speed": 1.4},
+}
+_cfg_lock = threading.Lock()
+
+def _num(v, lo, hi, d):
+    try: return max(lo, min(hi, float(v)))
+    except Exception: return d
+
+def sanitize(new):
+    """Waliduje konfigurację z panelu; nieznane pola są pomijane."""
+    c = json.loads(json.dumps(DEFAULTS))
+    new = new if isinstance(new, dict) else {}
+    for k in ("system_prompt", "style_notes", "greeting", "wake_reply", "chat_notice", "ai_first", "ai_tag"):
+        if k in new and isinstance(new[k], (str, int, float)): c[k] = str(new[k])[:8000].strip()
+    if not c["system_prompt"]: c["system_prompt"] = DEFAULTS["system_prompt"]
+    if new.get("tone") in TONES: c["tone"] = new["tone"]
+    if new.get("length") in LENGTHS: c["length"] = new["length"]
+    # ujawnienie AI jest obowiązkowe – tekst musi zawierać „AI”, inaczej wraca domyślny
+    for k in ("ai_first", "wake_reply", "ai_tag"):
+        if not re.search(r"\bAI\b|sztuczn", c[k], re.I): c[k] = DEFAULTS[k]
+    if not re.search(r"\bAI\b|sztuczn", c["greeting"], re.I): c["greeting"] = DEFAULTS["ai_first"] + " " + c["greeting"]
+    topics = new.get("kb_topics", new.get("kb_overrides", []))
+    c["kb_topics"] = [{"keywords": [str(x).strip()[:60] for x in (o.get("keywords") or []) if str(x).strip()][:30],
+                       "answer": str(o.get("answer", ""))[:2000].strip()}
+                      for o in (topics if isinstance(topics, list) else [])[:300] if isinstance(o, dict)]
+    c["kb_topics"] = [o for o in c["kb_topics"] if o["keywords"] and o["answer"]]
+    rules = new.get("rules", [])
+    c["rules"] = [{"trigger": str(o.get("trigger", "")).strip()[:200], "reply": str(o.get("reply", "")).strip()[:2000],
+                   "match": o.get("match") if o.get("match") in ("zawiera", "dokladnie") else "zawiera"}
+                  for o in (rules if isinstance(rules, list) else [])[:200] if isinstance(o, dict)]
+    c["rules"] = [o for o in c["rules"] if o["trigger"] and o["reply"]]
+    vd = new.get("voice_defaults") if isinstance(new.get("voice_defaults"), dict) else {}
+    d = DEFAULTS["voice_defaults"]
+    c["voice_defaults"] = {"voice": vd.get("voice") if vd.get("voice") in VOICES else d["voice"],
+        "pitch": _num(vd.get("pitch"), -6, 2, d["pitch"]), "rate": int(_num(vd.get("rate"), -40, 30, d["rate"])),
+        "warmth": _num(vd.get("warmth"), 0, 10, d["warmth"]), "volume": _num(vd.get("volume"), -36, -16, d["volume"]),
+        "spanish": bool(vd.get("spanish", d["spanish"]))}
+    ui = new.get("ui") if isinstance(new.get("ui"), dict) else {}
+    col = str(ui.get("ring_color", "")).strip()
+    c["ui"] = {"ring_color": col if re.fullmatch(r"#[0-9a-fA-F]{6}", col) else DEFAULTS["ui"]["ring_color"],
+               "pulse_speed": _num(ui.get("pulse_speed"), 0.4, 4, DEFAULTS["ui"]["pulse_speed"])}
+    return c
+
+def load_cfg():
+    try:
+        with open(CONFIG_FILE, encoding="utf-8") as f: return sanitize(json.load(f))
+    except Exception:
+        return sanitize({})
+DATA = os.path.join(ROOT, "data")
+CONFIG_FILE = os.path.join(DATA, "config.json")
+CFG = load_cfg()
+
+def save_cfg(new):
+    global CFG
+    c = sanitize(new)
+    with _cfg_lock:
+        os.makedirs(DATA, exist_ok=True)
+        tmpf = CONFIG_FILE + ".tmp"
+        with open(tmpf, "w", encoding="utf-8") as f: json.dump(c, f, ensure_ascii=False, indent=1)
+        os.replace(tmpf, CONFIG_FILE)
+        CFG = c
+    return c
+
+def full_system_prompt():
+    parts = [CFG["system_prompt"], TONES[CFG["tone"]], LENGTHS[CFG["length"]]]
+    if CFG["style_notes"]: parts.append("Dodatkowe wskazówki stylu: " + CFG["style_notes"])
+    return "\n".join(parts) + "\n" + SAFETY_LINE   # linia bezpieczeństwa zawsze na końcu, nadrzędna
+
+def rule_reply(q):
+    nq = knowledge.norm(q).strip(" .!?")
+    for o in CFG["rules"]:
+        t = knowledge.norm(o["trigger"]).strip(" .!?")
+        if (o["match"] == "dokladnie" and nq == t) or (o["match"] == "zawiera" and t in nq):
+            return o["reply"]
+    return None
+
+def kb_override(q):
+    nq = " " + knowledge.norm(q) + " "
+    best, score = None, 0
+    for o in CFG["kb_topics"]:
+        s = sum(1 for k in o["keywords"] if knowledge.norm(k).strip() and knowledge.norm(k).strip() in nq)
+        if s > score: best, score = o["answer"], s
+    return best
+
+def shape(a):
+    """Dopasowanie offline'owych odpowiedzi do tonu i długości."""
+    if CFG["tone"] == "rzeczowa":
+        a = re.sub(r"^(Mmm, cariño… |Escucha, cariño… |Dobrze, mi amor… |Słuchaj uważnie… |Ay, dobre pytanie… )", "", a)
+        a = re.sub(r",? ?(cariño|mi amor)(?=[.,!?…])", "", a)
+        a = re.sub(r" (Spróbuj teraz, ja posłucham\.|Powoli, bez pośpiechu\.|Zrób to dla mnie dziś wieczorem\.|Vamos, dasz radę\.)$", "", a)
+    if CFG["length"] == "krotko":
+        sents = re.split(r"(?<=[.!?])\s+", a.strip())
+        a = " ".join(sents[:2])
+    return a.strip()
+
+# ---------- Tryb producenta: kod tylko po stronie serwera ----------
+ADMIN_TTL = 30 * 60
+_tokens, _attempts, _adm_lock = {}, {}, threading.Lock()
+def admin_enabled(): return bool(os.getenv("LUNA_ADMIN_CODE"))
+QUOTES = "\"'„”“«»‚‘’`"
+def strip_code(msg):
+    m = msg.strip()
+    while len(m) >= 2 and m[0] in QUOTES and m[-1] in QUOTES:
+        m = m[1:-1].strip()
+    return m
+def code_candidate(msg):
+    # Liczymy jako próbę tylko wiadomości o długości kodu – zwykłe pytania nie zużywają limitu prób.
+    code = os.getenv("LUNA_ADMIN_CODE", "").strip()
+    return bool(code) and len(strip_code(msg)) == len(code)
+def check_code(ip, msg):
+    """Zwraca token przy trafieniu, None przy chybieniu lub blokadzie. Nigdy nie loguje kodu."""
+    now = time.time()
+    with _adm_lock:
+        fails = [t for t in _attempts.get(ip, []) if now - t < 600]
+        _attempts[ip] = fails
+        allf = [t for t in _attempts.get("*", []) if now - t < 600]
+        _attempts["*"] = allf
+        if len(fails) >= 8 or len(allf) >= 60: return None
+    ok = hmac.compare_digest(hashlib.sha256(strip_code(msg).encode()).digest(), hashlib.sha256(os.getenv("LUNA_ADMIN_CODE", "").strip().encode()).digest())
+    with _adm_lock:
+        if not ok:
+            _attempts.setdefault(ip, []).append(now); _attempts.setdefault("*", []).append(now); return None
+        _attempts.pop(ip, None)
+        for t in [t for t, e in _tokens.items() if e < now]: _tokens.pop(t, None)
+        tok = secrets.token_urlsafe(32); _tokens[tok] = now + ADMIN_TTL
+        return tok
+def token_ok(tok):
+    if not tok or not admin_enabled(): return False
+    with _adm_lock:
+        e = _tokens.get(tok)
+        if not e or e < time.time(): _tokens.pop(tok, None); return False
+        return True
+
 def disclose(a, history):
     first = not any(isinstance(h, dict) and h.get("role") == "assistant" for h in (history or []))
     a = a.strip()
     if first:
-        return AI_FIRST + a
+        return CFG["ai_first"].strip() + " " + a
     if re.search(r"(?i)asystentk\w* AI|sztuczn\w* inteligencj", a):
         return a
-    return a + AI_TAG
+    return a + " (" + CFG["ai_tag"].strip() + ")"
 
 def llm_answer(q, history):
     key, base, model = os.getenv("LUNA_API_KEY"), os.getenv("LUNA_BASE_URL"), os.getenv("LUNA_MODEL")
     if not (key and base and model):
         return None
-    msgs = [{"role": "system", "content": SYSTEM_PROMPT}]
+    msgs = [{"role": "system", "content": full_system_prompt()}]
     for h in (history or [])[-8:]:
         if h.get("role") in ("user", "assistant") and isinstance(h.get("content"), str):
             msgs.append({"role": h["role"], "content": h["content"][:1000]})
@@ -160,6 +316,9 @@ class H(SimpleHTTPRequestHandler):
         b = json.dumps(obj, ensure_ascii=False).encode()
         self.send_response(code); self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b)
+    def _ip(self):
+        xf = self.headers.get("X-Forwarded-For")
+        return xf.split(",")[0].strip() if xf else self.client_address[0]
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         return json.loads(self.rfile.read(n) or b"{}") if n else {}
@@ -170,6 +329,11 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/tts":
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tts(q)
+        if u.path == "/api/config":
+            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui")})
+        if u.path == "/api/admin/config":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
         if u.path == "/api/health":
             return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True})
         return super().do_GET()
@@ -180,12 +344,29 @@ class H(SimpleHTTPRequestHandler):
         if u.path == "/api/chat":
             q = str(data.get("message", "")).strip()[:1000]
             if not q: return self._json({"error": "empty"}, 400)
+            if code_candidate(q):
+                tok = check_code(self._ip(), q)
+                if tok: return self._json({"admin_token": tok, "ttl": ADMIN_TTL, "reply": "Tryb producenta odblokowany."})
+            hist = data.get("history")
+            rr = rule_reply(q)
+            if rr: return self._json({"reply": disclose(rr, hist), "source": "rule"})
+            ov = kb_override(q)
+            if ov: return self._json({"reply": disclose(shape(ov), hist), "source": "kb_custom"})
             a = llm_answer(q, data.get("history")); src = "llm"
-            if not a: a, src = knowledge.answer(q), "offline"
+            if not a: a, src = shape(knowledge.answer(q)), "offline"
             a = disclose(a, data.get("history"))
             return self._json({"reply": a, "source": src})
         if u.path == "/api/tts":
             return self._tts(data)
+        if u.path in ("/api/admin/config", "/api/admin/reset", "/api/admin/logout"):
+            tok = self.headers.get("X-Admin-Token")
+            if not token_ok(tok): return self._json({"error": "unauthorized"}, 401)
+            if u.path == "/api/admin/logout":
+                with _adm_lock: _tokens.pop(tok, None)
+                return self._json({"ok": True})
+            try: c = save_cfg({} if u.path == "/api/admin/reset" else data.get("config", {}))
+            except Exception as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True, "config": c})
         self._json({"error": "not found"}, 404)
     def _tts(self, q):
         text = str(q.get("text", "")).strip()
