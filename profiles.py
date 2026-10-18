@@ -121,7 +121,7 @@ def save_own(uid, plan, data_url, declared):
     url, info = avatars.check_upload(data_url, declared, "prof-" + pid, r["name"])  # kontrola + wpis do kolejki moderacji awatarów
     raw = base64.b64decode(re.sub(r"^data:image/\w+;base64,", "", data_url))
     out, ext = imgsafe.reencode(raw, max_px=768, max_in=5 * 1024 * 1024, quality=4)  # bez metadanych
-    h = hashlib.sha1(out).hexdigest()[:10]
+    h = hashlib.sha1(out, usedforsecurity=False).hexdigest()[:10]
     with _lock:
         I = _imgs(); I[pid] = {"b": base64.b64encode(out).decode(), "ext": ext, "h": h, "t": int(time.time())}; store.put("agent_profile_img", I)
         P = _P(); x = P.get(pid)

@@ -35,6 +35,23 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
 os.makedirs(CACHE, exist_ok=True)
+# Odcisk certyfikatu podpisu APK (CN=Luna Team) – do samodzielnej weryfikacji przez użytkowników (apksigner verify --print-certs)
+APK_CERT_SHA256 = "6F:88:A6:AF:FB:53:67:5E:1E:A6:8E:76:89:74:6D:F7:87:78:10:E3:D1:81:6F:1D:00:92:38:5A:8B:1B:C8:56"
+_apk_cache = {}
+def apk_info():
+    """Wersja, rozmiar i SHA-256 aktualnego APK (liczone raz na plik) – pokazywane na stronie pobierania."""
+    fp = os.path.join(STATIC, APK_LATEST.lstrip("/"))
+    try: st = os.stat(fp)
+    except OSError: return {}
+    key = (fp, st.st_size, int(st.st_mtime))
+    if _apk_cache.get("k") != key:
+        h = hashlib.sha256()
+        with open(fp, "rb") as f:
+            for ch in iter(lambda: f.read(1 << 20), b""): h.update(ch)
+        _apk_cache.update(k=key, v={"url": APK_LATEST, "file": os.path.basename(fp), "size": st.st_size, "sha256": h.hexdigest(),
+                                    "version": (re.search(r"(\d+\.\d+\.\d+)", os.path.basename(fp)) or [None, ""])[1],
+                                    "package": "com.lunamowijakjest.app", "cert_sha256": APK_CERT_SHA256})
+    return _apk_cache["v"]
 
 VOICES = {
     "pl-PL-ZofiaNeural": "Zofia – najczystszy polski (domyślny)",
@@ -296,14 +313,27 @@ def strip_code(msg):
 def admin_code():
     # tolerujemy białe znaki i cudzysłowy wokół wartości zmiennej środowiskowej
     return strip_code(os.getenv("LUNA_ADMIN_CODE", "").replace("\ufeff", ""))
+def admin_totp_secret():
+    """2FA producenta (TOTP). Gdy LUNA_ADMIN_TOTP_SECRET jest ustawiony, logowanie wymaga: «kod 123456» (kod + spacja + 6 cyfr z aplikacji)."""
+    v = re.sub(r"[\s=]", "", os.getenv("LUNA_ADMIN_TOTP_SECRET", "")).upper()
+    return v if re.fullmatch(r"[A-Z2-7]{16,64}", v) else ""
+def _split_totp(msg):
+    m = strip_code(msg)
+    if admin_totp_secret():
+        parts = m.rsplit(None, 1)
+        if len(parts) == 2 and re.fullmatch(r"\d{6}", parts[1]): return parts[0].strip(), parts[1]
+        return m, ""
+    return m, None
 def code_candidate(msg):
     # Liczymy jako próbę tylko wiadomości podobne do kodu – zwykłe pytania nie zużywają limitu prób.
-    m = strip_code(msg)
+    m, _t = _split_totp(msg)
     if _admin_hash(): return 4 <= len(m) <= 64 and not re.search(r"\s", m)
     code = admin_code()
     return bool(code) and len(m) == len(code)
 def code_matches(msg):
-    m = strip_code(msg).encode()
+    m, otp = _split_totp(msg)
+    if otp is not None and not security.totp_ok(admin_totp_secret(), otp, "admin"): return False
+    m = m.encode()
     h = _admin_hash()
     if h:
         it, salt, dig = h
@@ -422,7 +452,7 @@ def tts(text, voice, pitch_st, lufs, spanish, rate=-8, warmth=4.5, hz=0, rasp=0,
     hz = int(max(-30, min(10, float(hz))))
     rasp = max(0.0, min(10.0, float(rasp))); breath = max(0.0, min(10.0, float(breath))); lisp = bool(lisp)
     text = re.sub(r"\s{2,}", " ", textutil.strip_emoji(text)).strip()[:1200]  # emoji nie są czytane na głos
-    key = hashlib.sha1(json.dumps([text, voice, round(pitch_st, 2), round(lufs, 1), bool(spanish), rate, round(warmth, 1), hz, round(rasp, 1), round(breath, 1), lisp, 5]).encode()).hexdigest()
+    key = hashlib.sha1(json.dumps([text, voice, round(pitch_st, 2), round(lufs, 1), bool(spanish), rate, round(warmth, 1), hz, round(rasp, 1), round(breath, 1), lisp, 5]).encode(), usedforsecurity=False).hexdigest()
     out = os.path.join(CACHE, key + ".mp3")
     if os.path.exists(out) and os.path.getsize(out) > 1000:
         return out
@@ -676,6 +706,7 @@ class _NullBody:
         except Exception: pass
 
 class H(SimpleHTTPRequestHandler):
+    server_version = "Luna"; sys_version = ""  # bez wersji Pythona/serwera w nagłówku Server
     def __init__(self, *a, **k): super().__init__(*a, directory=STATIC, **k)
     def log_message(self, fmt, *args): sys.stderr.write("%s %s\n" % (security.ip_hash(self.address_string()), security.redact(fmt % args)))
     def end_headers(self):
@@ -684,7 +715,16 @@ class H(SimpleHTTPRequestHandler):
         elif STATIC_CACHE.search(urlparse(self.path).path) and not self.path.startswith(("/api/", "/og/")):
             # obrazy i fonty strony: pamięć przeglądarki (szybsze LCP przy kolejnych wizytach); fonty 7 dni, obrazy 1 dzień
             self.send_header("Cache-Control", "public, max-age=604800" if self.path.endswith(".woff2") else "public, max-age=86400, stale-while-revalidate=604800")
-        for k, v in security.HEADERS.items(): self.send_header(k, v)
+        pth = urlparse(self.path).path
+        for k, v in security.HEADERS.items():
+            if k == "Content-Security-Policy":
+                v = security.csp(antibot.turnstile_on(), "'none'" if pth in ("/panel.html", "/panel") or pth.startswith("/api/") else "'self'")
+            if k == "X-Frame-Options" and (pth in ("/panel.html", "/panel") or pth.startswith("/api/")): v = "DENY"
+            self.send_header(k, v)
+        if pth.endswith(".apk"):
+            self.send_header("Content-Disposition", 'attachment; filename="' + os.path.basename(pth) + '"')
+            ah = apk_info().get("sha256")
+            if ah: self.send_header("X-Checksum-SHA256", ah)
         for c in getattr(self, "_cookies", []): self.send_header("Set-Cookie", c)
         self._cookies = []
         super().end_headers()
@@ -723,6 +763,8 @@ class H(SimpleHTTPRequestHandler):
         return d
     def _who(self):
         a = self._acct(); return (a[0]["uid"] if a else ""), self._dev()
+    def _ts_token(self, data):
+        return str(data.get("cf_turnstile") or self.headers.get("CF-Turnstile-Response") or "")[:2048]
     def _csrf_ok(self, csrf):
         t = self.headers.get("X-CSRF-Token") or ""
         return bool(t) and hmac.compare_digest(t, csrf)
@@ -732,8 +774,7 @@ class H(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b)
         return True
     def _ip(self):
-        xf = self.headers.get("X-Forwarded-For")
-        return xf.split(",")[0].strip() if xf else self.client_address[0]
+        return security.client_ip(self.headers, self.client_address[0])
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         p = urlparse(self.path).path
@@ -796,8 +837,12 @@ class H(SimpleHTTPRequestHandler):
             security.audit("POST " + p, ip, str(data.get("action") or data.get("code") or data.get("uid") or "")[:40])
         if p == "/api/account/signup":
             if not (livechat.rate_ok("su:" + ip, 3, 20) and livechat.rate_ok("su:*", 30, 2000)): return self._json({"error": "Za dużo prób – spróbuj później."}, 429)
+            if not antibot.turnstile_ok(self._ts_token(data), ip): return self._json({"error": "Potwierdź, że nie jesteś botem, i spróbuj ponownie.", "turnstile": True}, 403)
             ok, why = antibot.signup_check(str(data.get("email", "")), ip, self.headers.get("User-Agent", ""), data)
             if not ok: return self._json({"error": "Nie udało się założyć konta." if why == "honeypot" else why}, 400 if why == "honeypot" else 429 if "sieci" in why else 400)
+            pw = data.get("password")
+            if isinstance(pw, str) and 10 <= len(pw) <= 128 and security.pwned_count(pw) > 0:
+                return self._json({"error": "To hasło wyciekło już kiedyś w sieci (sprawdzone anonimowo w Have I Been Pwned). Wybierz inne, unikalne hasło.", "pwned": True}, 400)
             try: uid, sent = accounts.signup(data, notify.PUBLIC_URL)
             except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)
             except ValueError as e: return self._json({"error": str(e)}, 400)
@@ -808,20 +853,39 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"ok": True, "verification_sent": sent, "csrf": csrf, "user": accounts.public(accounts._accts()[uid])})
         if p == "/api/account/login":
             if not (livechat.rate_ok("li:" + ip, 6, 60) and livechat.rate_ok("li:*", 120, 5000)): return self._json({"error": "Za dużo prób logowania – odczekaj chwilę."}, 429)
-            try: uid = accounts.login(data.get("email"), data.get("password"))
+            if not antibot.turnstile_ok(self._ts_token(data), ip): return self._json({"error": "Potwierdź, że nie jesteś botem, i spróbuj ponownie.", "turnstile": True}, 403)
+            try: uid = accounts.login(data.get("email"), data.get("password"), data.get("totp"))
             except PermissionError as e: return self._json({"error": str(e), "locked": True}, 423)
+            except accounts.TotpRequired as e: return self._json({"error": str(e), "totp_required": True}, 401)
             except ValueError as e: return self._json({"error": str(e)}, 401)
+            old = self._cookie("luna_sid")
+            if old: accounts.end_session(old)  # rotacja sesji: stary identyfikator przestaje działać
             sid, csrf = accounts.new_session(uid); self._set_sid(sid, accounts.SESSION_DAYS * 86400)
             try: inbox.on_login(uid, self.headers.get("User-Agent", ""))
             except Exception as e: sys.stderr.write("inbox login %s\n" % type(e).__name__)
             return self._json({"ok": True, "csrf": csrf, "user": accounts.public(accounts._accts()[uid])})
-        if p in ("/api/account/logout", "/api/account/delete", "/api/account/link-tester", "/api/account/declare", "/api/account/delete-request", "/api/account/delete-cancel", "/api/me/settings"):
+        if p in ("/api/account/logout", "/api/account/logout-all", "/api/account/delete", "/api/account/link-tester", "/api/account/declare", "/api/account/delete-request", "/api/account/delete-cancel", "/api/me/settings",
+                 "/api/account/2fa/setup", "/api/account/2fa/enable", "/api/account/2fa/disable"):
             a = self._acct()
             if not a: return self._json({"error": "Zaloguj się."}, 401)
             usr, csrf = a
             if not self._csrf_ok(csrf): return self._json({"error": "Nieprawidłowy token CSRF – odśwież stronę."}, 403)
             if p == "/api/account/logout":
                 accounts.end_session(self._cookie("luna_sid")); self._set_sid("", 0); return self._json({"ok": True})
+            if p == "/api/account/logout-all":
+                n = accounts.end_all_sessions(usr["uid"]); self._set_sid("", 0); return self._json({"ok": True, "ended": n})
+            if p.startswith("/api/account/2fa/"):
+                if not livechat.rate_ok("2fa:" + usr["uid"], 6, 60): return self._json({"error": "Za dużo prób – odczekaj chwilę."}, 429)
+                try:
+                    if p.endswith("/setup"):
+                        if usr.get("totp"): return self._json({"error": "2FA jest już włączone."}, 400)
+                        return self._json(dict(accounts.totp_setup(usr["uid"]), ok=True))
+                    if p.endswith("/enable"):
+                        accounts.totp_enable(usr["uid"], data.get("code"))
+                        n = accounts.end_all_sessions(usr["uid"]); sid, csrf2 = accounts.new_session(usr["uid"])  # inne urządzenia wylogowane
+                        self._set_sid(sid, accounts.SESSION_DAYS * 86400); return self._json({"ok": True, "csrf": csrf2, "ended": max(0, n - 1)})
+                    accounts.totp_disable(usr["uid"], data.get("password"), data.get("code")); return self._json({"ok": True})
+                except ValueError as e: return self._json({"error": str(e)}, 400)
             if p == "/api/account/delete":
                 if not livechat.rate_ok("del:" + ip, 3, 20): return self._json({"error": "Za dużo prób."}, 429)
                 try: referral.forget(usr["uid"])
@@ -875,6 +939,7 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"ok": True, "accounts": accounts.admin_list()})
         if p == "/api/join":
             if not (livechat.rate_ok("join:" + ip, 2, 6) and livechat.rate_ok("join:*", 30, 300)): return self._json({"error": "Za dużo zgłoszeń – spróbuj później."}, 429)
+            if not antibot.turnstile_ok(self._ts_token(data), ip): return self._json({"error": "Potwierdź, że nie jesteś botem, i spróbuj ponownie.", "turnstile": True}, 403)
             if data.get("role") == "twarz AI" and not casting_state()["open"]: return self._json({"error": "Zgłoszenia zamknięte, finał wkrótce."}, 403)
             try: rec = join.submit(data, security.ip_hash(ip))
             except PermissionError: return self._json({"ok": True})  # spam: udajemy sukces, nic nie zapisujemy
@@ -1049,6 +1114,7 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"ok": True, "faq": helpbot.kb(), "unanswered": list(reversed(store.get("help_unanswered", []) or []))})
         if p == "/api/tickets":
             if not (livechat.rate_ok("tk:" + ip, 3, 15) and livechat.rate_ok("tk:*", 40, 600)): return self._json({"error": "Za dużo zgłoszeń – spróbuj za chwilę."}, 429)
+            if not antibot.turnstile_ok(self._ts_token(data), ip): return self._json({"error": "Potwierdź, że nie jesteś botem, i spróbuj ponownie.", "turnstile": True}, 403)
             try: tid, key, sent = tickets.submit(data)
             except PermissionError: return self._json({"ok": True, "id": "LUNA-0000", "key": ""})
             except ValueError as e: return self._json({"error": str(e)}, 400)
@@ -1274,6 +1340,11 @@ class H(SimpleHTTPRequestHandler):
         if u.path.startswith(("/api/battles", "/api/admin/battles", "/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/referral", "/api/gallery", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
             r = self._get_account(u)
             if r is not None: return r
+        if u.path in ("/.well-known/security.txt", "/security.txt"):
+            b = security.security_txt(notify.PUBLIC_URL or "https://luna-voice-coach.onrender.com").encode()
+            self.send_response(200); self.send_header("Content-Type", "text/plain; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "public, max-age=86400"); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/api/apk-info": return self._json(apk_info())
         if u.path.startswith("/og/") or u.path.rstrip("/") in promo_share.REDIRECTS:   # karty do udostępniania + krótkie linki (/casting, /glosuj, /zapros)
             if promo_share.handle_get(self, u, self._pid_plan): return
         if u.path == "/api/age/status":
@@ -1374,7 +1445,7 @@ class H(SimpleHTTPRequestHandler):
                 if re.fullmatch(r"https://[\w.-]+/[\w@./?=&%-]*", v): L[k] = v
             return self._json({"links": L})
         if u.path == "/api/config":
-            return self._json(api_i18n.config({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live", "free", "pay_notice", "app", "features")}, api_i18n.req_lang(u.query, self.headers)))
+            return self._json(api_i18n.config({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live", "free", "pay_notice", "app", "features")}, api_i18n.req_lang(u.query, self.headers)) | ({"turnstile": antibot.TS_SITE} if antibot.turnstile_on() else {}))
         if u.path == "/api/admin/config":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
@@ -1540,6 +1611,7 @@ class H(SimpleHTTPRequestHandler):
                 doc = promo_share.inject(doc, u.path, parse_qs(u.query), lang, notify.PUBLIC_URL.rstrip("/"), self._pid_plan)
                 NOIDX = u.path in ("/privacy.html", "/regulamin.html", "/panel.html") or (u.path == "/agentka.html" and (parse_qs(u.query).get("id", ["luna"])[0] or "luna") != "luna")
                 if NOIDX: doc = doc.replace("</head>", '<meta name="robots" content="noindex, follow">\n</head>', 1)
+                doc = doc.replace("</head>", '<script src="/sec-client.js"></script>\n</head>', 1)
                 b = doc.encode()
                 self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
                 if NOIDX: self.send_header("X-Robots-Tag", "noindex, follow")
@@ -1697,6 +1769,7 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"ok": True, "imported": n})
         if u.path == "/api/testers/signup":
             if not livechat.rate_ok("tst:" + self._ip(), 3, 10): return self._json({"error": "Za dużo prób – spróbuj później."}, 429)
+            if not antibot.turnstile_ok(self._ts_token(data), self._ip()): return self._json({"error": "Potwierdź, że nie jesteś botem, i spróbuj ponownie.", "turnstile": True}, 403)
             try: code, left = testers.signup(data, hashlib.sha256(("luna" + self._ip()).encode()).hexdigest()[:16])
             except OverflowError as e: return self._json({"error": str(e), "full": True}, 409)
             except age.Underage as e: return self._json({"error": str(e), "underage": True}, 403)

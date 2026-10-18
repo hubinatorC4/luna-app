@@ -79,7 +79,7 @@ def check_upload(data_url, declared, vid="", name=""):
     out, ext = imgsafe.reencode(raw, max_px=256, max_in=5 * 1024 * 1024, quality=4)
     url = f"data:image/{'png' if ext == 'png' else 'jpeg'};base64," + base64.b64encode(out).decode()
     thumb, _ = imgsafe.reencode(out, max_px=64, quality=6)
-    rec = {"id": hashlib.sha1(out).hexdigest()[:16], "vid": str(vid)[:32], "uid": str(vid)[:8], "name": str(name)[:30], "t": int(time.time()),
+    rec = {"id": hashlib.sha1(out, usedforsecurity=False).hexdigest()[:16], "vid": str(vid)[:32], "uid": str(vid)[:8], "name": str(name)[:30], "t": int(time.time()),
            "thumb": "data:image/jpeg;base64," + base64.b64encode(thumb).decode(), "ai_markers": info["ai_markers"], "kind": "upload", "reports": 0}
     with _lock:
         u = store.get("avatar_mod", {}) or {}; u[rec["id"]] = {**u.get(rec["id"], {}), **rec}

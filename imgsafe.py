@@ -35,7 +35,7 @@ def safe_avatar_dataurl(a, max_bytes=24 * 1024):
     try: raw = base64.b64decode(m.group(2), validate=True)
     except Exception: return ""
     if len(raw) > max_bytes: return ""
-    h = hashlib.sha1(raw).hexdigest()
+    h = hashlib.sha1(raw, usedforsecurity=False).hexdigest()
     with _lock:
         if h in _cache: return _cache[h]
     try:

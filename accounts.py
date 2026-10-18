@@ -1,7 +1,7 @@
 """Konta użytkowników: e-mail + hasło (Argon2id), sesje w ciasteczku HttpOnly, CSRF, blokada po nieudanych logowaniach,
 weryfikacja e-mail (gdy skonfigurowano dostawcę), eksport i usuwanie danych (RODO). Hasła i tokeny nigdy nie są logowane."""
 import hashlib, re, secrets, threading, time
-import store, age, testers, notify
+import store, age, testers, notify, security
 try:
     from argon2 import PasswordHasher
     from argon2.exceptions import VerifyMismatchError, InvalidHashError
@@ -79,8 +79,11 @@ def verify(tok):
                 u["verified"] = True; u["vtok"] = ""; store.put("accounts", a); return u["uid"]
     return False
 
-def login(email, pw):
-    """Zwraca uid lub rzuca ValueError/PermissionError (blokada)."""
+class TotpRequired(Exception):
+    """Hasło poprawne, ale konto ma włączone 2FA – potrzebny 6-cyfrowy kod z aplikacji."""
+
+def login(email, pw, totp=None):
+    """Zwraca uid lub rzuca ValueError/PermissionError (blokada)/TotpRequired (2FA)."""
     email = str(email or "").strip()[:254]; now = time.time()
     with _lock:
         a = _accts(); u = _by_email(a, email)
@@ -95,6 +98,14 @@ def login(email, pw):
                 if u2["fails"] >= MAX_FAILS: u2["lock"] = int(now + LOCK_MIN * 60); u2["fails"] = 0
                 store.put("accounts", a)
             raise ValueError("Nieprawidłowy e-mail lub hasło.")
+        if u2.get("totp"):
+            if not totp:
+                raise TotpRequired("Podaj 6-cyfrowy kod z aplikacji uwierzytelniającej.")
+            if not security.totp_ok(u2["totp"], totp, "u:" + u2["uid"]):
+                u2["fails"] = u2.get("fails", 0) + 1
+                if u2["fails"] >= MAX_FAILS: u2["lock"] = int(now + LOCK_MIN * 60); u2["fails"] = 0
+                store.put("accounts", a)
+                raise ValueError("Nieprawidłowy kod 2FA.")
         u2["fails"] = 0; u2["lock"] = 0; u2["last_login"] = int(now)
         if _ph and not u2["pw"].startswith("scrypt$") and _ph.check_needs_rehash(u2["pw"]): u2["pw"] = hash_pw(pw)
         store.put("accounts", a); return u2["uid"]
@@ -117,6 +128,40 @@ def session(sid):
 def end_session(sid):
     with _lock:
         s = _sess(); s.pop(_h(sid or ""), None); store.put("sessions", s)
+
+def end_all_sessions(uid):
+    """„Wyloguj ze wszystkich urządzeń” – usuwa każdą sesję konta. Zwraca liczbę zakończonych sesji."""
+    with _lock:
+        s = _sess(); keep = {k: v for k, v in s.items() if v.get("uid") != uid}
+        n = len(s) - len(keep); store.put("sessions", keep); return n
+
+# ---------- Opcjonalne 2FA (TOTP) dla użytkowników ----------
+def totp_setup(uid):
+    """Tworzy nowy (jeszcze nieaktywny) sekret; aktywuje go dopiero poprawny kod w totp_enable."""
+    sec = security.totp_new_secret()
+    with _lock:
+        a = _accts(); u = a.get(uid)
+        if not u: raise ValueError("Nie ma takiego konta.")
+        u["totp_pending"] = sec; store.put("accounts", a)
+    return {"secret": sec, "uri": security.totp_uri(sec, (u.get("name") or "konto") + " · Luna")}
+
+def totp_enable(uid, code):
+    with _lock:
+        a = _accts(); u = a.get(uid)
+        if not u or not u.get("totp_pending"): raise ValueError("Najpierw wygeneruj klucz 2FA.")
+        if not security.totp_ok(u["totp_pending"], code, "u:" + uid): raise ValueError("Nieprawidłowy kod – sprawdź czas w telefonie i spróbuj ponownie.")
+        u["totp"] = u.pop("totp_pending"); u["totp_at"] = int(time.time()); store.put("accounts", a)
+    return True
+
+def totp_disable(uid, pw, code):
+    with _lock:
+        a = _accts(); u = a.get(uid)
+        if not u or not u.get("totp"): raise ValueError("2FA nie jest włączone.")
+    if not check_pw(u["pw"], str(pw or "")): raise ValueError("Nieprawidłowe hasło.")
+    if not security.totp_ok(u["totp"], code, "u:" + uid): raise ValueError("Nieprawidłowy kod 2FA.")
+    with _lock:
+        a = _accts(); a[uid].pop("totp", None); a[uid].pop("totp_pending", None); store.put("accounts", a)
+    return True
 
 RANK = {"darmowy": 0, "podstawowa": 1, "premium": 2, "pro": 3}
 PASS_DAYS = 30
@@ -176,7 +221,7 @@ def expiring(days_lo, days_hi, tag):
 def public(u):
     return {"uid": u["uid"], "email": u["email"], "name": u["name"], "verified": u["verified"], "created": u["created"],
             "adult": bool(u.get("adult")), "adult_at": u.get("adult_at", 0), "tester": u.get("tester", ""), "items": u.get("items", []), **plan(u),
-            "email_verification_available": notify.email_enabled()}
+            "email_verification_available": notify.email_enabled(), "totp": bool(u.get("totp"))}
 
 def link_tester(uid, code):
     code = str(code or "").strip().upper()[:12]
@@ -188,7 +233,7 @@ def link_tester(uid, code):
 
 def export(uid):
     u = dict(_accts().get(uid) or {})
-    for k in ("pw", "vtok", "fails", "lock"): u.pop(k, None)
+    for k in ("pw", "vtok", "fails", "lock", "totp", "totp_pending"): u.pop(k, None)
     t = testers._all().get(u.get("tester", ""), None)
     if t: t = {k: v for k, v in t.items() if k != "ip"}
     return {"exported_at": int(time.time()), "account": u, "tester_application": t,
