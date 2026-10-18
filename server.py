@@ -1280,13 +1280,10 @@ class H(SimpleHTTPRequestHandler):
             hw = any(x.get("author") == "u:" + uid and x.get("status") != "deleted" for x in social._posts())
             return self._json({**base, "uref": uid[:8], "tier": nicktier.of_uid(uid), "profile": userprof.get(uid), "settings": userprof.settings(uid), "agent": {"id": pid, "own": (rr or {}).get("own", "")} if rr else None,
                                "completion": userprof.completion(uid, hw, bool(rr))})
-        if u.path == "/api/inbox/unread":
-            try: import inbox  # noqa – właściwy endpoint dostarcza moduł Skrzynki (osobny worker)
-            except ImportError: return self._json({"unread": 0, "available": False})
         if u.path == "/api/sceneries":
             pl, _uid = self._plan(); pl = self._gen_plan(pl, _uid); lg = (parse_qs(u.query).get("lang") or ["pl"])[0]
-            return self._json({"items": battle_categories.public(lg if lg in social.LANGS else "pl", pl), "custom": plans.has(pl, "pro"),
-                               "basic_from_data": bool((store.get("scenery_basic", {}) or {}).get("from_data"))})
+            return self._json({"items": agentvideo.scenes_public(lg if lg in social.LANGS else "pl", pl), "custom": plans.has(pl, "pro"),
+                               "basic_from_data": bool((store.get("bt_basic", {}) or {}).get("from_data"))})
         if u.path == "/api/agent/videos":
             pl, uid = self._plan(); pl = self._gen_plan(pl, uid); L = agentvideo.limits(pl)
             return self._json({"items": agentvideo.mine(uid) if uid else [], "limits": L, "engine": agentvideo.engine(), "login": not uid})

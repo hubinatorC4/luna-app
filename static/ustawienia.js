@@ -42,7 +42,7 @@ function rowHTML([id, ic, k, h, kind]){
   let on = false, sub = h ? T(h) : '';
   if (id === 'pub') on = !!P.profile.public;
   if (id === 'hide') on = !!P.profile.hide_rank;
-  if (kind === 'ntoggle') on = !!(P.settings.notif || {})[id.slice(2)];
+  if (kind === 'ntoggle') on = id === 'n_battles' && FP.battles !== undefined ? FP.battles : !!(P.settings.notif || {})[id.slice(2)];
   if (id === 'gen' && !(P.caps.gen > 0)) sub = `<span class="st-lockb">${esc(T('gen_lock'))}</span>`;
   if (id === 'plan') sub = esc(F('plan_now', {p: P.plan_name}));
   if (id === 'invite') sub = esc(T(FP.invites === 'none' ? 'inv_no' : 'inv_all'));
@@ -251,7 +251,7 @@ async function reload(){ P = await api('/api/me/profile'); if (!P.login) draw();
   try { const a = await api('/api/account/me'); ME = a.user; CSRF = a.csrf || ''; } catch(e){}
   try { P = await api('/api/me/profile'); } catch(e){ P = {login: true}; }
   if (P.login || !ME){ $('#stApp').innerHTML = `<div class="st-sheet"><p>${esc(T('login'))}</p><div class="st-btns"><a class="st-btn primary" href="/app#konto">${esc(T('login_b'))}</a></div></div>`; return; }
-  try { const f = await api('/api/friends/settings'); FP = {invites: f.keys.invites.value}; } catch(e){}
+  try { const f = await api('/api/friends/settings'); FP = {invites: f.keys.invites.value, battles: !!f.keys.battles.value}; } catch(e){}
   draw();
   window.addEventListener('luna-lang', () => { if (P && !P.login) draw(); });
 })();
