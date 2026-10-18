@@ -3,6 +3,7 @@
 const $ = s => document.querySelector(s);
 const D = JSON.parse(document.getElementById('i18n').textContent);
 const L = (document.documentElement.lang || 'pl').slice(0, 2); const t = Object.assign({}, D.pl, D[L] || {});
+const B = window.LunaBt;
 const VW = {pl: ['głos', 'głosy', 'głosów'], en: ['vote', 'votes', 'votes'], es: ['voto', 'votos', 'votos'], de: ['Stimme', 'Stimmen', 'Stimmen'], uk: ['голос', 'голоси', 'голосів']};
 const vw = n => { const f = VW[L] || VW.pl; let c = 'other'; try { c = new Intl.PluralRules(L).select(n); } catch (e) {} return esc(c === 'one' ? f[0] : c === 'few' ? f[1] : f[2]); };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
@@ -10,6 +11,8 @@ const lq = L === 'pl' ? '' : '?lang=' + L;
 const PT = {pl: 'Agentka współpracująca', en: 'Partner agent', es: 'Agente colaboradora', de: 'Partner-Agentin', uk: 'Агентка-партнерка'}[L] || 'Agentka współpracująca';
 const ptm = c => c && c.partner ? `<span class="pt-mark" title="${esc(PT)}" aria-label="${esc(PT)}">💖</span>` : '';
 const fmt = n => Number(n || 0).toLocaleString(L === 'uk' ? 'uk-UA' : L);
+const BID = new URLSearchParams(location.search).get('b') || '';
+const bq = () => '/api/battles' + (BID ? '?b=' + encodeURIComponent(BID) : '');
 let S = null, csrf = '', me = null, skew = 0, lastMsg = 0, busy = false;
 async function api(path, body){
   const o = body ? {method: 'POST', credentials: 'same-origin', headers: {'Content-Type': 'application/json', 'X-CSRF-Token': csrf}, body: JSON.stringify(body)} : {credentials: 'same-origin'};
@@ -23,13 +26,22 @@ const HEART = '<svg class="bt-heart" viewBox="0 0 64 64" aria-hidden="true"><def
   + '<path d="M15 16 C18 12 23 12 26 15" stroke="#fff" stroke-opacity=".75" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="44" cy="19" rx="4" ry="2.4" fill="#fff" fill-opacity=".35"/>'
   + '<path d="M40 28 L58 15" stroke="url(#bta)" stroke-width="3" stroke-linecap="round"/><path d="M60 13 L53 14 L57 19 Z" fill="url(#bta)"/></svg>';
 function heart(btn){ if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; btn.insertAdjacentHTML('beforeend', HEART); const h = btn.lastElementChild; setTimeout(() => h.remove(), 900); }
-function face(c, side, rank, sub, cls){
-  return `<div class="bt-half ${side} ${cls || ''}">${rank ? `<span class="bt-rank">#${rank}</span>` : ''}<div class="bt-pic${c.partner ? ' pt-ring' : ''}"><img src="${esc(c.img)}" alt="${esc(c.name)} (${esc(t.ai)})" width="300" height="400" decoding="async"></div>
-    <div class="bt-cap"><div class="bt-name">${esc(c.name)}${ptm(c)}<span class="bt-ai">${esc(t.ai)}</span></div><div class="bt-sub">${sub}</div></div></div>`;
+/* Ostre obrazy: sceneria 1x/2x w AVIF i WebP (image-set), agentki z katalogu 1x/2x (WebP z zapasowym JPG). Limit źródła scenerii: 1280×720. */
+const SC_OK = /^(city|studio|promenade|winter|gala|garden)$/;
+const sceneStyle = s => { s = SC_OK.test(s) ? s : 'studio'; const u = (x, e) => `url('/bitwy/${s}${x}.${e}')`;
+  return `background-image:${u('', 'webp')};background-image:-webkit-image-set(${u('', 'webp')} 1x,${u('@2x', 'webp')} 2x);background-image:image-set(${u('', 'avif')} type('image/avif') 1x,${u('@2x', 'avif')} type('image/avif') 2x,${u('', 'webp')} type('image/webp') 1x,${u('@2x', 'webp')} type('image/webp') 2x)`; };
+function pic(src, alt, w, h, lazy){
+  const m = /^(\/catalog\/[\w\/-]+)\.jpg$/.exec(src || ''); const at = `alt="${esc(alt)}" width="${w}" height="${h}" decoding="async"${lazy ? ' loading="lazy"' : ''}`;
+  if (!m) return `<img src="${esc(src)}" ${at}>`;
+  return `<picture><source type="image/webp" srcset="${m[1]}.webp 1x, ${m[1]}@2x.webp 2x"><img src="${m[1]}.jpg" srcset="${m[1]}.jpg 1x, ${m[1]}@2x.jpg 2x" ${at}></picture>`;
 }
-const role = c => esc(c.official ? t.official : t.user_agent) + (c.wins ? ` · 🏆 ${fmt(c.wins)}` : '');
+function face(c, side, rank, sub, cls){
+  return `<div class="bt-half ${side} ${cls || ''}">${rank ? `<span class="bt-rank">#${rank}</span>` : ''}<div class="bt-pic${c.partner ? ' pt-ring' : ''}">${pic(c.img, c.name + ' (' + t.ai + ')', 300, 400)}</div>
+    <div class="bt-cap"><div class="bt-name"><button type="button" class="bt-prof" data-agent="${esc(c.id || '')}">${esc(c.name)}</button>${ptm(c)}<span class="bt-ai">${esc(t.ai)}</span></div>${c.league ? `<div class="bt-lgrow">${B.league(c.league, c.elite)}${(c.titles || []).length ? ` <span class="bt-tt1">👑 ${esc(B.titleName(c.titles[c.titles.length - 1]))}</span>` : ''}</div>` : ''}<div class="bt-sub">${sub}</div></div></div>`;
+}
+const role = c => esc(c.official ? t.official : t.user_agent) + (c.pts ? ` · ${fmt(c.pts)} ${esc(B.T.pts)}` : '');
 function timer(){
-  const el = $('#btTimer'); if (!el || !S || !S.battle) return;
+  const el = $('#btTimer'); if (!el || !S || !S.battle || document.hidden) return;
   let s = Math.max(0, Math.floor(S.battle.end - (Date.now() / 1000 + skew)));
   if (s <= 0){ el.textContent = t.closed; document.querySelectorAll('.bt-vote').forEach(b => b.disabled = true); clearInterval(timer.iv); setTimeout(load, 2500); return; }
   const d = Math.floor(s / 86400); s %= 86400; const h = Math.floor(s / 3600); s %= 3600; const m = Math.floor(s / 60); s %= 60;
@@ -45,8 +57,8 @@ function renderStage(){
       const dis = !!b.mine || b.own || !S.logged_in;
       return `<button type="button" class="bt-vote ${side}${mine ? ' done' : ''}" data-side="${side}"${dis ? ' disabled' : ''}>${esc(mine ? t.voted_btn : t.vote_for.replace('{name}', c.name))}</button>`; };
     const note = b.own ? `<p class="bt-msg">${esc(t.own)}</p>` : !S.logged_in ? `<p class="bt-msg"><a class="pill primary" href="/app#konto">${esc(t.login_vote)}</a></p>` : '';
-    host.innerHTML = `${head(true)}<div class="bt-timeline"><span class="bt-timer" id="btTimer"></span><span class="bt-scene">${esc(t.scene)}: ${esc(t['scene_' + b.scene] || '')}</span></div>
-      <div class="bt-stage" style="background-image:url('/bitwy/${esc(b.scene)}.webp')">${face(b.a, 'a', 1, `${fmt(va)} ${vw(va)} · ${role(b.a)}`)}${face(b.b, 'b', 2, `${fmt(vb)} ${vw(vb)} · ${role(b.b)}`)}<div class="bt-vs" aria-hidden="true">VS</div></div>
+    host.innerHTML = `${head(true)}<div class="bt-timeline"><span class="bt-timer" id="btTimer"></span><span class="bt-scene">${b.lg ? B.league(b.lg) + ' ' : ''}${esc(t.scene)}: ${esc(t['scene_' + b.scene] || '')}</span></div>
+      <div class="bt-stage" style="${sceneStyle(b.scene)}">${face(b.a, 'a', 1, `${fmt(va)} ${vw(va)} · ${role(b.a)}`)}${face(b.b, 'b', 2, `${fmt(vb)} ${vw(vb)} · ${role(b.b)}`)}<div class="bt-vs" aria-hidden="true">VS</div></div>
       <div class="bt-actions">${btn('a')}${btn('b')}</div>
       <div class="bt-bar" role="img" aria-label="${esc(b.a.name)} ${pa}% · ${esc(b.b.name)} ${100 - pa}%"><i class="a" style="width:${pa}%"></i><i class="b" style="width:${100 - pa}%"></i></div>
       <div class="bt-counts"><span class="a">${esc(b.a.name)} ${pa}%</span><span class="b">${esc(b.b.name)} ${100 - pa}%</span></div>${note}
@@ -54,9 +66,9 @@ function renderStage(){
     clearInterval(timer.iv); timer(); timer.iv = setInterval(timer, 1000);
     host.querySelectorAll('.bt-vote:not([disabled])').forEach(x => x.onclick = vote);
   } else {
-    const luna = {name: 'Luna', img: '/catalog/luna/outfit_sweter.jpg', official: true};
+    const luna = {id: 'luna', name: 'Luna', img: '/catalog/luna/outfit_sweter.jpg', official: true};
     host.innerHTML = `${head(false)}<div class="bt-timeline"><span class="bt-scene">${esc(t.host)}</span></div>
-      <div class="bt-stage" style="background-image:url('/bitwy/studio.webp')">${face(luna, 'a', 0, role(luna))}
+      <div class="bt-stage" style="${sceneStyle('studio')}">${face(luna, 'a', 0, role(luna))}
       <div class="bt-half b"><div class="bt-slot"><span><b>?</b>${esc(t.slot)}</span></div></div><div class="bt-vs" aria-hidden="true">VS</div></div>
       <div class="bt-wait"><h2>${esc(t.wait_h)}</h2><p>${esc(t.wait_p.replace('{n}', S.missing))}</p><a class="pill primary" href="#btEnter">⚔️ ${esc(t.enter_cta)}</a><p class="bt-msg">${esc(t.free_note)}</p></div>`;
   }
@@ -66,22 +78,23 @@ function renderChamp(){
   if (!c || !c.a){ el.hidden = true; return; }
   const w = c.winner, sub = (side, n) => `${fmt(n)} ${vw(n)}`;
   el.hidden = false;
-  el.innerHTML = `<h2>${esc(t.champ)} · ${esc(t.ended)}</h2><div class="bt-stage" style="background-image:url('/bitwy/${esc(c.scene || 'gala')}.webp')">
+  el.innerHTML = `<h2>${esc(t.champ)} · ${esc(t.ended)}</h2><div class="bt-stage" style="${sceneStyle(c.scene || 'gala')}">
     ${face(c.a, 'a', 0, sub('a', c.va), w === 'a' ? '' : 'lost')}${face(c.b, 'b', 0, sub('b', c.vb), w === 'b' ? '' : 'lost')}<div class="bt-vs" aria-hidden="true">VS</div>
-    <div class="bt-win" style="left:${w === 'a' ? '25%' : '75%'}">🏆 ${esc(t.winner)}<small>${esc(t.pct_votes.replace('{p}', c.pct))}</small></div></div>`;
+    <div class="bt-win" style="left:${w === 'a' ? '25%' : '75%'}">🏆 ${esc(t.winner)}<small>${esc(t.pct_votes.replace('{p}', c.pct))}</small>${B.titleName(c.scene) ? `<small class="bt-wt">👑 ${esc(B.titleName(c.scene))}</small>` : ''}</div></div>`;
 }
 function renderLast(){
   const el = $('#btLastList');
   if (!S.last.length){ el.innerHTML = `<p class="bt-note">${esc(t.none_yet)}</p>`; return; }
   el.innerHTML = S.last.map(r => {
-    const res = r.reason !== 'end' ? t.cancelled : r.winner ? `<span class="w">🏆 ${esc(r[r.winner].name)}</span> ${esc(t.won)}` : t.draw;
-    return `<div class="bt-r"><img${r.a.partner ? ' class="pt-ring"' : ''} src="${esc(r.a.img)}" alt="" width="40" height="52"><img${r.b.partner ? ' class="pt-ring"' : ''} src="${esc(r.b.img)}" alt="" width="40" height="52"><div><b>${esc(r.a.name)}</b>${ptm(r.a)} ${fmt(r.va)} : ${fmt(r.vb)} <b>${esc(r.b.name)}</b>${ptm(r.b)}<br>${res} · ${new Date(r.end * 1000).toLocaleDateString(L)}</div></div>`;
+    const res = r.reason !== 'end' ? t.cancelled : r.winner ? `<span class="w">🏆 ${esc(r[r.winner].name)}</span> ${esc(t.won)} · 👑 ${esc(B.titleName(r.scene))} · +${S.pts_win || 10} ${esc(B.T.pts)}` : t.draw;
+    const lgl = r.lg ? `${B.league(r.lg)} ` : '';
+    return `<div class="bt-r"><img${r.a.partner ? ' class="pt-ring"' : ''} src="${esc(r.a.img)}" alt="" width="40" height="52"><img${r.b.partner ? ' class="pt-ring"' : ''} src="${esc(r.b.img)}" alt="" width="40" height="52"><div><b>${esc(r.a.name)}</b>${ptm(r.a)} ${fmt(r.va)} : ${fmt(r.vb)} <b>${esc(r.b.name)}</b>${ptm(r.b)}<br>${lgl}${res} · ${new Date(r.end * 1000).toLocaleDateString(L)}</div></div>`;
   }).join('');
 }
 function renderEnter(){
   const el = $('#btEnterBody');
   if (S.my_entry){ const m = S.my_entry;
-    el.innerHTML = `<div class="bt-mine"><img src="${esc(m.img)}" alt="" width="72" height="96"><div><small>${esc(t.my_h)}</small><br><b>${esc(m.name)}</b> <span class="bt-ai" style="position:static">${esc(t.ai)}</span><br>${esc(m.status === 'approved' ? t.st_approved : t.st_pending)}${m.wins ? ` · 🏆 ${fmt(m.wins)}` : ''}<br><button type="button" class="pill ghost sm" id="btWd">${esc(t.withdraw)}</button></div></div>`;
+    el.innerHTML = `<div class="bt-mine"><img src="${esc(m.img)}" alt="" width="72" height="96"><div><small>${esc(t.my_h)}</small><br><b>${esc(m.name)}</b> <span class="bt-ai" style="position:static">${esc(t.ai)}</span><br>${esc(m.status === 'approved' ? t.st_approved : t.st_pending)}<br>${B.league(m.league || 'braz')} <b>${fmt(m.pts)} ${esc(B.T.pts)}</b>${m.pos ? ` · #${fmt(m.pos)}` : ''} · <a href="/ranking.html${lq}">${esc(t.rank_link)}</a>${B.plaque(m.titles)}<br><button type="button" class="pill ghost sm" id="btWd">${esc(t.withdraw)}</button></div></div>`;
     $('#btWd').onclick = async () => { if (!confirm(t.withdraw_q)) return; try { await api('/api/battles/withdraw', {}); load(); } catch(e){ alert(e.message); } };
     return; }
   const pr = v => String(v || '').replace('.', L === 'en' ? '.' : ',');
@@ -149,19 +162,55 @@ document.addEventListener('click', async e => {
 /* Pełny ekran na telefonie: zamknięcie (X) i cienki pasek; intro TOP 2 z prawdziwymi wygranymi z historii bitew. */
 const RM = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const plural = (n, f) => { let c = 'other'; try { c = new Intl.PluralRules(L).select(n); } catch (e) {} return c === 'one' ? f[0] : c === 'few' ? f[1] : f[2]; };
-(() => { const x = $('#btClose'); if (!x) return; x.setAttribute('aria-label', t.close);
-  x.onclick = e => { let same = false; try { same = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (_) {}
-    if (same && history.length > 1){ e.preventDefault(); history.back(); } else x.href = '/promo.html' + lq; }; })();
+/* Wejście/wyjście bez przymusu: X, ESC, przesunięcie w dół, minimalizacja do paska; ustawienia; podsumowanie (?sum=). */
+const P = window.LunaBtPrefs || {get: k => k !== 'luna_bt_notify', set(){}, minimize(){}, restoreState: () => null, renderSettings(){}};
+const QS = new URLSearchParams(location.search);
+const sameRef = (() => { try { return !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (_) { return false; } })();
+const RESTORE = QS.get('restore') === '1' ? P.restoreState() : null;
+function leave(){ if (sameRef && history.length > 1) history.back(); else location.href = '/' + (L === 'pl' ? '' : '?lang=' + L); }
+function minimize(){
+  if (!S || S.state !== 'live' || !S.battle){ leave(); return; }
+  P.minimize({bid: S.battle.id, y: scrollY, pos: RESTORE && RESTORE.pos, t: Date.now()}); leave();
+}
+const sheetOpen = () => !!document.querySelector('.bt-sheet, .bt-intro');
+(() => {
+  const x = $('#btClose'); x.setAttribute('aria-label', t.close); x.title = t.close;
+  x.onclick = e => { e.preventDefault(); leave(); };
+  const m = $('#btMin'); m.setAttribute('aria-label', t.min); m.title = t.min; m.onclick = minimize;
+  const g = $('#btSet'); g.setAttribute('aria-label', t.settings); g.title = t.settings; g.onclick = openSettings;
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !sheetOpen() && !/INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '')) leave(); });
+  // przesunięcie w dół od góry ekranu = zamknięcie (jak w aplikacjach), tylko gdy strona jest na samej górze
+  let y0 = null, x0 = 0;
+  addEventListener('touchstart', e => { if (scrollY > 0 || sheetOpen() || e.target.closest('input,textarea,.bt-msgs,.bt-olist')) { y0 = null; return; } y0 = e.touches[0].clientY; x0 = e.touches[0].clientX; }, {passive: true});
+  addEventListener('touchmove', e => { if (y0 == null) return; const dy = e.touches[0].clientY - y0; const m2 = $('main'); if (dy > 0 && Math.abs(e.touches[0].clientX - x0) < dy) m2.style.transform = `translateY(${Math.min(dy, 140) / 2}px)`; }, {passive: true});
+  addEventListener('touchend', e => { if (y0 == null) return; const dy = (e.changedTouches[0] || {}).clientY - y0; $('main').style.transform = ''; y0 = null; if (dy > 120) leave(); });
+})();
+function sheet(html, label){
+  const d = document.createElement('div'); d.className = 'bt-sheet'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', label);
+  d.innerHTML = `<div class="bt-sheet-in"><button type="button" class="bt-x2" aria-label="${esc(t.close)}">✕</button>${html}</div>`;
+  document.body.appendChild(d); const x = d.querySelector('.bt-x2'); const prev = document.activeElement; x.focus();
+  const close = () => { d.remove(); document.removeEventListener('keydown', k); prev && prev.focus && prev.focus(); }; const k = ev => { if (ev.key === 'Escape') close(); };
+  x.onclick = close; d.onclick = ev => { if (ev.target === d) close(); }; document.addEventListener('keydown', k); return d;
+}
+function openSettings(){ const d = sheet('<div class="bt-sethost"></div>', t.settings); P.renderSettings(d.querySelector('.bt-sethost')); }
+async function openSummary(bid){
+  let s; try { s = await api('/api/battles/summary?bid=' + encodeURIComponent(bid)); } catch (_) { return; }
+  const w = s.winner ? s[s.winner] : null, dec = L === 'en' ? (x => x.replace(',', '.')) : (x => x);
+  const days = Math.max(1, Math.round((s.end - s.start) / 86400));
+  sheet(`<h3>${esc(t.sum_h)}</h3><table class="bt-sum"><tr><th>${esc(t.sum_win)}</th><td>${w ? `🏆 <b>${esc(w.name)}</b> <span class="bt-ai" style="position:static">${esc(t.ai)}</span>` : esc(s.reason === 'end' ? t.draw : t.cancelled)}</td></tr>
+    <tr><th>${esc(t.sum_score)}</th><td><b>${dec(s.pa)}% : ${dec(s.pb)}%</b></td></tr><tr><th>${esc(s.a.name)}</th><td>${fmt(s.va)} ${vw(s.va)}</td></tr><tr><th>${esc(s.b.name)}</th><td>${fmt(s.vb)} ${vw(s.vb)}</td></tr>
+    ${w ? `<tr><th>${esc(t.sum_title)}</th><td><b class="bt-gold">👑 ${esc(B.titleName(s.scene))}</b> · +${S && S.pts_win || 10} ${esc(B.T.pts)}</td></tr>` : ''}<tr><th>${esc(t.sum_dur)}</th><td>${fmt(days)} ${esc(t.dd)}</td></tr></table>`, t.sum_h);
+}
 let introDone = false;
 function intro(){
   if (introDone) return; introDone = true;
-  if (!S || S.state !== 'live' || !S.battle || RM()) return;
+  if (!S || S.state !== 'live' || !S.battle || RM() || !P.get('luna_bt_intro') || RESTORE || QS.get('sum') || !(sameRef || QS.get('intro') === '1')) return;
   const b = S.battle;
-  const plaque = c => c.wins > 0 ? `<div class="bi-plq">🏆 ${fmt(c.wins)} ${esc(plural(c.wins, t.pl_w))}</div>` : '';
-  const card = (c, side, rank) => `<div class="bi-ag ${side}"><span class="bt-rank">#${rank}</span><img${c.partner ? ' class="pt-ring"' : ''} src="${esc(c.img)}" alt="" width="300" height="400"><div class="bi-nm">${esc(c.name)}${ptm(c)}<span class="bt-ai">${esc(t.ai)}</span></div>${plaque(c)}</div>`;
+  const plaque = c => `<div class="bi-lg">${B.league(c.league || 'braz', c.elite)}</div>${B.plaque(c.titles)}`;
+  const card = (c, side, rank) => `<div class="bi-ag ${side}"><span class="bt-rank">#${rank}</span><span class="${c.partner ? 'pt-ring' : ''}">${pic(c.img, '', 300, 400)}</span><div class="bi-nm">${esc(c.name)}${ptm(c)}<span class="bt-ai">${esc(t.ai)}</span></div>${plaque(c)}</div>`;
   const o = document.createElement('div'); o.className = 'bt-intro'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', t.intro_t);
-  o.innerHTML = `<div class="bi-bg" style="background-image:url('/bitwy/${esc(b.scene)}.webp')"></div><i class="bi-slash"></i>
-    <h2 class="bi-t">${esc(t.intro_t)}</h2>${card(b.a, 'a', 1)}${card(b.b, 'b', 2)}<div class="bt-vs bi-vs" aria-hidden="true">VS</div>
+  o.innerHTML = `<div class="bi-bg" style="${sceneStyle(b.scene)}"></div><i class="bi-slash"></i>
+    <h2 class="bi-t">${b.lg ? esc(B.T.league + ' ' + (B.T.lg[b.lg] || '')) + ' · ' + esc(t.h1.replace(/^\S+\s/, '')) : esc(t.intro_t)}</h2>${card(b.a, 'a', 1)}${card(b.b, 'b', 2)}<div class="bt-vs bi-vs" aria-hidden="true">VS</div>
     <button type="button" class="bi-skip">${esc(t.skip)} ›</button>`;
   document.body.appendChild(o); document.body.classList.add('bt-introon');
   let gone = false; const end = () => { if (gone) return; gone = true; o.classList.add('out'); document.body.classList.remove('bt-introon'); document.removeEventListener('keydown', key); setTimeout(() => o.remove(), 350); };
@@ -169,12 +218,48 @@ function intro(){
   o.addEventListener('click', end); document.addEventListener('keydown', key); o.querySelector('.bi-skip').focus({preventScroll: true});
   setTimeout(end, 2600);
 }
-function apply(d){ S = d; skew = d.now - Date.now() / 1000; renderStage(); renderChamp(); renderLast(); renderEnter(); renderChat(); intro(); }
+
+/* ---------- inne trwające bitwy (pokazowa Top 2 i ligowe) ---------- */
+function renderOthers(){
+  const el = $('#btOthers'); const O = (S.others || []);
+  if (O.length < 2){ el.hidden = true; return; }
+  el.hidden = false; const cur = S.battle && S.battle.id;
+  el.innerHTML = `<h2>${esc(t.others_h)}</h2><div class="bt-olist">${O.map(o => `<a class="bt-o${o.id === cur ? ' on' : ''}" href="/bitwy.html?b=${esc(o.id)}${L === 'pl' ? '' : '&lang=' + L}">
+    <span class="bt-ot">${o.main ? esc(t.main_b) : B.league(o.lg)}</span><span class="bt-ov"><img src="${esc(o.a.img)}" alt="" width="44" height="58"><i>VS</i><img src="${esc(o.b.img)}" alt="" width="44" height="58"></span>
+    <span class="bt-on">${esc(o.a.name)} ${fmt(o.votes.a)} : ${fmt(o.votes.b)} ${esc(o.b.name)}</span></a>`).join('')}</div>`;
+}
+/* ---------- profil agentki (liga, Elita, punkty, tytuły – z prawdziwych wyników) ---------- */
+document.addEventListener('click', async e => {
+  const b = e.target.closest('.bt-prof'); if (!b || !b.dataset.agent) return;
+  let d; try { d = await api('/api/battles/agent/' + encodeURIComponent(b.dataset.agent)); } catch(_){ return; }
+  const T = B.T, dlg = document.createElement('div'); dlg.className = 'bt-sheet'; dlg.setAttribute('role', 'dialog'); dlg.setAttribute('aria-modal', 'true'); dlg.setAttribute('aria-label', T.profile);
+  dlg.innerHTML = `<div class="bt-sheet-in"><button type="button" class="bt-x2" aria-label="${esc(T.close)}">✕</button><img src="${esc(d.img)}" alt="${esc(d.name)} (${esc(T.ai)})" width="120" height="160">
+    <h3>${esc(d.name)} <span class="bt-ai" style="position:static">${esc(T.ai)}</span></h3><p>${esc(d.official ? t.official : t.user_agent)}</p>
+    <p>${B.league(d.league, d.elite)}</p><p class="bt-pstats"><b>${fmt(d.pts)} ${esc(T.pts)}</b> · ${esc(T.pos)} #${fmt(d.pos)} · ${fmt(d.wins)} ${esc(B.plural(d.wins, T.wins))} / ${fmt(d.played)} ${esc(T.played)} (${fmt(d.pct)}% ${esc(T.pct)})</p>
+    <h4>${esc(T.titles)}</h4>${B.plaque(d.titles) || `<p class="bt-note">${esc(T.no_titles)}</p>`}<p><a class="pill ghost sm" href="/ranking.html${lq}">${esc(t.rank_link)}</a></p></div>`;
+  document.body.appendChild(dlg); const x = dlg.querySelector('.bt-x2'); x.focus();
+  const close = () => { dlg.remove(); document.removeEventListener('keydown', k); b.focus(); }; const k = ev => { if (ev.key === 'Escape') close(); };
+  x.onclick = close; dlg.onclick = ev => { if (ev.target === dlg) close(); }; document.addEventListener('keydown', k);
+});
+/* ---------- „+10 pkt” po prawdziwej wygranej Twojej agentki (raz na bitwę) ---------- */
+function ptsGain(){
+  const W = S.my_wins || []; if (!W.length) return;
+  let seen = []; try { seen = JSON.parse(localStorage.getItem('bt_pts_seen') || '[]'); } catch(_){}
+  const fresh = W.filter(x => !seen.includes(x)); if (!fresh.length) return;
+  try { localStorage.setItem('bt_pts_seen', JSON.stringify(seen.concat(fresh).slice(-50))); } catch(_){}
+  const n = fresh.length * (S.pts_win || 10), el = document.createElement('div');
+  el.className = 'bt-pts' + (RM() ? ' still' : ''); el.setAttribute('role', 'status'); el.innerHTML = `<b>+${fmt(n)} ${esc(B.T.pts)}</b><small>${esc(t.pts_gain)}</small>`;
+  document.body.appendChild(el); setTimeout(() => el.remove(), RM() ? 4000 : 2600);
+}
+let first = true;
+function apply(d){ S = d; skew = d.now - Date.now() / 1000; renderStage(); renderChamp(); renderLast(); renderEnter(); renderChat(); renderOthers(); intro();
+  if (first){ first = false; if (RESTORE && RESTORE.y) scrollTo(0, RESTORE.y); if (QS.get('sum')) openSummary(QS.get('sum')); } setTimeout(ptsGain, introDone && S.state === 'live' && !RM() ? 2800 : 300); }
 async function load(){
-  try { if (!me){ const m = await api('/api/account/me'); me = m.user || {}; csrf = m.csrf || ''; } apply(await api('/api/battles')); }
+  try { if (!me){ const m = await api('/api/account/me'); me = m.user || {}; csrf = m.csrf || ''; } apply(await api(bq())); }
   catch(e){ $('#btStage').innerHTML = `<p class="bt-note">${esc(t.err)}</p>`; }
 }
+if (!P.get('luna_bt_show')){ $('main').innerHTML = `<section class="card bt-offmsg"><h2>⚔️ ${esc(t.h1.replace(/^\S+\s/, ''))}</h2><p>${esc(t.off_msg)}</p><button type="button" class="pill primary" id="btOn">${esc(t.off_btn)}</button></section>`; $('#btOn').onclick = () => { P.set('luna_bt_show', true); location.reload(); }; return; }
 load();
-setInterval(() => { if (!document.hidden && !busy) api('/api/battles').then(d => { const keep = $('#btForm'); S = d; skew = d.now - Date.now() / 1000; renderStage(); renderChamp(); renderLast(); if (!keep) renderEnter(); }).catch(() => {}); }, 20000);
+setInterval(() => { if (!document.hidden && !busy) api(bq()).then(d => { const keep = $('#btForm'); S = d; skew = d.now - Date.now() / 1000; renderStage(); renderChamp(); renderLast(); renderOthers(); if (!keep) renderEnter(); }).catch(() => {}); }, 20000);
 setInterval(pollChat, 4000);
 })();

@@ -10,7 +10,8 @@ EMAIL_KEY = os.getenv("EMAIL_API_KEY", "").strip()
 EMAIL_FROM = os.getenv("EMAIL_FROM", "").strip()
 PUBLIC_URL = os.getenv("PUBLIC_URL", "https://luna-voice-coach.onrender.com").rstrip("/")
 CRON_SECRET = os.getenv("CRON_SECRET", "").strip()
-TOPICS = ("live", "video", "update")
+TOPICS = ("live", "video", "update", "battle")
+DEFAULT_TOPICS = ("live", "video", "update")   # "battle" tylko po włączeniu „Powiadom mnie o wyniku bitwy”
 MOD_TOPIC = "mod"  # tylko z tokenem moderatora
 _lock = threading.Lock()
 LOG = []  # ostatnie zdarzenia (bez danych osobowych)
@@ -24,17 +25,18 @@ def email_enabled(): return EMAIL_PROVIDER in ("brevo", "resend") and bool(EMAIL
 # ---------- Web Push ----------
 def _subs(): return store.get("push_subs", {}) or {}
 
-def subscribe(sub, topics, uid=None, mod=False):
+def subscribe(sub, topics, uid=None, mod=False, merge=False):
     if not isinstance(sub, dict) or not re.match(r"https://", str(sub.get("endpoint", ""))) or not isinstance(sub.get("keys"), dict):
         raise ValueError("bad subscription")
     keys = sub["keys"]
     if not (isinstance(keys.get("p256dh"), str) and isinstance(keys.get("auth"), str)) or len(json.dumps(sub)) > 2000:
         raise ValueError("bad subscription")
-    topics = ([MOD_TOPIC] if mod and MOD_TOPIC in (topics or []) else []) + ([t for t in (topics or TOPICS) if t in TOPICS] or ([] if mod else list(TOPICS)))
+    topics = ([MOD_TOPIC] if mod and MOD_TOPIC in (topics or []) else []) + ([t for t in (topics or DEFAULT_TOPICS) if t in TOPICS] or ([] if mod else list(DEFAULT_TOPICS)))
     h = hashlib.sha256(sub["endpoint"].encode()).hexdigest()[:32]
     with _lock:
         d = _subs()
         if h not in d and len(d) >= 20000: raise ValueError("limit")
+        if merge and h in d: topics = sorted(set(d[h].get("topics", [])) | set(topics))
         d[h] = {"sub": {"endpoint": sub["endpoint"], "keys": {"p256dh": keys["p256dh"], "auth": keys["auth"]}}, "topics": topics, "t": int(time.time()), "uid": uid or d.get(h, {}).get("uid")}
         store.put("push_subs", d)
     return h
@@ -51,9 +53,9 @@ def send_push(topic, title, body, url="/", tag=None, uid=None):
     sent = failed = 0; dead = []
     for h, s in list(_subs().items()):
         if uid is not None:
-            if s.get("uid") != uid: continue
+            if s.get("uid") != uid or (topic == "battle" and "battle" not in s.get("topics", [])): continue
         elif topic == "manual" and MOD_TOPIC in s.get("topics", []) and len(s.get("topics", [])) == 1: continue
-        elif topic != "manual" and topic not in s.get("topics", TOPICS): continue
+        elif topic != "manual" and topic not in s.get("topics", DEFAULT_TOPICS): continue
         try:
             webpush(s["sub"], payload, vapid_private_key=PRIV, vapid_claims={"sub": SUBJ}, ttl=3600 * 12, timeout=10)
             sent += 1

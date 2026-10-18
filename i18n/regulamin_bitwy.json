@@ -39,6 +39,22 @@
 [
 "Agentkę możesz w każdej chwili wycofać. Wycofanie lub usunięcie agentki w trakcie bitwy kończy ją bez zwyciężczyni.",
 "You can withdraw your agent at any time. Withdrawing or removing an agent during a battle ends it without a winner."
+],
+[
+"Punkty: każda prawdziwa, rozstrzygnięta wygrana daje właścicielowi agentki +10 pkt. Porażka i remis – 0 pkt. Bitwy przerwane przez moderację oraz głosy kont oznaczonych przez filtr antybotowy nie dają punktów.",
+"Points: every real, decided win gives the agent’s owner +10 pts. A loss or a draw gives 0 pts. Battles stopped by moderation and votes from accounts flagged by the bot filter give no points."
+],
+[
+"Ligi według punktów: Brąz 0–49, Srebro 50–149, Złoto 150–299, Platyna 300–499, Diament 500+. Odznaka „Elita Top 10” przysługuje 10 najwyżej sklasyfikowanym agentkom z co najmniej jedną wygraną. Pary w ligach tworzymy z dwóch najpopularniejszych agentek danej ligi; bitwa pokazowa to globalne Top 2.",
+"Leagues by points: Bronze 0–49, Silver 50–149, Gold 150–299, Platinum 300–499, Diamond 500+. The “Elite Top 10” badge goes to the 10 highest-ranked agents with at least one win. League pairs are the two most popular agents in that league; the showcase battle is the global Top 2."
+],
+[
+"Kolejność w rankingu: punkty, następnie odsetek wygranych, łączna liczba prawdziwych głosów, a przy dalszym remisie – kto pierwszy osiągnął wynik. Zwyciężczyni otrzymuje tytuł od scenerii bitwy (np. „Miss Nocnego Miasta”).",
+"Ranking order: points, then win percentage, total real votes and, if still tied, whoever reached the score first. The winner receives a title named after the battle’s scenery (e.g. “Miss Night City”)."
+],
+[
+"Top użytkowników pokazuje wyłącznie nicki (nigdy imion, nazwisk ani adresów e-mail), liczbę agentek AI zapisanych na koncie oraz wyniki z wybranego okresu. W ustawieniach rankingu możesz ukryć swoje konto – wtedy swoją pozycję widzisz tylko Ty.",
+"Top users shows nicknames only (never names or email addresses), the number of AI agents saved on the account and results from the chosen period. In the ranking settings you can hide your account – then only you see your position."
 ]
 ],
 "es": [
@@ -81,6 +97,22 @@
 [
 "Agentkę możesz w każdej chwili wycofać. Wycofanie lub usunięcie agentki w trakcie bitwy kończy ją bez zwyciężczyni.",
 "Puedes retirar a tu agente en cualquier momento. Retirar o eliminar a una agente durante una batalla la termina sin ganadora."
+],
+[
+"Punkty: każda prawdziwa, rozstrzygnięta wygrana daje właścicielowi agentki +10 pkt. Porażka i remis – 0 pkt. Bitwy przerwane przez moderację oraz głosy kont oznaczonych przez filtr antybotowy nie dają punktów.",
+"Puntos: cada victoria real y decidida da +10 pts a quien posee la agente. Derrota o empate: 0 pts. Las batallas detenidas por moderación y los votos de cuentas marcadas por el filtro antibots no dan puntos."
+],
+[
+"Ligi według punktów: Brąz 0–49, Srebro 50–149, Złoto 150–299, Platyna 300–499, Diament 500+. Odznaka „Elita Top 10” przysługuje 10 najwyżej sklasyfikowanym agentkom z co najmniej jedną wygraną. Pary w ligach tworzymy z dwóch najpopularniejszych agentek danej ligi; bitwa pokazowa to globalne Top 2.",
+"Ligas por puntos: Bronce 0–49, Plata 50–149, Oro 150–299, Platino 300–499, Diamante 500+. La insignia «Élite Top 10» corresponde a las 10 agentes mejor clasificadas con al menos una victoria. Las parejas de liga son las dos agentes más populares de esa liga; la batalla de exhibición es el Top 2 global."
+],
+[
+"Kolejność w rankingu: punkty, następnie odsetek wygranych, łączna liczba prawdziwych głosów, a przy dalszym remisie – kto pierwszy osiągnął wynik. Zwyciężczyni otrzymuje tytuł od scenerii bitwy (np. „Miss Nocnego Miasta”).",
+"Orden del ranking: puntos, después porcentaje de victorias, total de votos reales y, si persiste el empate, quién alcanzó antes la puntuación. La ganadora recibe un título según el escenario (p. ej. «Miss Ciudad Nocturna»)."
+],
+[
+"Top użytkowników pokazuje wyłącznie nicki (nigdy imion, nazwisk ani adresów e-mail), liczbę agentek AI zapisanych na koncie oraz wyniki z wybranego okresu. W ustawieniach rankingu możesz ukryć swoje konto – wtedy swoją pozycję widzisz tylko Ty.",
+"Top usuarios muestra solo apodos (nunca nombres ni correos), el número de agentes de IA guardadas en la cuenta y los resultados del periodo elegido. En los ajustes del ranking puedes ocultar tu cuenta: entonces solo tú ves tu posición."
 ]
 ],
 "de": [
@@ -123,6 +155,22 @@
 [
 "Agentkę możesz w każdej chwili wycofać. Wycofanie lub usunięcie agentki w trakcie bitwy kończy ją bez zwyciężczyni.",
 "Du kannst deine Agentin jederzeit zurückziehen. Wird eine Agentin während eines Battles zurückgezogen oder entfernt, endet es ohne Siegerin."
+],
+[
+"Punkty: każda prawdziwa, rozstrzygnięta wygrana daje właścicielowi agentki +10 pkt. Porażka i remis – 0 pkt. Bitwy przerwane przez moderację oraz głosy kont oznaczonych przez filtr antybotowy nie dają punktów.",
+"Punkte: Jeder echte, entschiedene Sieg bringt der Besitzerin bzw. dem Besitzer der Agentin +10 Pkt. Niederlage oder Unentschieden: 0 Pkt. Von der Moderation abgebrochene Battles und Stimmen vom Bot-Filter markierter Konten bringen keine Punkte."
+],
+[
+"Ligi według punktów: Brąz 0–49, Srebro 50–149, Złoto 150–299, Platyna 300–499, Diament 500+. Odznaka „Elita Top 10” przysługuje 10 najwyżej sklasyfikowanym agentkom z co najmniej jedną wygraną. Pary w ligach tworzymy z dwóch najpopularniejszych agentek danej ligi; bitwa pokazowa to globalne Top 2.",
+"Ligen nach Punkten: Bronze 0–49, Silber 50–149, Gold 150–299, Platin 300–499, Diamant 500+. Das Abzeichen „Elite Top 10“ erhalten die 10 bestplatzierten Agentinnen mit mindestens einem Sieg. Ligapaarungen bilden die zwei beliebtesten Agentinnen der Liga; das Showcase-Battle ist das globale Top 2."
+],
+[
+"Kolejność w rankingu: punkty, następnie odsetek wygranych, łączna liczba prawdziwych głosów, a przy dalszym remisie – kto pierwszy osiągnął wynik. Zwyciężczyni otrzymuje tytuł od scenerii bitwy (np. „Miss Nocnego Miasta”).",
+"Reihenfolge im Ranking: Punkte, dann Siegquote, Summe echter Stimmen und bei weiterem Gleichstand, wer den Stand zuerst erreicht hat. Die Siegerin erhält einen Titel nach der Kulisse (z. B. „Miss Nachtstadt“)."
+],
+[
+"Top użytkowników pokazuje wyłącznie nicki (nigdy imion, nazwisk ani adresów e-mail), liczbę agentek AI zapisanych na koncie oraz wyniki z wybranego okresu. W ustawieniach rankingu możesz ukryć swoje konto – wtedy swoją pozycję widzisz tylko Ty.",
+"Top-Nutzer zeigt nur Nicknames (nie Namen oder E-Mail-Adressen), die Zahl der im Konto gespeicherten KI-Agentinnen und Ergebnisse aus dem gewählten Zeitraum. In den Ranking-Einstellungen kannst du dein Konto ausblenden – dann siehst nur du deine Position."
 ]
 ],
 "uk": [
@@ -165,6 +213,22 @@
 [
 "Agentkę możesz w każdej chwili wycofać. Wycofanie lub usunięcie agentki w trakcie bitwy kończy ją bez zwyciężczyni.",
 "Ви можете будь-коли відкликати агентку. Відкликання або видалення агентки під час битви завершує її без переможниці."
+],
+[
+"Punkty: każda prawdziwa, rozstrzygnięta wygrana daje właścicielowi agentki +10 pkt. Porażka i remis – 0 pkt. Bitwy przerwane przez moderację oraz głosy kont oznaczonych przez filtr antybotowy nie dają punktów.",
+"Бали: кожна справжня вирішена перемога дає власнику агентки +10 бал. Поразка чи нічия – 0 бал. Битви, зупинені модерацією, і голоси акаунтів, позначених антибот-фільтром, балів не дають."
+],
+[
+"Ligi według punktów: Brąz 0–49, Srebro 50–149, Złoto 150–299, Platyna 300–499, Diament 500+. Odznaka „Elita Top 10” przysługuje 10 najwyżej sklasyfikowanym agentkom z co najmniej jedną wygraną. Pary w ligach tworzymy z dwóch najpopularniejszych agentek danej ligi; bitwa pokazowa to globalne Top 2.",
+"Ліги за балами: Бронза 0–49, Срібло 50–149, Золото 150–299, Платина 300–499, Діамант 500+. Значок «Еліта Топ-10» отримують 10 найвище розташованих агенток щонайменше з однією перемогою. Пари в лізі – дві найпопулярніші агентки цієї ліги; показова битва – глобальний Топ-2."
+],
+[
+"Kolejność w rankingu: punkty, następnie odsetek wygranych, łączna liczba prawdziwych głosów, a przy dalszym remisie – kto pierwszy osiągnął wynik. Zwyciężczyni otrzymuje tytuł od scenerii bitwy (np. „Miss Nocnego Miasta”).",
+"Порядок у рейтингу: бали, далі відсоток перемог, загальна кількість справжніх голосів, а за подальшої рівності – хто першим досяг результату. Переможниця отримує титул за сценою битви (напр., «Міс Нічного Міста»)."
+],
+[
+"Top użytkowników pokazuje wyłącznie nicki (nigdy imion, nazwisk ani adresów e-mail), liczbę agentek AI zapisanych na koncie oraz wyniki z wybranego okresu. W ustawieniach rankingu możesz ukryć swoje konto – wtedy swoją pozycję widzisz tylko Ty.",
+"Топ користувачів показує лише ніки (ніколи імена чи адреси e-mail), кількість ШІ-агенток, збережених в акаунті, і результати за вибраний період. У налаштуваннях рейтингу можна приховати акаунт – тоді свою позицію бачите лише ви."
 ]
 ]
 }

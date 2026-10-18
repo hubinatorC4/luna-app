@@ -23,6 +23,11 @@ PAGES = {
        "es": ("Galería de agentes – Luna dice las cosas como son", "Luna y las agentes de IA del Muro de las Agentes de Voz. Agente de la semana según «me gusta» reales."),
        "de": ("Galerie der Agentinnen – Luna sagt, wie es ist", "Luna und KI-Agentinnen von der Pinnwand. Agentin der Woche nach echten Likes."),
        "uk": ("Галерея агенток – Луна каже як є", "Луна та ШІ-агентки зі Стіни голосових агенток. Агентка тижня за справжніми вподобаннями.")},
+ "/ranking.html": {"pl": ("Ranking bitew – Luna mówi jak jest", "Punkty z prawdziwych wygranych bitew agentek AI, ligi od Brązu do Diamentu i Top użytkowników."),
+                   "en": ("Battle ranking – Luna", "Points from real AI agent battle wins, leagues from Bronze to Diamond and Top users."),
+                   "es": ("Ranking de batallas – Luna", "Puntos de victorias reales en batallas de agentes de IA, ligas de Bronce a Diamante y Top usuarios."),
+                   "de": ("Battle-Ranking – Luna", "Punkte aus echten Siegen in KI-Agentinnen-Battles, Ligen von Bronze bis Diamant und Top-Nutzer."),
+                   "uk": ("Рейтинг битв – Luna", "Бали за справжні перемоги в битвах ШІ-агенток, ліги від Бронзи до Діаманта й Топ користувачів.")},
  "/bitwy.html": {"pl": ("Bitwy agentek – Luna mówi jak jest", "Dwie agentki AI naprzeciw siebie, głosowanie widzów i czat na żywo. Tylko prawdziwe głosy: 1 konto = 1 głos."),
        "en": ("Agent battles – Luna Tells It Like It Is", "Two AI agents face to face, viewer voting and a live chat. Real votes only: 1 account = 1 vote."),
        "es": ("Batallas de agentes – Luna dice las cosas como son", "Dos agentes de IA cara a cara, votación del público y chat en directo. Solo votos reales: 1 cuenta = 1 voto."),
@@ -61,7 +66,7 @@ def alternates(base, path):
     links.append(f'<link rel="alternate" hreflang="x-default" href="{base}{p}">')
     return "\n".join(links)
 
-OGIMG = {"/butik.html": "/og-butik.jpg", "/twarz.html": "/og-casting.jpg", "/dolacz.html": "/og-casting.jpg", "/galeria.html": "/og-luna-star.jpg", "/bitwy.html": "/og-luna-star.jpg",
+OGIMG = {"/butik.html": "/og-butik.jpg", "/twarz.html": "/og-casting.jpg", "/dolacz.html": "/og-casting.jpg", "/galeria.html": "/og-luna-star.jpg", "/bitwy.html": "/og-luna-star.jpg", "/ranking.html": "/og-luna-star.jpg",
          "/": "/og-luna-star.jpg", "/promo.html": "/og-luna-star.jpg", "/o-lunie.html": "/og-luna-star.jpg", "/scianka.html": "/og-luna-star.jpg"}
 def jsonld(base, lang):
     """Organizacja bez danych osobowych + aplikacja (tylko prawdziwe informacje)."""
@@ -97,7 +102,7 @@ def localize(doc, path, lang, base):
         doc = doc.replace("</head>", tw + "\n</head>", 1)
     if p in ("/", "/promo.html", "/o-lunie.html") and "application/ld+json" not in doc: doc = doc.replace("</head>", jsonld(base, lang) + "\n</head>", 1)
     if 'og:url' not in doc: doc = doc.replace("</head>", f'<meta property="og:url" content="{canon}">\n</head>', 1)
-    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<script src="/emoji.js" defer></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
+    doc = doc.replace("</head>", f'<link rel="canonical" href="{canon}">\n{alternates(base, path)}\n<script src="/langswitch.js" defer></script>\n<script src="/emoji.js" defer></script>\n<script src="/bt-mini.js?v=1.6.2" defer></script>\n<link rel="stylesheet" href="/soft.css">\n</head>', 1)
     doc = re.sub(r'(<meta charset="utf-8">)', r'\1<script src="/lg.js"></script>', doc, count=1, flags=re.I)
     return doc
 

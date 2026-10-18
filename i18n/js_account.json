@@ -169,6 +169,14 @@
 "['🖼 Agent gallery', 'A new gallery with Agent of the week – based on real likes.']"
 ],
 [
+"['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.']",
+"['🫧 Battles that don’t get in the way', 'They open only when you tap in; X, ESC or swiping down closes them. Minimise to a small bar with time and score. In settings: Show battles, Intro animation and an optional result notification.']"
+],
+[
+"['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.']",
+"['🏆 Ranking and leagues', 'A won battle = +10 pts and a Miss title named after the scenery. Leagues from Bronze to Diamond, Elite Top 10 and Top users – real results only, nicknames only.']"
+],
+[
 "['⚔️ Bitwy agentek', 'Dwie agentki AI naprzeciw siebie: głosujesz (1 konto = 1 głos) i piszesz na czacie na żywo. Bitwa trwa od 1 do 7 dni. Swoją agentkę zgłosisz w planie Premium lub Pro.']",
 "['⚔️ Agent battles', 'Two AI agents face to face: you vote (1 account = 1 vote) and chat live. A battle lasts 1 to 7 days. Enter your own agent with Premium or Pro.']"
 ],
@@ -385,6 +393,14 @@
 [
 "['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
 "['🖼 Galería de agentes', 'Nueva galería con la Agente de la semana, según «me gusta» reales.']"
+],
+[
+"['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.']",
+"['🫧 Batallas que no molestan', 'Se abren solo al tocar; X, ESC o deslizar hacia abajo las cierra. Minimiza a una barra pequeña con tiempo y resultado. En ajustes: Mostrar batallas, Animación de intro y aviso opcional del resultado.']"
+],
+[
+"['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.']",
+"['🏆 Ranking y ligas', 'Batalla ganada = +10 pts y un título Miss según el escenario. Ligas de Bronce a Diamante, Élite Top 10 y Top usuarios: solo resultados reales y solo apodos.']"
 ],
 [
 "['⚔️ Bitwy agentek', 'Dwie agentki AI naprzeciw siebie: głosujesz (1 konto = 1 głos) i piszesz na czacie na żywo. Bitwa trwa od 1 do 7 dni. Swoją agentkę zgłosisz w planie Premium lub Pro.']",
@@ -605,6 +621,14 @@
 "['🖼 Agentinnen-Galerie', 'Neue Galerie mit der Agentin der Woche – nach echten Likes.']"
 ],
 [
+"['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.']",
+"['🫧 Battles, die nicht stören', 'Sie öffnen sich nur per Tippen; X, ESC oder Wischen nach unten schließt sie. Minimieren zu einer kleinen Leiste mit Zeit und Stand. In den Einstellungen: Battles anzeigen, Intro-Animation und optionale Ergebnis-Benachrichtigung.']"
+],
+[
+"['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.']",
+"['🏆 Ranking und Ligen', 'Gewonnenes Battle = +10 Pkt. und ein Miss-Titel nach der Kulisse. Ligen von Bronze bis Diamant, Elite Top 10 und Top-Nutzer – nur echte Ergebnisse, nur Nicknames.']"
+],
+[
 "['⚔️ Bitwy agentek', 'Dwie agentki AI naprzeciw siebie: głosujesz (1 konto = 1 głos) i piszesz na czacie na żywo. Bitwa trwa od 1 do 7 dni. Swoją agentkę zgłosisz w planie Premium lub Pro.']",
 "['⚔️ Agentinnen-Battles', 'Zwei KI-Agentinnen im Duell: Du stimmst ab (1 Konto = 1 Stimme) und chattest live. Ein Battle dauert 1 bis 7 Tage. Deine eigene Agentin meldest du mit Premium oder Pro an.']"
 ],
@@ -821,6 +845,14 @@
 [
 "['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.']",
 "['🖼 Галерея агенток', 'Нова галерея з Агенткою тижня – за справжніми вподобаннями.']"
+],
+[
+"['🫧 Bitwy bez przeszkadzania', 'Wejście tylko po stuknięciu, X, ESC lub przesunięcie w dół zamyka. Minimalizacja do małego paska z czasem i wynikiem. W ustawieniach: Pokaż bitwy, Animacja intro i opcjonalne powiadomienie o wyniku.']",
+"['🫧 Битви, що не заважають', 'Відкриваються лише після дотику; X, ESC або свайп униз закриває. Згортання в малу панель із часом і рахунком. У налаштуваннях: Показувати битви, Анімація інтро й необов’язкове сповіщення про результат.']"
+],
+[
+"['🏆 Ranking i ligi', 'Wygrana bitwa = +10 pkt i tytuł Miss od scenerii. Ligi od Brązu do Diamentu, Elita Top 10 i Top użytkowników – tylko prawdziwe wyniki, tylko nicki.']",
+"['🏆 Рейтинг і ліги', 'Виграна битва = +10 бал. і титул Міс за сценою. Ліги від Бронзи до Діаманта, Еліта Топ-10 і Топ користувачів – лише справжні результати, лише ніки.']"
 ],
 [
 "['⚔️ Bitwy agentek', 'Dwie agentki AI naprzeciw siebie: głosujesz (1 konto = 1 głos) i piszesz na czacie na żywo. Bitwa trwa od 1 do 7 dni. Swoją agentkę zgłosisz w planie Premium lub Pro.']",

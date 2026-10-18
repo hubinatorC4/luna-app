@@ -22,12 +22,31 @@ function battleCard(d){
   const n = d ? d.missing : 1;
   return `${vs({name: 'Luna', img: '/catalog/luna/outfit_sweter.jpg'}, null)}<h3>⚔️ ${x[3]}</h3><p>${x[4]}</p><p>${esc(x[7].replace('{n}', n))}</p>${ch}<a class="pill primary" href="${BT}#btEnter">${x[8]}</a> <a class="pill ghost" href="${BT}">${x[6]}</a> <small>🛡️ ${x[5]}</small>`;
 }
+
+/* Top 10 użytkowników (prawdziwe wygrane bitew; tylko nicki, bez ukrytych) */
+const TT = {
+ pl: {h: '🏆 Top użytkowników', e: 'Jeszcze nikt nie wygrał bitwy – tu pojawią się tylko prawdziwe wyniki.', more: 'Pełny ranking', pts: 'pkt', w: ['wygrana', 'wygrane', 'wygranych'], ag: ['agentka', 'agentki', 'agentek'], lg: {braz: 'Brąz', srebro: 'Srebro', zloto: 'Złoto', platyna: 'Platyna', diament: 'Diament'}},
+ en: {h: '🏆 Top users', e: 'Nobody has won a battle yet – only real results will appear here.', more: 'Full ranking', pts: 'pts', w: ['win', 'wins', 'wins'], ag: ['agent', 'agents', 'agents'], lg: {braz: 'Bronze', srebro: 'Silver', zloto: 'Gold', platyna: 'Platinum', diament: 'Diamond'}},
+ es: {h: '🏆 Top usuarios', e: 'Nadie ha ganado aún una batalla: aquí solo aparecerán resultados reales.', more: 'Ranking completo', pts: 'pts', w: ['victoria', 'victorias', 'victorias'], ag: ['agente', 'agentes', 'agentes'], lg: {braz: 'Bronce', srebro: 'Plata', zloto: 'Oro', platyna: 'Platino', diament: 'Diamante'}},
+ de: {h: '🏆 Top-Nutzer', e: 'Noch hat niemand ein Battle gewonnen – hier erscheinen nur echte Ergebnisse.', more: 'Ganzes Ranking', pts: 'Pkt.', w: ['Sieg', 'Siege', 'Siege'], ag: ['Agentin', 'Agentinnen', 'Agentinnen'], lg: {braz: 'Bronze', srebro: 'Silber', zloto: 'Gold', platyna: 'Platin', diament: 'Diamant'}},
+ uk: {h: '🏆 Топ користувачів', e: 'Ще ніхто не виграв битву – тут з’являться лише справжні результати.', more: 'Повний рейтинг', pts: 'бал.', w: ['перемога', 'перемоги', 'перемог'], ag: ['агентка', 'агентки', 'агенток'], lg: {braz: 'Бронза', srebro: 'Срібло', zloto: 'Золото', platyna: 'Платина', diament: 'Діамант'}},
+}[L] || null;
+const LGI = {braz: '🥉', srebro: '🥈', zloto: '🥇', platyna: '💠', diament: '💎'};
+const pl = (n, f) => { let c = 'other'; try { c = new Intl.PluralRules(L).select(n); } catch (e) {} return c === 'one' ? f[0] : c === 'few' ? f[1] : f[2]; };
+function top10(d){
+  const t = TT || {h: '🏆 Top', e: '', more: 'Ranking', pts: 'pkt', w: ['', '', ''], ag: ['', '', ''], lg: {}}; const U = (d && d.users && d.users.items || []).slice(0, 10);
+  const nk = u => `<span class="nk${u.plan === 'premium' || u.plan === 'pro' ? ' nk-' + u.plan : ''}">${esc(u.nick)}</span>`;
+  return `<h3>${t.h}</h3>${U.length ? `<ol class="rc-top">${U.map(u => `<li><b class="p">${u.pos}</b> ${nk(u)} <span class="lg">${LGI[u.league] || ''} ${esc(t.lg[u.league] || '')}</span><br><small>${u.wins} ${esc(pl(u.wins, t.w))} · <b>${u.pts}</b> ${t.pts} · ${u.pct}% · <b>${u.agents}</b> ${esc(pl(u.agents, t.ag))}</small></li>`).join('')}</ol>` : `<p><small>${t.e}</small></p>`}<a class="pill ghost" href="/ranking.html${lq}#top">${t.more}</a>`;
+}
 function build(){
   const el = document.createElement('section'); el.className = 'recruit-pin'; el.id = 'casting-pilne'; el.dataset.track = 'sec:recruit';
-  el.innerHTML = `<style>.rc-battle .bt-mini .rc-slot{position:relative;overflow:hidden;padding:0;width:56px;height:74px;border-radius:10px}.rc-battle .bt-mini img{width:56px;height:74px;object-fit:cover;border-radius:10px;display:block}.rc-battle .bt-mini em{position:absolute;left:3px;top:3px;font:700 9px/1 system-ui;font-style:normal;background:rgba(0,0,0,.7);color:#fff;padding:2px 4px;border-radius:4px}.rc-battle .rc-live{font-size:11px;background:#e0114f;color:#fff;border-radius:5px;padding:2px 6px;vertical-align:middle}.rc-battle .rc-champ{color:#ffd36b;font-weight:700}</style><div class="rc-urgent"><span class="rc-badge">📣 ${L === 'pl' ? 'Przypięte' : L === 'de' ? 'Angeheftet' : L === 'es' ? 'Fijado' : L === 'uk' ? 'Закріплено' : 'Pinned'}</span>
+  el.innerHTML = `<style>.rc-battle .bt-mini .rc-slot{position:relative;overflow:hidden;padding:0;width:56px;height:74px;border-radius:10px}.rc-battle .bt-mini img{width:56px;height:74px;object-fit:cover;border-radius:10px;display:block}.rc-battle .bt-mini em{position:absolute;left:3px;top:3px;font:700 9px/1 system-ui;font-style:normal;background:rgba(0,0,0,.7);color:#fff;padding:2px 4px;border-radius:4px}.rc-battle .rc-live{font-size:11px;background:#e0114f;color:#fff;border-radius:5px;padding:2px 6px;vertical-align:middle}.rc-battle .rc-champ{color:#ffd36b;font-weight:700}.rc-top{list-style:none;margin:6px 0 10px;padding:0}.rc-top li{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.07)}.rc-top .p{display:inline-block;min-width:22px;color:#ffd36b}.rc-top .lg{font-size:12px;opacity:.85}</style><div class="rc-urgent"><span class="rc-badge">📣 ${L === 'pl' ? 'Przypięte' : L === 'de' ? 'Angeheftet' : L === 'es' ? 'Fijado' : L === 'uk' ? 'Закріплено' : 'Pinned'}</span>
       <h2>${x[0]}</h2><p>${x[1]}</p><a class="pill primary big" href="/twarz.html${lq}#castForm">🎙️ ${x[2]}</a></div>
-    <div class="rc-battle" id="bitwy" aria-label="${x[3]}">${battleCard(null)}</div>`;
+    <div class="rc-battle" id="bitwy" data-bt aria-label="${x[3]}">${battleCard(null)}</div><div class="rc-battle rc-topu" id="topUsers" data-bt>${top10(null)}</div>`;
   fetch('/api/battles', {credentials: 'same-origin'}).then(r => r.json()).then(d => { const b = el.querySelector('#bitwy'); if (b && d && d.state) b.innerHTML = battleCard(d); }).catch(() => {});
+  // Top 10 ładowane dopiero, gdy karta jest blisko ekranu (bez wpływu na start strony głównej)
+  const loadTop = () => fetch('/api/battles/ranking?period=all', {credentials: 'same-origin'}).then(r => r.json()).then(d => { const b = el.querySelector('#topUsers'); if (b && d && d.users) b.innerHTML = top10(d); }).catch(() => {});
+  if ('IntersectionObserver' in window){ const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)){ io.disconnect(); loadTop(); } }, {rootMargin: '200px'}); setTimeout(() => { const b = el.querySelector('#topUsers'); b && io.observe(b); }, 0); } else loadTop();
   return el;
 }
 function place(){

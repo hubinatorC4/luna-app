@@ -27,7 +27,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.6.1"
+VERSION = "1.6.2"
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
@@ -858,7 +858,7 @@ class H(SimpleHTTPRequestHandler):
                 if p == "/api/battles/vote":
                     if not livechat.rate_ok("btv:" + ip, 10, 300): return self._json({"error": "Za szybko."}, 429)
                     antibot.on_vote("u:" + uid, ip, ua)
-                    return self._json(self._bt_pub(battles.vote(uid, dev, str(data.get("bid", "")), data.get("side")), uid))
+                    return self._json(self._bt_pub(battles.vote(uid, dev, str(data.get("bid", ""))[:12], data.get("side")), uid))
                 if p == "/api/battles/chat":
                     if not (livechat.rate_ok("btc:" + ip, 6, 400) and livechat.rate_ok("btc:" + uid, 4, 300)): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
                     m, L = battles.chat_post(uid, a[0].get("name") or "", str(data.get("bid", "")), data.get("text"))
@@ -877,6 +877,16 @@ class H(SimpleHTTPRequestHandler):
                     return self._json({"ok": True, "pending": True, "id": e["id"]})
                 if p == "/api/battles/withdraw":
                     battles.withdraw(uid); return self._json({"ok": True})
+                if p == "/api/battles/notify":
+                    on = data.get("on") is True
+                    if on and isinstance(data.get("sub"), dict):
+                        try: notify.subscribe(data["sub"], ["battle"], uid, merge=True)
+                        except ValueError: pass
+                    return self._json({"on": battles.set_notify(uid, on, str(data.get("lang", "pl"))[:2])})
+                if p == "/api/battles/notes/seen":
+                    battles.notes_seen(uid, [str(x)[:12] for x in (data.get("bids") or [])][:30]); return self._json({"ok": True})
+                if p == "/api/battles/privacy":
+                    return self._json({"hidden": battles.set_privacy(uid, data.get("hide") is True)})
             except PermissionError as e: return self._json({"error": str(e)}, 403)
             except (ValueError, KeyError, TypeError) as e: return self._json({"error": str(e) if isinstance(e, ValueError) else "not found"}, 400)
             return self._json({"error": "not found"}, 404)
@@ -1015,6 +1025,7 @@ class H(SimpleHTTPRequestHandler):
         show = CFG["pricing"]["show"]
         d["price"] = CFG["pricing"]["plans"]["premium"]["pln"] if show else None
         d["price_pro"] = CFG["pricing"]["plans"]["pro"]["pln"] if show else None
+        d["notify"] = battles.notify_on(uid)
         return d
     def _get_account(self, u):
         p = u.path
@@ -1034,8 +1045,21 @@ class H(SimpleHTTPRequestHandler):
                 return self._json(battles.admin_list())
             if p == "/api/battles":
                 if dev and not antibot.UA_BOT.search(self.headers.get("User-Agent", "") or "bot"): battles.touch(dev)
-                return self._json(self._bt_pub(battles.public(uid, dev), uid))
+                return self._json(self._bt_pub(battles.public(uid, dev, (q.get("b") or [""])[0][:12] or None), uid))
+            if p == "/api/battles/notes":
+                lg = (q.get("lang") or ["pl"])[0][:2]
+                return self._json({"on": battles.notify_on(uid), "items": [dict(n, text=battles.note_text(n, lg)) for n in battles.notes(uid)]})
+            if p == "/api/battles/summary":
+                sm = battles.summary((q.get("bid") or [""])[0][:12])
+                return self._json(sm) if sm else self._json({"error": "not_found"}, 404)
+            if p == "/api/battles/ranking":
+                per = (q.get("period") or ["all"])[0]
+                per = per if per in ("all", "month", "week") else "all"
+                return self._json(battles.ranking(uid, per, accounts._accts(), lambda a: accounts.plan(a)["plan"]))
             if p.startswith("/api/battles/img/"): return self._dataurl(battles.entry_img(p.rsplit("/", 1)[-1], uid))
+            if p.startswith("/api/battles/agent/"):
+                pr = battles.profile(p.rsplit("/", 1)[-1][:20])
+                return self._json(pr) if pr else self._json({"error": "not_found"}, 404)
             if p == "/api/battles/chat":
                 s = (q.get("since") or ["0"])[0]
                 return self._json(battles.chat_list((q.get("bid") or [""])[0][:12], uid, int(s) if s.isdigit() else 0))
@@ -1276,6 +1300,8 @@ class H(SimpleHTTPRequestHandler):
             return self._json({"error": "Ścianka Agentek Głosu – wkrótce."}, 404)
         if u.path in ("/app", "/app/"):
             u = u._replace(path="/index.html")
+        elif u.path in ("/bitwy", "/bitwy/", "/ranking", "/ranking/"):   # krótkie linki: /bitwy, /ranking
+            u = u._replace(path="/" + u.path.strip("/") + ".html")
         elif u.path == "/":
             # Strona główna = feed (Ścianka Agentek Głosu). Aplikacja TWA/PWA (start_url /app, ?source=twa|pwa) dostaje czat.
             qs = parse_qs(u.query); ref = self.headers.get("Referer", "")

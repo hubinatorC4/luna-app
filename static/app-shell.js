@@ -238,6 +238,7 @@ function openAccount(){
 /* ---------- Więcej: Jak korzystać, pomoc i kontakt, linki ---------- */
 const BT = {pl: ['⚔️ Bitwy agentek', 'Dwie agentki AI, Twój głos, czat na żywo'], en: ['⚔️ Agent battles', 'Two AI agents, your vote, live chat'], es: ['⚔️ Batallas de agentes', 'Dos agentes de IA, tu voto, chat en directo'],
   de: ['⚔️ Agentinnen-Battles', 'Zwei KI-Agentinnen, deine Stimme, Live-Chat'], uk: ['⚔️ Битви агенток', 'Дві ШІ-агентки, ваш голос, чат наживо']}[lang] || ['⚔️ Bitwy agentek', ''];
+const RK = {pl: ['🏆 Ranking bitew', 'Ligi, punkty i Top użytkowników'], en: ['🏆 Battle ranking', 'Leagues, points and top users'], es: ['🏆 Ranking de batallas', 'Ligas, puntos y top usuarios'], de: ['🏆 Battle-Ranking', 'Ligen, Punkte und Top-Nutzer'], uk: ['🏆 Рейтинг битв', 'Ліги, бали й топ користувачів']}[lang] || ['🏆 Ranking bitew', 'Ligi, punkty i Top użytkowników'];
 function renderMore(){
   const host = $('#p-more'); host.dataset.ready = '1';
   host.innerHTML = `<div class="wrapc">
@@ -245,7 +246,8 @@ function renderMore(){
     <ul class="menu"><li><button type="button" data-chat><span>${esc(T.help_h)}<small>${esc(T.help_s)}</small></span></button></li>
       <li><a href="/problemy.html" data-page>${esc(T.problems)}</a></li>
       <li><a href="/twarz.html#castForm" data-page><span>${esc(T.cast)}<small>${esc(T.cast_s)}</small></span></a></li>
-      <li><a href="/bitwy.html"><span>${esc(BT[0])}<small>${esc(BT[1])}</small></span></a></li></ul>
+      <li data-bt><a href="/bitwy.html"><span>${esc(BT[0])}<small>${esc(BT[1])}</small></span></a></li>
+      <li data-bt><a href="/ranking.html" data-page><span>${esc(RK[0])}<small>${esc(RK[1])}</small></span></a></li></ul>
     <h2 class="t" id="howH" style="font-size:22px">${esc(T.how_h)}</h2>
     ${T.how.map(([h, p]) => `<details class="more"><summary>${esc(h)}</summary><p>${esc(p)}</p></details>`).join('')}
     <ul class="menu"><li><button type="button" id="replay">${esc(T.replay)}</button></li></ul>
