@@ -40,7 +40,7 @@ function appLink(){
   if (acts){ const a = document.createElement('a'); a.className = 'pill ghost applink'; a.href = href; a.textContent = t[0]; a.title = t[1]; a.setAttribute('aria-label', t[1]); acts.prepend(a); }
   const fn = document.querySelector('.sitefoot nav, footer nav');
   if (fn && !fn.querySelector('a[href^="/app.html"]')){ const b = document.createElement('a'); b.href = href; b.textContent = t[1]; fn.prepend(b); }
-  if (!document.getElementById('applinkCss')){ const st = document.createElement('style'); st.id = 'applinkCss'; st.textContent = '.applink{opacity:.9}@media (max-width:480px){.applink{font-size:0!important;padding:8px 10px!important}.applink::before{content:"📱";font-size:16px}}'; document.head.appendChild(st); }
+  if (!document.getElementById('applinkCss')){ const st = document.createElement('style'); st.id = 'applinkCss'; st.textContent = '.applink{opacity:.9}@media (max-width:520px){header .applink{display:none!important}}'; document.head.appendChild(st); }
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 })();
