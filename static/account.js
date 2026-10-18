@@ -59,16 +59,16 @@ window.addEventListener('luna-plan', e => planUI(e.detail));
 
 /* ---------- konto ---------- */
 /* Poleć Lunę – osobisty link i prawdziwe liczby z serwera (bez sztucznych liczników). */
-const RX = {pl: ['🎁 Poleć Lunę', 'Za każdą osobę, która założy konto z Twojego linku i potwierdzi e-mail, dostajesz 7 dni Premium (maks. 10 w miesiącu).', 'Skopiuj link', 'Skopiowano ✓', 'W tym miesiącu', 'nagród', 'Łącznie zdobyte', 'dni Premium', 'Czeka na potwierdzenie e-maila', 'Nagrody ruszą, gdy włączymy potwierdzanie adresów e-mail.', 'Udostępnij'],
-  en: ['🎁 Recommend Luna', 'For each person who creates an account from your link and confirms their email, you get 7 days of Premium (max 10 per month).', 'Copy link', 'Copied ✓', 'This month', 'rewards', 'Earned in total', 'days of Premium', 'Waiting for email confirmation', 'Rewards will start once email confirmation is switched on.', 'Share'],
-  es: ['🎁 Recomienda a Luna', 'Por cada persona que cree una cuenta desde tu enlace y confirme su correo, recibes 7 días de Premium (máx. 10 al mes).', 'Copiar enlace', 'Copiado ✓', 'Este mes', 'recompensas', 'Total conseguido', 'días de Premium', 'Pendiente de confirmar el correo', 'Las recompensas empezarán cuando activemos la confirmación de correo.', 'Compartir'],
-  de: ['🎁 Luna empfehlen', 'Für jede Person, die über deinen Link ein Konto erstellt und ihre E-Mail bestätigt, bekommst du 7 Tage Premium (max. 10 pro Monat).', 'Link kopieren', 'Kopiert ✓', 'Diesen Monat', 'Belohnungen', 'Insgesamt erhalten', 'Tage Premium', 'Wartet auf E-Mail-Bestätigung', 'Belohnungen starten, sobald die E-Mail-Bestätigung aktiv ist.', 'Teilen'],
-  uk: ['🎁 Порадь Луну', 'За кожну людину, яка створить акаунт за вашим посиланням і підтвердить е-пошту, ви отримуєте 7 днів Premium (макс. 10 на місяць).', 'Копіювати посилання', 'Скопійовано ✓', 'Цього місяця', 'винагород', 'Загалом отримано', 'днів Premium', 'Очікує підтвердження е-пошти', 'Винагороди запрацюють, коли ми ввімкнемо підтвердження е-пошти.', 'Поділитися']};
+const RX = {pl: ['🎁 Poleć Lunę', 'Gdy ktoś założy konto z Twojego linku i zrobi pierwszy zakup, oboje dostajecie 7 dni Premium (maks. 10 nagród w miesiącu).', 'Skopiuj link', 'Skopiowano ✓', 'W tym miesiącu', 'nagród', 'Łącznie zdobyte', 'dni Premium', 'Czeka na pierwszy zakup', 'Nagrody ruszą, gdy włączymy potwierdzanie adresów e-mail.', 'Udostępnij'],
+  en: ['🎁 Recommend Luna', 'When someone creates an account from your link and makes a first purchase, you both get 7 days of Premium (max 10 rewards per month).', 'Copy link', 'Copied ✓', 'This month', 'rewards', 'Earned in total', 'days of Premium', 'Waiting for a first purchase', 'Rewards will start once email confirmation is switched on.', 'Share'],
+  es: ['🎁 Recomienda a Luna', 'Cuando alguien crea una cuenta con tu enlace y hace su primera compra, ambos recibís 7 días de Premium (máx. 10 recompensas al mes).', 'Copiar enlace', 'Copiado ✓', 'Este mes', 'recompensas', 'Total conseguido', 'días de Premium', 'Pendiente de la primera compra', 'Las recompensas empezarán cuando activemos la confirmación de correo.', 'Compartir'],
+  de: ['🎁 Luna empfehlen', 'Wenn jemand über deinen Link ein Konto erstellt und zum ersten Mal kauft, bekommt ihr beide 7 Tage Premium (max. 10 Belohnungen pro Monat).', 'Link kopieren', 'Kopiert ✓', 'Diesen Monat', 'Belohnungen', 'Insgesamt erhalten', 'Tage Premium', 'Wartet auf den ersten Kauf', 'Belohnungen starten, sobald die E-Mail-Bestätigung aktiv ist.', 'Teilen'],
+  uk: ['🎁 Порадь Луну', 'Коли хтось створить акаунт за вашим посиланням і зробить першу покупку, ви обоє отримаєте 7 днів Premium (макс. 10 винагород на місяць).', 'Копіювати посилання', 'Скопійовано ✓', 'Цього місяця', 'винагород', 'Загалом отримано', 'днів Premium', 'Очікує першої покупки', 'Винагороди запрацюють, коли ми ввімкнемо підтвердження е-пошти.', 'Поділитися']};
 function refUI(){
   const el = $('#a_ref'); if (!el) return; const t = RX[(document.documentElement.lang || 'pl').slice(0, 2)] || RX.pl;
   fetch('/api/referral', {credentials: 'same-origin'}).then(r => r.ok ? r.json() : null).then(d => { if (!d || !d.link) return;
     el.hidden = false;
-    el.innerHTML = `<h4>${esc(t[0])}</h4><p class="hint">${esc(t[1])}</p>${ME && !ME.email_verification_available ? `<p class="hint warn">${esc(t[9])}</p>` : ''}
+    el.innerHTML = `<h4>${esc(t[0])}</h4><p class="hint">${esc(t[1])}</p>
       <div class="refrow"><input readonly value="${esc(d.link)}" aria-label="link"><button type="button" class="primary" id="a_refcopy">${esc(t[2])}</button>${navigator.share ? `<button type="button" class="ghost" id="a_refshare">${esc(t[10])}</button>` : ''}</div>
       <p class="hint">${esc(t[4])}: <b>${d.rewarded_month}/${d.cap_month}</b> ${esc(t[5])} · ${esc(t[6])}: <b>${d.days_earned}</b> ${esc(t[7])}${d.pending ? ` · ${esc(t[8])}: <b>${d.pending}</b>` : ''}</p>`;
     $('#a_refcopy').onclick = async () => { try { await navigator.clipboard.writeText(d.link); } catch(e){ el.querySelector('input').select(); document.execCommand('copy'); } $('#a_refcopy').textContent = t[3]; };
@@ -167,7 +167,7 @@ fetch('/api/config').then(r => r.json()).then(c => {
 const NEWS = [
   ['🎙️ Lekcje głosu z Luną', 'Na stronie głównej: lekcja dnia i tematy ćwiczeń – Luna czyta je na głos.'],
   ['🛍 Cała nowa kolekcja w Butiku', 'Wszystkie stroje ze zdjęciem są już w sprzedaży. Kolejne dochodzą, gdy tylko mają zdjęcie.'],
-  ['🎁 Poleć Lunę', '7 dni Premium za każdą poleconą osobę, która założy konto i potwierdzi e-mail (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.'],
+  ['🎁 Poleć Lunę', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.'],
   ['🖼 Galeria agentek', 'Nowa galeria z Agentką tygodnia – według prawdziwych polubień.'],
   ['⚔️ Bitwy agentek – wkrótce', 'Ruszą, gdy w obsadzie będą co najmniej dwie agentki. Pilnie szukamy nowych agentek!'],
   ['🏠 Strona główna jak kanał', 'Jeden długi kanał: wpisy, nowości, Butik i casting. Większe litery, „Pokaż więcej” przy długich tekstach.'],

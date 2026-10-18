@@ -50,6 +50,7 @@ def verify(payload, sig_header, secret=None, tolerance=300, now=None):
     return any(hmac.compare_digest(exp, v) for v in parts.get("v1", []))
 
 ON_PAID = None
+ON_USER_PAID = None   # (uid) – każdy opłacony zakup (plan lub strój), np. nagroda Poleć Lunę
 def handle(event, grant_pass, grant_item):
     """Obsługa zdarzenia. Zwraca opis wyniku. Idempotentnie po id sesji Checkout."""
     typ = event.get("type"); s = (event.get("data") or {}).get("object") or {}
@@ -67,5 +68,8 @@ def handle(event, grant_pass, grant_item):
         store.put("payments_done", done)
     try:
         if kind == "item" and ON_PAID: ON_PAID(ref, s.get("amount_total"), s.get("currency"))
+    except Exception: pass
+    try:
+        if ON_USER_PAID and uid: ON_USER_PAID(uid)
     except Exception: pass
     return "granted"

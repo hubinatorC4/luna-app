@@ -25,7 +25,7 @@ try:
 except Exception:
     WAW = None
 
-VERSION = "1.4.8"
+VERSION = "1.4.9"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -621,6 +621,7 @@ def _wall_pricing():
     P = CFG["pricing"]; return {"show": P["show"], "foreign": P["foreign"], "plans": P["plans"]}
 social.PRICING = _wall_pricing
 payments.ON_PAID = lambda ref, amt, cur: stats.add("item:" + str(ref) + ":buy")
+payments.ON_USER_PAID = lambda uid: referral.on_purchase(uid)
 stats.threadsafe_start()
 
 def _help_prices():
@@ -800,6 +801,9 @@ class H(SimpleHTTPRequestHandler):
             tok = check_code(ip, str(data.get("passphrase", ""))[:80])
             if not tok: return self._json({"error": "Nieprawidłowy kod."}, 401)
             return self._json({"admin_token": tok, "ttl": ADMIN_TTL})
+        if p == "/api/admin/referrals":
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            referral.set_enabled(bool(data.get("enabled"))); return self._json(referral.admin_list())
         if p == "/api/admin/official":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             try: return self._json(social.official_action(str(data.get("id", ""))[:20], str(data.get("action", ""))))
@@ -1016,6 +1020,8 @@ class H(SimpleHTTPRequestHandler):
             q = parse_qs(u.query)
             try: return self._json(social.gallery(q.get("offset", ["0"])[0], q.get("limit", ["24"])[0]))
             except ValueError: return self._json({"error": "bad request"}, 400)
+        if p == "/api/referral/status":
+            return self._json({"enabled": referral.enabled(), "days": referral.DAYS, "cap": referral.CAP})
         if p == "/api/referral":
             a = self._acct()
             if not a: return self._json({"error": "Zaloguj się."}, 401)

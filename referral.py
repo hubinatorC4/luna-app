@@ -1,5 +1,6 @@
-"""Poleć Lunę: za każdą poleconą osobę, która założy konto przez link i potwierdzi e-mail, polecający dostaje 7 dni Premium.
-Limit: 10 nagród w miesiącu kalendarzowym (czas polski). Bez nagród za polubienia/obserwacje. Tylko prawdziwe dane – zero sztucznych liczników."""
+"""Poleć Lunę (v1.4.9): gdy osoba, która założyła konto z linku polecającego, zrobi PIERWSZY prawdziwy zakup (plan lub strój),
+OBIE osoby dostają 7 dni Premium. Limit: 10 nagród polecającego w miesiącu (czas polski). Konta oznaczone przez antybota – bez nagrody.
+Program można wyłączyć w panelu właściciela (referral_cfg.enabled). Bez nagród za polubienia/obserwacje. Tylko prawdziwe dane."""
 import datetime, secrets, threading, time
 import store, accounts, antibot
 
@@ -14,6 +15,9 @@ def _month(ts=None):
     return d.strftime("%Y-%m")
 
 def _refs(): return store.get("referrals", {}) or {}
+def enabled(): return bool((store.get("referral_cfg", {}) or {}).get("enabled", True))
+def set_enabled(on):
+    c = store.get("referral_cfg", {}) or {}; c["enabled"] = bool(on); c["changed"] = int(time.time()); store.put("referral_cfg", c); return enabled()
 
 def code(uid):
     """Stały kod polecający konta (tworzony przy pierwszym użyciu)."""
@@ -34,6 +38,7 @@ def _owner(c):
 
 def on_signup(new_uid, ref_code, ak_new=None):
     """Zapisuje polecenie (status pending). Nagroda dopiero po potwierdzeniu e-maila."""
+    if not enabled(): return None
     rid = _owner(ref_code)
     if not rid or rid == new_uid: return None
     with _lock:
@@ -56,22 +61,33 @@ def _grant(uid, days):
         u["pass"] = ps; store.put("accounts", a); return True
 
 def on_verified(uid):
-    """Wywoływane po potwierdzeniu e-maila poleconej osoby."""
+    """Potwierdzenie e-maila poleconej osoby – tylko odnotowanie (nagroda po pierwszym zakupie)."""
     with _lock:
         R = _refs(); r = next((x for x in R.values() if x["referee"] == uid and x["status"] == "pending"), None)
         if not r: return None
+        r["verified"] = True; store.put("referrals", R); return r["status"]
+
+def on_purchase(uid):
+    """Pierwszy opłacony zakup poleconej osoby → po 7 dni Premium dla obu stron (jeśli program włączony)."""
+    if not uid: return None
+    with _lock:
+        R = _refs(); r = next((x for x in R.values() if x["referee"] == uid and x["status"] == "pending"), None)
+        if not r: return None
+        if not enabled(): return None   # wyłączony: polecenie czeka; nagroda tylko, gdy program działa
         if r.get("ak") and antibot.hidden(r["ak"]): r["status"] = "rejected"; r["reason"] = "konto oznaczone jako podejrzane"
         else:
             m = _month(); n = sum(1 for x in R.values() if x["referrer"] == r["referrer"] and x["status"] == "rewarded" and _month(x["rewarded_at"]) == m)
             if n >= CAP: r["status"] = "capped"; r["reason"] = f"limit {CAP} nagród w miesiącu"
-            elif _grant(r["referrer"], DAYS): r["status"] = "rewarded"; r["rewarded_at"] = int(time.time())
+            elif _grant(r["referrer"], DAYS):
+                _grant(uid, DAYS); r["status"] = "rewarded"; r["rewarded_at"] = int(time.time()); r["both"] = True
         store.put("referrals", R); return r["status"]
 
 def mine(uid, base=""):
     R = [r for r in _refs().values() if r["referrer"] == uid]; m = _month()
     month = sum(1 for r in R if r["status"] == "rewarded" and _month(r["rewarded_at"]) == m)
+    if not enabled(): return {"enabled": False}
     c = code(uid)
-    return {"code": c, "link": f"{base}/?ref={c}", "days_per_referral": DAYS, "cap_month": CAP, "rewarded_month": month,
+    return {"enabled": True, "rule": "first_purchase_both", "code": c, "link": f"{base}/?ref={c}", "days_per_referral": DAYS, "cap_month": CAP, "rewarded_month": month,
             "rewarded_total": sum(1 for r in R if r["status"] == "rewarded"), "pending": sum(1 for r in R if r["status"] == "pending"),
             "days_earned": DAYS * sum(1 for r in R if r["status"] == "rewarded")}
 
@@ -82,7 +98,7 @@ def admin_list():
     out.sort(key=lambda x: -x["created"])
     st = {}
     for r in out: st[r["status"]] = st.get(r["status"], 0) + 1
-    return {"items": out[:500], "stats": st, "days": DAYS, "cap": CAP}
+    return {"items": out[:500], "stats": st, "days": DAYS, "cap": CAP, "enabled": enabled()}
 
 def forget(uid):
     """Usunięcie konta: usuwamy powiązania polecające tej osoby (dane osobowe), zachowując anonimowe liczby nagród."""
