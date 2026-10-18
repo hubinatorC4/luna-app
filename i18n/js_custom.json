@@ -1,0 +1,122 @@
+{
+"en": [
+[
+"'Za mało miejsca na obraz – wybierz mniejszy plik.'",
+"'Not enough space for the image – choose a smaller file.'"
+],
+[
+"<em class=\"soon\">wkrótce</em>",
+"<em class=\"soon\">coming soon</em>"
+],
+[
+"'Ta opcja jest dostępna od planu '",
+"'This option is available from the plan '"
+],
+[
+"'. Płatności – wkrótce.'",
+"'. Payments – coming soon.'"
+],
+[
+"`Twój plan: ${",
+"`Your plan: ${"
+],
+[
+"'Plan Darmowy. Zaloguj się, aby korzystać z planu przypisanego do konta.'",
+"'Free plan. Sign in to use the plan linked to your account.'"
+],
+[
+"' Płatności – wkrótce.'",
+"' Payments – coming soon.'"
+]
+],
+"es": [
+[
+"'Za mało miejsca na obraz – wybierz mniejszy plik.'",
+"'No hay espacio para la imagen: elige un archivo más pequeño.'"
+],
+[
+"<em class=\"soon\">wkrótce</em>",
+"<em class=\"soon\">próximamente</em>"
+],
+[
+"'Ta opcja jest dostępna od planu '",
+"'Esta opción está disponible desde el plan '"
+],
+[
+"'. Płatności – wkrótce.'",
+"'. Pagos: próximamente.'"
+],
+[
+"`Twój plan: ${",
+"`Tu plan: ${"
+],
+[
+"'Plan Darmowy. Zaloguj się, aby korzystać z planu przypisanego do konta.'",
+"'Plan Gratis. Inicia sesión para usar el plan de tu cuenta.'"
+],
+[
+"' Płatności – wkrótce.'",
+"' Pagos: próximamente.'"
+]
+],
+"de": [
+[
+"'Za mało miejsca na obraz – wybierz mniejszy plik.'",
+"'Zu wenig Platz für das Bild – wähle eine kleinere Datei.'"
+],
+[
+"<em class=\"soon\">wkrótce</em>",
+"<em class=\"soon\">bald</em>"
+],
+[
+"'Ta opcja jest dostępna od planu '",
+"'Diese Option gibt es ab dem Plan '"
+],
+[
+"'. Płatności – wkrótce.'",
+"'. Zahlungen – bald.'"
+],
+[
+"`Twój plan: ${",
+"`Dein Plan: ${"
+],
+[
+"'Plan Darmowy. Zaloguj się, aby korzystać z planu przypisanego do konta.'",
+"'Plan Gratis. Melde dich an, um den Plan deines Kontos zu nutzen.'"
+],
+[
+"' Płatności – wkrótce.'",
+"' Zahlungen – bald.'"
+]
+],
+"uk": [
+[
+"'Za mało miejsca na obraz – wybierz mniejszy plik.'",
+"'Замало місця для зображення — оберіть менший файл.'"
+],
+[
+"<em class=\"soon\">wkrótce</em>",
+"<em class=\"soon\">незабаром</em>"
+],
+[
+"'Ta opcja jest dostępna od planu '",
+"'Ця опція доступна від плану '"
+],
+[
+"'. Płatności – wkrótce.'",
+"'. Оплата — незабаром.'"
+],
+[
+"`Twój plan: ${",
+"`Ваш план: ${"
+],
+[
+"'Plan Darmowy. Zaloguj się, aby korzystać z planu przypisanego do konta.'",
+"'План Безкоштовний. Увійдіть, щоб користуватися планом акаунта.'"
+],
+[
+"' Płatności – wkrótce.'",
+"' Оплата — незабаром.'"
+]
+]
+}

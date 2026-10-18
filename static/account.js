@@ -19,6 +19,13 @@ function ageOk(){ try { const a = JSON.parse(localStorage.getItem(AGE_KEY) || 'n
 function ageGate(){
   if (ageOk() || (ME && ME.adult)) return;
   const d = $('#ageGate'); if (!d) return;
+  /* oświadczenie zapamiętane na tym urządzeniu (także po wyczyszczeniu pamięci przeglądarki, jeśli zostało zapisane na serwerze) */
+  const v = vid();
+  if (v && !ageGate.checked){ ageGate.checked = true;
+    fetch('/api/age/status?vid=' + encodeURIComponent(v), {credentials: 'same-origin'}).then(r => r.json()).then(st => {
+      if (st && st.declared){ try { localStorage.setItem(AGE_KEY, JSON.stringify({adult: true, at: st.at})); } catch(e){} return; }
+      ageGate();
+    }).catch(() => ageGate()); return; }
   d.showModal();
   d.addEventListener('cancel', e => e.preventDefault());
   $('#ageForm').onsubmit = async e => {

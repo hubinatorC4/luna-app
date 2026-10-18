@@ -1015,6 +1015,8 @@ class H(SimpleHTTPRequestHandler):
         if u.path.startswith(("/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
             r = self._get_account(u)
             if r is not None: return r
+        if u.path == "/api/age/status":
+            return self._json(age.status(parse_qs(u.query).get("vid", [""])[0][:40]))
         if u.path == "/api/voices":
             return self._json({"voices": VOICES, "default": DEFAULT_VOICE})
         if u.path == "/api/tts":

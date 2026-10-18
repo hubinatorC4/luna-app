@@ -1,13 +1,15 @@
 """Tłumaczenie stron publicznych po stronie serwera (indeksowalne): i18n/<plik>.json = {lang: [[pl, tłumaczenie], ...]}.
 Wpis z „<” – zamiana fragmentu HTML; wpis z „~” – zamiana podciągu; pozostałe – cały węzeł tekstowy lub wartość atrybutu.
-Pliki JS z listy JS dostają ?lang=xx i podmianę napisów (tylko na stronach publicznych, nie w aplikacji)."""
+Pliki JS z listy JS dostają ?lang=xx i podmianę napisów (strony publiczne i aplikacja /app)."""
 import json, os, re
 D = os.path.join(os.path.dirname(os.path.abspath(__file__)), "i18n")
 PAGES = {"/promo.html": ["promo", "common"], "/live.html": ["live", "common"], "/regulamin.html": ["regulamin_v140", "regulamin", "common"],
          "/privacy.html": ["privacy_v140", "privacy", "common"], "/o-lunie.html": ["common"],
+         "/index.html": ["app_index"],
          **{x: ["common"] for x in ("/scianka.html", "/butik.html", "/testerzy.html", "/dolacz.html", "/twarz.html", "/wesprzyj.html", "/problemy.html")}}
-JS = {"portal.js": "js_portal", "live.js": "js_live", "testers.js": "js_testers", "push.js": "js_push"}
-JS_ON = ("/promo.html", "/live.html")
+JS = {"portal.js": "js_portal", "live.js": "js_live", "testers.js": "js_testers", "push.js": "js_push",
+      "app.js": "js_app", "account.js": "js_account", "custom.js": "js_custom", "livechat.js": "js_livechat", "profile.js": "js_profile"}
+JS_ON = ("/promo.html", "/live.html", "/index.html")
 _c = {}
 def _load(n):
     if n not in _c:
@@ -42,7 +44,7 @@ def apply(doc, path, lang):
                 body = r[2].sub(lambda m, t=r[3]: m.group(1) + t.replace('"', "&quot;") + '"', body)
         doc = head + body
     if path in JS_ON:
-        doc = re.sub(r'(<script src="/(' + "|".join(re.escape(k) for k in JS) + r')(\?[^"]*)?)"', lambda m: m.group(1) + ("&" if m.group(3) else "?") + "lang=" + lang + '"', doc)
+        doc = re.sub(r'(<script src="/?(' + "|".join(re.escape(k) for k in JS) + r')(\?[^"]*)?)"', lambda m: m.group(1) + ("&" if m.group(3) else "?") + "lang=" + lang + '"', doc)
     return doc
 def js(name, src, lang):
     n = JS.get(name)

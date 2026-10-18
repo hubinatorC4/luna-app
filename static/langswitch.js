@@ -21,6 +21,7 @@ function mount(){
   const N = NAV[cur];
   if (N){ document.querySelectorAll('header nav a, .sitefoot nav a, footer nav a').forEach(a => { const h = a.getAttribute('href'); if (N[h] && !/🎁/.test(a.textContent)) a.textContent = N[h]; else if (N[h]) a.textContent = N[h] + ' 🎁'; });
     document.querySelectorAll('header a.pill.primary[href="/app"]').forEach(a => a.textContent = OPEN[cur]); }
+  appLink();
   if (document.querySelector('.lswitch')) return;
   const host = document.querySelector('header .bar .acts') || document.querySelector('header .bar') || document.querySelector('header.top') || document.querySelector('header');
   const s = document.createElement('select'); s.className = 'lswitch'; s.setAttribute('aria-label', 'Język / Language');
@@ -29,6 +30,17 @@ function mount(){
   if (host) host.prepend(s); else { s.classList.add('floating'); document.body.appendChild(s); }
   document.querySelectorAll('.langtabs').forEach(t => t.hidden = true);
   document.querySelectorAll('a[href^="/"]').forEach(a => { if (cur === 'pl' || /^\/(api|music|uploads)\//.test(a.getAttribute('href'))) return; try { const u = new URL(a.href); if (u.origin === location.origin && /\.html$|\/$/.test(u.pathname) && !u.searchParams.get('lang')){ u.searchParams.set('lang', cur); a.href = u.pathname + u.search + u.hash; } } catch(e){} });
+}
+/* v1.4.2: dyskretny link do aplikacji (/app.html) w nagłówku i stopce strony */
+function appLink(){
+  if (document.documentElement.classList.contains('twa') || window.top !== window.self || document.querySelector('.applink')) return;
+  const t = {pl: ['📱 Aplikacja', 'Otwórz aplikację Luny'], en: ['📱 App', 'Open the Luna app'], es: ['📱 App', 'Abrir la app de Luna'], de: ['📱 App', 'Luna-App öffnen'], uk: ['📱 Застосунок', 'Відкрити застосунок Луни']}[cur] || ['📱 Aplikacja', 'Otwórz aplikację Luny'];
+  const href = '/app.html' + (cur !== 'pl' ? '?lang=' + cur : '');
+  const acts = document.querySelector('header .bar .acts');
+  if (acts){ const a = document.createElement('a'); a.className = 'pill ghost applink'; a.href = href; a.textContent = t[0]; a.title = t[1]; a.setAttribute('aria-label', t[1]); acts.prepend(a); }
+  const fn = document.querySelector('.sitefoot nav, footer nav');
+  if (fn && !fn.querySelector('a[href^="/app.html"]')){ const b = document.createElement('a'); b.href = href; b.textContent = t[1]; fn.prepend(b); }
+  if (!document.getElementById('applinkCss')){ const st = document.createElement('style'); st.id = 'applinkCss'; st.textContent = '.applink{opacity:.9}@media (max-width:480px){.applink{font-size:0!important;padding:8px 10px!important}.applink::before{content:"📱";font-size:16px}}'; document.head.appendChild(st); }
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 })();
