@@ -1,6 +1,6 @@
 # „Dołącz do zespołu” – treść strony /zespol.html i formularza (5 języków: pl, en, es, de, uk). Właściciel tylko jako Hubinator❤️.
 C = {
-"_title": ["Dołącz do zespołu – Luna mówi jak jest", "Join the team – Luna mówi jak jest", "Únete al equipo – Luna mówi jak jest", "Werde Teil des Teams – Luna mówi jak jest", "Приєднуйтесь до команди – Luna mówi jak jest"],
+"_title": ["Dołącz do zespołu – Luna mówi jak jest", "Join the team – Luna Tells It Like It Is", "Únete al equipo – Luna dice las cosas como son", "Werde Teil des Teams – Luna sagt, wie es ist", "Приєднуйтесь до команди – Луна каже як є"],
 "h1": ["Dołącz do zespołu 🤝", "Join the team 🤝", "Únete al equipo 🤝", "Werde Teil des Teams 🤝", "Приєднуйтесь до команди 🤝"],
 "lead": ["Luna nie je, nie śpi i nie pije kawy – ale ludzie, którzy ją budują, owszem ☕ Jesteśmy otwarci na osoby, które chcą pomóc rozwijać Lunę. Jeśli masz ochotę dorzucić swoją cegiełkę – odezwij się!",
  "Luna doesn’t eat, sleep or drink coffee – but the people building her do ☕ We’re open to people who want to help grow Luna. If you’d like to add your brick – get in touch!",
