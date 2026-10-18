@@ -26,7 +26,7 @@ TOPICS = [
   ["Moja ulubiona rozgrzewka: trzy minuty mruczenia na „mmm”, potem parskanie ustami jak konik, a na koniec glissando od wysokiego do niskiego tonu na „uuu”. Pięć minut i głos jest ciepły, gotowy na wszystko.",
    "Zacznij od ziewania z otwartym gardłem, potem „brrr” na wargach i powolne „ma-me-mi-mo-mu” w średnim tonie. Rozgrzany głos brzmi niżej i pełniej."]),
  (["tempo", "szybko", "wolniej", "wolno", "spiesz", "pospiech"],
-  ["Mów wolniej, niż Ci się wydaje, że trzeba. Wolne tempo brzmi pewnie i zmysłowo, szybkie brzmi nerwowo. Spróbuj przeczytać akapit o połowę wolniej i nagraj się, sam usłyszysz różnicę."]),
+  ["Mów wolniej, niż Ci się wydaje, że trzeba. Wolne tempo brzmi pewnie i ciepło, szybkie brzmi nerwowo. Spróbuj przeczytać akapit o połowę wolniej i nagraj się, sam usłyszysz różnicę."]),
  (["pauz", "przerw", "cisz"],
   ["Pauza to Twoja tajna broń, cariño. Zatrzymaj się na sekundę przed ważnym słowem, a wszyscy będą na nie czekać. Cisza w rozmowie nie jest pustką, tylko napięciem, które Ty kontrolujesz."]),
  (["intonacj", "melodi", "monoton", "plaski", "nudn", "znudz"],

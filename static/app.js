@@ -85,7 +85,6 @@ async function ask(q){
     reply = d.reply;
   } catch(e){ reply = 'Ay, cariño, straciłam połączenie z serwerem. Spróbuj za chwilę. (' + CFG.ai_tag + ')'; }
   t.remove(); addMsg(reply, 'luna');
-  if (!sessionStorage.getItem('luna.noticed') && CFG.chat_notice){ sessionStorage.setItem('luna.noticed', '1'); const n = document.createElement('div'); n.className = 'msg sys'; n.textContent = 'ℹ️ ' + CFG.chat_notice; chat.appendChild(n); scroll(); }
   history.push({role:'user', content:q}, {role:'assistant', content:reply}); history = history.slice(-20);
   sessionStorage.setItem('luna.history', JSON.stringify(history));
   if (S.autoSpeak) await speak(reply);

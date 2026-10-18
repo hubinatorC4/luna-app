@@ -25,6 +25,8 @@
     <label class="wake" title="Nasłuchiwanie słowa „Luna”">
       <input type="checkbox" id="wakeToggle"><span class="sw"></span><span class="lbl">Nasłuchiwanie</span>
     </label>
+    <button id="liveBtn" class="icon badged" aria-label="Czat na żywo – napisz do twórcy" title="Czat na żywo – napisz do twórcy">💬<span class="badge" id="liveBadge" hidden></span></button>
+    <button id="inboxBtn" class="icon badged" aria-label="Skrzynka moderatora" title="Skrzynka moderatora" hidden>📥<span class="badge" id="inboxBadge" hidden></span></button>
     <button id="musicBtn" class="icon" aria-label="Muzyka" title="Muzyka">🎷</button>
     <button id="customBtn" class="icon" aria-label="Stwórz własną asystentkę" title="Stwórz własną asystentkę">✨</button>
     <button id="settingsBtn" class="icon" aria-label="Ustawienia">⚙</button>
@@ -48,7 +50,7 @@
   <div class="eq" id="eq"><i></i><i></i><i></i><i></i><i></i></div>
 </section>
 
-<div class="chat-notice" id="chatNotice">Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.</div>
+<button type="button" class="live-cta" id="liveCta">💬 Czat na żywo – napisz do twórcy</button>
 <main id="chat" aria-live="polite"></main>
 
 <form id="composer" autocomplete="off">
@@ -104,6 +106,28 @@
     </div>
     <p class="hint">Nasłuchiwanie słowa „Luna” działa, gdy ta strona jest otwarta i ma dostęp do mikrofonu (najlepiej w Chrome).</p>
   </form>
+</dialog>
+<dialog id="live" class="wide">
+  <div class="live-head"><h2>💬 Czat na żywo</h2><button type="button" class="x" id="liveClose" aria-label="Zamknij">✕</button></div>
+  <p class="hint" style="margin:0 0 8px">Napisz do twórcy Luny. Odpowiada człowiek z naszego zespołu, nie AI.</p>
+  <div class="chat-notice" id="chatNotice">Czas odpowiedzi na każde pytanie zależy od dostępności osób w biurze, ale nie będzie dłuższy niż 30 dni.</div>
+  <div class="live-list" id="liveList" aria-live="polite"></div>
+  <p class="hint" id="liveWho"></p>
+  <form class="live-form" id="liveForm">
+    <textarea id="liveInput" rows="2" maxlength="2000" placeholder="Twoja wiadomość…" required></textarea>
+    <button class="primary" id="liveSend" aria-label="Wyślij">➤</button>
+  </form>
+  <p class="hint" id="liveErr"></p>
+</dialog>
+<dialog id="inbox" class="wide">
+  <div class="live-head"><h2>📥 Skrzynka moderatora</h2><button type="button" class="x" id="inboxClose" aria-label="Zamknij">✕</button></div>
+  <div id="inboxListView"><p class="hint" id="inboxEmpty">Brak rozmów.</p><div id="inboxList"></div></div>
+  <div id="inboxThreadView" hidden>
+    <div class="inbox-bar"><button type="button" class="ghost" id="inboxBack">← Wróć</button><img class="mav" id="inboxAv" alt=""><b id="inboxName"></b><button type="button" class="ghost danger" id="inboxDel">Usuń</button></div>
+    <div class="live-list" id="inboxThread"></div>
+    <form class="live-form" id="inboxForm"><textarea id="inboxInput" rows="2" maxlength="2000" placeholder="Odpowiedź dla odwiedzającego…" required></textarea><button class="primary" aria-label="Wyślij odpowiedź">➤</button></form>
+    <p class="hint" id="inboxErr"></p>
+  </div>
 </dialog>
 <dialog id="admin">
   <form method="dialog" id="admForm">
@@ -194,6 +218,7 @@
     <div class="btns sticky">
       <button type="button" id="admSave" class="primary">Zapisz</button>
       <button type="button" id="admReset" class="ghost">Przywróć domyślne</button>
+      <button type="button" id="admInbox" class="ghost">📥 Skrzynka czatu <span id="admInboxN"></span></button>
       <button type="button" id="admLogout" class="ghost">Wyloguj</button>
       <button value="ok">Zamknij</button>
     </div>
@@ -243,6 +268,7 @@
 <script src="music.js"></script>
 <script src="profile.js"></script>
 <script src="holo.js"></script>
+<script src="livechat.js"></script>
 <script src="admin-catalog.js"></script>
 </body>
 </html>

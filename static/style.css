@@ -142,5 +142,26 @@ body.holo.listening .ring{background:conic-gradient(from 0deg,color-mix(in srgb,
 @keyframes holoScan{from{background-position:0 0}to{background-position:0 40px}}
 @keyframes holoFlicker{0%,100%{opacity:.9;transform:none}47%{opacity:.9}48%{opacity:.65;transform:translateX(2px)}49%{opacity:.92;transform:translateX(-1px)}50%{opacity:.9;transform:none}83%{opacity:.8}84%{opacity:.9}}
 @media (prefers-reduced-motion: reduce){body.holo .ring,body.holo .ring img,body.holo .ring::after{animation:none!important}}
-@media (max-width:440px){.wake .lbl{display:none}.brand small{font-size:11px;display:block;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.actions{gap:6px}.icon{width:34px;height:34px;font-size:16px}}
+@media (max-width:440px){.wake .lbl{display:none}.brand small{font-size:11px;display:block;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.actions{gap:4px}.icon{width:32px;height:32px;font-size:15px}.brand small{max-width:96px}}
 .toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;background:#241810;border:1px solid var(--amber);color:var(--text);padding:10px 14px;border-radius:14px;font-size:14px;box-shadow:0 8px 30px rgba(0,0,0,.6)}.toast button{background:var(--amber);color:#1b0f06;border:none;border-radius:10px;padding:5px 10px;font-weight:600;margin-left:4px;cursor:pointer}
+/* v1.2 – czat na żywo */
+.badged{position:relative}
+.badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#ff4d4d;color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;box-shadow:0 0 0 2px #0b0705}
+.badge[hidden]{display:none}
+dialog.wide{width:min(96vw,560px);max-height:92vh;display:none;flex-direction:column}
+dialog.wide[open]{display:flex}
+.live-head{display:flex;align-items:center;justify-content:space-between}.live-head h2{margin:0 0 6px}
+.x{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.live-list{flex:1;min-height:180px;max-height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 2px;margin-top:8px}
+.live-list .msg .meta{display:block;font-size:11px;opacity:.7;margin-bottom:2px}
+.live-form{display:flex;gap:8px;align-items:flex-end}
+.live-form textarea{flex:1;background:#0f0a07;color:var(--text);border:1px solid rgba(240,160,64,.35);border-radius:12px;padding:9px;font:inherit;resize:none}
+.live-form button{width:46px;height:46px;border-radius:50%;border:none;background:var(--amber);color:#1b0f06;font-size:18px;cursor:pointer}
+.live-cta{align-self:center;margin:2px auto 6px;background:rgba(240,160,64,.1);border:1px solid rgba(240,160,64,.45);color:var(--amber2);border-radius:999px;padding:6px 14px;font-size:13px;cursor:pointer}
+.conv{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--card);border:1px solid rgba(240,160,64,.2);border-radius:14px;padding:9px;margin:6px 0;color:var(--text);cursor:pointer;position:relative}
+.conv.unread{border-color:var(--amber)}
+.conv .ct{display:flex;flex-direction:column;min-width:0;flex:1}.conv small{color:var(--muted);font-size:11px}
+.conv .last{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#d9c3ad;font-size:13px}
+.conv .badge{position:static;box-shadow:none}
+.inbox-bar{display:flex;align-items:center;gap:8px}.inbox-bar b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.danger{color:#ff8a7a!important}

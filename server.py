@@ -17,8 +17,9 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import catalog, base64
+import livechat
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC = os.path.join(ROOT, "static")
 CACHE = os.path.join(ROOT, "cache")
@@ -398,6 +399,17 @@ class H(SimpleHTTPRequestHandler):
             b = open(fp, "rb").read(); ct = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp", "mp3": "audio/mpeg"}[fn.rsplit(".", 1)[1]]
             self.send_response(200); self.send_header("Content-Type", ct); self.send_header("Content-Length", str(len(b)))
             self.send_header("Cache-Control", "public, max-age=604800"); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/api/live/poll":
+            q = {k: v[0] for k, v in parse_qs(u.query).items()}
+            try: msgs, unread = livechat.visitor_poll(q.get("vid", ""), int(q.get("since", 0) or 0), q.get("mark", "1") != "0")
+            except Exception: return self._json({"error": "bad id"}, 400)
+            return self._json({"msgs": msgs, "unread": unread, "notice": CFG.get("chat_notice", "")})
+        if u.path.startswith("/api/admin/live"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            if u.path == "/api/admin/live": return self._json(livechat.inbox())
+            vid = u.path.rsplit("/", 1)[-1]
+            try: return self._json(livechat.conv(vid))
+            except KeyError: return self._json({"error": "not found"}, 404)
         if u.path == "/api/health":
             return self._json({"ok": True, "llm": bool(os.getenv("LUNA_API_KEY")), "ai_disclosure": True, "admin": admin_enabled(), "version": VERSION})
         return super().do_GET()
@@ -421,6 +433,22 @@ class H(SimpleHTTPRequestHandler):
             if not a: a, src = shape(knowledge.answer(q), ctx), "offline"
             a = disclose(a, hist, ctx["name"])
             return self._json({"reply": a, "source": src})
+        if u.path == "/api/live/send":
+            ip = self._ip(); vid = str(data.get("vid", ""))
+            if not livechat.VID_RE.fullmatch(vid): return self._json({"error": "bad id"}, 400)
+            if not (livechat.rate_ok("ip:" + ip, 8, 300) and livechat.rate_ok("vid:" + vid, 6, 150) and livechat.rate_ok("all", 120, 5000)):
+                return self._json({"error": "Za dużo wiadomości – spróbuj za chwilę."}, 429)
+            try: msgs = livechat.visitor_send(vid, data.get("name", ""), data.get("avatar", ""), data.get("text", ""), CFG.get("chat_notice", ""))
+            except ValueError as e: return self._json({"error": str(e)}, 400)
+            return self._json({"ok": True, "msgs": msgs})
+        if u.path in ("/api/admin/live/reply", "/api/admin/live/delete"):
+            if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+            vid = str(data.get("vid", ""))
+            try:
+                if u.path.endswith("/delete"): livechat.delete(vid); return self._json({"ok": True})
+                return self._json({"ok": True, "msgs": livechat.reply(vid, data.get("text", ""))})
+            except KeyError: return self._json({"error": "not found"}, 404)
+            except ValueError as e: return self._json({"error": str(e)}, 400)
         if u.path == "/api/tts":
             return self._tts(data)
         if u.path in ("/api/admin/catalog", "/api/admin/catalog/reset", "/api/admin/upload"):

@@ -11,14 +11,15 @@ def att(prefix):
 SRC = {  # (rodzaj, id) -> źródło
     ("outfit", "koronkowa"): att("21adaa56") or "/workspace/luna_koronka.jpg",
     ("outfit", "wieczorowa"): att("b856a570"), ("outfit", "biznes"): att("89a471e7"),
-    ("outfit", "sweter"): att("75f5b2db"), ("outfit", "letnia"): att("1dfaaae3"),
+    ("outfit", "sweter"): att("75f5b2db"),  # letnia: brak zatwierdzonego obrazu → „wkrótce”
     ("pose", "prosto"): att("b856a570"), ("pose", "polobrot"): att("3e7cac4b"),
     ("pose", "zamyslona"): att("029f5812"), ("pose", "siedzaca"): att("8f463d09"),
 }
+ALIAS = {"suknia": "wieczorowa", "zakiet": "biznes", "marynarka": "biznes", "koronka": "koronkowa"}
 # obrazy dostarczone później w /workspace mają pierwszeństwo: luna_outfit_<id>.jpg, luna_pose_<id>.jpg, luna_body_<id>.jpg
 for f in glob.glob("/workspace/luna_outfit_*.*") + glob.glob("/workspace/luna_pose_*.*") + glob.glob("/workspace/luna_body_*.*"):
     k, i = os.path.splitext(os.path.basename(f))[0].split("_", 2)[1:]
-    SRC[(k, i)] = f
+    SRC[(k, ALIAS.get(i, i))] = f
 
 def sharp_resize(im, w):
     h = round(im.height * w / im.width)

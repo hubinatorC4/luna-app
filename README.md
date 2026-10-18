@@ -4,13 +4,14 @@ Luna to aplikacja webowa (PWA). Rozmawia po polsku ciepłym, niskim głosem z hi
 
 **Na żywo:** https://luna-voice-coach.onrender.com · strona promocyjna: `/promo.html`
 
-## Funkcje (v1.1)
+## Funkcje (v1.2)
 - czat tekstowy i głosowy, słowo wybudzające „Luna”, synteza mowy (edge-tts, pl-PL-ZofiaNeural)
 - panel „Barwa głosu”: wysokość, tempo, ciepło, głośność i presety
 - „Stwórz własną asystentkę”: imię, słowo wybudzające, ton, długość odpowiedzi, kolor pierścienia, stroje, pozy i sylwetki (gating według planów)
 - plany Podstawowa → Premium → Pro / Ultra (wersja demonstracyjna, bez płatności)
 - tryb hologram, okrągłe awatary Luny i użytkownika
 - muzyka w tle: 10 utworów smooth jazz (Kevin MacLeod, CC BY 4.0, zob. `static/music/LICENSES.md`)
+- czat na żywo „Napisz do twórcy” (💬): rozmowy odwiedzających z anonimowym identyfikatorem, imieniem i awatarem; skrzynka moderatora (📥) z licznikami nieprzeczytanych i odpowiedziami; limity wiadomości; komunikat o czasie odpowiedzi (edytowalny w panelu) jako baner i automatyczna wiadomość po pierwszym pytaniu
 - panel producenta: osobowość, teksty, baza wiedzy, reguły, głos, wygląd, katalog postaci i playlista
 
 ## Uruchomienie lokalne
@@ -41,7 +42,7 @@ Panel producenta otworzysz, wpisując kod w zwykłym czacie. Kod jest sprawdzany
 
 Konfiguracja usługi jest w `render.yaml` (plan free, Frankfurt, health check `/api/health`).
 
-> ⚠️ Darmowy Render ma **ulotny dysk**. Zmiany z panelu producenta (`data/config.json`, `data/catalog.json`) i przesłane pliki znikają po każdym wdrożeniu. Przed aktualizacją zrób **Eksport JSON**, a po niej **Import**.
+> ⚠️ Darmowy Render ma **ulotny dysk**. Zmiany z panelu producenta (`data/config.json`, `data/catalog.json`, rozmowy czatu na żywo w `data/livechat.json`) i przesłane pliki znikają po każdym wdrożeniu. Przed aktualizacją zrób **Eksport JSON**, a po niej **Import**.
 
 ## Obrazy
 - Stroje, pozy i sylwetki: wrzuć do `/workspace` pliki `luna_outfit_<id>.jpg`, `luna_pose_<id>.jpg`, `luna_body_<id>.jpg` i uruchom `python3 tools/build_images.py`. Skrypt tworzy wersje 1x/2x w JPEG i WebP, a także awatary 256/512/1024, ikony PWA i favicon.
