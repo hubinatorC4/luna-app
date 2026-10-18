@@ -17,7 +17,7 @@ def _ffmpeg():
 FFMPEG = _ffmpeg()
 import knowledge
 import catalog, base64
-import helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
+import social, helpbot, seo, tickets, butik, join, payments, plans, accounts, avatars, security, age, livechat, liveroom, library, store, notify, testers
 from datetime import datetime, timedelta
 try:
     from zoneinfo import ZoneInfo
@@ -88,6 +88,7 @@ DEFAULTS = {
     "seller": {"name": "", "address": "", "nip": "", "vat": ""},
     "casting": {"start": "2026-10-18T00:00", "end": "2026-12-31T23:59", "final": "", "xmas": True},
     "app": {"play_url": ""},
+    "features": {"wall": True},
     "free": {"chat_minutes": 5, "outfits": 1, "live_questions": False, "voice_test": True, "convo": True},
     "music": {"volume": 0.25, "tracks": json.load(open(os.path.join(ROOT, "static", "music", "playlist.json"), encoding="utf-8"))},
 }
@@ -154,6 +155,8 @@ def sanitize(new):
                    "vat": se.get("vat") if se.get("vat") in ("czynny", "zwolniony", "") else ""}
     ca = new.get("casting") if isinstance(new.get("casting"), dict) else {}
     dt = lambda v, d: v if re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}", str(v or "")) else d
+    fe = new.get("features") if isinstance(new.get("features"), dict) else {}
+    c["features"] = {"wall": fe.get("wall", True) is not False}
     ap = new.get("app") if isinstance(new.get("app"), dict) else {}
     pu = str(ap.get("play_url", "")).strip()[:300]
     c["app"] = {"play_url": pu if re.fullmatch(r"https://play\.google\.com/[\w\-./?=&%]+", pu) else ""}
@@ -628,6 +631,21 @@ class H(SimpleHTTPRequestHandler):
         self._cookies = getattr(self, "_cookies", []) + [f"luna_sid={sid}; Path=/; Max-Age={max_age}; HttpOnly; Secure; SameSite=Lax"]
     def _acct(self):
         return accounts.session(self._cookie("luna_sid"))
+    def _dataurl(self, url):
+        m = re.fullmatch(r"data:image/(png|jpeg);base64,(.+)", str(url or ""), re.S)
+        if not m: return self._json({"error": "not found"}, 404)
+        b = base64.b64decode(m.group(2))
+        self.send_response(200); self.send_header("Content-Type", "image/" + m.group(1)); self.send_header("Content-Length", str(len(b)))
+        self.send_header("Cache-Control", "private, max-age=3600"); self.end_headers(); self.wfile.write(b); return True
+    def _dev(self):
+        """Losowy identyfikator urządzenia w ciasteczku HttpOnly (do głosów i autorstwa bez konta); serwer trzyma tylko jego skrót."""
+        d = self._cookie("luna_dev") or ""
+        if not re.fullmatch(r"[0-9a-f]{32}", d):
+            d = secrets.token_hex(16)
+            self._cookies = getattr(self, "_cookies", []) + [f"luna_dev={d}; Path=/; Max-Age=63072000; HttpOnly; Secure; SameSite=Lax"]
+        return d
+    def _who(self):
+        a = self._acct(); return (a[0]["uid"] if a else ""), self._dev()
     def _csrf_ok(self, csrf):
         t = self.headers.get("X-CSRF-Token") or ""
         return bool(t) and hmac.compare_digest(t, csrf)
@@ -642,7 +660,7 @@ class H(SimpleHTTPRequestHandler):
     def _body(self):
         n = int(self.headers.get("Content-Length") or 0)
         p = urlparse(self.path).path
-        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets") else 64 * 1024
+        lim = 9 * 1024 * 1024 if p in ("/api/admin/upload", "/api/admin/backup") else 7 * 1024 * 1024 if p in ("/api/avatar/upload", "/api/tickets", "/api/wall/post") else 64 * 1024
         if n > lim: raise ValueError("too large")
         return json.loads(self.rfile.read(n) or b"{}") if n else {}
 
@@ -739,6 +757,43 @@ class H(SimpleHTTPRequestHandler):
             try: _mod_push("Nowe zgłoszenie do projektu Luna", f"{rec['name']} – {rec['role_other'] or rec['role']}")
             except Exception: pass
             return self._json({"ok": True})
+        if p.startswith(("/api/wall/", "/api/comments", "/api/vote", "/api/report", "/api/admin/social")):
+            if p.startswith(("/api/wall/", "/api/comments")) and not CFG["features"]["wall"] and p.startswith("/api/wall/"): return self._json({"error": "wkrótce"}, 404)
+            if data.get("website"): return self._json({"ok": True})  # honeypot
+            uid, dev = self._who()
+            try:
+                if p == "/api/wall/post":
+                    if not (livechat.rate_ok("wp:" + ip, 2, 20) and livechat.rate_ok("wp:" + dev, 2, 15)): return self._json({"error": "Za dużo wpisów – odczekaj chwilę."}, 429)
+                    po = social.create_post(data, uid, dev)
+                    if po["status"] == "pending":
+                        try: _mod_push("Ścianka: nowy wpis do akceptacji", po["nick"] + ": " + po["text"][:80])
+                        except Exception: pass
+                    return self._json({"ok": True, "pending": po["status"] == "pending", "id": po["id"]})
+                if p == "/api/wall/edit":
+                    if not livechat.rate_ok("we:" + dev, 6, 60): return self._json({"error": "Za szybko."}, 429)
+                    po = social.edit_post(str(data.get("id", "")), data, uid, dev); return self._json({"ok": True, "pending": po["status"] == "pending"})
+                if p == "/api/wall/delete":
+                    social.delete_post(str(data.get("id", "")), uid, dev); return self._json({"ok": True})
+                if p == "/api/comments":
+                    if not (livechat.rate_ok("cm:" + ip, 4, 60) and livechat.rate_ok("cm:" + dev, 3, 40)): return self._json({"error": "Za dużo komentarzy – odczekaj chwilę."}, 429)
+                    c = social.add_comment(data, uid, dev)
+                    try: _mod_push("Nowy komentarz do akceptacji", c["nick"] + ": " + c["text"][:80])
+                    except Exception: pass
+                    return self._json({"ok": True, "pending": True})
+                if p == "/api/vote":
+                    if not (livechat.rate_ok("vt:" + ip, 40, 2000) and livechat.rate_ok("vt:" + dev, 30, 1500)): return self._json({"error": "Za szybko."}, 429)
+                    v = data.get("v"); return self._json(social.vote(str(data.get("target", "")), social.author_key(uid, dev), v if v in (1, -1) else 0))
+                if p == "/api/report":
+                    if not livechat.rate_ok("rp:" + ip, 5, 50): return self._json({"error": "Za dużo zgłoszeń."}, 429)
+                    social.report(str(data.get("target", "")), data.get("reason", ""), social.author_key(uid, dev)); return self._json({"ok": True})
+                if p == "/api/admin/social":
+                    if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+                    if data.get("action") == "unban": social.unban(str(data.get("author", "")))
+                    elif data.get("action"): social.moderate(data.get("kind"), str(data.get("id", "")), data.get("action"), data.get("variants"))
+                    return self._json({"ok": True, **social.admin_list()})
+            except PermissionError as e: return self._json({"error": str(e)}, 403)
+            except (ValueError, KeyError) as e: return self._json({"error": str(e) if isinstance(e, ValueError) else "not found"}, 400)
+            return self._json({"error": "not found"}, 404)
         if p == "/api/help":
             if not (livechat.rate_ok("hb:" + ip, 15, 300) and livechat.rate_ok("hb:*", 600, 20000)): return self._json({"error": "Za szybko – odczekaj chwilę."}, 429)
             return self._json(helpbot.answer(data.get("q", ""), data.get("lang", "pl")))
@@ -829,6 +884,32 @@ class H(SimpleHTTPRequestHandler):
             d["plans"] = [{"id": k, "name": plans.NAMES[k], **({"prices": (v if CFG["pricing"]["foreign"] else {"pln": v["pln"]})} if CFG["pricing"]["show"] or adm else {})} for k, v in CFG["pricing"]["plans"].items()]; d["foreign"] = CFG["pricing"]["foreign"]
             d["payments"] = {"web": payments.enabled(), "mode": payments.mode() if adm else None, "methods": ["BLIK", "karta / card"] + (["Przelewy24"] if payments.P24 else [])}
             return self._json(d)
+        if p.startswith(("/api/wall", "/api/comments", "/api/admin/social", "/api/admin/wall/img/")):
+            q = parse_qs(u.query)
+            if p.startswith("/api/admin/"):
+                if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
+                if p.startswith("/api/admin/wall/img/"):
+                    return self._dataurl(social.admin_img(p.rsplit("/", 1)[-1]))
+                return self._json(social.admin_list())
+            if p.startswith("/api/wall") and not CFG["features"]["wall"]: return self._json({"error": "wkrótce"}, 404)
+            uid, dev = self._who()
+            if p == "/api/wall":
+                lim = max(1, min(20, int((q.get("limit") or ["10"])[0]) if (q.get("limit") or ["10"])[0].isdigit() else 10))
+                b = (q.get("before") or [""])[0]
+                lg = (q.get("lang") or ["pl"])[0]
+                return self._json(social.feed("top" if (q.get("sort") or [""])[0] == "top" else "new", int(b) if b.isdigit() else None, lim, uid, dev, lg if lg in social.LANGS else "pl"))
+            if p.startswith("/api/wall/img/"):
+                return self._dataurl(social.wall_img(p.rsplit("/", 1)[-1]))
+            if p == "/api/comments":
+                t = (q.get("target") or [""])[0]
+                if not social.TARGET_RE.fullmatch(t): return self._json({"error": "bad target"}, 400)
+                return self._json(social.list_comments(t, uid, dev))
+            if p == "/api/votes":
+                pass
+            return self._json({"error": "not found"}, 404)
+        if p == "/api/votes":
+            uid, dev = self._who(); ts = (parse_qs(u.query).get("t") or [""])[0].split(",")[:60]
+            return self._json({t: social.counts(t, social.author_key(uid, dev)) for t in ts if social.TARGET_RE.fullmatch(t)})
         if p == "/api/help/chips":
             lang = parse_qs(u.query).get("lang", ["pl"])[0]
             return self._json({"chips": helpbot.chips(lang if lang in helpbot.LANGS else "pl"), "intro": helpbot.INTRO.get(lang, helpbot.INTRO["pl"])})
@@ -881,7 +962,7 @@ class H(SimpleHTTPRequestHandler):
         return None
     def do_GET(self):
         u = urlparse(self.path)
-        if u.path.startswith(("/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
+        if u.path.startswith(("/api/wall", "/api/comments", "/api/votes", "/api/admin/social", "/api/admin/wall/img/", "/api/help", "/api/admin/help", "/api/tickets", "/api/admin/tickets", "/api/seller", "/api/casting", "/api/account/", "/api/admin/users", "/api/admin/avatars", "/api/admin/audit", "/api/butik", "/api/support", "/api/admin/butik", "/api/admin/join")):
             r = self._get_account(u)
             if r is not None: return r
         if u.path == "/api/voices":
@@ -890,7 +971,7 @@ class H(SimpleHTTPRequestHandler):
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tts(q)
         if u.path == "/api/config":
-            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live", "free", "pay_notice", "app")})
+            return self._json({k: CFG[k] for k in ("greeting", "wake_reply", "ai_first", "ai_tag", "chat_notice", "voice_defaults", "ui", "music", "live", "free", "pay_notice", "app", "features")})
         if u.path == "/api/admin/config":
             if not token_ok(self.headers.get("X-Admin-Token")): return self._json({"error": "unauthorized"}, 401)
             return self._json({"config": CFG, "defaults": DEFAULTS, "voices": VOICES, "tones": list(TONES), "lengths": list(LENGTHS), "safety_line": SAFETY_LINE})
@@ -973,12 +1054,22 @@ class H(SimpleHTTPRequestHandler):
             b = (seo.sitemap(base) if u.path.endswith(".xml") else seo.robots(base)).encode()
             self.send_response(200); self.send_header("Content-Type", "application/xml; charset=utf-8" if u.path.endswith(".xml") else "text/plain; charset=utf-8")
             self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b); return
+        if u.path == "/scianka.html" and not CFG["features"]["wall"]:
+            return self._json({"error": "Ścianka Luny – wkrótce."}, 404)
         if u.path == "/" or u.path.endswith(".html"):
             fp = os.path.join(STATIC, "index.html" if u.path == "/" else u.path.lstrip("/"))
             if os.path.isfile(os.path.realpath(fp)) and os.path.realpath(fp).startswith(os.path.realpath(STATIC)):
                 lang = parse_qs(u.query).get("lang", [""])[0]
                 lang = lang if lang in seo.LANGS else ""
                 doc = seo.localize(open(fp, encoding="utf-8").read(), u.path, lang, notify.PUBLIC_URL.rstrip("/"))
+                pid = parse_qs(u.query).get("post", [""])[0]
+                if u.path == "/scianka.html" and re.fullmatch(r"[0-9a-f]{12}", pid or ""):
+                    po = social.get_post(pid)
+                    if po:
+                        import html as _h
+                        dsc = _h.escape((po["nick"] + ": " + po["text"])[:200], quote=True)
+                        doc = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{dsc}">', doc)
+                        if po.get("img"): doc = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{notify.PUBLIC_URL}/api/wall/img/{po["img"]}">', doc)
                 b = doc.encode()
                 self.send_response(200); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(b)))
                 self.send_header("Content-Language", lang or "pl"); self.send_header("Vary", "Accept-Language"); self.end_headers(); self.wfile.write(b); return

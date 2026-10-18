@@ -34,7 +34,7 @@ def load_generated():
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools"))
     try:
         import pages_content as C
-        for fn, D in (("/testerzy.html", C.TESTERZY), ("/wesprzyj.html", C.WESPRZYJ), ("/dolacz.html", C.DOLACZ), ("/twarz.html", C.TWARZ), ("/problemy.html", C.PROBLEMY), ("/butik.html", C.BUTIK)):
+        for fn, D in (("/testerzy.html", C.TESTERZY), ("/wesprzyj.html", C.WESPRZYJ), ("/dolacz.html", C.DOLACZ), ("/twarz.html", C.TWARZ), ("/problemy.html", C.PROBLEMY), ("/butik.html", C.BUTIK), ("/scianka.html", C.WALL)):
             PAGES[fn] = {l: (D[l]["_title"], re.sub(r"<[^>]+>", "", D[l].get("lead", ""))[:160]) for l in LANGS}
     except Exception:
         pass

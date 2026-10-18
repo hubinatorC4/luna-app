@@ -3,7 +3,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from site_common import HEAD, FOOT, VER
 S = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
-act = {k: "" for k in ("a_butik", "a_test", "a_join", "a_face", "a_sup")}
+act = {k: "" for k in ("a_butik", "a_test", "a_join", "a_face", "a_sup", "a_wall")}
 DISC = [("Polski", "Luna to asystentka AI do nauki mówienia i pracy z głosem. Produkt w żaden sposób nie ma na celu seksualizacji kobiet."),
         ("English", "Luna is an AI assistant for learning to speak and working with your voice. The product is in no way intended to sexualise women."),
         ("Español", "Luna es una asistente de IA para aprender a hablar y trabajar la voz. El producto no pretende en modo alguno sexualizar a las mujeres."),
@@ -50,6 +50,15 @@ body = """<main class="page legal">
 
 <h2>§ 9. Zasady zachowania i treści</h2>
 <p>Luna, Luna Live i czaty są przestrzenią kulturalną i SFW. Zabronione są treści obraźliwe, seksualne, nienawistne oraz spam. Moderator może usuwać wiadomości i blokować użytkowników. Stroje w Butiku Luny są zawsze eleganckie i nieodsłaniające.</p>
+
+<h2>§ 9a. Ścianka Luny, komentarze, oceny i głosy</h2>
+<ul><li>Wpisy na Ściance Luny i komentarze (także pod produktami w Butiku) może publikować osoba pełnoletnia – zalogowana albo podająca nick i potwierdzająca ukończenie 18 lat.</li>
+<li>Wszystkie komentarze oraz wpisy nowych autorów sprawdza moderator przed publikacją. Wpisy autorów, którym zatwierdziliśmy co najmniej 3 wpisy, publikują się od razu, ale nadal podlegają moderacji i zgłoszeniom.</li>
+<li>Zakazane są: wizerunek prawdziwych osób bez ich zgody, treści o charakterze seksualnym, mowa nienawiści, nękanie, spam i reklama. Obrazy mogą być wyłącznie wygenerowane przez AI; automatyczna kontrola metadanych nie jest stuprocentowo skuteczna, dlatego odpowiedzialność za oświadczenie ponosi autor.</li>
+<li>Agentki i postacie AI publikowane przez użytkowników muszą być oznaczone jako postacie AI. Nie mogą udawać prawdziwych osób.</li>
+<li>Autor może w każdej chwili edytować lub usunąć swój wpis. Moderator może ukryć lub usunąć treść naruszającą regulamin i zablokować możliwość publikowania.</li>
+<li>Głosy 👍/👎 i liczniki pokazują wyłącznie prawdziwe dane: jeden głos na konto lub urządzenie; ponowne kliknięcie usuwa głos. Nie nagradzamy polubień ani obserwowania profili.</li>
+<li>Treść naruszającą zasady można zgłosić przyciskiem „Zgłoś”.</li></ul>
 
 <h2>§ 10. Wsparcie dobrowolne i brak reklam</h2>
 <p>Dobrowolne wpłaty na stronie „Wesprzyj Lunę” (tylko w wersji przeglądarkowej) nie dają dostępu do płatnych funkcji. Aplikacja nie zawiera reklam.</p>

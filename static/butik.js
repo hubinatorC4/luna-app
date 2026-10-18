@@ -19,7 +19,10 @@ document.querySelectorAll('.tabsx button').forEach(b => b.onclick = () => {
 if (location.hash === '#cennik') document.querySelector('[data-tab=price]').click();
 function render(){
   if (!B) return; const t = T(); const en = document.documentElement.lang !== 'pl';
-  $('#items').innerHTML = B.items.map(i => `<div class="item"><img src="${esc(i.image || '/avatar-512.jpg')}" alt="" loading="lazy"><div class="b"><b>${esc(en ? i.name_en : i.name)}</b><br><small>${esc(t[LN[i.line]])} · ${esc(i.collection)}</small>${i.price ? `<br><small>${money(i.price)}</small>` : ''}</div></div>`).join('');
+  $('#items').innerHTML = B.items.map(i => `<div class="item"><img src="${esc(i.image || '/avatar-512.jpg')}" alt="" loading="lazy"><div class="b"><b>${esc(en ? i.name_en : i.name)}</b><br><small>${esc(t[LN[i.line]])} · ${esc(i.collection)}</small>${i.price ? `<div class="bprice">${money(i.price)}</div><small class="bvat">${esc(t.vat)}</small>` : ''}
+    <div class="wallpage bsoc"><div class="acts"><span data-votes="item:${esc(i.id)}"></span><button type="button" class="act share" data-share="${esc(location.origin + '/butik.html#' + i.id)}" data-text="${esc(en ? i.name_en : i.name)}">↗</button></div>
+    <details><summary>💬</summary><div data-comments="item:${esc(i.id)}" data-rating="1"></div></details></div></div></div>`).join('');
+  if (window.LunaSocial) window.LunaSocial.auto();
   $('#preview').hidden = !B.preview;
   const show = B.prices_visible;
   $('#lines').innerHTML = `<tr><th></th><th>${esc(t.released)}</th><th>${esc(t.planned)}</th>${show ? '<th>zł</th>' + (B.foreign ? '<th>€</th><th>$</th>' : '') + '' : ''}</tr>` +

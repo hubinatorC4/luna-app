@@ -7,7 +7,7 @@ import pages_content as C
 S = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
 
 def page(fn, title, desc, body, i18n=None, scripts=(), active="", cls=""):
-    act = {k: "" for k in ("a_butik", "a_test", "a_join", "a_face", "a_sup")}
+    act = {k: "" for k in ("a_butik", "a_test", "a_join", "a_face", "a_sup", "a_wall")}
     if active: act[active] = ' aria-current="page"'
     h = HEAD.format(title=title, desc=desc, ver=VER, cls=cls, **act)
     j = f'<script type="application/json" id="i18n">{json.dumps(i18n, ensure_ascii=False)}</script>\n' if i18n else ""
@@ -170,5 +170,41 @@ body = f"""<main class="page">
 </section>
 </main>
 """
-page("butik.html", P["_title"], "Butik Luny – stroje w trzech liniach: Ekonomiczna, Classic i Couture. Cennik planów i strojów.", body, C.BUTIK, ["/butik.js"], "a_butik")
+page("butik.html", P["_title"], "Butik Luny – stroje w trzech liniach: Ekonomiczna, Classic i Couture. Cennik planów i strojów.", body, C.BUTIK, ["/social.js", "/butik.js"], "a_butik")
 print("ok")
+
+# ---------- scianka (Ścianka Luny) ----------
+P = C.WALL["pl"]
+body = f"""<div class="wallpage">
+<section class="hero"><h1 data-i18n="h1">{P['h1']}</h1><p class="sub" data-i18n="sub">{P['sub']}</p>
+<p class="lead" data-i18n="lead">{P['lead']}</p></section>
+<main class="wrap"><div class="feed">
+<form class="composer card" id="composer" novalidate>
+  <span class="ava gen" id="meAva" aria-hidden="true">✦</span>
+  <div class="cmain">
+    <textarea class="cfield" name="text" maxlength="2000" rows="2" data-i18n-ph="ph" placeholder="{P['ph']}" aria-label="{P['ph']}"></textarea>
+    <div class="cextra" id="cExtra" hidden>
+      <input class="nickin" name="nick" maxlength="30" data-i18n-ph="nick" placeholder="{P['nick']}" aria-label="{P['nick']}" autocomplete="nickname">
+      <label id="adultRow"><input type="checkbox" name="adult"> <span data-i18n="adult">{P['adult']}</span></label>
+      <label id="imgDeclRow" hidden><input type="checkbox" name="img_decl"> <span data-i18n="img_decl">{P['img_decl']}</span></label>
+      <div id="imgPrev"></div>
+    </div>
+    <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <input type="file" id="imgFile" accept="image/png,image/jpeg,image/webp" hidden>
+    <div class="crow"><button type="button" class="ghost" id="imgBtn" data-i18n="img">{P['img']}</button><button type="submit" class="primary" data-i18n="publish">{P['publish']}</button></div>
+    <p class="cmsg" id="cMsg" role="status" aria-live="polite"></p>
+  </div>
+</form>
+<div class="tabs" role="tablist"><button type="button" class="on" data-sort="new" data-i18n="t_new">{P['t_new']}</button><button type="button" data-sort="top" data-i18n="t_top">{P['t_top']}</button></div>
+<div id="feed" aria-live="polite"></div>
+<div class="card empty" id="empty" hidden><div class="big">🎙️</div><h3 data-i18n="empty_h">{P['empty_h']}</h3><p data-i18n="empty">{P['empty']}</p></div>
+<p class="endnote" id="endnote" hidden data-i18n="end">{P['end']}</p>
+<div id="sentinel"></div>
+</div>
+<aside class="side">
+  <div class="card scard"><h3 data-i18n="rules_h">{P['rules_h']}</h3><ul data-i18n="rules">{P['rules']}</ul></div>
+  <div class="card scard"><h3 data-i18n="agents_h">{P['agents_h']}</h3><p class="mutep" data-i18n="agents_empty">{P['agents_empty']}</p></div>
+  <div class="card scard soft"><h3 data-i18n="ref_h">{P['ref_h']}</h3><p data-i18n="ref">{P['ref']}</p><button type="button" class="btn sm" id="refCopy" data-i18n="ref_btn">{P['ref_btn']}</button></div>
+</aside></main></div>
+"""
+page("scianka.html", P["_title"], P["lead"], body, C.WALL, ["/social.js", "/scianka.js"], "a_wall", "wallbody")

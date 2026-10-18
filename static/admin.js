@@ -50,7 +50,7 @@ function fill(c){
   MUS = JSON.parse(JSON.stringify((c.music && c.music.tracks) || [])); musRender(); $('#adm_mvol').value = c.music ? c.music.volume : .25; $('#adm_mvol_v').textContent = Math.round($('#adm_mvol').value * 100) + '%';
   $('#adm_holo_default').checked = !!c.ui.holo_default; $('#adm_holo_plan').value = c.ui.holo_plan || 'podstawowa';
   const lv = c.live || {}; $('#adm_lv_day').value = lv.day ?? 6; $('#adm_lv_time').value = lv.time || '20:00'; $('#adm_lv_hours').value = lv.hours ?? 3; $('#adm_lv_note').value = lv.note || ''; $('#adm_lv_pool').checked = lv.pool !== false; $('#adm_lv_auto').checked = lv.auto !== false;
-  const pr = c.pricing || {plans: {}}; $('#adm_pr_show').checked = !!pr.show; $('#adm_app_play').value = (c.app && c.app.play_url) || ''; $('#adm_pr_foreign').checked = !!pr.foreign;
+  const pr = c.pricing || {plans: {}}; $('#adm_pr_show').checked = !!pr.show; $('#adm_app_play').value = (c.app && c.app.play_url) || ''; $('#adm_feat_wall').checked = !c.features || c.features.wall !== false; $('#adm_pr_foreign').checked = !!pr.foreign;
   ['podstawowa', 'premium', 'pro'].forEach(p => ['pln', 'eur', 'usd'].forEach(k => $(`#adm_pr_${p}_${k}`).value = (pr.plans[p] || {})[k] || ''));
   const fr = c.free || {}; $('#adm_fr_min').value = fr.chat_minutes ?? 5; $('#adm_fr_live').checked = !!fr.live_questions; $('#adm_fr_convo').checked = fr.convo !== false; $('#adm_fr_voice').checked = fr.voice_test !== false;
   const se = c.seller || {}; ['name', 'address', 'nip', 'vat'].forEach(k => $('#adm_se_' + k).value = se[k] || '');
@@ -68,7 +68,7 @@ function collect(){
   c.live = {day: +$('#adm_lv_day').value, time: $('#adm_lv_time').value, hours: parseFloat($('#adm_lv_hours').value), note: $('#adm_lv_note').value, pool: $('#adm_lv_pool').checked, auto: $('#adm_lv_auto').checked};
   c.music = {volume: parseFloat($('#adm_mvol').value), tracks: MUS};
   c.ui = {ring_color: $('#adm_ring_color').value, pulse_speed: parseFloat($('#adm_pulse_speed').value), holo_default: $('#adm_holo_default').checked, holo_plan: $('#adm_holo_plan').value};
-  c.app = {play_url: $('#adm_app_play').value.trim()}; c.pricing = {v: 2, show: $('#adm_pr_show').checked, foreign: $('#adm_pr_foreign').checked, plans: {}};
+  c.app = {play_url: $('#adm_app_play').value.trim()}; c.features = {wall: $('#adm_feat_wall').checked}; c.pricing = {v: 2, show: $('#adm_pr_show').checked, foreign: $('#adm_pr_foreign').checked, plans: {}};
   ['podstawowa', 'premium', 'pro'].forEach(p => { c.pricing.plans[p] = {}; ['pln', 'eur', 'usd'].forEach(k => c.pricing.plans[p][k] = $(`#adm_pr_${p}_${k}`).value.trim()); });
   c.free = {chat_minutes: +$('#adm_fr_min').value, live_questions: $('#adm_fr_live').checked, convo: $('#adm_fr_convo').checked, voice_test: $('#adm_fr_voice').checked, outfits: 1};
   c.seller = {}; ['name', 'address', 'nip', 'vat'].forEach(k => c.seller[k] = $('#adm_se_' + k).value.trim());

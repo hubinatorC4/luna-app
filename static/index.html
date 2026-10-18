@@ -286,6 +286,11 @@
         <label class="filebtn">⬆ Importuj JSON<input type="file" id="admImport" accept="application/json,.json" hidden></label>
       </div>
     </details>
+    <details id="socSection"><summary>🧱 Ścianka i komentarze <span id="socBadge" class="badge"></span></summary>
+      <p class="hint">Wszystkie komentarze i wpisy nowych autorów czekają tu na akceptację. Autorzy z 3+ zatwierdzonymi wpisami publikują od razu. Zgłoszenia trafiają tutaj.</p>
+      <label class="row"><input type="checkbox" id="adm_feat_wall"> Ścianka włączona (link w menu, /scianka.html) – zapisz konfigurację</label>
+      <div id="socStats" class="hint"></div><h4>Wpisy</h4><div id="socPosts" class="items"></div><h4>Komentarze</h4><div id="socCmts" class="items"></div><h4>Zablokowani autorzy</h4><div id="socBans" class="items"></div>
+    </details>
     <details id="tstSection"><summary>🎁 Testerzy <span id="tstCount"></span></summary>
       <p class="hint" id="tstStore"></p>
       <div class="btns"><button type="button" class="ghost" id="tstReload">↻ Odśwież</button><button type="button" class="ghost" id="tstCsv">⬇ Eksport CSV</button></div>
@@ -396,6 +401,7 @@
 <script src="push.js"></script>
 <script src="admin-catalog.js"></script>
 <script src="admin-extra.js"></script>
+<script src="admin-social.js"></script>
 <script src="helpbot-loader.js?v=1.3.1"></script>
 </body>
 </html>

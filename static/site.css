@@ -51,3 +51,8 @@ body.xmas .countdown .cd span{border-color:#c9a24a;box-shadow:0 0 12px rgba(255,
 .plancard .pbig{font-size:38px;font-weight:900;line-height:1.1;color:#fff;letter-spacing:-.5px}
 .plancard .psub{font-size:13px;color:#cfd8d2;margin:6px 0 12px}
 .pfoot{grid-column:1/-1;text-align:center}
+.item .bprice{font-size:30px;font-weight:900;line-height:1.1;margin-top:8px;color:#ffb347;letter-spacing:-.3px}
+.item .bvat{color:#bdb3a8;font-size:12px}
+.item .bsoc{margin-top:8px}.item .bsoc .acts{margin-top:6px;padding-top:8px}
+.item .bsoc details summary{cursor:pointer;font-size:14px;color:#ddd;padding:4px 0}
+.item .bsoc .cform input.cn{flex-basis:100%}
