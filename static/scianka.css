@@ -302,3 +302,7 @@ background:linear-gradient(180deg,#fff 20%,var(--gold));-webkit-background-clip:
 .rc-vs b{font-size:1.2rem;color:#ffc27a;letter-spacing:.08em}
 @media (max-width:720px){.recruit-pin{grid-template-columns:1fr}.rc-urgent h2{font-size:1.35rem}}
 .post.pinned{border-color:rgba(255,190,120,.55)}.post .pinb{float:right;font-size:1.1rem}
+/* v1.5.1 – kontrast (WCAG AA) */
+.wallpage .report{color:#d6c3ad}
+.wallpage .tabs button{color:#e2d2bf}
+@media (max-width:520px){.wallpage .tabs{display:flex;max-width:100%;overflow-x:auto}.wallpage .tabs button{padding:10px 16px;font-size:15.5px;white-space:nowrap}}

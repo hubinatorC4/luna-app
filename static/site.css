@@ -102,3 +102,9 @@ body.xmas .countdown .cd span{border-color:#c9a24a;box-shadow:0 0 12px rgba(255,
 .popscroll{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x mandatory}
 .popc{flex:0 0 160px;scroll-snap-align:start;display:flex;flex-direction:column;gap:4px;text-decoration:none;color:inherit;background:rgba(255,255,255,.04);border:1px solid rgba(240,160,64,.25);border-radius:16px;padding:8px}
 .popc img{width:100%;height:120px;object-fit:cover;border-radius:12px;background:#1a120c}.popc span{font-size:15px;line-height:1.25}.popc b{color:var(--amber2,#ffd08a);font-size:15px}
+/* v1.5.1 – większe pola dotyku kropek banera, rezerwa miejsca na siatki (mniej przesunięć układu) */
+.annbox .anndots button{width:24px;height:24px;background:transparent;position:relative}
+.annbox .anndots button::after{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;transform:translate(-50%,-50%);border-radius:50%;background:rgba(255,255,255,.3)}
+.annbox .anndots button.on{width:30px;background:transparent}
+.annbox .anndots button.on::after{width:22px;border-radius:6px;background:#ffb347}
+#items:empty{min-height:120vh}

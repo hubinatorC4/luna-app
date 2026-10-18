@@ -17,7 +17,7 @@ function render(p, l){
   const R = p.rich, a = R.v[l] || R.v.pl, L = R.links || {};
   const ps = (arr, cls) => `<div class="ptext${cls ? ' ' + cls : ''}">` + arr.map(x => `<p>${x}</p>`).join('') + '</div>';
   const media = `<figure class="media"><img src="${esc(p.img)}" alt="" loading="lazy" width="1280" height="720"><span class="ai-badge" title="AI">✦ AI</span></figure>`;
-  const cards = () => '<div class="pgrid">' + R.items.map(it => `<div class="pc"><small>${esc(it.collection)}</small><div class="pn">${esc((a.names || {})[it.id] || it.id)}</div>${it.price ? `<div class="pp">${money(it.price, l, R.foreign)}</div>` : ''}<div class="tier">${esc(a.tiers[it.tier] || '')}</div>${it.upcoming && it.release_date ? `<span class="soon">📅 ${esc(soonTxt(it.release_date, l))}</span>` : ''}</div>`).join('') + '</div>';
+  const cards = () => '<div class="pgrid">' + R.items.map(it => `<div class="pc"><small>${esc((it.collection_i18n || {})[l] || it.collection)}</small><div class="pn">${esc((a.names || {})[it.id] || it.id)}</div>${it.price ? `<div class="pp">${money(it.price, l, R.foreign)}</div>` : ''}<div class="tier">${esc(a.tiers[it.tier] || '')}</div>${it.upcoming && it.release_date ? `<span class="soon">📅 ${esc(soonTxt(it.release_date, l))}</span>` : ''}</div>`).join('') + '</div>';
   let b = `<div class="ptag">${a.tag}</div><h2 class="lead-h">${a.h}</h2>`;
   switch (R.kind){
     case 1: b += ps(a.ps) + media + cards() + `<p class="pnote">${a.note}</p><div class="cta-row"><a class="btn" href="${href(L.btn, l)}">${a.btn}</a></div>`; break;

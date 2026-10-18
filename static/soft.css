@@ -63,3 +63,6 @@ a{transition:color var(--t) var(--ease)}
   .lswitch{max-width:64px;padding:6px 4px;font-size:13px;text-overflow:clip}
   .star-hero{border-radius:28px 28px 50% 50% / 28px 28px 40px 40px!important}
 }
+/* v1.5.1 – większe pola wyboru (dostępność) */
+.consent input[type=checkbox]{width:24px;height:24px;flex:0 0 24px}
+#galGrid:empty{min-height:120vh}

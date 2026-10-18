@@ -115,3 +115,6 @@ if (saved && saved.n && !new URLSearchParams(location.search).get('post')){
   load(true, Math.min(20, Math.max(10, saved.n))).then(() => scrollTo(0, saved.y));
 } else load(true);
 })();
+
+/* karta „Poleć Lunę” ukryta, gdy właściciel wyłączył program */
+(() => { const c = document.getElementById("refCard"); if (c) fetch("/api/referral/status").then(r => r.json()).then(d => { if (!d.enabled) c.hidden = true; }).catch(() => {}); })();

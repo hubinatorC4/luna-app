@@ -5,7 +5,9 @@ cd /workspace/luna-app
 while true; do
   { date -u; python3 tools/sync_butik_images.py
     git add static/catalog/butik data/catalog_outfits.json
-    if ! git diff --cached --quiet; then
+    if [ -n "$(git status --porcelain | grep -v -E ' (static/catalog/butik/|data/catalog_outfits.json)')" ]; then
+      echo "inne niezatwierdzone zmiany w repo – pomijam tę rundę (bez commitu), żeby nie kolidować z pracą agentów"; git reset -q
+    elif ! git diff --cached --quiet; then
       git -c user.name="Luna Team" -c user.email="luna-team@users.noreply.github.com" commit -qm "Butik: automatyczna synchronizacja zdjęć $(date -u +%H:%M)" -- static/catalog/butik data/catalog_outfits.json \
        && git pull -q --rebase --autostash origin main && git push -q origin main && git log --oneline -1 > /workspace/shots/BUTIK_DEPLOY_PENDING
     else echo "bez zmian"; fi; } >> /tmp/butik_autosync.log 2>&1

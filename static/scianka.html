@@ -41,7 +41,7 @@
     <p class="cmsg" id="cMsg" role="status" aria-live="polite"></p>
   </div>
 </form>
-<div class="tabs" role="tablist"><button type="button" class="on" data-sort="hot" data-i18n="t_hot">Polecane</button><button type="button" data-sort="new" data-i18n="t_new">Nowe</button><button type="button" data-sort="top" data-i18n="t_top">Popularne</button></div>
+<div class="tabs" role="group"><button type="button" class="on" data-sort="hot" data-i18n="t_hot">Polecane</button><button type="button" data-sort="new" data-i18n="t_new">Nowe</button><button type="button" data-sort="top" data-i18n="t_top">Popularne</button></div>
 <div id="feed" aria-live="polite"></div>
 <div class="card empty" id="empty" hidden><div class="big">🎙️</div><h3 data-i18n="empty_h">Tu jeszcze cisza… ale nie na długo! 🎙️</h3><p data-i18n="empty">Bądź pierwszą osobą, która coś napisze. Podziel się postępem, ulubionym ćwiczeniem albo po prostu dobrym słowem.</p></div>
 <p class="endnote" id="endnote" hidden data-i18n="end">To już wszystko ✨ Wróć później po nowe wpisy.</p>
@@ -68,6 +68,5 @@
 <script src="/wall-official.js?v=1.4.1"></script>
 <script src="/scianka.js?v=1.4.8"></script><script src="/recruit.js?v=1.4.3"></script>
 <script src="/helpbot-loader.js?v=1.4.1"></script>
-<script>fetch("/api/referral/status").then(r=>r.json()).then(d=>{if(!d.enabled){const c=document.getElementById("refCard");if(c)c.hidden=true;}}).catch(()=>{});</script>
 </body>
 </html>

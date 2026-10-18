@@ -20,7 +20,7 @@ def items(ids, pricing):
         if not it or it.get("status") == "hidden": continue
         pr = it["price"] if pricing.get("foreign") else {"pln": it["price"]["pln"]}
         st = butik.eff_status(it)
-        out.append({"id": iid, "collection": it.get("collection", ""), "tier": TIER.get(it.get("tier"), "basic"),
+        out.append({"id": iid, "collection": it.get("collection", ""), "collection_i18n": butik.COLL_I18N.get(it.get("collection", ""), {}), "tier": TIER.get(it.get("tier"), "basic"),
                     "price": pr if pricing.get("show") else None, "upcoming": st != "released", "release_date": it.get("release_date")})
     return out
 def public(p, lang, pricing, extra):
