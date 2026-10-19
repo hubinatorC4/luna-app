@@ -1,8 +1,8 @@
-/* Ramka moderatora: błyskawica ⚡ co ~8–12 s (tylko transform/opacity), pauza poza ekranem, prefers-reduced-motion = statyczna poświata.
+/* Ramka admina: ciemnoniebieska (#0a3cff) błyskawica ⚡ przelatuje przez logo co ~5–7,5 s (tylko transform/opacity), pauza poza ekranem, prefers-reduced-motion = statyczna poświata.
    Elementy .mod-av powstają wyłącznie z flagi serwera „mod” (konto z rolą admin). Ogłoszenie „Co nowego”: przeniesienie pod nagłówek i zamykanie. */
 (() => {
 const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-const BOLT = '<svg class="mod-bolt" viewBox="0 0 40 90" aria-hidden="true"><defs><linearGradient id="mbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#bcd6ff"/><stop offset="1" stop-color="#3D7BFF"/></linearGradient></defs><path d="M24 2 6 50h13L12 88 35 34H22L30 2z" fill="url(#mbg)" stroke="#e8f0ff" stroke-width="1.2" stroke-linejoin="round"/></svg>';
+const BOLT = '<svg class="mod-bolt" viewBox="0 0 40 90" aria-hidden="true"><defs><linearGradient id="mbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5f8bff"/><stop offset=".45" stop-color="#1f55ff"/><stop offset="1" stop-color="#0a3cff"/></linearGradient></defs><path d="M24 2 6 50h13L12 88 35 34H22L30 2z" fill="url(#mbg)" stroke="#bcd0ff" stroke-width="1.1" stroke-linejoin="round"/><path d="M24 6 10 47h11L15 80" fill="none" stroke="#eaf1ff" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/></svg>';
 const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
   const el = e.target, v = el.querySelector('video');
   el.classList.toggle('mod-off', !e.isIntersecting);
@@ -10,8 +10,8 @@ const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.
 }), {rootMargin: '60px'}) : null;
 function enhance(el){
   if (el.dataset.mr) return; el.dataset.mr = '1';
-  el.style.setProperty('--dur', (8 + Math.random() * 4).toFixed(2) + 's');
-  el.style.setProperty('--d', (Math.random() * 6 + .5).toFixed(2) + 's');
+  el.style.setProperty('--dur', (5 + Math.random() * 2.5).toFixed(2) + 's');
+  el.style.setProperty('--d', (Math.random() * 3 + .5).toFixed(2) + 's');
   const img = el.querySelector('img');
   if (!RM && img){
     const v = document.createElement('video');
