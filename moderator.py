@@ -692,7 +692,7 @@ def announcement_cached():
 def inject(doc, h, path):
     """Wstrzykuje ogłoszenie (dla wszystkich) i link „🛡️ Panel admina” (tylko gdy serwer rozpozna konto admin)."""
     a = announcement_cached()
-    add = '<link rel="stylesheet" href="/mod-ring.css?v=1.1">\n<script src="/mod-ring.js?v=1.1" defer></script>\n'
+    add = '<link rel="stylesheet" href="/mod-ring.css?v=1.2">\n<script src="/mod-ring.js?v=1.2" defer></script>\n'
     if a["on"] and a["text"]:
         add += (f'<div class="luna-ann" role="status" data-t="{a["t"]}"><b>📣 {html.escape(a["title"])}</b> <span>{html.escape(a["text"])}</span>'
                 '<button type="button" class="luna-ann-x" aria-label="Zamknij">×</button></div>\n')

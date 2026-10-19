@@ -2,12 +2,15 @@
 .mod-av{--s:40px;position:relative;display:inline-block;width:var(--s);height:var(--s);min-width:var(--s);border-radius:50%;padding:3px;box-sizing:border-box;flex:none;isolation:isolate;
   background:linear-gradient(135deg,#0A2BFF 0%,#1E5BFF 100%);box-shadow:0 0 0 1px rgba(61,123,255,.55),0 0 10px rgba(61,123,255,.55);vertical-align:middle}
 .mod-av>img,.mod-av>video{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:#000}
-.mod-av::after{content:"";position:absolute;inset:-2px;border-radius:50%;pointer-events:none;box-shadow:0 0 18px 4px rgba(61,123,255,.95),inset 0 0 10px rgba(160,200,255,.6);opacity:0;
-  animation:modglow var(--dur,10s) linear infinite;animation-delay:var(--d,2s);will-change:opacity}
-.mod-bolt{position:absolute;left:50%;top:-14%;width:58%;height:128%;margin-left:-29%;pointer-events:none;opacity:0;z-index:2;transform:translate3d(0,-10%,0) scale(.85);
-  animation:modbolt var(--dur,10s) linear infinite;animation-delay:var(--d,2s);will-change:opacity,transform;filter:drop-shadow(0 0 4px #9cc4ff) drop-shadow(0 0 10px #3D7BFF)}
-@keyframes modbolt{0%,93.5%{opacity:0;transform:translate3d(0,-10%,0) scale(.85)}94.2%{opacity:1;transform:translate3d(0,0,0) scale(1)}95.2%{opacity:.25}96%{opacity:1}99.5%,100%{opacity:0;transform:translate3d(0,6%,0) scale(1.04)}}
-@keyframes modglow{0%,93.5%{opacity:0}94.2%{opacity:1}95.2%{opacity:.3}96%{opacity:1}99.5%,100%{opacity:0}}
+.mod-av::after{content:"";position:absolute;inset:-2px;border-radius:50%;pointer-events:none;box-shadow:0 0 16px 3px rgba(10,60,255,.9),inset 0 0 10px rgba(95,139,255,.55);opacity:0;
+  animation:modglow var(--dur,6s) linear infinite;animation-delay:var(--d,2s);will-change:opacity}
+.mod-bolt{position:absolute;left:50%;top:-14%;width:58%;height:128%;margin-left:-29%;pointer-events:none;opacity:0;z-index:2;transform:translate3d(-80%,-6%,0) rotate(-10deg) scale(.9);
+  animation:modbolt var(--dur,6s) cubic-bezier(.4,0,.2,1) infinite;animation-delay:var(--d,2s);will-change:opacity,transform;filter:drop-shadow(0 0 2px #6f95ff) drop-shadow(0 0 7px #0a3cff) drop-shadow(0 0 14px rgba(10,60,255,.7))}
+/* ⚡ admin: ciemna, żywa niebieska błyskawica (#0a3cff) przelatuje ukośnie przez logo z krótkim mignięciem; logo i ramka bez zmian */
+@keyframes modbolt{0%,86%{opacity:0;transform:translate3d(-80%,-6%,0) rotate(-10deg) scale(.9)}88%{opacity:1;transform:translate3d(-38%,-3%,0) rotate(-6deg) scale(1)}
+  89.5%{opacity:.35}90.5%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1.03)}92%{opacity:.9;transform:translate3d(30%,2%,0) rotate(5deg) scale(1)}
+  95%,100%{opacity:0;transform:translate3d(82%,5%,0) rotate(10deg) scale(.92)}}
+@keyframes modglow{0%,87%{opacity:0}88.5%{opacity:.9}89.5%{opacity:.3}90.5%{opacity:1}94%,100%{opacity:0}}
 .mod-av.mod-off::after,.mod-av.mod-off .mod-bolt{animation-play-state:paused}
 @media (prefers-reduced-motion:reduce){.mod-av::after,.mod-bolt{animation:none}.mod-av{box-shadow:0 0 0 1px rgba(61,123,255,.7),0 0 16px rgba(61,123,255,.75)}}
 .st-av.mod-av{border-radius:50%}
