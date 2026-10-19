@@ -182,7 +182,7 @@ const NEWS = [
 window.LunaNews = () => {
   let d = $('#newsDlg');
   if (!d){ d = document.createElement('dialog'); d.id = 'newsDlg'; d.className = 'news';
-    d.innerHTML = '<h2>Co nowego w wersji 1.6.4</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
+    d.innerHTML = '<h2>Co nowego w wersji 0.02 (testy)</h2><ul>' + NEWS.map(([h, t]) => `<li><b>${h}</b><br>${t}</li>`).join('') + '</ul><form method="dialog"><button class="primary">Super!</button></form>';
     document.body.appendChild(d); }
   d.showModal(); try { localStorage.setItem('luna.seenVer', '1.6.8'); } catch(e){}
 };

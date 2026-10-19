@@ -34,6 +34,7 @@ except Exception:
     WAW = None
 
 VERSION = "1.6.9"
+PUBLIC_VERSION = "0.02"   # numer pokazywany użytkownikom do końca testów (VERSION zostaje wewnętrzny: /api/health, cache, Co nowego)
 STATIC_CACHE = re.compile(r"\.(webp|avif|jpe?g|png|ico|svg|woff2)$")
 APK_LATEST = "/download/luna-1.1.1.apk"  # Android 1.1.1 (versionCode 3), com.lunamowijakjest.app
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -719,7 +720,7 @@ def _announce_update():
     try:
         if store.get("notified_version") != VERSION:
             store.put("notified_version", VERSION)
-            if notify.push_enabled(): notify.send_push("update", f"Luna {VERSION} jest dostępna", "Nowa wersja aplikacji – otwórz, aby odświeżyć.", "/")
+            if notify.push_enabled(): notify.send_push("update", f"Luna {PUBLIC_VERSION} (testy) – nowa aktualizacja", "Nowa wersja aplikacji – otwórz, aby odświeżyć.", "/")
     except Exception as e: print("update notify error", repr(e)[:200], file=sys.stderr)
 
 
@@ -1753,6 +1754,7 @@ class H(SimpleHTTPRequestHandler):
                 if u.path not in ("/panel.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html"):   # dostępność (focus, ruch, stopka) + licznik testerów w stopce (dane z /api/testers)
                     if "a11y.css" not in doc: doc = doc.replace("</head>", '<link rel="stylesheet" href="/a11y.css?v=1.0">\n</head>', 1)
                     if u.path != "/app.html" and "tester-count.js" not in doc: doc = doc.replace("</body>", '<script src="/tester-count.js?v=1.0" defer></script>\n</body>', 1)
+                    if u.path != "/app.html" and "public-version.js" not in doc: doc = doc.replace("</body>", '<script src="/public-version.js?v=1.0" defer></script>\n</body>', 1)   # „wersja 0.02 (testy)”
                 if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
                     doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
                 doc = moderator.inject(doc, self, u.path)   # ogłoszenie + (tylko dla konta admin) link „🛡️ Panel admina”

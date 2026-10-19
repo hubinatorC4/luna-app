@@ -251,6 +251,10 @@
 [
 "['🎁 Zaproś znajomych', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
 "['🎁 Invite friends', 'You recommend – you both get 7 days of Premium after the invited person’s first purchase (max. 10 per month). You’ll find your link in Settings.']"
+],
+[
+"0.02 (testy)</h2>",
+"0.02 (beta testing)</h2>"
 ]
 ],
 "es": [
@@ -505,6 +509,10 @@
 [
 "['🎁 Zaproś znajomych', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
 "['🎁 Invita a tus amigos', 'Recomiendas y ambos recibís 7 días de Premium tras la primera compra de la persona invitada (máx. 10 al mes). Tu enlace está en Ajustes.']"
+],
+[
+"0.02 (testy)</h2>",
+"0.02 (fase de pruebas)</h2>"
 ]
 ],
 "de": [
@@ -759,6 +767,10 @@
 [
 "['🎁 Zaproś znajomych', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
 "['🎁 Freunde einladen', 'Du empfiehlst – ihr bekommt beide 7 Tage Premium nach dem ersten Kauf der eingeladenen Person (max. 10 pro Monat). Deinen Link findest du in den Einstellungen.']"
+],
+[
+"0.02 (testy)</h2>",
+"0.02 (Testphase)</h2>"
 ]
 ],
 "uk": [
@@ -1013,6 +1025,10 @@
 [
 "['🎁 Zaproś znajomych', 'Polecasz – oboje dostajecie 7 dni Premium po pierwszym zakupie poleconej osoby (maks. 10 w miesiącu). Link znajdziesz w Ustawieniach.']",
 "['🎁 Запроси друзів', 'Рекомендуєте — ви обоє отримуєте 7 днів Premium після першої покупки запрошеної особи (макс. 10 на місяць). Посилання знайдете в Налаштуваннях.']"
+],
+[
+"0.02 (testy)</h2>",
+"0.02 (тестування)</h2>"
 ]
 ]
 }

@@ -42,7 +42,7 @@ fetch('/api/apk-info').then(r => r.json()).then(i => {
   d.style.cssText = 'margin:8px auto 0;max-width:640px;font-size:.82rem;opacity:.8;word-break:break-all;text-align:left';
   const mk = (tag, txt) => { const e = document.createElement(tag); e.textContent = txt; return e; };
   d.append(mk('summary', '🔒 ' + L[1] + ' · SHA-256'));
-  d.append(mk('p', L[0] + ' ' + i.version + ' · ' + i.file + ' · ' + (i.size / 1048576).toFixed(2) + ' MB'));
+  d.append(mk('p', (window.LunaPublicVersion ? window.LunaPublicVersion.label() : L[0] + ' 0.02') + ' · ' + (i.size / 1048576).toFixed(2) + ' MB'));   // publicznie „wersja 0.02 (testy)” do końca testów
   const c = mk('code', i.sha256); const p = document.createElement('p'); p.append('SHA-256: ', c); d.append(p);
   d.append(mk('p', L[2] + ' (SHA-256): ' + i.cert_sha256));
   cta.after(d);
