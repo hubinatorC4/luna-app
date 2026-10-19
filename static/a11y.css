@@ -1,0 +1,20 @@
+/* Dostępność i drobny szlif (wstawiane przez serwer na stronach publicznych i w aplikacji; bez paneli admina).
+   Niska specyficzność (:where), żeby nie nadpisywać istniejących komponentów; nie dotyka logo, ramek i awatarów. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+:where(a,button,input,select,textarea,summary,[tabindex]:not([tabindex="-1"]),[role=button]):focus-visible{outline:3px solid #ffb35c;outline-offset:2px}
+:where(.search):focus-within{box-shadow:0 0 0 3px rgba(255,179,92,.55)}
+#input:focus-visible{border-color:#ffb35c;box-shadow:0 0 0 3px rgba(255,179,92,.35)}
+:where(summary){cursor:pointer}
+:where(button,[role=button],summary,label){-webkit-tap-highlight-color:rgba(255,179,92,.18)}
+::selection{background:rgba(255,179,92,.35);color:#fff}
+/* stopka: większe pola dotyku i czytelne linki */
+.sitefoot nav a{display:inline-block;padding:4px 2px;text-underline-offset:3px}
+.sitefoot nav a:focus-visible{text-decoration:underline}
+.sitefoot .owner{color:#e6e6e6}
+.sitefoot p{max-width:760px;margin-left:auto;margin-right:auto}
+.appfoot a{text-underline-offset:2px}
+@media (max-width:600px){.sitefoot{font-size:13.5px}.sitefoot nav{gap:4px 12px}.sitefoot nav a{padding:6px 2px}}
+/* długie słowa i adresy nie rozpychają telefonu */
+:where(main,.card,.sitefoot) :where(p,li,dd){overflow-wrap:break-word}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media (forced-colors:active){:where(a,button,summary):focus-visible{outline:2px solid CanvasText}}

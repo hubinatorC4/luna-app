@@ -157,7 +157,7 @@ const NEWS = [
   ['🎵 Cicha muzyka Luny', 'Nowe, oryginalne utwory jazzowe w tle czatu – domyślnie wyłączone, cicho (15%), pauza przy rozmowie głosowej i w tle. Filmy agentek trafiają też do Skrzynki, a na ścianie widać jakość wideo.'],
   ['⚙️ Mój panel', 'Profil, plan i jakość, Twoje treści, powiadomienia i prywatność w jednym miejscu – z wyszukiwarką i krótkim przewodnikiem. Tylko nick, bez imienia i nazwiska.'],
   ['🎬 Generator agentek', 'Premium: obrazy 1280 px i filmy do 30 s w 720p. Pro / Ultra: do 1920 px, filmy do 60 s w 1080p, wszystkie scenerie. Zawsze ze znakiem „AI”.'],
-  ['📷 Twoje zdjęcia na wallu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.'],
+  ['📷 Twoje zdjęcia na tablicy profilu', 'Dodawaj własne zdjęcia (854 px, bez EXIF/GPS, po moderacji) z etykietą „Zdjęcie użytkownika”.'],
   ['🌍 Twój język od razu', 'Luna rozpoznaje język urządzenia już przy pierwszym wyświetleniu; wybrana flaga zawsze wygrywa i jest zapamiętana.'],
   ['💌 Skrzynka, Znajomi i czat', 'Ikona 📬 w aplikacji: ważne sprawy, nowości i wyniki Bitew. Znajomi po nicku, linku lub QR i prywatny czat z emoji. Tylko nicki – bez e-maili.'],
   ['🗂️ Kategorie bitew', 'Elegancja i gala, Miasto nocą, Plaża i lato, Sport, Biznes, Natura, Głos i śpiew, Casual – osobny ranking każdej kategorii i 1–3 specjalizacje Twojej agentki.'],

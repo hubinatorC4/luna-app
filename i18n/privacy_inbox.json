@@ -1,7 +1,7 @@
 {
 "en": [
 [
-"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na wall (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
+"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na tablicy profilu (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
 "Profile and content (My panel): nick, optional profile avatar (any image that follows the rules, after moderation), bio, interests, privacy and online-visibility settings (default: close friends only), your photos on the wall (max. 854 px), photos sent in the friends chat (depending on the plan up to 854, 1280 or 1920 px) and agent descriptions and images from the Generator. We remove EXIF and GPS metadata from all photos, and each one goes through an automatic nudity filter."
 ],
 [
@@ -43,7 +43,7 @@
 ],
 "es": [
 [
-"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na wall (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
+"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na tablicy profilu (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
 "Perfil y contenidos (Mi panel): nick, avatar de perfil opcional (cualquier imagen conforme a las normas, tras moderación), descripción, intereses, ajustes de privacidad y de visibilidad en línea (por defecto: solo amigos cercanos), tus fotos en el muro (máx. 854 px), fotos enviadas en el chat de amigos (según el plan, hasta 854, 1280 o 1920 px) y descripciones e imágenes de agentes del Generador. Eliminamos los metadatos EXIF y GPS de todas las fotos, y cada una pasa un filtro automático de desnudos."
 ],
 [
@@ -85,7 +85,7 @@
 ],
 "de": [
 [
-"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na wall (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
+"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na tablicy profilu (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
 "Profil und Inhalte (Mein Bereich): Nick, optionaler Profil-Avatar (jedes regelkonforme Bild, nach Moderation), Beschreibung, Interessen, Datenschutz- und Online-Sichtbarkeitseinstellungen (Standard: nur enge Freunde), deine Fotos auf der Wand (max. 854 px), im Freundes-Chat gesendete Fotos (je nach Plan bis 854, 1280 oder 1920 px) sowie Beschreibungen und Bilder von Agentinnen aus dem Generator. Aus allen Fotos entfernen wir EXIF- und GPS-Metadaten, und jedes durchläuft einen automatischen Nacktheitsfilter."
 ],
 [
@@ -127,7 +127,7 @@
 ],
 "uk": [
 [
-"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na wall (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
+"Profil i treści (Mój panel): nick, opcjonalnie awatar profilu (dowolny obraz zgodny z zasadami, po moderacji), opis, zainteresowania, ustawienia prywatności i widoczności online (domyślnie: tylko bliscy znajomi), Twoje zdjęcia na tablicy profilu (maks. 854 px), zdjęcia wysłane w czacie znajomych (według planu do 854, 1280 lub 1920 px) oraz opisy i obrazy agentek z Generatora. Ze wszystkich zdjęć usuwamy metadane EXIF i GPS, a każde przechodzi automatyczny filtr nagości.",
 "Профіль і вміст (Моя панель): нік, необов’язковий аватар профілю (будь-яке зображення за правилами, після модерації), опис, інтереси, налаштування приватності та видимості онлайн (за замовчуванням: лише близькі друзі), ваші фото на стіні (макс. 854 px), фото, надіслані в чаті з друзями (залежно від плану до 854, 1280 або 1920 px), а також описи й зображення агенток із Генератора. З усіх фото ми видаляємо метадані EXIF і GPS, а кожне проходить автоматичний фільтр оголеності."
 ],
 [

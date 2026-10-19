@@ -1,8 +1,8 @@
 {
 "en": [
 [
-"~Administratorem danych jest Hubert Szumski. Kontakt z administratorem: <a href=\"/app#live\">czat z twórcą</a> w aplikacji (zakładka „Czat z twórcą”).",
-"The data controller is Hubert Szumski. Contact the controller via the <a href=\"/app#live\">chat with the creator</a> in the app (the “Chat with the creator” tab)."
+"~Administratorem danych jest twórca i właściciel serwisu, występujący pod pseudonimem Hubinator❤️. Kontakt z administratorem: <a href=\"/app#live\">czat z twórcą</a> w aplikacji (zakładka „Czat z twórcą”).",
+"The data controller is the creator and owner of the service, known by the pseudonym Hubinator❤️. Contact the controller via the <a href=\"/app#live\">chat with the creator</a> in the app (the “Chat with the creator” tab)."
 ],
 [
 "~Masz prawo do dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przeniesienia oraz sprzeciwu, a także do wycofania zgody w dowolnym momencie. Napisz w <a href=\"/app#live\">czacie z twórcą</a> w aplikacji. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (uodo.gov.pl).",
@@ -49,7 +49,7 @@
 "~<li><b>User profile</b>: it is anonymous – only your nickname (required, unique, moderated) is public. We don’t collect first or last names, and your email is used only for signing in. All other fields are optional and the profile is private by default. Your avatar can be any image that meets the moderation rules (no nudity, minors, brands or impersonation); we strip EXIF metadata. You can delete your account in “My panel”: you can restore it within 30 days, after which all data is permanently deleted.</li>"
 ],
 [
-"~<li><b>Zdjęcia użytkownika</b>: na wall możesz dodawać tylko własne zdjęcia – zapisujemy je w maks. 854 px, bez EXIF i GPS, i publikujemy dopiero po akceptacji moderatora (bez nagości i treści seksualnych, bez osób niepełnoletnich, inne osoby tylko za ich zgodą, bez marek i logo). Są oznaczone „Zdjęcie użytkownika”, można je zgłosić i usunąć, i nigdy nie mogą być twarzą agentki AI.</li>",
+"~<li><b>Zdjęcia użytkownika</b>: na tablicy profilu możesz dodawać tylko własne zdjęcia – zapisujemy je w maks. 854 px, bez EXIF i GPS, i publikujemy dopiero po akceptacji moderatora (bez nagości i treści seksualnych, bez osób niepełnoletnich, inne osoby tylko za ich zgodą, bez marek i logo). Są oznaczone „Zdjęcie użytkownika”, można je zgłosić i usunąć, i nigdy nie mogą być twarzą agentki AI.</li>",
 "~<li><b>User photos</b>: you may only add your own photos to the wall – we store them at max 854 px without EXIF or GPS and publish them only after moderator approval (no nudity or sexual content, no minors, other people only with their consent, no brands or logos). They are labelled “User photo”, can be reported and removed, and can never be used as an AI agent’s face.</li>"
 ],
 [
@@ -67,8 +67,8 @@
 ],
 "es": [
 [
-"~Administratorem danych jest Hubert Szumski. Kontakt z administratorem: <a href=\"/app#live\">czat z twórcą</a> w aplikacji (zakładka „Czat z twórcą”).",
-"El responsable del tratamiento es Hubert Szumski. Contacto con el responsable: <a href=\"/app#live\">chat con el creador</a> en la app (pestaña «Chat con el creador»)."
+"~Administratorem danych jest twórca i właściciel serwisu, występujący pod pseudonimem Hubinator❤️. Kontakt z administratorem: <a href=\"/app#live\">czat z twórcą</a> w aplikacji (zakładka „Czat z twórcą”).",
+"El responsable del tratamiento es el creador y propietario del servicio, conocido por el seudónimo Hubinator❤️. Contacto con el responsable: <a href=\"/app#live\">chat con el creador</a> en la app (pestaña «Chat con el creador»)."
 ],
 [
 "~Masz prawo do dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przeniesienia oraz sprzeciwu, a także do wycofania zgody w dowolnym momencie. Napisz w <a href=\"/app#live\">czacie z twórcą</a> w aplikacji. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (uodo.gov.pl).",
@@ -115,7 +115,7 @@
 "~<li><b>Perfil de usuario</b>: es anónimo; solo se ve tu apodo (obligatorio, único y moderado). No recogemos nombre ni apellidos y el correo solo sirve para iniciar sesión. Los demás campos son opcionales y el perfil es privado por defecto. El avatar puede ser cualquier imagen que cumpla las normas de moderación (sin desnudos, menores, marcas ni suplantación); eliminamos los metadatos EXIF. Puedes eliminar la cuenta en «Mi panel»: durante 30 días puedes restaurarla y después borramos todos los datos de forma definitiva.</li>"
 ],
 [
-"~<li><b>Zdjęcia użytkownika</b>: na wall możesz dodawać tylko własne zdjęcia – zapisujemy je w maks. 854 px, bez EXIF i GPS, i publikujemy dopiero po akceptacji moderatora (bez nagości i treści seksualnych, bez osób niepełnoletnich, inne osoby tylko za ich zgodą, bez marek i logo). Są oznaczone „Zdjęcie użytkownika”, można je zgłosić i usunąć, i nigdy nie mogą być twarzą agentki AI.</li>",
+"~<li><b>Zdjęcia użytkownika</b>: na tablicy profilu możesz dodawać tylko własne zdjęcia – zapisujemy je w maks. 854 px, bez EXIF i GPS, i publikujemy dopiero po akceptacji moderatora (bez nagości i treści seksualnych, bez osób niepełnoletnich, inne osoby tylko za ich zgodą, bez marek i logo). Są oznaczone „Zdjęcie użytkownika”, można je zgłosić i usunąć, i nigdy nie mogą być twarzą agentki AI.</li>",
 "~<li><b>Fotos de usuario</b>: en el muro solo puedes añadir tus propias fotos; las guardamos a un máximo de 854 px, sin EXIF ni GPS, y se publican tras la aprobación del moderador (sin desnudos ni contenido sexual, sin menores, otras personas solo con su consentimiento, sin marcas ni logotipos). Llevan la etiqueta «Foto de usuario», se pueden denunciar y eliminar y nunca pueden ser la cara de una agente IA.</li>"
 ],
 [
@@ -133,8 +133,8 @@
 ],
 "de": [
 [
-"~Administratorem danych jest Hubert Szumski. Kontakt z administratorem: <a href=\"/app#live\">czat z twórcą</a> w aplikacji (zakładka „Czat z twórcą”).",
-"Verantwortlicher für die Daten ist Hubert Szumski. Kontakt zum Verantwortlichen: <a href=\"/app#live\">Chat mit dem Entwickler</a> in der App (Bereich „Chat mit dem Entwickler“)."
+"~Administratorem danych jest twórca i właściciel serwisu, występujący pod pseudonimem Hubinator❤️. Kontakt z administratorem: <a href=\"/app#live\">czat z twórcą</a> w aplikacji (zakładka „Czat z twórcą”).",
+"Verantwortlich für die Daten ist der Macher und Inhaber des Dienstes, bekannt unter dem Pseudonym Hubinator❤️. Kontakt zum Verantwortlichen: <a href=\"/app#live\">Chat mit dem Entwickler</a> in der App (Bereich „Chat mit dem Entwickler“)."
 ],
 [
 "~Masz prawo do dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przeniesienia oraz sprzeciwu, a także do wycofania zgody w dowolnym momencie. Napisz w <a href=\"/app#live\">czacie z twórcą</a> w aplikacji. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (uodo.gov.pl).",
@@ -181,7 +181,7 @@
 "~<li><b>Nutzerprofil</b>: Es ist anonym – öffentlich ist nur dein Nickname (Pflicht, eindeutig, moderiert). Wir erheben keine Vor- oder Nachnamen; die E-Mail dient nur der Anmeldung. Alle anderen Felder sind optional, das Profil ist standardmäßig privat. Als Avatar ist jedes Bild erlaubt, das den Moderationsregeln entspricht (keine Nacktheit, Minderjährigen, Marken oder Identitätsanmaßung); EXIF-Metadaten werden entfernt. Du kannst dein Konto unter „Mein Bereich“ löschen: 30 Tage lang kannst du es wiederherstellen, danach werden alle Daten endgültig gelöscht.</li>"
 ],
 [
-"~<li><b>Zdjęcia użytkownika</b>: na wall możesz dodawać tylko własne zdjęcia – zapisujemy je w maks. 854 px, bez EXIF i GPS, i publikujemy dopiero po akceptacji moderatora (bez nagości i treści seksualnych, bez osób niepełnoletnich, inne osoby tylko za ich zgodą, bez marek i logo). Są oznaczone „Zdjęcie użytkownika”, można je zgłosić i usunąć, i nigdy nie mogą być twarzą agentki AI.</li>",
+"~<li><b>Zdjęcia użytkownika</b>: na tablicy profilu możesz dodawać tylko własne zdjęcia – zapisujemy je w maks. 854 px, bez EXIF i GPS, i publikujemy dopiero po akceptacji moderatora (bez nagości i treści seksualnych, bez osób niepełnoletnich, inne osoby tylko za ich zgodą, bez marek i logo). Są oznaczone „Zdjęcie użytkownika”, można je zgłosić i usunąć, i nigdy nie mogą być twarzą agentki AI.</li>",
 "~<li><b>Nutzerfotos</b>: Auf die Wand darfst du nur eigene Fotos stellen – wir speichern sie mit max. 854 px ohne EXIF und GPS und veröffentlichen sie erst nach Freigabe durch die Moderation (keine Nacktheit oder sexuellen Inhalte, keine Minderjährigen, andere Personen nur mit Zustimmung, keine Marken oder Logos). Sie sind als „Nutzerfoto“ gekennzeichnet, können gemeldet und entfernt werden und dürfen nie das Gesicht einer KI-Agentin sein.</li>"
 ],
 [
@@ -199,8 +199,8 @@
 ],
 "uk": [
 [
-"~Administratorem danych jest Hubert Szumski. Kontakt z administratorem: <a href=\"/app#live\">czat z twórcą</a> w aplikacji (zakładka „Czat z twórcą”).",
-"Адміністратором даних є Hubert Szumski. Зв’язок з адміністратором: <a href=\"/app#live\">чат з автором</a> у застосунку (вкладка «Чат з автором»)."
+"~Administratorem danych jest twórca i właściciel serwisu, występujący pod pseudonimem Hubinator❤️. Kontakt z administratorem: <a href=\"/app#live\">czat z twórcą</a> w aplikacji (zakładka „Czat z twórcą”).",
+"Адміністратором даних є творець і власник сервісу, відомий під псевдонімом Hubinator❤️. Зв’язок з адміністратором: <a href=\"/app#live\">чат з автором</a> у застосунку (вкладка «Чат з автором»)."
 ],
 [
 "~Masz prawo do dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przeniesienia oraz sprzeciwu, a także do wycofania zgody w dowolnym momencie. Napisz w <a href=\"/app#live\">czacie z twórcą</a> w aplikacji. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (uodo.gov.pl).",
@@ -247,7 +247,7 @@
 "~<li><b>Профіль користувача</b>: анонімний — публічно видно лише нікнейм (обов’язковий, унікальний, модерується). Ми не збираємо імені чи прізвища, а email використовується лише для входу. Інші поля необов’язкові, профіль за замовчуванням приватний. Аватаром може бути будь-яке зображення, що відповідає правилам модерації (без оголеності, неповнолітніх, брендів і видавання себе за інших); метадані EXIF видаляємо. Акаунт можна видалити в «Моя панель»: протягом 30 днів його можна відновити, після цього всі дані видаляються назавжди.</li>"
 ],
 [
-"~<li><b>Zdjęcia użytkownika</b>: na wall możesz dodawać tylko własne zdjęcia – zapisujemy je w maks. 854 px, bez EXIF i GPS, i publikujemy dopiero po akceptacji moderatora (bez nagości i treści seksualnych, bez osób niepełnoletnich, inne osoby tylko za ich zgodą, bez marek i logo). Są oznaczone „Zdjęcie użytkownika”, można je zgłosić i usunąć, i nigdy nie mogą być twarzą agentki AI.</li>",
+"~<li><b>Zdjęcia użytkownika</b>: na tablicy profilu możesz dodawać tylko własne zdjęcia – zapisujemy je w maks. 854 px, bez EXIF i GPS, i publikujemy dopiero po akceptacji moderatora (bez nagości i treści seksualnych, bez osób niepełnoletnich, inne osoby tylko za ich zgodą, bez marek i logo). Są oznaczone „Zdjęcie użytkownika”, można je zgłosić i usunąć, i nigdy nie mogą być twarzą agentki AI.</li>",
 "~<li><b>Фото користувача</b>: на стіну можна додавати лише власні фото — ми зберігаємо їх максимум у 854 px, без EXIF і GPS, і публікуємо лише після схвалення модератором (без оголеності й сексуального вмісту, без неповнолітніх, інші люди — лише за їхньою згодою, без брендів і логотипів). Вони позначені «Фото користувача», їх можна поскаржитися й видалити, і вони ніколи не можуть бути обличчям ШІ-агентки.</li>"
 ],
 [

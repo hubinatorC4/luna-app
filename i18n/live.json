@@ -123,6 +123,10 @@
 [
 "Napisz na czacie…",
 "Write in the chat…"
+],
+[
+"Wyślij wiadomość",
+"Send message"
 ]
 ],
 "es": [
@@ -249,6 +253,10 @@
 [
 "Napisz na czacie…",
 "Escribe en el chat…"
+],
+[
+"Wyślij wiadomość",
+"Enviar mensaje"
 ]
 ],
 "de": [
@@ -375,6 +383,10 @@
 [
 "Napisz na czacie…",
 "Im Chat schreiben…"
+],
+[
+"Wyślij wiadomość",
+"Nachricht senden"
 ]
 ],
 "uk": [
@@ -501,6 +513,10 @@
 [
 "Napisz na czacie…",
 "Напишіть у чаті…"
+],
+[
+"Wyślij wiadomość",
+"Надіслати повідомлення"
 ]
 ]
 }

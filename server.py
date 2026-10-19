@@ -1750,6 +1750,9 @@ class H(SimpleHTTPRequestHandler):
                     doc = doc.replace("</body>", '<script src="/owner-line.js?v=1.0" defer></script>\n</body>', 1)
                 if u.path not in ("/panel.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html") and "report.js" not in doc:   # Zgłoś 🚩 (arkusz zgłoszeń, 🚩 na zdjęciach) i Stan konta
                     doc = doc.replace("</body>", '<script src="/report.js?v=1.0" defer></script>\n<script src="/standing.js?v=1.0" defer></script>\n<script src="/tester-perks.js?v=1.0" defer></script>\n</body>', 1)
+                if u.path not in ("/panel.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html"):   # dostępność (focus, ruch, stopka) + licznik testerów w stopce (dane z /api/testers)
+                    if "a11y.css" not in doc: doc = doc.replace("</head>", '<link rel="stylesheet" href="/a11y.css?v=1.0">\n</head>', 1)
+                    if u.path != "/app.html" and "tester-count.js" not in doc: doc = doc.replace("</body>", '<script src="/tester-count.js?v=1.0" defer></script>\n</body>', 1)
                 if u.path not in ("/panel.html", "/privacy.html", "/regulamin.html", "/admin-support.html", "/admin-przychody.html", "/kasa.html") and "agegate.js" not in doc:   # bramka „Masz 18 lat?” (po stronie klienta, bez wpływu na SEO)
                     doc = doc.replace("</body>", '<script src="/agegate.js?v=1.0" defer></script>\n</body>', 1)
                 doc = moderator.inject(doc, self, u.path)   # ogłoszenie + (tylko dla konta admin) link „🛡️ Panel admina”
